@@ -1,11 +1,11 @@
-import styles from './Contact.module.scss'
+import styles from './RentVehicle.module.scss'
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles)
-function Contact() {
+function RentVehicle() {
     return (<div className={cx('wrapper')}>
-        Contact Page
+        RentVehicle page
     </div>);
 }
 
-export default Contact;
+export default RentVehicle;
