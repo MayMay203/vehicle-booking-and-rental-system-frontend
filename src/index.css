@@ -44,11 +44,40 @@ table {
 	border-spacing: 0;
 }
 
+*,::after,::befor{
+	box-sizing: border-box;
+}
+
 html{
   font-size: 62.5%;
 }
 
 body{
-  font-size: 1.6rem;
-  font-family: "Poppins", sans-serif;
+	font-size: 1.6rem;
+	font-family: "Poppins", sans-serif;
+	color: var(--text-color);
+	scroll-behavior: smooth!important;
+}
+
+a{
+	text-decoration: none;
+	color: inherit
+}
+
+input, button, textarea, select{
+	font-size: inherit;
+	font-family: inherit;
+}
+
+
+
+:root{
+	--primary-bg: #FFF6F3;
+	--primary-color: #D34714;
+	--dark-red-color: #A33A3A;
+	--red-color: #E20D0D;
+	--white-color: #fff;
+	--black-color: #000;
+	--text-color: #161823;
+	--orange-color: #FF7F50;
 }

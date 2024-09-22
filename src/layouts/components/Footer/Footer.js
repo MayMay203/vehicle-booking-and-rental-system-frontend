@@ -1,7 +1,90 @@
+import Logo from '~/components/Logo'
+import styles from './Footer.module.scss'
+import classNames from 'classnames/bind'
+import { Link } from 'react-router-dom'
+import { config } from '~/config'
+import { FacebookIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from '~/components/Icon'
+
+const cx = classNames.bind(styles)
 function Footer() {
-    return (<div>
-        Footer
-    </div>);
+  return (
+    <div className={cx('wrapper')}>
+      <div className="row">
+        <div className="col-5">
+          <Logo />
+        </div>
+        <div className="col">
+          <div className="row">
+            <div className="col">
+              <h2 className={cx('title')}>DỊCH VỤ</h2>
+              <ul className={cx('list')}>
+                <li className={cx('item')}>
+                  <Link className={cx('link')} to={config.routes.booking}>
+                    Đặt xe
+                  </Link>
+                </li>
+                <li className={cx('item')}>
+                  <Link className={cx('link')} to={config.routes.booking}>
+                    Mua vé xe
+                  </Link>
+                </li>
+                <li className={cx('item')}>
+                  <Link className={cx('link')} to={config.routes.booking}>
+                    Thuê xe tự lái
+                  </Link>
+                </li>
+                <li className={cx('item')}>
+                  <Link className={cx('link')} to={config.routes.booking}>
+                    Thuê xe du lịch
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="col">
+              <h2 className={cx('title')}>HỖ TRỢ</h2>
+              <ul className={cx('list')}>
+                <li className={cx('item')}>
+                  <Link className={cx('link')} to={config.routes.answer}>
+                    Hỏi đáp
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="col">
+              <h2 className={cx('title')}>KHÁM PHÁ</h2>
+              <ul className={cx('list')}>
+                <li className={cx('item')}>
+                  <Link className={cx('link')} to={config.routes.about}>
+                    Về chúng tôi
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="col">
+              <h2 className={cx('title')}>LIÊN HỆ</h2>
+              <div className={cx('socials')}>
+                <a href="#!" className={cx('social')}>
+                  <FacebookIcon />
+                </a>
+                <a href="#!" className={cx('social')}>
+                  <InstagramIcon />
+                </a>
+                <a href="#!" className={cx('social')}>
+                  <LinkedInIcon />
+                </a>
+                <a href="#!" className={cx('social')}>
+                  <TwitterIcon />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p className={cx('copy-right')}>
+        Bản quyền thuộc <span className={cx('brand')}>Safely Travel</span>
+      </p>
+    </div>
+  )
 }
 
-export default Footer;
+export default Footer
