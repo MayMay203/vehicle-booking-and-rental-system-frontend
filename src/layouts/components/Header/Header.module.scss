@@ -1,3 +1,4 @@
+@use '../../../abstracts' as abstracts;
 .wrapper{
     display: flex;
     flex-direction: column;
@@ -7,6 +8,10 @@
     top: -20px;
     left: 0;
     right: 0;
+
+    @include abstracts.screen(lg){
+        top: -10px;
+    }
 }
 
 .controls{
@@ -53,4 +58,52 @@
     }
 }
 
+
+.btn-menu{
+    padding: 8px 10px;
+    margin-left: 12px;
+
+    @include abstracts.screen(sm){
+        margin: 0;
+        padding: 6px 6px;
+    }
+}
+
+.btn-back{
+    padding: 8px;
+}
+
+.overlay{
+    position: fixed;
+    inset: 0;
+    background-color: rgba($color: #000, $alpha: 0.2);
+    z-index: 50;
+    visibility: hidden;
+    opacity: 0;
+    transition: .5s ease;
+}
+
+.content{
+    position: fixed;
+    background-color: var(--white-color);
+    left: 50%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 51;
+    transition: transform .5s ease;
+    transform: translateX(100%);
+    overscroll-behavior: contain;
+
+    @include abstracts.screen(md){
+        left: 30%;
+    }
+}
+
+.content-actions{
+    padding: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 

@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .logo-img{
     width: 270px;
 }
@@ -6,6 +8,16 @@
     font-weight: 500;
     font-size: 1.5rem;
     margin-top: 8px;
-    margin-left: 130px;
+    margin-left: 100px;
     color: var(--dark-red-color);
+    text-wrap: nowrap;
+
+
+    @include abstracts.screen(lg){
+        margin-left: 80px;
+    }
+
+     @include abstracts.screen(md){
+        margin-left: 40px;
+    }
 }

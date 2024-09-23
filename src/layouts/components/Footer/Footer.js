@@ -9,12 +9,12 @@ const cx = classNames.bind(styles)
 function Footer() {
   return (
     <div className={cx('wrapper')}>
-      <div className="row">
-        <div className="col-5">
+      <div className="row row-cols-1 gy-5 row-cols-md-2">
+        <div className="col-12 col-md-6 col-xl-4">
           <Logo />
         </div>
-        <div className="col">
-          <div className="row">
+        <div className="col-12 col-md-6 col-xl-8">
+          <div className="row row-cols-2 gy-5 row-cols-lg-3 row-cols-xl-4">
             <div className="col">
               <h2 className={cx('title')}>DỊCH VỤ</h2>
               <ul className={cx('list')}>
@@ -60,7 +60,7 @@ function Footer() {
                 </li>
               </ul>
             </div>
-            <div className="col">
+            <div className="col col-lg-6">
               <h2 className={cx('title')}>LIÊN HỆ</h2>
               <div className={cx('socials')}>
                 <a href="#!" className={cx('social')}>

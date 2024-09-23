@@ -69,6 +69,12 @@ input, button, textarea, select{
 	font-family: inherit;
 }
 
+button{
+	border: none;
+	background-color: transparent;
+	outline: none;
+}
+
 
 
 :root{
