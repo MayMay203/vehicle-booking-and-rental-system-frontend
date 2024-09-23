@@ -1,17 +1,35 @@
+@use '../../../../abstracts' as abstracts;
+
 .wrapper{
     height: 50px;
-    background-color: var(--primary-bg);
     display: flex;
+    margin-top: 0;
+    flex-direction: row;
+    background-color: var(--primary-bg);
+    
+    @include abstracts.screen(lg){
+        flex-direction: column;
+        margin-top: 4px;
+        background-color: initial;
+    }
 }
 
 .menu-item{
     height: 100%;
-    padding: 8px;
     color: var(--red-color);
-    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 8px 24px;
+
+    @include abstracts.screen(lg){
+        padding: 16px 24px;
+        justify-content: flex-start;
+    }
+
+    @include abstracts.screen(md){
+        padding: 16px 20px;
+    }
 }
 
 .active{
