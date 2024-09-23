@@ -1,0 +1,122 @@
+.banner{
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+.banner-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.search-wrapper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--white-color);
+    border-radius: 12px;
+    width: 65%;
+}
+
+.type{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.type-link{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 8px;
+    flex: 1;
+    font-size: 1.8rem;
+    font-weight: 500;
+    padding: 14px 0;
+    
+    &:first-child{
+        color: var(--white-color);
+        font-weight: 600;
+        background-color: var(--light-orange);
+        border-radius: 12px 0 0 0;
+    }
+}
+
+.search-block{
+    padding: 14px;
+}
+
+.number-list{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.number-item{
+    --color: #27AE60;
+    --background-color: linear-gradient(white 40%,#27AE60 80%);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    box-shadow: 2px 1px 2px 1px var(--border-color);
+    background: var(--background-color);
+
+    &:nth-child(2){
+        --color: #D04545;
+        --background-color: linear-gradient(white 40%,var(--color) 80%);
+    }
+
+    &:nth-child(3){
+        --color: #2474E5;
+        --background-color: linear-gradient(white 40%,var(--color) 80%);
+    }
+
+    &:nth-child(4){
+        --color: #C39C11;
+        --background-color: linear-gradient(white 40%,var(--color) 80%);
+    }
+}
+
+.heading{
+    font-size: 2.5rem;
+    color: #484848;
+    font-weight: 700;
+    margin-bottom: 24px;
+    font-family: 'Poppins', sans-serif;
+
+    & ~ .heading{
+        margin-top: 24px;
+    }
+}
+
+.content{
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.number{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4.3rem;
+    font-weight: 600;
+    color: var(--color);
+}
+
+.number-title{
+    width: 70%;
+    line-height: 1.3;
+    text-align: center;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 600;
+    color: var(--white-color)
+}

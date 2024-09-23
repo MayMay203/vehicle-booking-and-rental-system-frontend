@@ -61,7 +61,7 @@ body{
 
 a{
 	text-decoration: none;
-	color: inherit
+	color: var(--text-color)
 }
 
 input, button, textarea, select{
@@ -69,13 +69,14 @@ input, button, textarea, select{
 	font-family: inherit;
 }
 
-button{
-	border: none;
+button, select{
 	background-color: transparent;
 	outline: none;
 }
 
-
+button{
+	border: none;
+}
 
 :root{
 	--primary-bg: #FFF6F3;
@@ -86,4 +87,9 @@ button{
 	--black-color: #000;
 	--text-color: #161823;
 	--orange-color: #FF7F50;
+	--dark-white: #f2f2f2;
+	--light-orange: #FF7948;
+	--border-color: rgba(204, 204,204, 0.8);
+	--black-color: #000;
+	--heading-color: #D5420C;
 }

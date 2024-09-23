@@ -1,0 +1,30 @@
+.wrapper{
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+
+
+.title{
+    color: var(--black-color);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+select{
+    border: 1px solid var(--border-color);
+    padding: 4px;
+    border-radius: 6px;
+}
+
+option:hover{
+    color: #ccc;
+}
+
+input{
+    outline: none;
+    border: 1px solid var(--border-color);
+    padding: 4px;
+    border-radius: 6px;
+}
