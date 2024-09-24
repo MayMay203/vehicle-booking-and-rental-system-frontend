@@ -54,7 +54,15 @@ function Home() {
           </div>
         </div>
         <h2 className={cx('heading')}>CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h2>
-        <OfferList title={"Sài Gòn - Nha Trang"} price={200.000} amount={5}/>
+        <OfferList title={'Sài Gòn - Nha Trang'} price={'200.000d'} amount={5} src={images.trip} />
+        <h2 className={cx('heading')}>CÁC ƯU ĐÃI NỔI BẬT</h2>
+        <OfferList title={'Giảm 50k cho chuyến đi đầu tiên'} src={images.voucher} amount={5} voucher={'Lấy mã ngay'} />
+        <h2 className={cx('heading')}>ĐẶT XE</h2>
+        <OfferList title={'Đặt xe tại Đà Nẵng'} price={'50.000d'} amount={5} src={images.booking} />
+        <h2 className={cx('heading')}>THUÊ XE</h2>
+        <OfferList title={'Thuê xe máy tự lái'} price={'200.000d'} amount={3} src={images.renting} />
+        <h2 className={cx('heading')}>DÀNH CHO ĐỐI TÁC</h2>
+        <OfferList title={'Đăng ký làm đối tác nhà xe'} amount={3} src={images.partner} />
       </div>
     </div>
   )

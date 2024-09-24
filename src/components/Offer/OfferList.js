@@ -5,56 +5,63 @@ import { MenuBack, MenuNext } from '../Icon'
 import { useState } from 'react'
 
 const cx = classNames.bind(styles)
-function OfferList({ title, price, link, amount, className }) {
+function OfferList({ title, price, link, amount, src, voucher, className }) {
   const [index, setIndex] = useState(0)
   const handleBack = () => {
     setIndex((prev) => prev + 1)
   }
 
   const handleNext = () => {
-   setIndex((prev) => prev - 1)
+    setIndex((prev) => prev - 1)
   }
-
-  console.log('re-render')
-  console.log(index)
 
   return (
     <div className={cx('wrapper', [className])}>
       <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index*12}px)))` } : undefined}
+        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
         className={cx('offer-item')}
         title={title}
         price={price}
         link={link}
+        src={src}
+        voucher={voucher}
       />
       <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index*12}px)))` } : undefined}
+        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
         className={cx('offer-item')}
         title={title}
         price={price}
         link={link}
+        src={src}
+        voucher={voucher}
       />
       <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index*12}px)))` } : undefined}
+        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
         className={cx('offer-item')}
         title={title}
         price={price}
         link={link}
+        src={src}
+        voucher={voucher}
       />
 
       <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index*12}px)))` } : undefined}
+        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
         className={cx('offer-item')}
         title={title}
         price={price}
         link={link}
+        src={src}
+        voucher={voucher}
       />
       <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index*12}px)))` } : undefined}
+        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
         className={cx('offer-item')}
         title={title}
         price={price}
         link={link}
+        src={src}
+        voucher={voucher}
       />
 
       {amount > 3 && index < 0 && (
