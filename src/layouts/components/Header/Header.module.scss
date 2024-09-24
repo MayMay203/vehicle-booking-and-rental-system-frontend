@@ -9,6 +9,7 @@
     left: 0;
     right: 0;
     z-index: 20;
+    transition: transform 0.3s ease;
 
     @include abstracts.screen(lg){
         top: -10px;
@@ -38,20 +39,20 @@
 
 .icon {
     margin-right: 4px;
-    animation: shake 1s ease-in-out infinite;
+    // animation: shake 1s ease-in-out infinite;
 }
 
-@keyframes shake {
-    0% {
-        transform: translateX(0);
-    }
-    10%, 30%, 50%, 70% {
-        transform: translateX(-3px);
-    }
-    20%, 40%, 60%, 80%, 100% {
-        transform: translateX(3px);
-    }
-}
+// @keyframes shake { 
+//     0% {
+//         transform: translateX(0);
+//     }
+//     10%, 30%, 50%, 70% {
+//         transform: translateX(-3px);
+//     }
+//     20%, 40%, 60%, 80%, 100% {
+//         transform: translateX(3px);
+//     }
+// }
 
 
 .btn-menu{
@@ -67,7 +68,6 @@
 .btn-back{
     padding: 8px;
 }
-
 .overlay{
     position: fixed;
     inset: 0;
@@ -83,7 +83,7 @@
     background-color: var(--white-color);
     left: 50%;
     right: 0;
-    top: 0;
+    top: 0; 
     bottom: 0;
     z-index: 51;
     transition: transform .5s ease;

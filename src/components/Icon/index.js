@@ -9,4 +9,8 @@ export {
   BookingIcon,
   RentingIcon,
   BusIcon,
+  DepartIcon,
+  DestinationIcon,
+  MenuBack,
+  MenuNext
 } from './Icon'

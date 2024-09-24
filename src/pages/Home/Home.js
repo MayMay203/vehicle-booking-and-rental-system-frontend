@@ -5,6 +5,7 @@ import Search from '~/components/Search'
 import { Link } from 'react-router-dom'
 import { config } from '~/config'
 import { BookingIcon, BusIcon, RentingIcon } from '~/components/Icon'
+import OfferList from '~/components/Offer/OfferList'
 
 const cx = classNames.bind(styles)
 function Home() {
@@ -53,6 +54,7 @@ function Home() {
           </div>
         </div>
         <h2 className={cx('heading')}>CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h2>
+        <OfferList title={"Sài Gòn - Nha Trang"} price={200.000} amount={5}/>
       </div>
     </div>
   )

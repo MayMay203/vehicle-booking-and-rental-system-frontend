@@ -1,6 +1,7 @@
 import styles from './Menu.module.scss'
 import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 
 const cx = classNames.bind(styles)
 function Menu({children, className}) {
@@ -13,4 +14,4 @@ Menu.propTypes = {
     children: PropTypes.node.isRequired
 }
 
-export default Menu
+export default memo(Menu)
