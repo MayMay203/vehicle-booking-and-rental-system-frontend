@@ -12,5 +12,10 @@ export {
   DepartIcon,
   DestinationIcon,
   MenuBack,
-  MenuNext
+  MenuNext,
+  StarIcon,
+  CheckedIcon,
+  SecurityIcon,
+  TicketFeatIcon,
+  PaymentIcon
 } from './Icon'

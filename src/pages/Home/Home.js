@@ -2,10 +2,15 @@ import { images } from '~/assets/images'
 import styles from './Home.module.scss'
 import classNames from 'classnames/bind'
 import Search from '~/components/Search'
-import { Link } from 'react-router-dom'
 import { config } from '~/config'
 import { BookingIcon, BusIcon, RentingIcon } from '~/components/Icon'
 import OfferList from '~/components/Offer/OfferList'
+import ContentItem from './ContentItem'
+import NumberList from '~/components/NumberList'
+import LinkItem from '~/components/LinkItem'
+import RentingOffer from '~/components/RentingOffer'
+import FeedbackList from '~/components/FeedbackList'
+import FeatureList from '~/components/FeatureList'
 
 const cx = classNames.bind(styles)
 function Home() {
@@ -15,18 +20,9 @@ function Home() {
         <img src={images.banner} alt="banner" className={cx('banner-image')}></img>
         <div className={cx('search-wrapper')}>
           <div className={cx('type')}>
-            <Link to={config.routes.ticket} className={cx('type-link')}>
-              <BusIcon />
-              Mua vé
-            </Link>
-            <Link to={config.routes.booking} className={cx('type-link')}>
-              <BookingIcon />
-              Đặt xe
-            </Link>
-            <Link to={config.routes.renting} className={cx('type-link')}>
-              <RentingIcon />
-              Thuê xe
-            </Link>
+            <LinkItem title="Mua vé" to={config.routes.ticket} Icon={BusIcon} />
+            <LinkItem title="Đặt xe" to={config.routes.booking} Icon={BookingIcon} />
+            <LinkItem title="Thuê xe" to={config.routes.renting} Icon={RentingIcon} />
           </div>
           <div className={cx('search-block')}>
             <Search />
@@ -34,35 +30,33 @@ function Home() {
         </div>
       </div>
       <div className={cx('container', 'content')}>
-        <h2 className={cx('heading')}>CON SỐ NỔI BẬT</h2>
-        <div className={cx('number-list')}>
-          <div className={cx('number-item')}>
-            <span className={cx('number')}>100+</span>
-            <span className={cx('number-title')}>Nhà xe chất lượng cao</span>
-          </div>
-          <div className={cx('number-item')}>
-            <span className={cx('number')}>100+</span>
-            <span className={cx('number-title')}>Tuyến đường</span>
-          </div>
-          <div className={cx('number-item')}>
-            <span className={cx('number')}>500+</span>
-            <span className={cx('number-title')}>Đối tác cùng phát triển</span>
-          </div>
-          <div className={cx('number-item')}>
-            <span className={cx('number')}>100+</span>
-            <span className={cx('number-title')}>Giao dịch thanh toán thành công</span>
-          </div>
-        </div>
-        <h2 className={cx('heading')}>CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h2>
-        <OfferList title={'Sài Gòn - Nha Trang'} price={'200.000d'} amount={5} src={images.trip} />
-        <h2 className={cx('heading')}>CÁC ƯU ĐÃI NỔI BẬT</h2>
-        <OfferList title={'Giảm 50k cho chuyến đi đầu tiên'} src={images.voucher} amount={5} voucher={'Lấy mã ngay'} />
-        <h2 className={cx('heading')}>ĐẶT XE</h2>
-        <OfferList title={'Đặt xe tại Đà Nẵng'} price={'50.000d'} amount={5} src={images.booking} />
-        <h2 className={cx('heading')}>THUÊ XE</h2>
-        <OfferList title={'Thuê xe máy tự lái'} price={'200.000d'} amount={3} src={images.renting} />
-        <h2 className={cx('heading')}>DÀNH CHO ĐỐI TÁC</h2>
-        <OfferList title={'Đăng ký làm đối tác nhà xe'} amount={3} src={images.partner} />
+        <ContentItem title="CON SỐ NỔI BẬT" Component={<NumberList />} />
+        <ContentItem
+          title="CÁC TUYẾN ĐƯỜNG PHỔ BIẾN"
+          Component={<OfferList title={'Sài Gòn - Nha Trang'} price={'200.000d'} amount={5} src={images.trip} />}
+        />
+        <ContentItem
+          title="CÁC ƯU ĐÃI NỔI BẬT"
+          Component={
+            <OfferList
+              title={'Giảm 50k cho chuyến đi đầu tiên'}
+              src={images.voucher}
+              amount={5}
+              voucher={'Lấy mã ngay'}
+            />
+          }
+        />
+        <ContentItem
+          title="ĐẶT XE"
+          Component={<OfferList title="Đặt xe tại Đà Nẵng" price={'50.000d'} amount={5} src={images.booking} />}
+        />
+        <ContentItem title="THUÊ XE" Component={<RentingOffer />} />
+        <ContentItem
+          title="DÀNH CHO ĐỐI TÁC"
+          Component={<OfferList title="Đăng ký làm đối tác nhà xe" amount={3} src={images.partner} />}
+        />
+        <ContentItem title="PHẢN HỒI CỦA KHÁCH HÀNG" Component={<FeedbackList />} />
+        <ContentItem title="TẠI SAO NÊN LỰA CHỌN CHÚNG TÔI" Component={<FeatureList/>} />
       </div>
     </div>
   )
