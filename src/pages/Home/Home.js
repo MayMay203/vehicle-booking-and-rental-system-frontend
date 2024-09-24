@@ -17,7 +17,7 @@ function Home() {
   return (
     <div className={cx('wrapper')}>
       <div className={cx('banner')}>
-        <img src={images.banner} alt="banner" className={cx('banner-image')}></img>
+        <img src={images.banner} alt="banner" className={cx('banner-image','d-none','d-md-block')}></img>
         <div className={cx('search-wrapper')}>
           <div className={cx('type')}>
             <LinkItem title="Mua vé" to={config.routes.ticket} Icon={BusIcon} />

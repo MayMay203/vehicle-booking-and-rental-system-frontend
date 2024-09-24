@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .wrapper{
     padding-bottom: 50px;
 }
@@ -6,6 +8,10 @@
     position: relative;
     width: 100%;
     height: 400px;
+
+    @include abstracts.screen(sm){
+        margin-top: 70px;
+    }
 }
 
 .banner-image{
@@ -21,7 +27,16 @@
     transform: translate(-50%, -50%);
     background-color: var(--white-color);
     border-radius: 12px;
-    width: 65%;
+    width: 70%;
+    border: 1px solid var(--border-color);
+
+    @include abstracts.screen(lg){
+        width: 80%;
+    }
+
+    @include abstracts.screen(md){
+        width: 95%;
+    } 
 }
 
 .type{

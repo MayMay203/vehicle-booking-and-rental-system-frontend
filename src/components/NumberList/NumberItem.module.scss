@@ -1,13 +1,4 @@
-.number-list{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-
 .number-item{
-    --color: #27AE60;
-    --background-color: linear-gradient(white 40%,#27AE60 80%);
-
     display: flex;
     flex-direction: column;
     position: relative;
@@ -18,11 +9,17 @@
     background: var(--background-color);
     user-select: none;
     transition: transform .5s ease;
+    margin: auto;
 
     &:hover{
         transform: translateY(-12px);
     }
+}
 
+.col{
+    --color: #27AE60;
+    --background-color: linear-gradient(white 40%,#27AE60 80%);
+    
     &:nth-child(2){
         --color: #D04545;
         --background-color: linear-gradient(white 40%,var(--color) 80%);

@@ -1,11 +1,8 @@
 import NumberItem from './NumberItem';
-import styles from './NumberItem.module.scss'
-import classNames from 'classnames/bind';
 
-const cx = classNames.bind(styles)
 function NumberList() {
     return (
-      <div className={cx('number-list')}>
+      <div className='row gy-5 row-cols-1 row-cols-sm-2 row-cols-lg-3 justify-content-lg-around row-cols-xl-4'>
         <NumberItem title={'Nhà xe chất lượng cao'} number={'100+'} />
         <NumberItem title={'Tuyến đường'} number={'100+'} />
         <NumberItem title={'Hợp tác cùng phát triển'} number={'500+'} />
