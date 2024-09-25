@@ -1,9 +1,6 @@
 @use '../../abstracts' as abstracts;
 .wrapper{
-    height: 240px;
-
     @include abstracts.screen(lg){
-        height: initial;
         row-gap: 30px;
     }
 }
@@ -11,6 +8,7 @@
 .item{
     position: relative;
     cursor: pointer;
+    height: 240px;
     
     &-img{
         width: 100%;

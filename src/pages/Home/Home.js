@@ -17,12 +17,12 @@ function Home() {
   return (
     <div className={cx('wrapper')}>
       <div className={cx('banner')}>
-        <img src={images.banner} alt="banner" className={cx('banner-image','d-none','d-md-block')}></img>
+        <img src={images.banner} alt="banner" className={cx('banner-image', 'd-none', 'd-md-block')}></img>
         <div className={cx('search-wrapper')}>
           <div className={cx('type')}>
-            <LinkItem title="Mua vé" to={config.routes.ticket} Icon={BusIcon} />
-            <LinkItem title="Đặt xe" to={config.routes.booking} Icon={BookingIcon} />
-            <LinkItem title="Thuê xe" to={config.routes.renting} Icon={RentingIcon} />
+            <LinkItem title="Mua vé" to={config.routes.ticket} Icon={<BusIcon />} />
+            <LinkItem title="Đặt xe" to={config.routes.booking} Icon={<BookingIcon />} />
+            <LinkItem title="Thuê xe" to={config.routes.renting} Icon={<RentingIcon/>} />
           </div>
           <div className={cx('search-block')}>
             <Search />
@@ -56,7 +56,7 @@ function Home() {
           Component={<OfferList title="Đăng ký làm đối tác nhà xe" amount={3} src={images.partner} />}
         />
         <ContentItem title="PHẢN HỒI CỦA KHÁCH HÀNG" Component={<FeedbackList />} />
-        <ContentItem title="TẠI SAO NÊN LỰA CHỌN CHÚNG TÔI" Component={<FeatureList/>} />
+        <ContentItem title="TẠI SAO NÊN LỰA CHỌN CHÚNG TÔI" Component={<FeatureList />} />
       </div>
     </div>
   )

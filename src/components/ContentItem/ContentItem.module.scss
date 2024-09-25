@@ -10,8 +10,9 @@
     font-weight: 700;
     margin-bottom: 32px;
     font-family: 'Poppins', sans-serif;
+    line-height: 1.4;
 
     @include abstracts.screen(md){
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
 }

@@ -19,6 +19,6 @@ function MenuItem({menu}) {
 }
 
 Menu.propTypes = {
-  menu: PropTypes.object.isRequired
+  menu: PropTypes.object
 }
 export default MenuItem

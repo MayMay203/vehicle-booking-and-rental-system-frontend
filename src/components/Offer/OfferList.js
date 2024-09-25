@@ -12,7 +12,6 @@ function OfferList({ title, price, link, amount, src, voucher, className }) {
 
   const isSm = useMediaQuery({ query: '(max-width: 767.98px)' })
   const isMd = useMediaQuery({ query: '(min-width: 768px) and (max-width: 991.98px)' })
-  console.log(number)
 
   useEffect(() => {
     if (isSm) {
