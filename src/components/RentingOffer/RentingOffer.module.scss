@@ -1,7 +1,11 @@
+@use '../../abstracts' as abstracts;
 .wrapper{
-    display: flex;
-    column-gap: 12px;
     height: 240px;
+
+    @include abstracts.screen(lg){
+        height: initial;
+        row-gap: 30px;
+    }
 }
 
 .item{

@@ -2,11 +2,28 @@ import styles from './Offer.module.scss'
 import classNames from 'classnames/bind'
 import OfferItem from './OfferItem'
 import { MenuBack, MenuNext } from '../Icon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 const cx = classNames.bind(styles)
 function OfferList({ title, price, link, amount, src, voucher, className }) {
   const [index, setIndex] = useState(0)
+  const [number, setNumber] = useState(3)
+
+  const isSm = useMediaQuery({ query: '(max-width: 767.98px)' })
+  const isMd = useMediaQuery({ query: '(min-width: 768px) and (max-width: 991.98px)' })
+  console.log(number)
+
+  useEffect(() => {
+    if (isSm) {
+      setNumber(1)
+    } else if (isMd) {
+      setNumber(2)
+    } else {
+      setNumber(3)
+    }
+  }, [isSm, isMd])
+
   const handleBack = () => {
     setIndex((prev) => prev + 1)
   }
@@ -69,7 +86,7 @@ function OfferList({ title, price, link, amount, src, voucher, className }) {
           <MenuBack />
         </button>
       )}
-      {amount > 3 && -1 * index < amount - 3 && (
+      {amount > number && -1 * index < amount - number && (
         <button className={cx('btn', 'btn-next')} onClick={handleNext}>
           <MenuNext />
         </button>

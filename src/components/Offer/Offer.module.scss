@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .wrapper{
     position: relative;
     display: flex;
@@ -20,6 +22,15 @@
     &:hover .offer-img{
         scale: 1.04;
     }
+
+    @include abstracts.screen(lg){
+        width: calc((100% - 12px) / 2);
+    }
+    
+    @include abstracts.screen(md){
+        width: 100%;
+    }
+
 }
 
 .offer-img{

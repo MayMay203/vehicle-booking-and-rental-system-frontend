@@ -1,5 +1,7 @@
+@use '../../abstracts' as abstracts;
+
 .wrapper{
-    margin-top: 50px;
+    margin-top: 60px;
 }
 
 .heading{
@@ -8,4 +10,8 @@
     font-weight: 700;
     margin-bottom: 32px;
     font-family: 'Poppins', sans-serif;
+
+    @include abstracts.screen(md){
+        font-size: 2.2rem;
+    }
 }
