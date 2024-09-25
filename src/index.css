@@ -69,13 +69,19 @@ input, button, textarea, select{
 	font-family: inherit;
 }
 
-button, select{
+button, select, input{
 	background-color: transparent;
 	outline: none;
 }
 
 button{
 	border: none;
+}
+
+/* Custom modal */
+.modal-header{
+	padding: 16px;
+	align-items: initial;
 }
 
 :root{

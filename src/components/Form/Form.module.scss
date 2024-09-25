@@ -1,0 +1,43 @@
+.form{
+    padding: 8px 20px 20px;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.form-label{
+    margin-bottom: 8px;
+    width: 120px;
+    white-space: nowrap;
+}
+
+.form-textarea,
+.form-input{
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 4px 10px;
+    background-color: transparent;
+}
+
+.form-textarea{
+    resize: none;
+}
+
+.form-input{
+    height: 42px;
+}
+
+.form-error{
+    margin-top: 10px;
+    color: red;
+    font-size: 1.3rem;
+    font-weight: 500;
+    display: block;
+}
+
+.show{
+    display: block;
+}

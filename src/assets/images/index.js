@@ -8,5 +8,6 @@ export const images = {
     renting: require('./renting.png'),
     renting2: require('./renting1.png'),
     renting3: require('./renting2.png'),
-    noImage: require('./no-image.png')
+    noImage: require('./no-image.png'),
+    google: require('./google.png')
 }
