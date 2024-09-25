@@ -1,5 +1,4 @@
 import Button from '../Button'
-import { DepartIcon, DestinationIcon } from '../Icon'
 import styles from './Search.module.scss'
 import classNames from 'classnames/bind'
 
