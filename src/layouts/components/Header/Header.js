@@ -6,12 +6,15 @@ import { BackIcon, MenuIcon, PhoneIcon } from '~/components/Icon'
 import Logo from '~/components/Logo'
 import Menu from './Menu/Menu'
 import MenuItem from './Menu/MenuItem'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
+  const headerRef = useRef(null);
+  const [lastScrollY, setLastScrollY] = useState()
+
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
     overlayRef.current.style.visibility = 'hidden'
@@ -24,10 +27,33 @@ function Header({ menus }) {
     overlayRef.current.style.opacity = '1'
   }
 
+  const handleScroll = () => {
+    if (window.innerWidth >= 992) {
+      const currentScroll = window.scrollY
+      if (currentScroll > lastScrollY) {
+        headerRef.current.style.transform = 'translateY(-100%)'
+      } else {
+        headerRef.current.style.transform = 'translateY(0)'
+      }
+      setLastScrollY(currentScroll)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastScrollY])
+
   return (
-    <div className={cx('wrapper')}>
+    <header
+      className={cx('wrapper')}
+      ref={headerRef}
+    >
       {/* Mobile header */}
-      <div className={cx('mobile-header, d-lg-none')}>
+      <div className={cx('mobile-header', 'd-lg-none')}>
         <div className={cx('overlay')} ref={overlayRef} onClick={hanldeBack}></div>
         <div className={cx('content')} ref={contentRef}>
           <div className={cx('content-actions')}>
@@ -75,7 +101,7 @@ function Header({ menus }) {
           <MenuItem key={index} menu={menu}></MenuItem>
         ))}
       </Menu>
-    </div>
+    </header>
   )
 }
 

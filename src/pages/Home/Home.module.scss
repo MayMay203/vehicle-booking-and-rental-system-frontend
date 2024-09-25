@@ -1,0 +1,56 @@
+@use '../../abstracts' as abstracts;
+
+.wrapper{
+    padding-bottom: 50px;
+}
+
+.banner{
+    position: relative;
+    width: 100%;
+    height: 400px;
+
+    @include abstracts.screen(sm){
+        margin-top: 70px;
+    }
+}
+
+.banner-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.search-wrapper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--white-color);
+    border-radius: 12px;
+    width: 70%;
+    border: 1px solid var(--border-color);
+
+    @include abstracts.screen(lg){
+        width: 80%;
+    }
+
+    @include abstracts.screen(md){
+        width: 95%;
+    } 
+}
+
+.type{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-block{
+    padding: 14px;
+}
+
+.content{
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+

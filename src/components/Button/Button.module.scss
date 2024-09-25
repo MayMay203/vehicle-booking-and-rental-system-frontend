@@ -53,8 +53,7 @@
     color: var(--white-color);
 
     &:hover{
-        border-color: var(--btn-rounded-border-color);
-        background-color: var(--btn-rounded-hover-bg);
+        opacity: 0.9;
     }
 }
 

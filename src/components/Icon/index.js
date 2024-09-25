@@ -1,1 +1,21 @@
-export { PhoneIcon, FacebookIcon, InstagramIcon, LinkedInIcon, TwitterIcon, MenuIcon, BackIcon } from './Icon'
+export {
+  PhoneIcon,
+  FacebookIcon,
+  InstagramIcon,
+  LinkedInIcon,
+  TwitterIcon,
+  MenuIcon,
+  BackIcon,
+  BookingIcon,
+  RentingIcon,
+  BusIcon,
+  DepartIcon,
+  DestinationIcon,
+  MenuBack,
+  MenuNext,
+  StarIcon,
+  CheckedIcon,
+  SecurityIcon,
+  TicketFeatIcon,
+  PaymentIcon
+} from './Icon'

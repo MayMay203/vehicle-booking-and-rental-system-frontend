@@ -45,7 +45,7 @@ function DefaultLayout({ children }) {
   return (
     <div className={cx('wrapper')}>
       <Header menus={userMenu}/>
-      <div className={cx('container','content')}>
+      <div className={cx('content')}>
         {children}
       </div>
       <Footer />
