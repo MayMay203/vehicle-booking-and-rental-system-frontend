@@ -7,31 +7,32 @@ import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 
 const cx = classNames.bind(styles)
-function ForgetPasswordModal() {
+function ResetPasswordModal() {
   const { isOpenModal, openModal, closeModal } = useModal()
 
-    const handleReceiveOTP = () => {
-        closeModal('forget');
-        openModal('authCode',{type: 'forget'})
-    }
+  const handleChangePass = () => {
+    closeModal('reset')
+    openModal('login')
+  }
 
-    const handleShowLogin = () => {
-        closeModal('forget')
-        openModal('login')
-    }
-  
+  const handleShowLogin = () => {
+    closeModal('reset')
+    openModal('login')
+  }
+
   return (
-    <Modal show={isOpenModal.forget} onHide={() => closeModal('forget')} centered>
+    <Modal show={isOpenModal.reset} onHide={() => closeModal('reset')} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
-          <Modal.Title className={cx('title')}>Quên mật khẩu</Modal.Title>
+          <Modal.Title className={cx('title')}>Đặt lại mật khẩu</Modal.Title>
         </div>
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <FormInput id="phone" type="phone" title="Số điện thoại" />
-          <Button className={cx('btn-submit')} onClick={handleReceiveOTP}>
-            Nhận mã OTP
+          <FormInput id="newPass" type="phone" title="Mật khẩu mới" />
+          <FormInput id="againPass" type="phone" title="Nhập lại mật khẩu" />
+          <Button className={cx('btn-submit')} onClick={handleChangePass}>
+            Đổi mật khẩu
           </Button>
           <div className={cx('bottom')}>
             <span className={cx('content')}>Bạn có muốn quay lại?</span>
@@ -45,4 +46,4 @@ function ForgetPasswordModal() {
   )
 }
 
-export default ForgetPasswordModal
+export default ResetPasswordModal

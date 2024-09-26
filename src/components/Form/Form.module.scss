@@ -28,6 +28,7 @@
 
 .form-input{
     height: 42px;
+    font-size: 1.5rem;
 }
 
 .form-error{
@@ -35,9 +36,28 @@
     color: red;
     font-size: 1.3rem;
     font-weight: 500;
-    display: block;
+    display: none;
 }
 
 .show{
     display: block;
+}
+
+.block-gender{
+    display: flex;
+    flex-direction: column;
+}
+
+.gender{
+    display: flex;
+    justify-content: center;
+    column-gap: 36px;
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+}
+
+.form-gender{
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
 }

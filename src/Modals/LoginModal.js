@@ -9,7 +9,17 @@ import { images } from '~/assets/images'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
-  const { isOpenModal, closeModal } = useModal()
+  const { isOpenModal, openModal, closeModal } = useModal()
+
+  const handleShowRegister = () => {
+    closeModal('login')
+    openModal('register')
+  }
+
+  const handleShowForget = () => {
+    closeModal('login')
+    openModal('forget')
+  }
   return (
     <Modal show={isOpenModal.login} onHide={() => closeModal('login')} centered>
       <Modal.Header closeButton>
@@ -23,7 +33,7 @@ function LoginModal() {
           <FormInput id="phone" type="phone" title="Số điện thoại" error="Số điện thoại không đúng" />
           <FormInput id="password" type="password" title="Mật khẩu" error="Trường này bắt buộc" />
           <Button className={cx('btn-submit')}>Đăng nhập</Button>
-          <button className={cx('btn-link')}>Quên mật khẩu</button>
+          <button className={cx('btn-link')} onClick={handleShowForget}>Quên mật khẩu</button>
           <div className={cx('other')}>hoặc</div>
           <button className={cx('btn-google')}>
             <span className={cx('icon')}>
@@ -33,7 +43,7 @@ function LoginModal() {
           </button>
           <div className={cx('bottom')}>
             <span className={cx('content')}>Bạn chưa có tài khoản?</span>
-            <button className={cx('btn-link','btn-bottom')}>Đăng ký</button>
+            <button className={cx('btn-link','btn-bottom')} onClick={handleShowRegister}>Đăng ký</button>
           </div>
         </Form>
       </Modal.Body>

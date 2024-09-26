@@ -13,7 +13,10 @@ function AuthModalProvider({ children }) {
     info: false,
   })
 
-  const openModal = (modal) => {
+  const [modalData, setModalData] = useState({})
+
+  const openModal = (modal, data = {}) => {
+    setModalData(data)
     setModals((prev) => ({ ...prev, [modal]: true }))
   }
 
@@ -23,8 +26,9 @@ function AuthModalProvider({ children }) {
 
   const value = {
     isOpenModal: modals,
+    modalData,
     openModal,
-    closeModal,
+    closeModal
   }
   return <AuthModalContext.Provider value={value}>{children}</AuthModalContext.Provider>
 }

@@ -6,10 +6,21 @@ import Form from '~/components/Form'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
+import { type } from '@testing-library/user-event/dist/type'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
-  const { isOpenModal, closeModal } = useModal()
+  const { isOpenModal, openModal, closeModal } = useModal()
+
+  const handleContinue = () => {
+    openModal('authCode', { type: 'register' })
+    closeModal('register')
+  }
+
+  const handleShowLogin = () => {
+    closeModal('register')
+    openModal('login')
+  }
   return (
     <Modal show={isOpenModal.register} onHide={() => closeModal('register')} centered>
       <Modal.Header closeButton>
@@ -22,7 +33,9 @@ function RegisterModal() {
         <Form>
           <FormInput id="phone" type="phone" title="Số điện thoại" error="Số điện thoại không đúng" />
           <FormInput id="password" type="password" title="Mật khẩu" error="Trường này bắt buộc" />
-          <Button className={cx('btn-submit')}>Tiếp tục</Button>
+          <Button className={cx('btn-submit')} onClick={handleContinue}>
+            Tiếp tục
+          </Button>
           <div className={cx('other')}>hoặc</div>
           <button className={cx('btn-google')}>
             <span className={cx('icon')}>
@@ -32,7 +45,9 @@ function RegisterModal() {
           </button>
           <div className={cx('bottom')}>
             <span className={cx('content')}>Bạn đã có tài khoản?</span>
-            <button className={cx('btn-link', 'btn-bottom')}>Đăng nhập</button>
+            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowLogin}>
+              Đăng nhập
+            </button>
           </div>
         </Form>
       </Modal.Body>
