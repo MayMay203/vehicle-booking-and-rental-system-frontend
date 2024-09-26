@@ -57,9 +57,11 @@ function Header({ menus }) {
         <div className={cx('content')} ref={contentRef}>
           <div className={cx('content-actions')}>
             <button className={cx('btn-back')} onClick={hanldeBack}>
-              {' '}
               <BackIcon />
             </button>
+            <Button outline className="d-sm-none" onClick={() => openModal('login')}>
+              Đăng nhập
+            </Button>
           </div>
           <Menu>
             {menus.map((menu, index) => (

@@ -10,8 +10,9 @@
 
 .form-label{
     margin-bottom: 8px;
-    width: 120px;
-    white-space: nowrap;
+    width: 100%;
+    line-height: 1.4;
+    white-space: wrap;
 }
 
 .form-textarea,

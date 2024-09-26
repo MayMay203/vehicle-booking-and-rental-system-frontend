@@ -6,7 +6,6 @@ import Form from '~/components/Form'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
-import { type } from '@testing-library/user-event/dist/type'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
