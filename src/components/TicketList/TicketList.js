@@ -6,8 +6,6 @@ function TicketList() {
         <TicketItem />
         <TicketItem />
         <TicketItem />
-        <TicketItem />
-        <TicketItem />
       </div>
     )
 }
