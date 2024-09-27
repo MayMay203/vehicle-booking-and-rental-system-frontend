@@ -61,3 +61,13 @@
         padding-bottom: 20px;
         border-bottom: 1px solid var(--border-color);
 }
+
+.star-list{
+    display: flex;
+    column-gap: 4px;
+    padding: 4px 5px;
+}
+
+.normal{
+    color: #e6e5e5;
+}
