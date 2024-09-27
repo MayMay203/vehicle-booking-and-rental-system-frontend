@@ -1,0 +1,27 @@
+.pagination-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.dot {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  border: none;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+
+  &:hover {
+    background-color: #fcd4c6;
+  }
+
+  &.active {
+    background-color: #e20d0d;
+  }
+}
