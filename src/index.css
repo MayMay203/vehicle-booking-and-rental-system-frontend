@@ -99,3 +99,7 @@ button{
 	--black-color: #000;
 	--heading-color: #D5420C;
 }
+
+.option{
+	width: 100%;
+}

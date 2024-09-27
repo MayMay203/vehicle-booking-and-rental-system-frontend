@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .voucher {
     width: 40rem;
     height: 16rem;
@@ -7,12 +9,19 @@
     display: flex;
     align-items: center;
     padding: 1rem;
+
+    @include abstracts.screen(sm){
+        width: 30rem;
+    }
 }
 
 .voucher-value{
     color: #E20D0D;
     font-size: 3rem;
     font-weight: 600;
+    @include abstracts.screen(sm){
+         font-size: 2rem !important;
+    }
 }
 .border-right {
     border-right: 0.2rem solid #E20D0D;  
@@ -23,6 +32,9 @@
     color: #D5420C;
     font-size: 1.6rem;
     font-weight: 600;
+     @include abstracts.screen(sm){
+          font-size: 1rem;
+    }
 }
 
 .claim_voucher{
@@ -42,6 +54,12 @@
         background-color: #B83606;
         color: white;
     }
+
+     @include abstracts.screen(sm){
+        height: 2rem !important;
+        min-width: 1.5rem !important;
+        font-size: 1rem !important;
+    }
 }
 
 .custom-progress {
@@ -58,6 +76,11 @@
     font-weight: 500;
     padding-top: 1rem;
     text-align: right;
+
+    @include abstracts.screen(sm){
+          font-size: 1rem;
+    }
+
 }
 
 .time-content{
@@ -65,6 +88,11 @@
     font-size: 1.5rem;
     font-weight: 600;
     padding-top: 1rem;
+
+     @include abstracts.screen(sm){
+          font-size: 1rem;
+    }
+
 }
 .time{
     color: #000000;
@@ -72,4 +100,8 @@
     font-weight: 400;
     padding-top: 1rem;
     text-align: right;
+
+    @include abstracts.screen(sm){
+          font-size: 1.1rem;
+    }
 }

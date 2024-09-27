@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .wrapper {
     // display: flex; 
     justify-content: center;
@@ -32,6 +34,14 @@
         font-weight: 600;
         border-radius: 0.3rem 0;
     }
+
+    @include abstracts.screen(md){
+         padding-inline-start: 3rem;
+    }
+
+    @include abstracts.screen(sm){
+        padding-inline-start: 2rem;
+    }
 }
 
 .nav-button {
@@ -42,6 +52,10 @@
     &.rotate {
         transform: rotate(90deg); 
         color: #333;
+    }
+
+    @include abstracts.screen(md){
+        margin-right: 1rem;
     }
 }
 
@@ -54,4 +68,5 @@
   background-color: #FFF6F3;
   border: 0.1rem solid #FFEBE4;
   border-radius: 0;
+  line-height: 1.5;
 }
