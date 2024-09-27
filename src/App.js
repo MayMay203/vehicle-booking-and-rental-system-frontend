@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { publicRoutes } from "./routes"
 import { DefaultLayout } from "./layouts"
-import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal, ResetPassword, ResetPasswordModal } from "./Modals"
+import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal, ResetPasswordModal } from "./Modals"
 
 function App() {
   return (
