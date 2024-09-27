@@ -7,13 +7,15 @@ import Logo from '~/components/Logo'
 import Menu from './Menu/Menu'
 import MenuItem from './Menu/MenuItem'
 import { useEffect, useRef, useState } from 'react'
+import { useModal } from '~/Context/AuthModalProvider'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
-  const headerRef = useRef(null);
+  const headerRef = useRef(null)
   const [lastScrollY, setLastScrollY] = useState()
+  const { openModal } = useModal()
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -44,24 +46,20 @@ function Header({ menus }) {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastScrollY])
 
   return (
-    <header
-      className={cx('wrapper')}
-      ref={headerRef}
-    >
+    <header className={cx('wrapper')} ref={headerRef}>
       {/* Mobile header */}
       <div className={cx('mobile-header', 'd-lg-none')}>
         <div className={cx('overlay')} ref={overlayRef} onClick={hanldeBack}></div>
         <div className={cx('content')} ref={contentRef}>
           <div className={cx('content-actions')}>
             <button className={cx('btn-back')} onClick={hanldeBack}>
-              {' '}
               <BackIcon />
             </button>
-            <Button outline className="d-sm-none">
+            <Button outline className="d-sm-none" onClick={() => openModal('login')}>
               Đăng nhập
             </Button>
           </div>
@@ -84,10 +82,10 @@ function Header({ menus }) {
             </p>
           </div>
           <div className={cx('actions')}>
-            <Button outline className="d-none d-md-block">
+            <Button outline className="d-none d-md-block" onClick={() => openModal('register')}>
               Đăng ký
             </Button>
-            <Button outline className="d-none d-sm-block">
+            <Button outline className="d-none d-sm-block" onClick={() => openModal('login')}>
               Đăng nhập
             </Button>
             <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
