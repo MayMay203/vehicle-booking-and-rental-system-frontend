@@ -9,5 +9,6 @@ export const images = {
     renting2: require('./renting1.png'),
     renting3: require('./renting2.png'),
     noImage: require('./no-image.png'),
-    google: require('./google.png')
+    google: require('./google.png'),
+    location: require('./location.png')
 }
