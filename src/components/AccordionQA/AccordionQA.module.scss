@@ -1,0 +1,72 @@
+@use '../../abstracts' as abstracts;
+
+.wrapper {
+    // display: flex; 
+    justify-content: center;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+.question {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    width: 100%; 
+    padding: 1rem;
+    padding-inline-start: 5rem; 
+    background-color: white;
+    color: #333;
+    font-size: 1.7rem;
+    font-weight: 600;
+    font-family: 'Inter';
+    border: 0.1rem solid #FFEBE4;
+    cursor: pointer; 
+    transition: background-color 0.3s, transform 0.3s;
+
+    &:hover {
+        background-color: #FFF6F3;
+        color: black;
+        border: 0.1rem solid #FFEBE4;
+        font-weight: 600;
+    }
+
+    &.active { 
+        background-color: #FFEBE4;
+        font-weight: 600;
+        border-radius: 0.3rem 0;
+    }
+
+    @include abstracts.screen(md){
+         padding-inline-start: 3rem;
+    }
+
+    @include abstracts.screen(sm){
+        padding-inline-start: 2rem;
+    }
+}
+
+.nav-button {
+    margin-right: 5rem; 
+    font-size: 2rem;
+    color: #333333;
+    transition: transform 0.3s; 
+    &.rotate {
+        transform: rotate(90deg); 
+        color: #333;
+    }
+
+    @include abstracts.screen(md){
+        margin-right: 1rem;
+    }
+}
+
+.accordion-body {
+  font-size: 1.4rem;
+  color: #333; 
+  padding: 2rem;
+  padding-inline-start: 5.5rem; 
+  width: 100%;
+  background-color: #FFF6F3;
+  border: 0.1rem solid #FFEBE4;
+  border-radius: 0;
+  line-height: 1.5;
+}

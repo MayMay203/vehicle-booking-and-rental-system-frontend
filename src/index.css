@@ -122,3 +122,7 @@ button{
 	--light-green: #A0CD8A;
 	--green-color: #27AE60;
 }
+
+.option{
+	width: 100%;
+}

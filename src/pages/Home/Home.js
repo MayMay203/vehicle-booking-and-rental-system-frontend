@@ -40,7 +40,7 @@ function Home() {
           Component={
             <OfferList
               title={'Giảm 50k cho chuyến đi đầu tiên'}
-              src={images.voucher}
+              src={images.voucher_img}
               amount={5}
               voucher={'Lấy mã ngay'}
             />
