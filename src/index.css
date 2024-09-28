@@ -84,6 +84,26 @@ button{
 	align-items: initial;
 }
 
+/* Custom breadcrumbs */
+.breadcrumb{
+	margin-top: 30px;
+	height: 48px;
+	background-color: var(--grey-color);
+	display: flex;
+	align-items: center;
+	border-radius: 6px;
+	padding: 4px 16px;
+}
+
+.active{
+	color: var(--text-color)!important;
+	font-weight: 600
+}
+
+.active::before{
+	color: var(--text-color)!important;
+}
+
 :root{
 	--primary-bg: #FFF6F3;
 	--primary-color: #D34714;
@@ -98,4 +118,11 @@ button{
 	--border-color: rgba(204, 204,204, 0.8);
 	--black-color: #000;
 	--heading-color: #D5420C;
+	--grey-color: #F6F6F6;
+	--light-green: #A0CD8A;
+	--green-color: #27AE60;
+}
+
+.option{
+	width: 100%;
 }

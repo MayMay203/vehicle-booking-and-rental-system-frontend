@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import Button from '../Button'
 import styles from './Search.module.scss'
 import classNames from 'classnames/bind'
@@ -66,4 +67,4 @@ function Search() {
   )
 }
 
-export default Search
+export default memo(Search)

@@ -1,0 +1,107 @@
+@use '../../abstracts' as abstracts;
+
+.voucher {
+    width: 40rem;
+    height: 16rem;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+
+    @include abstracts.screen(sm){
+        width: 30rem;
+    }
+}
+
+.voucher-value{
+    color: #E20D0D;
+    font-size: 3rem;
+    font-weight: 600;
+    @include abstracts.screen(sm){
+         font-size: 2rem !important;
+    }
+}
+.border-right {
+    border-right: 0.2rem solid #E20D0D;  
+    padding-right: 1rem;            
+    height: 10rem;
+}
+.voucher-name{
+    color: #D5420C;
+    font-size: 1.6rem;
+    font-weight: 600;
+     @include abstracts.screen(sm){
+          font-size: 1rem;
+    }
+}
+
+.claim_voucher{
+    height: 3rem !important;
+    min-width: 2rem !important;
+    margin-bottom: 1rem;
+    background-color: #B83606;
+    font-weight: 500 !important;
+    &:hover {
+        background-color: #B83606 !important;
+        color: white;
+        cursor: pointer; 
+    }
+
+    &:active {
+        transform: scale(0.95); 
+        background-color: #B83606;
+        color: white;
+    }
+
+     @include abstracts.screen(sm){
+        height: 2rem !important;
+        min-width: 1.5rem !important;
+        font-size: 1rem !important;
+    }
+}
+
+.custom-progress {
+    background-color: #f0f0f0;
+    width: 27rem;
+    height: 0.8rem;
+    border: 0.1rem solid #D5420C;
+    padding: 0;
+}
+
+.voucher-number{
+    color: #27AE60;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding-top: 1rem;
+    text-align: right;
+
+    @include abstracts.screen(sm){
+          font-size: 1rem;
+    }
+
+}
+
+.time-content{
+    color: #000000;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding-top: 1rem;
+
+     @include abstracts.screen(sm){
+          font-size: 1rem;
+    }
+
+}
+.time{
+    color: #000000;
+    font-size: 1.5rem;
+    font-weight: 400;
+    padding-top: 1rem;
+    text-align: right;
+
+    @include abstracts.screen(sm){
+          font-size: 1.1rem;
+    }
+}
