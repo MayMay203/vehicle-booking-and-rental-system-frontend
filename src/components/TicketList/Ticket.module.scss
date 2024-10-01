@@ -8,11 +8,16 @@
 }
 
 .image-wrapper{
+    position: relative;
     width: 350px;
     height: 180px;
 
     @include abstracts.screen(xl){
         width: 100%;
+    }
+
+    &:hover .btn-msg{
+        scale: 1.2;
     }
 }
 
@@ -88,6 +93,7 @@
     font-weight: 600;
     line-height: 1.4;
     color: var(--primary-color);
+    transition: rotate .3s ease;
 
     span{
         white-space: nowrap;
@@ -103,3 +109,88 @@
     }
 }
 
+.btn-msg{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 60px;
+    height: 40px;
+    border: none;
+    font-size: 1.8rem;
+    border-radius: 6px;
+    padding: 4px 12px;
+    opacity: .9;
+    transition: scale .3s ease;
+
+    &:hover{
+        scale: 1.2;
+    }
+}
+
+// Tabs
+.tab-item{
+    padding: 6px 20px;
+    
+    &.active::after{
+        content: '';
+        width: 100%;
+        height: 2px;
+        display: inline-block;
+        background-color: #000;
+    }
+}
+
+.active{
+    text-shadow: 0px 0px 0.5px #000;
+}
+
+.top{
+    display: inline-flex;
+    align-items: center;
+    position: absolute;
+    column-gap: 12px;
+    right: 0;
+}
+
+.number{
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+
+    &::before{
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: #000;
+    }
+}
+
+.title{
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 26px;
+}
+
+.policies{
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.policy{
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+
+    &::before{
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        background-color: #000;
+        border-radius: 50%;
+    }
+}

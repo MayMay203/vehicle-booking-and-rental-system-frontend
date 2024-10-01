@@ -1,19 +1,37 @@
 import { images } from '~/assets/images'
 import styles from './Ticket.module.scss'
 import classNames from 'classnames/bind'
-import { StarIcon } from '../Icon'
+import { MessageIcon, StarIcon } from '../Icon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
+import Voucher from '../Voucher'
+import {useState } from 'react'
+import FeedbackList from '../FeedbackList'
+import UtilitiesList from '../UtilitiesList'
 
 const cx = classNames.bind(styles)
 function TicketItem() {
+  const [type, setType] = useState('feedback')
+  const [isDetail, setIsDetail] = useState(false)
+
+  const handleShowDetail = () => {
+     setIsDetail((prev) => !prev)
+  }
+
+  const handleClickTab = (type) => {
+    console.log(type)
+    setType(type)
+  }
   return (
-   <div className={cx('wrapper')}>
+    <div className={cx('wrapper')}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
         <div className="col">
           <div className={cx('image-wrapper')}>
             <img src={images.trip} alt="car" className={cx('image')}></img>
+            <button className={cx('btn-msg')}>
+              <MessageIcon />
+            </button>
           </div>
         </div>
         <div className="col d-flex flex-column gap-2 gap-lg-4">
@@ -41,18 +59,91 @@ function TicketItem() {
           </div>
           <span className={cx('status', 'w-100')}>Còn 19 chỗ trống</span>
           <div className="d-flex w-100 align-items-center justify-content-between justify-content-md-end justify-content-lg-none mt-4 mt-lg-0 gap-sm-2 gap-md-5 gap-lg-5">
-            <button className={cx('actions', 'd-flex', 'gap-2', 'align-items-center')}>
+            <button className={cx('actions', 'd-flex', 'gap-2', 'align-items-center')} onClick={handleShowDetail}>
               <span>Thông tin chi tiết</span>
-              <FontAwesomeIcon icon={faCaretDown} />
+              <FontAwesomeIcon
+                icon={faCaretDown}
+                style={{ rotate: isDetail ? '-180deg' : '0deg', transition: 'rotate .2s ease' }}
+              />
             </button>
             <Button rounded>Đặt ngay</Button>
           </div>
         </div>
       </div>
-      <div className={cx('detail')}>
-        
-      </div>
-   </div>
+      {isDetail && (
+        <div className="mt-5">
+          <div className={cx('tabs')}>
+            <button
+              className={cx('tab-item', { active: type === 'discount' })}
+              onClick={() => handleClickTab('discount')}
+            >
+              Giảm giá
+            </button>
+            <button
+              className={cx('tab-item', { active: type === 'feedback' })}
+              onClick={() => handleClickTab('feedback')}
+            >
+              Đánh giá
+            </button>
+            <button className={cx('tab-item', { active: type === 'image' })} onClick={() => handleClickTab('image')}>
+              Hình ảnh
+            </button>
+            <button className={cx('tab-item', { active: type === 'policy' })} onClick={() => handleClickTab('policy')}>
+              Chính sách
+            </button>
+            <button
+              className={cx('tab-item', { active: type === 'utility' })}
+              onClick={() => handleClickTab('utility')}
+            >
+              Tiện ích
+            </button>
+          </div>
+          {type === 'discount' && (
+            <div className="mt-5 row row-cols-1 justify-content-center row-cols-lg-2 gy-5">
+              <div className="col mt-0">
+                <Voucher className="m-auto" />
+              </div>
+              <div className="col mt-0">
+                <Voucher className="m-auto" />
+              </div>
+              <div className="col mt-0">
+                <Voucher className="m-auto" />
+              </div>
+              <div className="col mt-0">
+                <Voucher className="m-auto" />
+              </div>
+            </div>
+          )}
+          {type === 'feedback' && (
+            <div className="mt-5 position-relative">
+              <div className={cx('top')}>
+                <div className={cx('rating')}>
+                  <StarIcon className={cx('icon')} width="2.6rem" />
+                  <span>4.5(5)</span>
+                </div>
+                <span className={cx('number')}>830 đánh giá</span>
+              </div>
+              <FeedbackList />
+            </div>
+          )}
+          {type === 'policy' && (
+            <div className="mt-5 p-5 pt-2">
+              <p className={cx('title')}>Chính sách nhà xe</p>
+              <div className={cx('policies')}>
+                <span className={cx('policy')}>Không hút thuốc, uống rượu trên xe.</span>
+                <span className={cx('policy')}>Không vứt rác trên xe.</span>
+                <span className={cx('policy')}>Tổng trọng lượng hành lý không vượt quá 7kg.</span>
+              </div>
+            </div>
+          )}
+          {
+            type === 'utility' && (
+                <UtilitiesList/>
+            )
+          }
+        </div>
+      )}
+    </div>
   )
 }
 

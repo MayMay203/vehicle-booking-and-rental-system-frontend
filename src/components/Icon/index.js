@@ -18,5 +18,6 @@ export {
   SecurityIcon,
   TicketFeatIcon,
   PaymentIcon,
-  FilterIcon
+  FilterIcon,
+  MessageIcon
 } from './Icon'
