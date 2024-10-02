@@ -71,57 +71,59 @@ function RentVehicle() {
       <Container>
         <Row>
           <Col>
-            <Carousel >
+            <Carousel>
               <Carousel.Item className={cx('carousel-item')}>
                 <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.slider1_rental_page}></img>
                 <Carousel.Caption>
-                  <h3>First slide label</h3>
-                  <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                  {/* <h3>First slide label</h3>
+                  <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> */}
                 </Carousel.Caption>
               </Carousel.Item>
               <Carousel.Item className={cx('carousel-item')}>
                 <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.slider1_rental_page}></img>
                 <Carousel.Caption>
-                  <h3>Second slide label</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                 
                 </Carousel.Caption>
               </Carousel.Item>
               <Carousel.Item className={cx('carousel-item')}>
                 <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.slider1_rental_page}></img>
                 <Carousel.Caption>
-                  <h3>Third slide label</h3>
-                  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                 
                 </Carousel.Caption>
               </Carousel.Item>
             </Carousel>
           </Col>
         </Row>
-        <Row className="justify-content-center pt-5 pb-5">
-          <p className={cx('title', 'p-5')}>DỊCH VỤ THUÊ XE TỰ LÁI</p>
-          <div className={cx('trapezoid')}>
-            <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.manned}></img>
-            <div className={cx('text-overlay', 'p-4')}>Thuê xe ô tô</div>
-          </div>
-          <div className={cx('trapezoid', 'flipped')}>
-            <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.self_driving}></img>
-            <div className={cx('text-overlay', 'p-4')}>Thuê xe máy, mô tô</div>
-          </div>
+        <Row className="pt-5 pb-5">
+          <p className={cx('title', 'p-5')}>DỊCH VỤ THUÊ XE</p>
+          <Col sm="6" className="d-flex justify-content-start">
+            <Button className={cx('trapezoid')} variant="none">
+              <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.manned}></img>
+              <div className={cx('text-overlay', 'p-4')}>Thuê xe tự lái</div>
+            </Button>
+          </Col>
+          <Col sm="6" className="d-flex justify-content-end">
+            <Button className={cx('trapezoid', 'flipped', 'justify-content-right')} variant="none">
+              <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.self_driving}></img>
+              <div className={cx('text-overlay', 'p-4')}>Thuê xe có người lái</div>
+            </Button>
+          </Col>
         </Row>
-        <Row className={cx('justify-content-center pt-5 pb-5', 'background')}>
+        <Row className={cx(' pt-5 pb-5', 'background')}>
           <p className={cx('title', 'p-5')}>MÃ GIẢM GIÁ</p>
-          <Col xxl="4" xl="6" className="d-flex flex-column align-items-center mb-5">
+          <Col xxl="4" xl="6" className="d-flex flex-column align-items-center ">
             <Voucher></Voucher>
           </Col>
-          <Col xxl="4" xl="6" className={cx('d-flex flex-column align-items-center mb-5')}>
+          <Col xxl="4" xl="6" className={cx('d-flex flex-column align-items-center')}>
             <Voucher></Voucher>
           </Col>
-          <Col xxl="4" xl="6" className="d-flex flex-column align-items-center mb-5">
+          <Col xxl="4" xl="6" className="d-flex flex-column align-items-center ">
             <Voucher></Voucher>
           </Col>
-          <Col xxl="4" xl="6" className="d-flex flex-column align-items-center mb-5">
+          <Col xxl="4" xl="6" className="d-flex flex-column align-items-center ">
             <Voucher></Voucher>
           </Col>
-          <Col xxl="4" xl="6" className="d-flex flex-column align-items-center mb-5">
+          <Col xxl="4" xl="6" className="d-flex flex-column align-items-center ">
             <Voucher></Voucher>
           </Col>
           <p className={cx('note', 'p-5 justify-content-center')}>Hãy sử dụng mã giảm giá để tiết kiệm hơn nhé!</p>

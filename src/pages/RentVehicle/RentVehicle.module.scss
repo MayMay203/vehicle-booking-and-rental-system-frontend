@@ -1,124 +1,90 @@
 @use '../../abstracts' as abstracts;
 
-.carousel-indicators li {
-  // background-color: #ff0000; 
-  // width: 1.5rem;              
-  // height: 1.5rem;              
-  // border-radius: 50%;        
-  // margin: 0 0.5rem;             
-}
-
-.carousel-indicators .button {
-  // background-color: #00ff00;
-}
-
 .carousel-item img {
-//   height: auto;
-//   object-fit: cover; 
+  height: auto;
+  width: 100%;
+  object-fit: cover; 
   aspect-ratio: 3/ 1;
 }
 
 .title {
-    font-weight: 600;
-    font-size:3rem;
-    text-align: center;
+  font-weight: 600;
+  font-size:3rem;
+  text-align: center;
+   @include abstracts.screen(sm){
+     font-size:2.4rem;
+  }
 }
 
 .trapezoid {
-    width: 64rem; 
-    height: 30rem; 
-    background-color: #4CAF50; 
-    clip-path: polygon(0% 0%, 70% 0%, 100% 100%, 0% 100%); 
-    margin: 5rem 0;
-    border-radius: 2rem;
-    margin-top: 2rem; 
-    position: relative; 
-    overflow: hidden;
+  width: 96%; 
+  height: 30rem;
+  background-color: #4CAF50; 
+  clip-path: polygon(0% 0%, 70% 0%, 100% 100%, 0% 100%); 
+  margin: 5rem 0;
+  border-radius: 2rem;
+  margin-top: 2rem; 
+  position: relative; 
+  overflow: hidden;
 
-    @include abstracts.screen(sm){
-      margin-right: 12px;
-    }
+  @include abstracts.screen(sm){
+    // margin-right: 12px;
+    height: 20rem;
+  }
+  @include abstracts.screen(md){
+    height: 16rem;
+  }
+  @include abstracts.screen(lg){
+    height: 20rem;
+  }
 }
 
 .trapezoid img {
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    transform: translate(-50%, -50%); 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  transform: translate(-50%, -50%); 
 }
 .flipped {
-    transform: rotate(180deg);
-    margin-left: auto;
-    margin-top: 8rem;
+  transform: rotate(180deg);
+  margin-top: 8rem;
+  @include abstracts.screen(sm){
+    margin-top: 1rem;
+  }
 }
 
 .text-overlay {
-    color: #A33A3A;              
-    background-color: #FCD4C6;   
-    text-align: center;      
-    font-size: 2rem;   
-    font-weight: 600; 
-    padding: 0.5rem;             
-    position: absolute;          
-    bottom: 3.33%;               
-    left: 10%;                   
-    width: 50%;                 
+  color: #A33A3A;              
+  background-color: #FCD4C6;   
+  text-align: center;      
+  font-size: 2rem;   
+  font-weight: 600;            
+  position: absolute;          
+  bottom: 3.33%;               
+  left: 10%;                   
+  width: 50%;     
+  border-radius: 0.3rem;
+  @include abstracts.screen(lg){
+    font-size: 1.4rem;  
+    padding: 1rem !important;
+  }           
 }
 .flipped .text-overlay{
-    transform: rotate(180deg);
-    bottom: 80%;
+  top: 3.33%;
+  bottom: auto;
+  transform: rotate(180deg);
 }
 
-/* Media query cho màn hình nhỏ hơn */
-@media (max-width: 800px) {
-  .trapezoid {
-    width: 32rem; 
-    height: 15rem; 
-  }
-  .text-overlay {
-    font-size: 1.5rem; 
-    padding: 0.3rem;
-  }
-}
-
-/* Media query cho màn hình cực nhỏ (điện thoại di động) */
-@media (max-width: 300px) {
-  .trapezoid {
-    width: 8rem; 
-    height: 3rem; 
-  }
-  .text-overlay {
-    font-size: 0.3rem; 
-    padding: 0.1rem;
-  }
-}
 
 .background{
-    background-color: #FFF6F3;
-
-    @include abstracts.screen(sm){
-      width: 100%;
-      margin: 0;
-    }
+  background-color: #FFF6F3;
+  width: 100%;
+  margin: 0;
 }
 
-@keyframes pulse_sm {
-  0% {
-      transform: scale(1);
-      color: #f66e3c; 
-  }
-  50% {
-      transform: scale(1.02); 
-      color: #E20D0D; 
-  }
-  100% {
-      transform: scale(1);
-      color: #f66e3c; 
-  }
-}
 
 @keyframes pulse {
   0% {
@@ -126,7 +92,7 @@
       color: #f66e3c; 
   }
   50% {
-      transform: scale(1.1); 
+      transform: scale(1.04); 
       color: #E20D0D; 
   }
   100% {
@@ -135,17 +101,14 @@
   }
 }
 .note{
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 600;
   color: #D34714;
   font-style: italic;
-  font-family: 'Inter';
+  // font-family: 'Inter';
   text-align: center;
   animation: pulse 3s infinite;
-
-  @include abstracts.screen(md){
-    animation: pulse_sm 3s infinite;
-  }
+  line-height: 1.5;
 }
 
 .nav-button {
