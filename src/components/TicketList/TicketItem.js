@@ -9,6 +9,9 @@ import Voucher from '../Voucher'
 import {useState } from 'react'
 import FeedbackList from '../FeedbackList'
 import UtilitiesList from '../UtilitiesList'
+import ImageList from '../ImageList'
+import Slider from 'react-slick'
+import FeedbackItem from '../FeedbackList/FeedbackItem'
 
 const cx = classNames.bind(styles)
 function TicketItem() {
@@ -16,7 +19,7 @@ function TicketItem() {
   const [isDetail, setIsDetail] = useState(false)
 
   const handleShowDetail = () => {
-     setIsDetail((prev) => !prev)
+    setIsDetail((prev) => !prev)
   }
 
   const handleClickTab = (type) => {
@@ -115,7 +118,7 @@ function TicketItem() {
             </div>
           )}
           {type === 'feedback' && (
-            <div className="mt-5 position-relative">
+            <div className="position-relative">
               <div className={cx('top')}>
                 <div className={cx('rating')}>
                   <StarIcon className={cx('icon')} width="2.6rem" />
@@ -123,7 +126,16 @@ function TicketItem() {
                 </div>
                 <span className={cx('number')}>830 đánh giá</span>
               </div>
-              <FeedbackList />
+              <div className="p-5 pt-3">
+                <Slider dots={true} slidesToScroll={2} rows={2} slidesToShow={2}>
+                  <FeedbackItem className="pt-4" />
+                  <FeedbackItem className="pt-4" />
+                  <FeedbackItem className="pt-4" />
+                  <FeedbackItem className="pt-4" />
+                  <FeedbackItem className="pt-4" />
+                  <FeedbackItem className="pt-4" />
+                </Slider>
+              </div>
             </div>
           )}
           {type === 'policy' && (
@@ -136,11 +148,8 @@ function TicketItem() {
               </div>
             </div>
           )}
-          {
-            type === 'utility' && (
-                <UtilitiesList/>
-            )
-          }
+          {type === 'utility' && <UtilitiesList />}
+          {type === 'image' && <ImageList />}
         </div>
       )}
     </div>

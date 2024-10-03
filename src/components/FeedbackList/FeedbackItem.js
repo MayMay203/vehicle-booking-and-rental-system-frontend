@@ -6,10 +6,10 @@ import classNames from 'classnames/bind'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 
 const cx = classNames.bind(styles)
-function FeedbackItem() {
+function FeedbackItem({className}) {
   return (
     <div className="col">
-      <div className={cx('item')}>
+      <div className={cx('item', [className])}>
         <div className={cx('info-wrapper')}>
           <Image src="default" alt="avatar" className={cx('avatar')} />
           <div className={cx('info')}>

@@ -1,9 +1,14 @@
+@use '../../abstracts' as abstracts;
+
 .item{
-    margin: 12px auto;
-    width: 60%;
-    padding: 12px;
     background-color: #F5F5F5;
     box-shadow: 0 1px 1px #000;
+    padding: 12px;
+    min-height: 150px;
+
+    @include abstracts.screen(lg){
+        min-height: initial;
+    }
 }
 
 .img{
@@ -21,4 +26,5 @@
     margin-top: 12px;
     font-weight: 400;
     font-size: 1.5rem;
+    line-height: 1.4;
 }

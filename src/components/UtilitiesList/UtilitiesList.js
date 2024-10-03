@@ -2,7 +2,7 @@ import { images } from '~/assets/images'
 import UtilityItem from './UtilityItem'
 function UtilitiesList() {
   return (
-    <div className="mt-5 row row-cols-1 gy-3">
+    <div className="p-4 pt-0 mt-5 row row-cols-1 row-cols-lg-2 gx-lg-4 gy-3">
       <UtilityItem
         src={images.chair}
         alt="chair"
