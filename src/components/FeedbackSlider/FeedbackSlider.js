@@ -4,12 +4,12 @@ import FeedbackItem from "../FeedbackList/FeedbackItem";
 function FeedbackSlider() {
     const settings = {
       dot: true,
-      slideToShow: 2,
-      slideToScroll: 2,
+      slidesToShow: 2,
+      slidesToScroll: 2,
       rows: 2,
       responsive: [
         {
-          breakpoint: 768,
+          breakpoint: 992,
           settings: {
             slidesToShow: 1, 
             slidesToScroll: 1,
@@ -19,7 +19,7 @@ function FeedbackSlider() {
       ],
     }
     return (
-      <Slider {...settings} className='mt-5' >
+      <Slider {...settings} className='m-auto p-5 pt-0 mt-5' >
         <FeedbackItem className="pt-4" />
         <FeedbackItem className="pt-4" />
         <FeedbackItem className="pt-4" />

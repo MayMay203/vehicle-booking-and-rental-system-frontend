@@ -64,8 +64,10 @@
     background-color: var(--primary-bg);
     font-weight: 600;
 
-    @include abstracts.screen(sm){
+    @include abstracts.screen(md){
         font-size: 1.4rem;
+        width: 85px;
+        height: 30px;
     }
 }
 
@@ -154,6 +156,10 @@
     position: absolute;
     column-gap: 12px;
     right: 0;
+
+    @include abstracts.screen(md){
+        margin-top: 8px;
+    }
 }
 
 .number{
