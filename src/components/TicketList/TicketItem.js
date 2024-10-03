@@ -7,16 +7,36 @@ import { faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
 import Voucher from '../Voucher'
 import {useState } from 'react'
-import FeedbackList from '../FeedbackList'
 import UtilitiesList from '../UtilitiesList'
 import ImageList from '../ImageList'
 import Slider from 'react-slick'
-import FeedbackItem from '../FeedbackList/FeedbackItem'
+import FeedbackSlider from '../FeedbackSlider'
 
 const cx = classNames.bind(styles)
 function TicketItem() {
   const [type, setType] = useState('feedback')
   const [isDetail, setIsDetail] = useState(false)
+
+  const settings = {
+    slidesToShow: 5,
+    infinite: false,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 576,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
 
   const handleShowDetail = () => {
     setIsDetail((prev) => !prev)
@@ -75,7 +95,7 @@ function TicketItem() {
       </div>
       {isDetail && (
         <div className="mt-5">
-          <div className={cx('tabs')}>
+          <Slider {...settings}>
             <button
               className={cx('tab-item', { active: type === 'discount' })}
               onClick={() => handleClickTab('discount')}
@@ -100,7 +120,7 @@ function TicketItem() {
             >
               Tiện ích
             </button>
-          </div>
+          </Slider>
           {type === 'discount' && (
             <div className="mt-5 row row-cols-1 justify-content-center row-cols-lg-2 gy-5">
               <div className="col mt-0">
@@ -127,14 +147,7 @@ function TicketItem() {
                 <span className={cx('number')}>830 đánh giá</span>
               </div>
               <div className="p-5 pt-3">
-                <Slider dots={true} slidesToScroll={2} rows={2} slidesToShow={2}>
-                  <FeedbackItem className="pt-4" />
-                  <FeedbackItem className="pt-4" />
-                  <FeedbackItem className="pt-4" />
-                  <FeedbackItem className="pt-4" />
-                  <FeedbackItem className="pt-4" />
-                  <FeedbackItem className="pt-4" />
-                </Slider>
+               <FeedbackSlider/>
               </div>
             </div>
           )}
