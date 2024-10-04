@@ -140,6 +140,7 @@ function Header({ menus }) {
                 <FontAwesomeIcon icon={faBell} />
               </button>
               <Tippy
+                offset={[-70, 10]}
                 delay={[100, 500]}
                 interactive
                 placement="bottom"
