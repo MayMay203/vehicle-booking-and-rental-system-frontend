@@ -6,4 +6,6 @@ export const routes = {
   partner: '/register-partner',
   answer: '/answer-hub',
   about: '/about',
+  account: '/manage-account',
+  order: '/manage-orders'
 }

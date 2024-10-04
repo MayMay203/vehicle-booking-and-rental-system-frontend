@@ -39,20 +39,7 @@
 
 .icon {
     margin-right: 4px;
-    // animation: shake 1s ease-in-out infinite;
 }
-
-// @keyframes shake { 
-//     0% {
-//         transform: translateX(0);
-//     }
-//     10%, 30%, 50%, 70% {
-//         transform: translateX(-3px);
-//     }
-//     20%, 40%, 60%, 80%, 100% {
-//         transform: translateX(3px);
-//     }
-// }
 
 
 .btn-menu{
@@ -96,9 +83,53 @@
 }
 
 .content-actions{
-    padding: 8px 8px 0 0;
+    padding: 8px 8px 4px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.btn-action{
+    color: #A33A3A;
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+    position: relative;
+
+    &::after{
+        content: '1';
+        color: var(--white-color);
+        font-size: 1.2rem;
+        font-weight: 600;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: red;
+        display: block;
+        position: absolute;
+        top: 0px;
+        right: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    & ~ .btn-action{
+        font-size: 2.2rem;
+        margin-left: 8px;
+    }
+
+    & ~ .btn-action::after{
+        top: 2px;
+        right: 4px;
+    }
+}
+
+.avatar{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-left: 12px;
+    cursor: pointer;
+}

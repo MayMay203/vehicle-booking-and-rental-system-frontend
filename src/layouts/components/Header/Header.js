@@ -4,10 +4,19 @@ import PropTypes from 'prop-types'
 import Button from '~/components/Button'
 import { BackIcon, MenuIcon, PhoneIcon } from '~/components/Icon'
 import Logo from '~/components/Logo'
-import Menu from './Menu/Menu'
-import MenuItem from './Menu/MenuItem'
+import Menu from '../../../components/Menu/Menu'
+import MenuItem from '../../../components/Menu/MenuItem'
 import { useEffect, useRef, useState } from 'react'
 import { useModal } from '~/Context/AuthModalProvider'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBell } from '@fortawesome/free-regular-svg-icons'
+import { faMessage } from '@fortawesome/free-regular-svg-icons'
+import Image from '~/components/Image'
+import { images } from '~/assets/images'
+import Tippy from '@tippyjs/react/headless'
+import PopperWrapper from '~/components/PopperWrapper'
+import UserMenu from '~/UserMenu'
+import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
@@ -16,6 +25,7 @@ function Header({ menus }) {
   const headerRef = useRef(null)
   const [lastScrollY, setLastScrollY] = useState()
   const { openModal } = useModal()
+  const isLogin = true
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -59,9 +69,36 @@ function Header({ menus }) {
             <button className={cx('btn-back')} onClick={hanldeBack}>
               <BackIcon />
             </button>
-            <Button outline className="d-sm-none" onClick={() => openModal('login')}>
-              Đăng nhập
-            </Button>
+            {!isLogin ? (
+              <Button outline className="d-sm-none" onClick={() => openModal('login')}>
+                Đăng nhập
+              </Button>
+            ) : (
+              <div className={cx('actions')}>
+                <button className={cx('btn-action', 'd-md-none')}>
+                  <FontAwesomeIcon icon={faMessage} />
+                </button>
+                <button className={cx('btn-action', 'd-md-none')}>
+                  <FontAwesomeIcon icon={faBell} />
+                </button>
+                <Tippy
+                  delay={[100, 500]}
+                  interactive
+                  placement="bottom"
+                  render={(attrs) => (
+                    <div className={cx('menu')} {...attrs}>
+                      <PopperWrapper>
+                        <UserMenu></UserMenu>
+                      </PopperWrapper>
+                    </div>
+                  )}
+                >
+                  <button>
+                    <Image src={images.noImage} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
+                  </button>
+                </Tippy>
+              </div>
+            )}
           </div>
           <Menu>
             {menus.map((menu, index) => (
@@ -81,17 +118,48 @@ function Header({ menus }) {
               <span>7h-19h</span>
             </p>
           </div>
-          <div className={cx('actions')}>
-            <Button outline className="d-none d-md-block" onClick={() => openModal('register')}>
-              Đăng ký
-            </Button>
-            <Button outline className="d-none d-sm-block" onClick={() => openModal('login')}>
-              Đăng nhập
-            </Button>
-            <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
-              <MenuIcon />
-            </button>
-          </div>
+          {!isLogin && (
+            <div className={cx('actions')}>
+              <Button outline className="d-none d-md-block" onClick={() => openModal('register')}>
+                Đăng ký
+              </Button>
+              <Button outline className="d-none d-sm-block" onClick={() => openModal('login')}>
+                Đăng nhập
+              </Button>
+              <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
+                <MenuIcon />
+              </button>
+            </div>
+          )}
+          {isLogin && (
+            <div className={cx('actions')}>
+              <button to={config.routes.message} className={cx('btn-action', 'd-none', 'd-md-block')}>
+                <FontAwesomeIcon icon={faMessage} />
+              </button>
+              <button className={cx('btn-action', 'd-none', 'd-md-block')}>
+                <FontAwesomeIcon icon={faBell} />
+              </button>
+              <Tippy
+                delay={[100, 500]}
+                interactive
+                placement="bottom"
+                render={(attrs) => (
+                  <div className={cx('menu')} {...attrs}>
+                    <PopperWrapper>
+                      <UserMenu></UserMenu>
+                    </PopperWrapper>
+                  </div>
+                )}
+              >
+                <button>
+                  <Image src={images.noImage} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                </button>
+              </Tippy>
+              <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
+                <MenuIcon />
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <Menu className="d-none d-lg-flex">
