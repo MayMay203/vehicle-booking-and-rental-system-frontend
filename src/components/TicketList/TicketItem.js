@@ -147,12 +147,12 @@ function TicketItem() {
                 <span className={cx('number')}>830 đánh giá</span>
               </div>
               <div className="p-5 pt-3">
-               <FeedbackSlider/>
+                <FeedbackSlider />
               </div>
             </div>
           )}
           {type === 'policy' && (
-            <div className="mt-5 p-5 pt-2">
+            <div className={cx('policy-wrapper', 'mt-5')}>
               <p className={cx('title')}>Chính sách nhà xe</p>
               <div className={cx('policies')}>
                 <span className={cx('policy')}>Không hút thuốc, uống rượu trên xe.</span>

@@ -1,0 +1,9 @@
+@use '../../abstracts' as abstracts;
+
+.custom{
+    padding:0 32px;
+    
+    @include abstracts.screen(lg){
+        padding: 0;
+    }
+}

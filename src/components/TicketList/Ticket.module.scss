@@ -188,6 +188,14 @@
     margin-bottom: 26px;
 }
 
+.policy-wrapper{
+    padding-left: 70px;
+
+    @include abstracts.screen(lg){
+        padding-left: 40px;
+    }
+}
+
 .policies{
     display: flex;
     flex-direction: column;
