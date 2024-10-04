@@ -1,11 +1,11 @@
 import TicketItem from "./TicketItem";
-function TicketList() {
+function TicketList({status}) {
     return (
       <div>
-        <TicketItem />
-        <TicketItem />
-        <TicketItem />
-        <TicketItem />
+        <TicketItem status={status} />
+        <TicketItem status={status} />
+        <TicketItem status={status} />
+        <TicketItem status={status} />
       </div>
     )
 }
