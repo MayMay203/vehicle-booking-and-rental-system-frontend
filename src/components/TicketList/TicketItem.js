@@ -13,6 +13,7 @@ import FeedbackSlider from '../FeedbackSlider'
 import Tabs from '../Tabs'
 import { faReadme } from '@fortawesome/free-brands-svg-icons'
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
+import Comment from '../Comment'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status }) {
@@ -108,15 +109,16 @@ function TicketItem({ status }) {
           <div className="d-flex gap-3 align-items-center">
             <img className={cx('location-img')} alt="location" src={images.location} />
             <div className={cx('location-time', 'd-flex', 'flex-column', 'gap-4', 'justify-content-center')}>
-              <div className='d-flex gap-4'>
+              <div className="d-flex gap-4">
                 <span>9:00 Hà Nội</span>
-                {
-                  status && <p className={cx('date')}>
+                {status && (
+                  <p className={cx('date')}>
                     <FontAwesomeIcon icon={faCalendar} />
-                    05/10/2024</p>
-                }
+                    05/10/2024
+                  </p>
+                )}
               </div>
-             
+
               <span className={cx('duration')}>1h30m</span>
               <span>10:30 Hải Phòng</span>
             </div>
@@ -128,10 +130,12 @@ function TicketItem({ status }) {
             <span className={cx('sale-off')}>-50%</span>
           </div>
           {!status && <span className={cx('status', 'w-100')}>Còn 19 chỗ trống</span>}
-          <button className="ml-auto d-flex align-items-center gap-2 fs-4">
-            Chi tiết đơn đặt
-            <FontAwesomeIcon icon={faReadme} className={cx('icon')}></FontAwesomeIcon>
-          </button>
+          {status && (
+            <button className="ml-auto d-flex align-items-center gap-2 fs-4">
+              Chi tiết đơn đặt
+              <FontAwesomeIcon icon={faReadme} className={cx('icon')}></FontAwesomeIcon>
+            </button>
+          )}
           <div className="d-flex w-100 align-items-center justify-content-between justify-content-md-end justify-content-lg-none mt-4 mt-lg-0 gap-sm-2 gap-md-5 gap-lg-5">
             <button className={cx('actions', 'd-flex', 'gap-2', 'align-items-center')} onClick={handleShowDetail}>
               <span>Thông tin chi tiết</span>
@@ -181,6 +185,7 @@ function TicketItem({ status }) {
               <div className="p-5 pt-3">
                 <FeedbackSlider />
               </div>
+              {status === 'completed' && <Comment />}
             </div>
           )}
           {type === 'policy' && (
