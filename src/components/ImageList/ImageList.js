@@ -1,7 +1,9 @@
 import { images } from '~/assets/images';
 import styles from './ImageList.module.scss'
 import classNames from 'classnames/bind';
-import Slider from 'react-slick';
+import 'matchmedia-polyfill'
+import 'matchmedia-polyfill/matchMedia.addListener'
+import Slider from 'react-slick'
 
 const cx = classNames.bind(styles)
 function ImageList() {
