@@ -7,9 +7,9 @@ import Button from '~/components/Button'
 const cx = classNames.bind(styles)
 const now = 60
 
-function Voucher() {
+function Voucher({className}) {
   return (
-    <div className={cx('wrapper', 'voucher')} style={{ backgroundImage: `url(${images.voucher})` }}>
+    <div className={cx('wrapper', 'voucher',[className])} style={{ backgroundImage: `url(${images.voucher})` }}>
       <Col xs="3" className={cx('d-flex justify-content-center align-items-center', 'border-right')}>
         <p className={cx('voucher-value')}>-50%</p>
       </Col>

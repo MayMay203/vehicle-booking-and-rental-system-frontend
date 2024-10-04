@@ -15,4 +15,8 @@ export const images = {
   slider1_rental_page: require('./slider1_rental_page.png'),
   self_driving: require('./self_driving.png'),
   manned: require('./manned.png'),
+  pillow: require('./pillow.png'),
+  beverage: require('./beverage.png'),
+  chair: require('./message_chair.png'),
+  sandal: require('./sandel.png')
 }

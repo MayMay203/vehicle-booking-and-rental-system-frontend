@@ -6,6 +6,9 @@ import RentVehicle from '~/pages/RentVehicle'
 import BookVehicle from '~/pages/BookVehicle'
 import RegisterPartner from '~/pages/RegisterPartner'
 import About from '~/pages/About'
+import OrderManagement from '~/pages/OrderManagement'
+import HeaderOnly from '~/layouts/HeaderOnly'
+import AccountManagement from '~/pages/AccountManagement'
 
 const publicRoutes = [
   {
@@ -35,6 +38,16 @@ const publicRoutes = [
   {
     path: config.routes.about,
     component: About,
+  },
+  {
+    path: config.routes.order,
+    component: OrderManagement,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.account,
+    component: AccountManagement,
+    layout: HeaderOnly,
   },
 ]
 

@@ -1,5 +1,3 @@
-@use '../../abstracts' as abstracts;
-
 .selected{
     color: #FFC700;
 }
@@ -33,7 +31,7 @@
 
 .bottom{
     display: flex;
-    justify-content: space-between;
+    column-gap: 40px;
     align-items: center;
     font-size: 1.2rem;
     font-weight: 500;
@@ -49,12 +47,7 @@
     align-items: center;
     column-gap: 4px;
     color: #22B760;
-    margin-right: 30px;
     font-weight: 600;
-
-    @include abstracts.screen(lg){
-        margin-right: 10px;
-    }
 }
 
 .item{
