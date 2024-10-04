@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .wrapper {
     margin: 0 auto;
     width: 90%;
@@ -5,6 +7,11 @@
     background-color: var(--white-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     border-radius: 8px; 
+
+    @include abstracts.screen(lg){
+        width: 100%;
+        padding: 20px 12px;
+    }
 }
 
 .btn-send{
@@ -28,6 +35,18 @@
     resize: none;
     font-size: 1.5rem;
     max-height: 100px;
+    line-height: 1.4;
+
+    @include abstracts.screen(lg){
+        max-height: 200px;
+    }
+}
+
+.quality{
+    @include abstracts.screen(md){
+        font-size: 1.4rem;
+        white-space: nowrap;
+    }
 }
 
 .icon{

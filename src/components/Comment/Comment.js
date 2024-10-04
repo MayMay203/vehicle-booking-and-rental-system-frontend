@@ -21,7 +21,7 @@ function Comment() {
   return (
     <div className={cx('wrapper')}>
       <div className="d-flex column-gap-3">
-        <span>Chất lượng dịch vụ:</span>
+        <span className={cx('quality')}>Chất lượng dịch vụ:</span>
         <div className="d-flex column-gap-3">
           {[...Array(5)].map((_, index) => (
             <FontAwesomeIcon
@@ -39,7 +39,7 @@ function Comment() {
           <textarea
             ref={textareaRef}
             rows={3}
-            placeholder="Đánh giá trải nghiệm của bạn ..."
+            placeholder="Đánh giá trải nghiệm"
             className={cx('text-comment')}
             onInput={handleInput}
           ></textarea>

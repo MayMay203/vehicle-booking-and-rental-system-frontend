@@ -49,6 +49,10 @@ function TicketItem({ status }) {
   const tabList = useMemo(() => {
     const tabs = [
       {
+        label: 'Giảm giá',
+        value: 'discount',
+      },
+      {
         label: 'Đánh giá',
         value: 'feedback',
       },
@@ -65,13 +69,6 @@ function TicketItem({ status }) {
         value: 'utility',
       },
     ]
-
-    if (!status) {
-      tabs.unshift({
-        label: 'Giảm giá',
-        value: 'discount',
-      })
-    }
 
     return tabs
   }, [status])
@@ -131,7 +128,7 @@ function TicketItem({ status }) {
           </div>
           {!status && <span className={cx('status', 'w-100')}>Còn 19 chỗ trống</span>}
           {status && (
-            <button className="ml-auto d-flex align-items-center gap-2 fs-4">
+            <button className={cx('d-flex', 'align-items-center', 'gap-2', 'fs-4', 'detail-btn')}>
               Chi tiết đơn đặt
               <FontAwesomeIcon icon={faReadme} className={cx('icon')}></FontAwesomeIcon>
             </button>

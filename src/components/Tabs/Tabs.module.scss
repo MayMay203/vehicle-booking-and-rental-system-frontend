@@ -1,6 +1,7 @@
 // Tabs
 .tab-item{
     padding: 6px 20px;
+    font-size: 1.5rem;
     
     &.active::after{
         content: '';

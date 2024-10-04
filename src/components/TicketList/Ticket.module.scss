@@ -215,3 +215,12 @@
     }
 }
 
+.detail-btn{
+    @include abstracts.screen(lg){
+        margin-left: auto;
+    }
+    @include abstracts.screen(md){
+        margin-left: initial;
+    }
+}
+
