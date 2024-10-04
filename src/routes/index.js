@@ -2,7 +2,8 @@ import { config } from '~/config'
 import Home from '~/pages/Home'
 import AnswerHub from '~/pages/AnswerHub'
 import BuyTicket from '~/pages/BuyTicket'
-import RentVehicle from '~/pages/RentVehicle'
+import RentVehicle from '~/pages/RentalPage/RentVehicle'
+import RentalService from '~/pages/RentalPage/RentalService'
 import BookVehicle from '~/pages/BookVehicle'
 import RegisterPartner from '~/pages/RegisterPartner'
 import About from '~/pages/About'
@@ -35,6 +36,10 @@ const publicRoutes = [
   {
     path: config.routes.about,
     component: About,
+  },
+  {
+    path: config.routes.rentalService,
+    component: RentalService,
   },
 ]
 

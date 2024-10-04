@@ -1,4 +1,4 @@
-@use '../../abstracts' as abstracts;
+@use '../../../abstracts' as abstracts;
 
 .carousel-item img {
   height: auto;
@@ -105,7 +105,7 @@
   font-weight: 600;
   color: #D34714;
   font-style: italic;
-  // font-family: 'Inter';
+  font-family: 'Inter';
   text-align: center;
   animation: pulse 3s infinite;
   line-height: 1.5;
