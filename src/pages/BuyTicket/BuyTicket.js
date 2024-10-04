@@ -15,7 +15,7 @@ function BuyTicket() {
   return (
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb className="mb-5">
-        <Breadcrumb.Item href={config.routes.home}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item href={config.routes.home}>Trang chủ</Breadcrumb.Item>
         <Breadcrumb.Item href={config.routes.ticket} active>
           Vé xe khách
         </Breadcrumb.Item>
