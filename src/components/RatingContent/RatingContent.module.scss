@@ -1,0 +1,32 @@
+@use '../../abstracts' as abstracts;
+
+.rating-card{
+    border: 1px solid #FFEBE4;
+    padding: 1rem;
+    margin: 1rem 1rem 1rem 0;
+    border-radius: 0.3rem;
+}
+.avatar{
+    border-radius: 50%;
+    width: 90%;
+    aspect-ratio: 1/1; 
+    border: 1px solid #FFEBE4;
+    // @include abstracts.screen(sm){
+    //   width: rem;
+    // }
+}
+.comment-front{
+    // @include abstracts.screen(sm){
+    //     width: 2rem;
+    // }
+}
+.comment, .time{
+    font-weight: 500;
+    line-height: 2.5rem;
+}
+.time-wrap{
+    text-align: end;
+}
+.time{
+    font-size: 1.4rem;
+}

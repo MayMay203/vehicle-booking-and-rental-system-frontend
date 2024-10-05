@@ -7,6 +7,7 @@ import RentalService from '~/pages/RentalPage/RentalService'
 import BookVehicle from '~/pages/BookVehicle'
 import RegisterPartner from '~/pages/RegisterPartner'
 import About from '~/pages/About'
+import RentalServiceDetail from '~/pages/RentalPage/RentalServiceDetail'
 
 const publicRoutes = [
   {
@@ -40,6 +41,10 @@ const publicRoutes = [
   {
     path: config.routes.rentalService,
     component: RentalService,
+  },
+  {
+    path: config.routes.rentalServiceDetail,
+    component: RentalServiceDetail,
   },
 ]
 

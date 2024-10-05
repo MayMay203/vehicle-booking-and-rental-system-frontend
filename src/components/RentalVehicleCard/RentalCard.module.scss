@@ -98,25 +98,13 @@
     width: 90%;
     margin: auto;
 }
-.rating{
-    background-color: #FFF6F3;
-}
 .price{
-background-color: #FFEBE4;
-}
-.rating, .price{
+    background-color: #FFEBE4;
     border-radius: 0.5rem;
     padding: 0.6rem 1rem 0.6rem 1rem;
     text-align: center;
 }
 
-.rating-value{
-    margin-right: 0.5rem;
-}
-.icon-star{
-    color: #FFC700;
-    font-size: 1.6rem;
-}
 .icon-money{
     color: #FF672F;
 }

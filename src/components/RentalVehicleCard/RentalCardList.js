@@ -2,15 +2,16 @@ import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './RentalCard.module.scss'
 import RentalCardItem from './RentalCardItem'
+import PropTypes from 'prop-types'
 
 const cx = classNames.bind(styles)
-function RentalCardList({ maxColumns = 4 }) {
+function RentalCardList({ maxColumns = 4, typeService }) {
   const cards = [
-    <RentalCardItem key={1} />,
-    <RentalCardItem key={2} />,
-    <RentalCardItem key={3} />,
-    <RentalCardItem key={4} />,
-    <RentalCardItem key={5} />,
+    <RentalCardItem key={1} typeService={typeService} />,
+    <RentalCardItem key={2} typeService={typeService} />,
+    <RentalCardItem key={3} typeService={typeService} />,
+    <RentalCardItem key={4} typeService={typeService} />,
+    <RentalCardItem key={5} typeService={typeService} />,
   ]
 
   const numGhostColumns = maxColumns - (cards.length % maxColumns || maxColumns)
@@ -29,5 +30,7 @@ function RentalCardList({ maxColumns = 4 }) {
     </div>
   )
 }
-
+RentalCardList.propTypes = {
+  typeService: PropTypes.string.isRequired,
+}
 export default RentalCardList
