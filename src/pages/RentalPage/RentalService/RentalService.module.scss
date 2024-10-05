@@ -71,7 +71,10 @@
 .datetime-rental{
     border: 0.1rem solid #DDDDDD;
     margin-bottom: 2rem;
-    padding: 8px;
+
+    @include abstracts.screen(md){
+        padding: 8px;
+    }
 }
 .txt, .btn-search{
     background-color: #FFEBE4;

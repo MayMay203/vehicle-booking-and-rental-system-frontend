@@ -54,8 +54,8 @@ html{
 
 body{
 	font-size: 1.6rem;
-	/* font-family: "Poppins", sans-serif; */
-	font-family: "Inter", sans-serif;
+	font-family: "Poppins", sans-serif;
+	/* font-family: "Inter", sans-serif; */
 	color: var(--text-color);
 	scroll-behavior: smooth!important;
 }
