@@ -109,7 +109,7 @@ function RentVehicle() {
         <Col sm="6" className="d-flex justify-content-start">
           <Button className={cx('trapezoid')} variant="none" onClick={() => handleNavigateToRentalService(manned)}>
             <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.manned}></img>
-            <div className={cx('text-overlay', 'p-4')}>Thuê xe tự lái</div>
+            <div className={cx('text-overlay', 'p-4')}>Thuê xe có người lái</div>
           </Button>
         </Col>
         <Col sm="6" className="d-flex justify-content-end">
@@ -119,7 +119,7 @@ function RentVehicle() {
             onClick={() => handleNavigateToRentalService(self_driving)}
           >
             <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.self_driving}></img>
-            <div className={cx('text-overlay', 'p-4')}>Thuê xe có người lái</div>
+            <div className={cx('text-overlay', 'p-4')}>Thuê xe tự lái</div>
           </Button>
         </Col>
       </Row>

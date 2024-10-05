@@ -182,7 +182,7 @@ function RentalService() {
           </Button>
         </Col>
       </Row>
-      <RentalVehicleCard></RentalVehicleCard>
+      <RentalVehicleCard typeService={typeService}></RentalVehicleCard>
     </div>
   )
 }

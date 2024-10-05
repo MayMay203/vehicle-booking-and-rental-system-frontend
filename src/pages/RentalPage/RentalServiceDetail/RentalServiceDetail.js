@@ -1,0 +1,256 @@
+import { config } from '~/config'
+import classNames from 'classnames/bind'
+import styles from './RentalServiceDetail.module.scss'
+import { Breadcrumb, Row, Col } from 'react-bootstrap'
+import { useLocation } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faBoxArchive,
+  faCar,
+  faCircleCheck,
+  faCircleXmark,
+  faClock,
+  faLocationDot,
+  faPhone,
+  faStopwatch,
+  faThumbTack,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons'
+import Rating from '~/components/Rating'
+import { images } from '~/assets/images'
+import Tab from 'react-bootstrap/Tab'
+import Tabs from 'react-bootstrap/Tabs'
+import Table from 'react-bootstrap/Table'
+import RatingContentList from '~/components/RatingContent/RatingContentList'
+
+const cx = classNames.bind(styles)
+function RentalServiceDetail() {
+  const location = useLocation()
+  const typeService = location.state?.typeService
+  const manned = 'manned'
+  const self_driving = 'self_driving'
+  return (
+    <div className={cx('wrapper', 'container')}>
+      <Breadcrumb className="mb-5">
+        <Breadcrumb.Item href={config.routes.home}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item href={config.routes.renting}>Thuê xe</Breadcrumb.Item>
+        <Breadcrumb.Item href={config.routes.rentalService}>
+          {typeService === self_driving && 'Thuê xe tự lái'}
+          {typeService === manned && 'Thuê xe có người lái'}
+        </Breadcrumb.Item>
+        <Breadcrumb.Item href={config.routes.renting} active>
+          Chi tiết xe
+        </Breadcrumb.Item>
+      </Breadcrumb>
+      <Row className="mb-5">
+        <Col xs="6">
+          <div className={cx('d-flex justify-content-start', 'trapezoid_lelf')}>
+            <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.vehicle}></img>
+          </div>
+        </Col>
+        {/* ---Trường hợp 2 ảnh--- */}
+        {/* <Col xs='6'>
+            <div className={cx('d-flex justify-content-end', 'trapezoid_right')}>
+              <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.vehicle1}></img>
+            </div>
+          </Col> */}
+
+        {/* ---Trường hợp 5 ảnh--- */}
+        <Col xs="6" className={cx('')}>
+          <Row>
+            <Col xs="6">
+              <img
+                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-up')}
+                alt="Vehicle"
+                src={images.vehicle}
+              ></img>
+            </Col>
+            <Col xs="6">
+              <img
+                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-up')}
+                alt="Vehicle"
+                src={images.vehicle1}
+              ></img>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs="6">
+              <img
+                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-down')}
+                alt="Vehicle"
+                src={images.vehicle}
+              ></img>
+            </Col>
+            <Col xs="6">
+              <img
+                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-down')}
+                alt="Vehicle"
+                src={images.vehicle1}
+              ></img>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Row className="mb-5">
+        <Col lg="8">
+          <Row className="mb-5">
+            <div className={cx('d-flex', 'name-location-vehicle')}>
+              <span className={cx('name-vehicle')}>Toyota Vios 2023 </span>
+              <Rating></Rating>
+            </div>
+            <div className={cx('icon-txt')}>
+              <FontAwesomeIcon icon={faLocationDot} className={cx('icon', 'icon-location')} />
+              <span className={cx('txt')}>98 Liên Hòa 2, Hòa Vang, Đà Nẵng</span>
+            </div>
+          </Row>
+          <Row className="mb-5">
+            <Tabs defaultActiveKey="information" id="tab-detail-vehicle" className="mb-3">
+              <Tab eventKey="information" title="Thông tin">
+                <Row>
+                  <Col>
+                    <div className={cx('icon-txt')}>
+                      <FontAwesomeIcon icon={faUser} className={cx('icon', 'icon-owner')} />
+                      <span className={cx('txt')}>Chủ xe:</span>
+                      <span className={cx('txt')}>Nguyễn Văn An</span>
+                    </div>
+                    <div className={cx('icon-txt')}>
+                      <FontAwesomeIcon icon={faPhone} className={cx('icon', 'icon-phone')} />
+                      <span className={cx('txt')}>Số điện thoại:</span>
+                      <span className={cx('txt')}>0842059998</span>
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Row>
+                    <span className={cx('title')}>Đặc điểm</span>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <div className={cx('feature', 'type-vehicle')}>
+                        <FontAwesomeIcon icon={faCar} className={cx('icon', 'icon-type')} />
+                        <div>
+                          <p className={cx('txt', 'name-feature')}>Loại xe</p>
+                          <p className={cx('txt', 'content-feature')}>Ô tô 4 chỗ</p>
+                        </div>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className={cx('feature', 'type-vehicle')}>
+                        <FontAwesomeIcon icon={faClock} className={cx('icon', 'icon-year')} />
+                        <div>
+                          <p className={cx('txt', 'name-feature')}>Đời xe</p>
+                          <p className={cx('txt', 'content-feature')}>2020</p>
+                        </div>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className={cx('feature', 'type-vehicle')}>
+                        <FontAwesomeIcon icon={faBoxArchive} className={cx('icon', 'icon-amount')} />
+                        <div>
+                          <p className={cx('txt', 'name-feature')}>Số lượng</p>
+                          <p className={cx('txt', 'content-feature')}>4 chiếc</p>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </Row>
+                <Row>
+                  <span className={cx('title')}>Mô tả</span>
+                  <span className={cx('content')}>
+                    Toyota Vios G là sự kết hợp hoàn hảo giữa tiết kiệm nhiên liệu và hiệu suất vận hành. - Với động cơ
+                    1.5L sản sinh công suất cực đại 107 mã lực cùng với hộp số vô cấp CVT mang đến sự trải nghiệm mượt
+                    mà và tiết kiệm nhiên liệu. - Nội thất rộng rãi và tính năng tiện nghi như hệ thống giải trí đa
+                    phương tiện, Vios G là một sự lựa chọn đáng tin cậy cho cuộc sống hàng ngày.
+                  </span>
+                </Row>
+                <Row>
+                  <span className={cx('title')}>Các tiện ích</span>
+                  <span className={cx('content')}>
+                    Có bản đồ, camera hành trình, camera lùi, điều hòa, định vị GPS, wifi,..
+                  </span>
+                </Row>
+              </Tab>
+              <Tab eventKey="policy" title="Điều khoản">
+                <Row>
+                  <span className={cx('title')}>Quy định</span>
+                  <span className={cx('content')}>
+                    - Sử dụng xe đúng mục đích. - Không sử dụng xe thuê vào mục đích phi pháp, trái pháp luật. - Không
+                    sử dụng xe thuê để cầm cố, thế chấp. - Không hút thuốc, nhả kẹo cao su, xả rác trong xe. - Không chở
+                    hàng quốc cấm dễ cháy nổ. - Không chở hoa quả, thực phẩm nặng mùi trong xe. - Khi trả xe, nếu xe bẩn
+                    hoặc có mùi trong xe, khách hàng vui lòng vệ sinh xe sạch sẽ hoặc gửi phụ thu phí vệ sinh xe. - Xe
+                    được giới hạn di chuyển ở mức 400km cho 24h, và lần lượt là 250km, 300km, 350 km cho gói 4h, 8h,
+                    12h. Trân trọng cảm ơn, chúc quý khách hàng có những chuyến đi tuyệt vời !
+                  </span>
+                </Row>
+                <Row>
+                  <span className={cx('title')}>Chính sách hủy chuyến</span>
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>Thời điểm hủy chuyến</th>
+                        <th>Khách thuê hủy chuyến</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div className={cx('icon-txt')}>
+                            <FontAwesomeIcon icon={faStopwatch} className={cx('icon', 'icon-clock-notice')} />
+                            <span className={cx('txt')}>Sau thanh toán &lt;= 1 giờ</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className={cx('icon-txt')}>
+                            <FontAwesomeIcon icon={faCircleCheck} className={cx('icon', 'icon-tick')} />
+                            <span className={cx('txt')}>Hoàn 100% toàn bộ chi phí đã thanh toán</span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className={cx('icon-txt')}>
+                            <FontAwesomeIcon icon={faStopwatch} className={cx('icon', 'icon-clock-warn')} />
+                            <span className={cx('txt')}>Sau thanh toán &gt; 1 giờ</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className={cx('icon-txt')}>
+                            <FontAwesomeIcon icon={faCircleXmark} className={cx('icon', 'icon-x')} />
+                            <span className={cx('txt')}>Khách thuê hủy chuyến</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                  <div className={cx('d-flex')}>
+                    <span className={cx('txt', 'note')}>Lưu ý:</span>
+                    <span className={cx('txt', 'note-content')}>
+                      Mọi tiền bạn đã thanh toán sẽ được hoàn trả 100% nếu chủ xe hủy đơn và hệ thống sẽ đánh giá xe 1
+                      sao.
+                    </span>
+                  </div>
+                </Row>
+              </Tab>
+              <Tab eventKey="rating" title="Đánh giá">
+                <RatingContentList></RatingContentList>
+              </Tab>
+            </Tabs>
+          </Row>
+        </Col>
+        <Col lg="4" className={cx('')}>
+          <Row className={cx('charge')}>
+            <div className={cx('icon-txt', 'd-flex justify-content-center align-items-center')}>
+              <FontAwesomeIcon icon={faThumbTack} className={cx('icon', 'm-0')} />
+              <span className={cx('txt')}>Bảng giá:</span>
+            </div>
+            <span className={cx('txt', 'charge-old')}>200.000đ/1 giờ</span>
+            <span className={cx('txt', 'charge-new')}>200.000đ / 2 giờ</span>
+          </Row>
+          <Row className={cx('order')}></Row>
+          <Row className={cx('surcharge')}></Row>
+        </Col>
+      </Row>
+    </div>
+  )
+}
+export default RentalServiceDetail

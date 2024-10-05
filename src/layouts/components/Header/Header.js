@@ -154,7 +154,7 @@ function Header({ menus }) {
                 )}
               >
                 <button>
-                  <Image src={images.noImage} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                  <Image src={images.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
                 </button>
               </Tippy>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>

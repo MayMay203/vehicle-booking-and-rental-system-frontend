@@ -10,7 +10,7 @@ export const get = async (url, options = {}) => {
 }
 
 export const post = async (url, body = {}, options = {}) => {
-  const response = await httpRequest.get(url, body, options)
+  const response = await httpRequest.post(url, body, options)
   return response.data
 }
 
