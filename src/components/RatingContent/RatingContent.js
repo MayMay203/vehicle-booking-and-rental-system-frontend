@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './RatingContent.module.scss'
 import { Row, Col } from 'react-bootstrap'
-import Image from 'react-bootstrap/Image'
 import {images} from '~/assets/images'
 import RatingStar from '../RatingStar'
 const cx = classNames.bind(styles)
@@ -10,7 +9,7 @@ function RatingContent() {
       <Row className={cx('rating-card')}>
         <Row>
           <Col xs="2" md="1">
-            <img src={images.avatar} className={cx('avatar')} />
+            <img src={images.avatar} className={cx('avatar')} alt='avatar' />
           </Col>
           <Col xs="7" md="8">
             <span>Bùi Thiên Bảo </span>

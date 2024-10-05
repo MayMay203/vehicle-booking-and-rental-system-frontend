@@ -2,7 +2,7 @@ import classNames from 'classnames/bind'
 import styles from './RentalCard.module.scss'
 import { Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAnglesDown, faCar, faCartShopping, faClock, faCodeBranch, faLocation, faLocationDot, faMoneyBill, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faAnglesDown, faCar, faCartShopping, faClock, faLocationDot, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
 import { images } from '~/assets/images'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
@@ -16,7 +16,7 @@ function RentalCardItem({typeService}) {
   return (
     <Button className={cx('rental-card', 'col-12', 'col-md-9', 'col-lg-4', 'col-xl-4')} variant="none" onClick={() => handleClickVehicle(typeService)}>
       <div className={cx('image-name-vehicle')}>
-        <img className={cx('image-vehicle')} src={images.renting}></img>
+        <img className={cx('image-vehicle')} src={images.renting} alt='car'></img>
         <span className={cx('name-vehicle')}>Toyota Vios 2020</span>
         <div className={cx('discount')}>
           <FontAwesomeIcon icon={faAnglesDown} className={cx('icon-discount')} />
