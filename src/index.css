@@ -81,8 +81,11 @@ button{
 
 /* Custom modal */
 .modal-header{
-	padding: 16px;
 	align-items: initial;
+}
+
+.modal-content{
+	padding: 16px 16px 32px 16px;
 }
 
 /* Custom breadcrumbs */

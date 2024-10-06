@@ -2,10 +2,9 @@ import { Modal } from 'react-bootstrap'
 import styles from './Modal.module.scss'
 import classNames from 'classnames/bind'
 import { useModal } from '~/Context/AuthModalProvider'
-import Form from '~/components/Form'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { verifyOTP } from '~/apiServices/verifyOTP'
 import { resendOTP } from '~/apiServices/resendOTP'
 
@@ -13,7 +12,16 @@ const cx = classNames.bind(styles)
 function AuthCodeModal() {
   const { isOpenModal, openModal, modalData, closeModal } = useModal()
   const { type, email } = modalData
+
+  const [isValid, setIsValid] = useState(false)
   const [otp, setOtp] = useState('')
+  const formRef = useRef(null)
+
+    useEffect(() => {
+      if (formRef.current) {
+        setIsValid(formRef.current.checkValidity())
+      }
+    }, [otp])
 
   const handleContinue = async (e) => {
     e.preventDefault()
@@ -47,22 +55,23 @@ function AuthCodeModal() {
         </div>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <form ref={formRef}>
           <FormInput
             title="Nhập OTP gửi từ email"
-            error="OTP không đúng"
             id="otp"
             type="otp"
             placeholder="Nhập OTP"
             value={otp}
+            required
             onChange={(e) => setOtp(e.target.value)}
+            isValid={isValid}
           ></FormInput>
           <span className={cx('time')}>2:00</span>
           <button className={cx('btn-resend')} onClick={handleResendOTP}>Gửi lại mã</button>
-          <Button className={cx('btn-submit')} onClick={handleContinue}>
+          <Button className={cx('btn-submit')} onClick={handleContinue} type='submit' disabled={!isValid}>
             Tiếp tục
           </Button>
-        </Form>
+        </form>
       </Modal.Body>
     </Modal>
   )

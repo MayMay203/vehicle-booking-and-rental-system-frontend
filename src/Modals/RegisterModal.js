@@ -2,11 +2,10 @@ import { Modal } from 'react-bootstrap'
 import styles from './Modal.module.scss'
 import classNames from 'classnames/bind'
 import { useModal } from '~/Context/AuthModalProvider'
-import Form from '~/components/Form'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { register } from '~/apiServices/registerService'
 
 const cx = classNames.bind(styles)
@@ -15,9 +14,17 @@ function RegisterModal() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
+  const [isValid, setIsValid] = useState(false)
+  const formRef = useRef(null)
 
-  const handleContinue = async(e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (formRef.current) {
+      setIsValid(formRef.current.checkValidity())
+    }
+  }, [email, password, confirmPass])
+
+  const handleContinue = async (e) => {
+    e.preventDefault()
     const data = await register(email, password, confirmPass)
     if (data) {
       console.log(data)
@@ -41,15 +48,18 @@ function RegisterModal() {
         </div>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <form ref={formRef}>
           <FormInput
             title="Email"
             error="Email không đúng định dạng"
             id="email"
             type="email"
-            placeholder="Email"
+            placeholder="Nhập email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            isValid={isValid}
+            required
           ></FormInput>
           <FormInput
             title="Mật khẩu"
@@ -57,21 +67,26 @@ function RegisterModal() {
             id="password"
             type="password"
             minLength="8"
-            placeholder="Mật khẩu"
+            placeholder="Nhập mật khẩu"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
+            isValid={isValid}
           ></FormInput>
           <FormInput
             title="Xác nhận mật khẩu"
-            error="Mật khẩu có ít nhất 8 kí tự"
-            id="confirmPass"
+            error="Mật khẩu xác nhận không đúng"
+            id="confirmPassword"
             type="password"
             minLength="8"
-            placeholder="Xác nhận mật khẩu"
+            placeholder="Nhập mật khẩu xác nhận"
             value={confirmPass}
+            password={password}
             onChange={(e) => setConfirmPass(e.target.value)}
+            isValid={isValid}
+            required
           ></FormInput>
-          <Button className={cx('btn-submit')} onClick={handleContinue}>
+          <Button className={cx('btn-submit')} onClick={handleContinue} disabled={!isValid} type="submit">
             Tiếp tục
           </Button>
           <div className={cx('other')}>hoặc</div>
@@ -87,7 +102,7 @@ function RegisterModal() {
               Đăng nhập
             </button>
           </div>
-        </Form>
+        </form>
       </Modal.Body>
     </Modal>
   )

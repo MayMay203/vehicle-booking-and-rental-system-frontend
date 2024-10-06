@@ -1,7 +1,3 @@
-.form{
-    padding: 8px 20px 20px;
-}
-
 .form-group{
     display: flex;
     flex-direction: column;
@@ -30,14 +26,15 @@
 .form-input{
     height: 42px;
     font-size: 1.5rem;
+    width: 100%;
 }
 
 .form-error{
-    margin-top: 10px;
+    margin-top: 12px;
+    margin-left: 4px;
     color: red;
     font-size: 1.3rem;
     font-weight: 500;
-    display: none;
 }
 
 .show{
@@ -61,4 +58,13 @@
     display: flex;
     align-items: center;
     column-gap: 4px;
+}
+
+.btn-eye{
+    padding: 8px;
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.7rem;
 }

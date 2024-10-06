@@ -2,11 +2,10 @@ import { Modal } from 'react-bootstrap'
 import styles from './Modal.module.scss'
 import classNames from 'classnames/bind'
 import { useModal } from '~/Context/AuthModalProvider'
-import Form from '~/components/Form'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { login } from '~/apiServices/login'
 import { UserContext } from '~/Context/UserProvider/UserProvider'
 
@@ -15,7 +14,15 @@ function LoginModal() {
   const { isOpenModal, openModal, closeModal } = useModal()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isValid, setIsValid] = useState(false)
+  const formRef = useRef(null)
   const userContext = useContext(UserContext)
+
+  useEffect(() => {
+    if (formRef.current) {
+      setIsValid(formRef.current.checkValidity())
+    }
+  }, [email, password])
 
   const handleShowRegister = () => {
     closeModal('login')
@@ -28,17 +35,17 @@ function LoginModal() {
   }
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    const data = await login(email, password);
+    e.preventDefault()
+    const data = await login(email, password)
     if (data) {
       alert('Đăng nhập thành công')
       userContext.toggleLogin()
       closeModal('login')
-    }
-    else {
+    } else {
       alert('Email hoặc mật khẩu sai')
     }
   }
+
   return (
     <Modal show={isOpenModal.login} onHide={() => closeModal('login')} centered>
       <Modal.Header closeButton>
@@ -48,15 +55,18 @@ function LoginModal() {
         </div>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <form ref={formRef} noValidate>
           <FormInput
             title="Email"
             error="Email không đúng định dạng"
             id="email"
             type="email"
-            placeholder="Email"
+            placeholder="Nhâp email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            isValid={isValid}
+            required
           ></FormInput>
           <FormInput
             title="Mật khẩu"
@@ -64,11 +74,15 @@ function LoginModal() {
             id="password"
             type="password"
             minLength="8"
-            placeholder="Mật khẩu"
+            placeholder="Nhập mật khẩu"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            isValid={isValid}
+            required
           ></FormInput>
-          <Button className={cx('btn-submit')} onClick={handleLogin}>Đăng nhập</Button>
+          <Button className={cx('btn-submit')} onClick={handleLogin} disabled={!isValid} type="submit">
+            Đăng nhập
+          </Button>
           <button className={cx('btn-link')} onClick={handleShowForget}>
             Quên mật khẩu
           </button>
@@ -85,7 +99,7 @@ function LoginModal() {
               Đăng ký
             </button>
           </div>
-        </Form>
+        </form>
       </Modal.Body>
     </Modal>
   )
