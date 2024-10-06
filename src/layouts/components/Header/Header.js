@@ -6,7 +6,7 @@ import { BackIcon, MenuIcon, PhoneIcon } from '~/components/Icon'
 import Logo from '~/components/Logo'
 import Menu from '../../../components/Menu/Menu'
 import MenuItem from '../../../components/Menu/MenuItem'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useModal } from '~/Context/AuthModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-regular-svg-icons'
@@ -17,6 +17,7 @@ import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
 import { config } from '~/config'
+import { UserContext } from '~/Context/UserProvider/UserProvider'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
@@ -25,7 +26,7 @@ function Header({ menus }) {
   const headerRef = useRef(null)
   const [lastScrollY, setLastScrollY] = useState()
   const { openModal } = useModal()
-  const isLogin = true
+  const userContext = useContext(UserContext)
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -69,7 +70,7 @@ function Header({ menus }) {
             <button className={cx('btn-back')} onClick={hanldeBack}>
               <BackIcon />
             </button>
-            {!isLogin ? (
+            {!userContext.isLogin ? (
               <Button outline className="d-sm-none" onClick={() => openModal('login')}>
                 Đăng nhập
               </Button>
@@ -118,7 +119,7 @@ function Header({ menus }) {
               <span>7h-19h</span>
             </p>
           </div>
-          {!isLogin && (
+          {!userContext.isLogin && (
             <div className={cx('actions')}>
               <Button outline className="d-none d-md-block" onClick={() => openModal('register')}>
                 Đăng ký
@@ -131,7 +132,7 @@ function Header({ menus }) {
               </button>
             </div>
           )}
-          {isLogin && (
+          {userContext.isLogin && (
             <div className={cx('actions')}>
               <button to={config.routes.message} className={cx('btn-action', 'd-none', 'd-md-block')}>
                 <FontAwesomeIcon icon={faMessage} />
@@ -153,7 +154,7 @@ function Header({ menus }) {
                 )}
               >
                 <button>
-                  <Image src={images.noImage} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                  <Image src={images.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
                 </button>
               </Tippy>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>

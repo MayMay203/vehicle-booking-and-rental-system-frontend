@@ -1,0 +1,151 @@
+@use '../../../abstracts' as abstracts;
+
+.trapezoid_lelf {
+  width: 100%; 
+//   height: 100%;
+  aspect-ratio: 5/3; 
+  background-color: #4CAF50; 
+  clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 0% 100%); 
+  border-radius: 0.3rem;
+  overflow: hidden;
+}
+.trapezoid_right {
+  width: 100%; 
+  aspect-ratio: 2 / 1; 
+  background-color: #4CAF50; 
+  clip-path: polygon(100% 0%, 15% 0%, 0% 100%, 100% 100%); 
+  border-radius: 0.3rem;
+  overflow: hidden;
+}
+.img-vehicle-5{
+    width: 90%;
+    aspect-ratio: 5 / 3.2; 
+    border-radius: 0.3rem;
+     @include abstracts.screen(md){
+        width: 95%;
+        aspect-ratio: 5 / 3; 
+    }
+}
+.img-up{
+    margin: 0 1rem 0 2rem;
+    @include abstracts.screen(md){
+        margin: 0 0.5rem 0 1rem;
+    }
+}
+.img-down{
+    margin: 2.2rem 0 0 0;
+     @include abstracts.screen(md){
+        margin: 1.5rem 0 0 0;
+    }
+}
+.name-location-vehicle{
+  width: 100%;
+}
+.name-vehicle{
+  font-size: 3rem;
+  font-weight: 600;
+  margin-right: 2rem;
+}
+.icon-txt{
+    align-items: center;
+    text-align: left;
+    justify-content: start;
+    padding: 0 1rem 1rem 1rem;
+    > div{
+        min-width: 50%;
+    }
+}
+.icon{
+  font-size: 1.8rem;
+  margin: 1rem 1rem 0 0;
+  @include abstracts.screen(md){
+    font-size: 1.6rem;
+  }
+}
+.icon-location, .icon-x{
+  margin-top: 2rem;
+  color: #E20D0D;
+}
+.icon-owner, .icon-type{
+  color: #2474E5;
+}
+.icon-phone{
+  color: #FF7F50;
+}
+.icon-year{
+  color: #FFC700;
+}
+.icon-amount, .icon-tick{
+  color: #27AE60;
+}
+.icon-clock-notice{
+  color: #FF7F50;
+}
+.icon-clock-warn{
+  color: #D34714;
+}
+.txt{
+  margin: 1rem 0 1rem 1rem;
+  @include abstracts.screen(md){
+    margin: 1rem 0 1rem 0.3rem;
+  }
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: black;
+}
+.title{
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem 0;
+}
+.feature{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+.content-feature{
+  font-size: 1.6rem;
+  font-weight: 600;
+  @include abstracts.screen(md){
+    font-size: 1.4rem;
+  }
+}
+.content{
+  font-weight: 500;
+  text-align: justify;
+  line-height: 2.5rem;
+}
+
+.charge, .order, .surcharge{
+  background-color: #FFEBE4;
+  margin: 0.5rem 1rem;
+  border-radius: 0.3rem;
+  padding: 2rem;
+}
+.charge{
+  text-align: center;
+  color: #A33A3A;
+}
+.charge-old{
+  text-decoration: line-through;
+  color: #FF7F50;
+  margin: 0 0.5rem;
+}
+.charge-new{
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: #FF7F50;
+  margin: 0.5rem !important;
+}
+.note{
+  color: red;
+  margin-left: 0;
+  font-weight: 600;
+  min-width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.note-content{
+  line-height: 2.5rem;
+}

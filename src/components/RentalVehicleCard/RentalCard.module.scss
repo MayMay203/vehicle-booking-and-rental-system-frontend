@@ -1,0 +1,110 @@
+.rental-card {
+    margin: 1rem;
+    flex: 1 1 calc(50% - 2rem); 
+    max-width: 30rem; 
+    min-width: 26rem;
+    max-height: 48rem;
+    text-align: left;
+    border: 0.2rem solid #F1EAEA !important;
+    background-color: white !important;
+    padding: 1rem;
+}
+.ghost-card {
+    visibility: hidden; 
+    flex: 1 1 calc(50% - 2rem); 
+    max-width: 30rem;
+    margin: 1rem;
+}
+.image-name-vehicle{
+    position: relative;
+}
+.image-vehicle{
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+}
+
+.name-vehicle{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(50%);  
+    background-color: #FFF6F3;
+    color: #000;
+    font-size: 1.8rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    display: flex;
+    line-height: 1.5;
+    width: 80%;
+    height: 25%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.icon-txt{
+    align-items: center;
+    text-align: left;
+    justify-content: start;
+    padding: 0 1rem 1rem 1rem;
+    > div{
+        min-width: 50%;
+    }
+}
+.discount{
+    padding: 0.6rem 1rem 0.6rem 1rem;
+    text-align: center;
+    background-color: #FF7F50;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 0.5rem;
+    width: 45%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(10%) translateY(10%); 
+}
+.icon-discount{
+    margin: 0 1rem 0 0;
+}
+.discount-value{
+    margin: 0;
+}
+.icon{
+    font-size: 1.6rem;
+    margin: 0 1rem 0 0;
+}
+.icon-location{
+    margin-top: 3.6rem;
+    color: #E20D0D;
+}
+.icon-type{
+    color: #2474E5;
+}
+.icon-year{
+    color: #FFC700;
+}
+.icon-amount{
+    color: #22B760;
+}
+.txt{
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+.line{
+    height: 1px; 
+    background-color: #D9D9D9; 
+    width: 90%;
+    margin: auto;
+}
+.price{
+    background-color: #FFEBE4;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1rem 0.6rem 1rem;
+    text-align: center;
+}
+
+.icon-money{
+    color: #FF672F;
+}

@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .selected{
     color: #FFC700;
 }
@@ -36,6 +38,10 @@
     font-size: 1.2rem;
     font-weight: 500;
     margin-top: 16px;
+
+    @include abstracts.screen(lg){
+        column-gap: 20px;
+    }
 }
 
 .time{

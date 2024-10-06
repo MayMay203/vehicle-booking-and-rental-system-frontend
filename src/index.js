@@ -8,13 +8,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AuthModalProvider from './Context/AuthModalProvider'
+import { UserProvider } from './Context/UserProvider/UserProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <AuthModalProvider>
-      <App />
-    </AuthModalProvider>
+    <UserProvider>
+      <AuthModalProvider>
+        <App />
+      </AuthModalProvider>
+    </UserProvider>
   </React.StrictMode>,
 )
 
