@@ -71,7 +71,7 @@ function TicketItem({ status }) {
     ]
 
     return tabs
-  }, [status])
+  }, [])
 
   const handleShowDetail = () => {
     setIsDetail((prev) => !prev)

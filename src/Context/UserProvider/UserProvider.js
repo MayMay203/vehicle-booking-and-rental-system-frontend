@@ -4,7 +4,7 @@ import { createContext, useState } from 'react'
 const UserContext = createContext()
 
 function UserProvider({ children }) {
-  const [isLogin, setIsLogin] = useState(localStorage.getItem('isLogin') === 'true')
+  const [isLogin, setIsLogin] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
 
   //   useEffect(() => {
