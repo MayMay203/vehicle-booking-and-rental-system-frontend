@@ -117,14 +117,18 @@
 }
 
 .charge, .order, .surcharge{
-  background-color: #FFEBE4;
-  margin: 0.5rem 1rem;
+  margin: 1rem;
   border-radius: 0.3rem;
-  padding: 2rem;
 }
 .charge{
+  background-color: #FFEBE4;
+  padding: 2rem;
   text-align: center;
   color: #A33A3A;
+}
+.txt-price-list{
+  color: #A33A3A;
+  font-size: 1.8rem;
 }
 .charge-old{
   text-decoration: line-through;
@@ -148,4 +152,9 @@
 }
 .note-content{
   line-height: 2.5rem;
+}
+
+.order, .surcharge{
+  background-color: #FFF6F3;
+  padding: 0.3rem;
 }

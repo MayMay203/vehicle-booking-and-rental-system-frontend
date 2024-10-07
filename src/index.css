@@ -258,3 +258,8 @@ background-color: #FFEBE4;
 		padding: 1rem 2rem;
 	}
 }
+.form-select{
+	font-size: 1.4rem;
+    width:15%;
+	color: #FF7F50;
+}

@@ -22,6 +22,8 @@ import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import Table from 'react-bootstrap/Table'
 import RatingContentList from '~/components/RatingContent/RatingContentList'
+import InforRental from '~/components/InforRental'
+import SurchargeFee from '~/components/InforRental/SurchargeFee'
 
 const cx = classNames.bind(styles)
 function RentalServiceDetail() {
@@ -241,13 +243,13 @@ function RentalServiceDetail() {
           <Row className={cx('charge')}>
             <div className={cx('icon-txt', 'd-flex justify-content-center align-items-center')}>
               <FontAwesomeIcon icon={faThumbTack} className={cx('icon', 'm-0')} />
-              <span className={cx('txt')}>Bảng giá:</span>
+              <span className={cx('txt', 'txt-price-list')}>Bảng giá:</span>
             </div>
             <span className={cx('txt', 'charge-old')}>200.000đ/1 giờ</span>
             <span className={cx('txt', 'charge-new')}>200.000đ / 2 giờ</span>
           </Row>
-          <Row className={cx('order')}></Row>
-          <Row className={cx('surcharge')}></Row>
+          <Row className={cx('order')}><InforRental></InforRental></Row>
+          <Row className={cx('surcharge')}><SurchargeFee></SurchargeFee></Row>
         </Col>
       </Row>
     </div>
