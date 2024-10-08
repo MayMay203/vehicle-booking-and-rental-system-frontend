@@ -34,13 +34,13 @@ function RentalServiceDetail() {
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
-        <Breadcrumb.Item href={config.routes.home}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item href={config.routes.home}>Trang chủ</Breadcrumb.Item>
         <Breadcrumb.Item href={config.routes.renting}>Thuê xe</Breadcrumb.Item>
         <Breadcrumb.Item href={config.routes.rentalService}>
           {typeService === self_driving && 'Thuê xe tự lái'}
           {typeService === manned && 'Thuê xe có người lái'}
         </Breadcrumb.Item>
-        <Breadcrumb.Item href={config.routes.renting} active>
+        <Breadcrumb.Item href={config.routes.rentalServiceDetail} active>
           Chi tiết xe
         </Breadcrumb.Item>
       </Breadcrumb>
@@ -248,7 +248,7 @@ function RentalServiceDetail() {
             <span className={cx('txt', 'charge-old')}>200.000đ/1 giờ</span>
             <span className={cx('txt', 'charge-new')}>200.000đ / 2 giờ</span>
           </Row>
-          <Row className={cx('order')}><InforRental></InforRental></Row>
+          <Row className={cx('order')}><InforRental typeService={typeService}></InforRental></Row>
           <Row className={cx('surcharge')}><SurchargeFee></SurchargeFee></Row>
         </Col>
       </Row>

@@ -1,0 +1,35 @@
+.wrap-step{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: center;
+    line-height: 2rem;
+}
+
+.line-dashed{
+    border: 1px dashed #000000;
+    .done{
+        border: 1px dashed #27AE60;
+    }
+}
+
+.step{
+    text-align: center;
+    font-size: 1.6rem;
+    color: #E20D0D;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    .done{
+        color: #27AE60;
+    }
+    .doing{
+        color: #FFC700;
+    }
+}
+.icon-step{
+    font-size: 2rem;
+}
+.content-step{
+    margin: 2rem 0;
+    font-weight: 500;
+}

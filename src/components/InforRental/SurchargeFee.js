@@ -22,6 +22,13 @@ function SurchargeFee() {
       <div className={cx('txt-sub-content')}>
         <span>Vui lòng trả lại hiện trạng xe được vệ sinh như lúc nhận để không mất phí này.</span>
       </div>
+  
+      <div className={cx('txt-content')}>
+        <span className={cx('txt', 'note')}>Lưu ý:</span>
+        <span className={cx('txt', 'note-content')}>
+          Mọi tiền bạn đã thanh toán sẽ được hoàn trả 100% nếu chủ xe hủy đơn và hệ thống sẽ đánh giá xe 1 sao.
+        </span>
+      </div>
     </div>
   )
 }

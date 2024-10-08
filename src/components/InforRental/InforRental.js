@@ -8,14 +8,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
 import Form from 'react-bootstrap/Form'
 import Voucher from '../Voucher'
+import { useNavigate } from 'react-router-dom'
 const cx = classNames.bind(styles)
-function TimeRental(){
+function TimeRental(typeService){
     const [startTime, setStartTime] = useState(new Date())
     const [endTime, setEndTime] = useState(new Date())
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
 
     const [selectedTime, setSelectedTime] = useState(null)
+
+    const navigate = useNavigate() 
+    const handleOrder = (type) =>{
+        navigate('/rent-vehicle/rental-service/rental-service-detail/rental-order',{ state: { typeService: type} })
+    }
     return (
       <div className="p-0">
         <div className={cx('datetime-rental')}>
@@ -129,7 +135,7 @@ function TimeRental(){
             </span>
           </div>
           <div className={cx('d-flex justify-content-center', 'txt-content')}>
-            <Button primary>Thuê xe</Button>
+            <Button primary onClick={() => handleOrder(typeService)}>Thuê xe</Button>
           </div>
         </div>
       </div>
