@@ -18,6 +18,9 @@ function ResetPasswordModal() {
     if (formRef.current) {
       setIsValid(formRef.current.checkValidity())
     }
+    if (password !== confirmPass) {
+      setIsValid(false)
+    }
   }, [password, confirmPass])
 
   const handleChangePass = () => {

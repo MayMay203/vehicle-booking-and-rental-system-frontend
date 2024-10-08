@@ -6,7 +6,7 @@ import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
 import { useEffect, useRef, useState } from 'react'
-import { register } from '~/apiServices/registerService'
+import { register } from '~/apiServices/register'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
@@ -21,17 +21,24 @@ function RegisterModal() {
     if (formRef.current) {
       setIsValid(formRef.current.checkValidity())
     }
+    if (password !== confirmPass) {
+      setIsValid(false)
+    }
   }, [email, password, confirmPass])
 
   const handleContinue = async (e) => {
     e.preventDefault()
-    const data = await register(email, password, confirmPass)
-    if (data) {
-      console.log(data)
-      openModal('authCode', { type: 'register', email: email })
-      closeModal('register')
-    } else {
-      console.log('Failed to register with this account')
+    try {
+      const data = await register(email, password, confirmPass)
+      if (data) {
+        openModal('authCode', { type: 'register', email: email })
+        closeModal('register')
+      } else {
+        console.log('Failed to register with this account')
+      }
+    }
+    catch (mesage) {
+      
     }
   }
 
@@ -63,7 +70,7 @@ function RegisterModal() {
           ></FormInput>
           <FormInput
             title="Mật khẩu"
-            error="Mật khẩu có ít nhất 8 kí tự"
+            error={password ? 'Mật khẩu có ít nhất 8 kí tự':'Vui lòng nhập mật khẩu'}
             id="password"
             type="password"
             minLength="8"

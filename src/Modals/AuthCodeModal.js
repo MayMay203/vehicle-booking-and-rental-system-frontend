@@ -4,24 +4,43 @@ import classNames from 'classnames/bind'
 import { useModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { verifyOTP } from '~/apiServices/verifyOTP'
 import { resendOTP } from '~/apiServices/resendOTP'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
+
 function AuthCodeModal() {
   const { isOpenModal, openModal, modalData, closeModal } = useModal()
   const { type, email } = modalData
+  const [timeLeft, setTimeLeft] = useState(5)
 
   const [isValid, setIsValid] = useState(false)
   const [otp, setOtp] = useState('')
   const formRef = useRef(null)
 
-    useEffect(() => {
-      if (formRef.current) {
-        setIsValid(formRef.current.checkValidity())
-      }
-    }, [otp])
+  useEffect(() => {
+    if (formRef.current) {
+      setIsValid(formRef.current.checkValidity())
+    }
+  }, [otp])
+
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timeoutId = setTimeout(() => {
+        setTimeLeft((prev) => prev - 1)
+      }, 1000)
+
+      return () => clearTimeout(timeoutId) 
+    }
+  }, [timeLeft])
+
+  const formatTime = useCallback((seconds) => {
+    const minutes = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+  }, [])
 
   const handleContinue = async (e) => {
     e.preventDefault()
@@ -42,11 +61,15 @@ function AuthCodeModal() {
   const handleResendOTP = async (e) => {
     e.preventDefault()
     setOtp('')
-    const data = await resendOTP(email)
-    if (data) {
-      alert('Vui lòng kiểm tra email để nhận OTP')
-    }
+    // const data = await resendOTP(email)
+    // if (data) {
+      setTimeLeft(5)
+      toast.info('Kiểm tra lại email để nhận OTP')
+    // }
   }
+
+  const handleChange = useCallback((e) => setOtp(e.target.value), [])
+
   return (
     <Modal show={isOpenModal.authCode} onHide={() => closeModal('authCode')} centered>
       <Modal.Header closeButton>
@@ -63,12 +86,14 @@ function AuthCodeModal() {
             placeholder="Nhập OTP"
             value={otp}
             required
-            onChange={(e) => setOtp(e.target.value)}
+            onChange={handleChange}
             isValid={isValid}
-          ></FormInput>
-          <span className={cx('time')}>2:00</span>
-          <button className={cx('btn-resend')} onClick={handleResendOTP}>Gửi lại mã</button>
-          <Button className={cx('btn-submit')} onClick={handleContinue} type='submit' disabled={!isValid}>
+          />
+          <span className={cx('time')}>{formatTime(timeLeft)}</span>
+          <button className={cx('btn-resend')} onClick={handleResendOTP} disabled={timeLeft > 0}>
+            Gửi lại mã
+          </button>
+          <Button className={cx('btn-submit')} onClick={handleContinue} type="submit" disabled={!isValid}>
             Tiếp tục
           </Button>
         </form>

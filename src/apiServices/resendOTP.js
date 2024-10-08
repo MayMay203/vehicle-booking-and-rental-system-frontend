@@ -1,4 +1,4 @@
-import httpRequest from '~/utils/httpRequest'
+import * as httpRequest from '~/utils/httpRequest'
 
 export const resendOTP = async (email) => {
     console.log(email)
@@ -6,6 +6,6 @@ export const resendOTP = async (email) => {
     const response = await httpRequest.post(`/api/v1/auth/resend_otp?email=${email}`)
     return response.data
   } catch (error) {
-    console.log('Failed to resend OTP: ', error)
+     throw httpRequest.getMessage(error)
   }
 }

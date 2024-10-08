@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { publicRoutes } from "./routes"
 import { DefaultLayout } from "./layouts"
 import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal, ResetPasswordModal } from "./Modals"
-
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
 function App() {
   return (
     <div className="App">
@@ -22,7 +23,8 @@ function App() {
       <AuthCodeModal />
       <PersonalModal />
       <ResetPasswordModal />
-      <ForgetPasswordModal/>
+      <ForgetPasswordModal />
+      <ToastContainer position="top-center" autoClose={3000}/>
     </div>
   )
 }

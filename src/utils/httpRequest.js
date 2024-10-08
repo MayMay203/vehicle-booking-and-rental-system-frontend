@@ -19,5 +19,8 @@ export const DELETE = async (path, options = {}) => {
   return response.data
 }
 
-export default httpRequest;
+export const getMessage = (error) => {
+  return error.response.data.data.message
+}
+
 
