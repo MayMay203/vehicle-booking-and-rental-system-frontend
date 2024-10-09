@@ -1,7 +1,7 @@
 import classNames from "classnames/bind"
 import styles from "./RentalOrder.module.scss"
 import { config } from '~/config'
-import { Breadcrumb, Row, Col } from "react-bootstrap"
+import { Breadcrumb, Row } from "react-bootstrap"
 import { useLocation } from 'react-router-dom'
 import StepRental from "~/components/StepRental"
 import OrderRental from "~/components/OrderRental"
@@ -22,7 +22,7 @@ function RentalOrder(){
           </Breadcrumb.Item>
           <Breadcrumb.Item href={config.routes.rentalServiceDetail}>Chi tiết xe</Breadcrumb.Item>
           <Breadcrumb.Item href={config.routes.rentalOrder} active>
-            Đặt xe
+            Xác nhận thuê xe
           </Breadcrumb.Item>
         </Breadcrumb>
         <Row className={cx('d-flex', 'align-items-center', 'justify-content-center', 'm-0')}>
