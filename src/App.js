@@ -5,6 +5,7 @@ import { DefaultLayout } from "./layouts"
 import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal, ResetPasswordModal } from "./Modals"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
+
 function App() {
   return (
     <div className="App">
@@ -24,7 +25,11 @@ function App() {
       <PersonalModal />
       <ResetPasswordModal />
       <ForgetPasswordModal />
-      <ToastContainer position="top-center" autoClose={3000}/>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        style={{width: '340px',textAlign: 'left', lineHeight: '1.3' }}
+      />
     </div>
   )
 }

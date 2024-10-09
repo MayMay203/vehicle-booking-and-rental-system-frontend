@@ -5,8 +5,12 @@ import { useModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { register } from '~/apiServices/register'
+import { UserContext } from '~/Context/UserProvider'
+import { toast } from 'react-toastify'
+import { config } from '~/config'
+import { resendOTP } from '~/apiServices/resendOTP'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
@@ -16,6 +20,8 @@ function RegisterModal() {
   const [confirmPass, setConfirmPass] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
+  const { saveEmail } = useContext(UserContext)
+  const [isShow, setIsShow] = useState(false)
 
   useEffect(() => {
     if (formRef.current) {
@@ -26,19 +32,23 @@ function RegisterModal() {
     }
   }, [email, password, confirmPass])
 
+  const reset = useCallback(() => {
+    setEmail('')
+    setPassword('')
+    setConfirmPass('')
+  }, [])
+
   const handleContinue = async (e) => {
     e.preventDefault()
     try {
-      const data = await register(email, password, confirmPass)
-      if (data) {
-        openModal('authCode', { type: 'register', email: email })
-        closeModal('register')
-      } else {
-        console.log('Failed to register with this account')
-      }
-    }
-    catch (mesage) {
-      
+      saveEmail(email)
+      await register(email, password, confirmPass)
+      await closeModal('register')
+      reset()
+      openModal('authCode', { type: 'register' })
+    } catch (mesage) {
+      toast.error(mesage, { autoClose: 2000 })
+      setIsShow(mesage.includes(config.message.emailConfirm))
     }
   }
 
@@ -46,6 +56,19 @@ function RegisterModal() {
     closeModal('register')
     openModal('login')
   }
+
+  const handleChange = useCallback((value, functionChange) => {
+    functionChange(value)
+  }, [])
+
+  const handleShowOTPModal = async () => {
+    closeModal('register')
+    setIsShow(false)
+    await resendOTP(email)
+    toast.info('Kiểm tra email để nhận OTP')
+    openModal('authCode', { type: 'register' })
+  }
+
   return (
     <Modal show={isOpenModal.register} onHide={() => closeModal('register')} centered>
       <Modal.Header closeButton>
@@ -63,22 +86,23 @@ function RegisterModal() {
             type="email"
             placeholder="Nhập email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => handleChange(e.target.value, setEmail)}
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             isValid={isValid}
             required
           ></FormInput>
           <FormInput
             title="Mật khẩu"
-            error={password ? 'Mật khẩu có ít nhất 8 kí tự':'Vui lòng nhập mật khẩu'}
+            error={password ? 'Mật khẩu có ít nhất 8 kí tự' : 'Vui lòng nhập mật khẩu'}
             id="password"
             type="password"
             minLength="8"
             placeholder="Nhập mật khẩu"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => handleChange(e.target.value, setPassword)}
             required
             isValid={isValid}
+            autoComplete="new-password"
           ></FormInput>
           <FormInput
             title="Xác nhận mật khẩu"
@@ -89,11 +113,17 @@ function RegisterModal() {
             placeholder="Nhập mật khẩu xác nhận"
             value={confirmPass}
             password={password}
-            onChange={(e) => setConfirmPass(e.target.value)}
+            onChange={(e) => handleChange(e.target.value, setConfirmPass)}
             isValid={isValid}
             required
+            autoComplete="new-password"
           ></FormInput>
-          <Button className={cx('btn-submit')} onClick={handleContinue} disabled={!isValid} type="submit">
+          {isShow && (
+            <Button type="button" className={cx('btn-verify')} onClick={handleShowOTPModal}>
+              Xác nhận OTP
+            </Button>
+          )}
+          <Button className={cx('btn-submit', 'm-0')} onClick={handleContinue} disabled={!isValid} type="submit">
             Tiếp tục
           </Button>
           <div className={cx('other')}>hoặc</div>

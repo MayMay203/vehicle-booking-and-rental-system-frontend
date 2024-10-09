@@ -142,10 +142,10 @@ button{
   background-color: #FF7F50 !important; 
 }
 
-
 .react-datepicker {
 border: 1px solid #FF7F50;
 background-color: #FFEBE4;
+
 
 .react-datepicker__current-month {/* phần tháng được chọn*/
 	font-size: 1.4rem;
@@ -257,4 +257,9 @@ background-color: #FFEBE4;
 		font-weight: 600;
 		padding: 1rem 2rem;
 	}
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset; 
+    -webkit-text-fill-color: var(--text-color);
 }

@@ -79,6 +79,7 @@ function LoginModal() {
             onChange={(e) => setPassword(e.target.value)}
             isValid={isValid}
             required
+            autoComplete="current-password"
           ></FormInput>
           <Button className={cx('btn-submit')} onClick={handleLogin} disabled={!isValid} type="submit">
             Đăng nhập

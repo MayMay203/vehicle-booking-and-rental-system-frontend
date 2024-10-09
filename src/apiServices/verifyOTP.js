@@ -2,7 +2,7 @@ import * as httpRequest from '~/utils/httpRequest'
 
 export const verifyOTP = async (email, otp) => {
   try {
-    const response = await httpRequest.post('/api/v1/auth/verify', {
+    const response = await httpRequest.post('/v1/auth/verify', {
       email,
       otp,
     })

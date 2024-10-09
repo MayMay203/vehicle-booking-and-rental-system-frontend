@@ -4,21 +4,24 @@ import classNames from 'classnames/bind'
 import { useModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { verifyOTP } from '~/apiServices/verifyOTP'
 import { resendOTP } from '~/apiServices/resendOTP'
 import { toast } from 'react-toastify'
+import { UserContext } from '~/Context/UserProvider'
 
 const cx = classNames.bind(styles)
 
 function AuthCodeModal() {
   const { isOpenModal, openModal, modalData, closeModal } = useModal()
-  const { type, email } = modalData
-  const [timeLeft, setTimeLeft] = useState(5)
+  const { type } = modalData
+  const [timeLeft, setTimeLeft] = useState(0)
+  const { getEmail } = useContext(UserContext)
 
   const [isValid, setIsValid] = useState(false)
   const [otp, setOtp] = useState('')
   const formRef = useRef(null)
+  const timeoutRef = useRef(null)
 
   useEffect(() => {
     if (formRef.current) {
@@ -28,13 +31,19 @@ function AuthCodeModal() {
 
   useEffect(() => {
     if (timeLeft > 0) {
-      const timeoutId = setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setTimeLeft((prev) => prev - 1)
       }, 1000)
 
-      return () => clearTimeout(timeoutId) 
+      return () => clearTimeout(timeoutRef.current)
     }
   }, [timeLeft])
+
+  useEffect(() => {
+    if (isOpenModal.authCode) {
+      setTimeLeft(120)
+    }
+  }, [isOpenModal])
 
   const formatTime = useCallback((seconds) => {
     const minutes = Math.floor(seconds / 60)
@@ -44,28 +53,27 @@ function AuthCodeModal() {
 
   const handleContinue = async (e) => {
     e.preventDefault()
-    const data = await verifyOTP(email, otp)
-    if (data) {
-      console.log(data)
+    try {
+      await verifyOTP(getEmail(), otp)
+      setTimeLeft(0)
       closeModal('authCode')
-      if (type === 'forget') {
-        openModal('reset')
-      } else if (type === 'register') {
-        openModal('info')
-      }
-    } else {
-      alert('Mã OTP hết hạn vui lòng thử lại')
+      setOtp('')
+      type === 'forget' ? openModal('reset') : openModal('info')
+    } catch (message) {
+      toast.error(message)
     }
   }
 
   const handleResendOTP = async (e) => {
     e.preventDefault()
     setOtp('')
-    // const data = await resendOTP(email)
-    // if (data) {
-      setTimeLeft(5)
+    try {
+      await resendOTP(getEmail())
+      setTimeLeft(120)
       toast.info('Kiểm tra lại email để nhận OTP')
-    // }
+    } catch (message) {
+      toast.error(message)
+    }
   }
 
   const handleChange = useCallback((e) => setOtp(e.target.value), [])

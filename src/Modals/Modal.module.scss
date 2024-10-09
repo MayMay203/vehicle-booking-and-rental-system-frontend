@@ -116,3 +116,16 @@
     // color: var(--text-color);
     font-weight: 500;
 }
+
+.btn-verify{
+    height: initial;
+    margin-left: auto;
+    padding: 6px 12px;
+    margin-bottom: 16px;
+    color: var(--orange-color);
+    font-weight: 500;
+    font-size: 1.5rem;
+    &:hover{
+        opacity: 0.8;
+    }
+}

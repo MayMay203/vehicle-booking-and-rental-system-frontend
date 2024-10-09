@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
 
 const cx = classNames.bind(styles)
 
-function FormInput({ id, type, title, error, isValid, value, className, password, ...props }) {
+function FormInput({ id, type, title, error, isValid, value, autoComplete, className, password, ...props }) {
   const [showError, setShowError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const inputRef = useRef(null)
@@ -43,6 +43,7 @@ function FormInput({ id, type, title, error, isValid, value, className, password
             }
           }}
           onBlur={handleCheckValidity}
+          autoComplete={autoComplete?autoComplete:'true'}
           {...props}
         />
         {type === 'password' && (
