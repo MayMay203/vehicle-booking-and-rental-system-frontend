@@ -12,6 +12,7 @@ import OrderManagement from '~/pages/OrderManagement'
 import HeaderOnly from '~/layouts/HeaderOnly'
 import AccountManagement from '~/pages/AccountManagement'
 import RentalServiceDetail from '~/pages/RentalPage/RentalServiceDetail'
+import RentalOrder from '~/pages/RentalPage/RentalOrder'
 
 const publicRoutes = [
   {
@@ -64,6 +65,10 @@ const publicRoutes = [
     path: config.routes.rentalServiceDetail,
     component: RentalServiceDetail,
   },
+  {
+    path: config.routes.rentalOrder,
+    component: RentalOrder,
+  }
 ]
 
 const privateRoutes = []

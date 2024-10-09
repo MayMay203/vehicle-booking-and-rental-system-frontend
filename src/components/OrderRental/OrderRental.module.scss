@@ -1,0 +1,121 @@
+.order{
+    border-radius: 0.3rem;
+    border: 1px solid #FF7F50;
+    align-items: center;
+    padding: 2rem;
+    line-height: 2.5rem;
+}
+.txt{
+    justify-content: center;
+    text-align: center;
+    font-weight: 600;
+    font-size: 2rem;
+    color: #FF7F50;
+}
+.txt-title{
+    color: #A33A3A;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 1rem 0 0rem 0;
+    padding: 0;
+}
+.wrap-renter{
+    padding: 0;
+}
+.box-renter{
+    background-color: #FFF6F3;
+    padding: 0.3rem 2rem;
+    // min-width: 60% !important;
+    margin: 1rem 0;
+    border-radius: 3px;
+}
+.icon{
+    font-size: 2rem;
+    margin-right: 2rem;
+    color: #FF7F50;
+}
+.name, .phone{
+    color: rgba($color: #000000, $alpha: 65%);
+    font-weight: 500;
+    font-size: 1.6rem;
+    margin: 0.5rem 0;
+}
+.input-name, .input-phone{
+    color: rgba($color: #000000, $alpha: 1);
+    font-weight: 500;
+    font-size: 1.6rem;
+    margin: 0.5rem 0;
+}
+.txt-content{
+    margin-left: 1rem;
+    color: black;
+    font-weight: 500;
+    font-size: 1.6rem;
+}
+.wrap-time-rental{
+    margin: 1rem 0;
+    padding: 0 1.5rem;
+}
+.wrap-infor{
+    border-bottom: 2px solid #FFEBE4;
+    color: #A33A3A;
+    font-size: 1.6rem;
+    font-weight: 600;
+    width: 100%;
+    justify-content: space-between;
+
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    padding: 1rem 0;
+}
+.line{
+    border-bottom: 2px solid #FF7F50;
+}
+.no-line{
+    border: none;
+}
+.align-right{
+    margin-left: auto;
+    color: #27AE60;
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+.txt-black{
+    color: black;
+}
+.txt-red{
+    color: #E20D0D;
+}
+.txt-bold{
+    font-weight: 600;
+}
+.wrap-note{
+    padding: 0;
+}
+.note{
+  color: red;
+  margin-left: 0;
+  font-weight: 600;
+  min-width: 5rem;
+  line-height: 2.5rem;
+}
+.note-content{
+  line-height: 2.5rem;
+  text-align: justify;
+  color: #000000;
+  margin-left: 1rem;
+}
+.btn-order{
+    width: 10rem;
+    margin: 1.5rem;
+}
+.txt-center{
+    text-align: center;
+}
+.link-policy{
+    color: #2474E5;
+    text-decoration: underline;
+    margin: 0 0.3rem;
+    text-align: center;
+}

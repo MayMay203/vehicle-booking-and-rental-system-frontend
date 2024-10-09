@@ -78,7 +78,7 @@ function RentVehicle() {
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
-        <Breadcrumb.Item href={config.routes.home}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item href={config.routes.home}>Trang chủ</Breadcrumb.Item>
         <Breadcrumb.Item href={config.routes.renting} active>
           Thuê xe
         </Breadcrumb.Item>
