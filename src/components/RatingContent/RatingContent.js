@@ -16,7 +16,7 @@ function RatingContent() {
             <RatingStar></RatingStar>
           </Col>
           <Col xs="3" md="3" className={cx('time-wrap')}>
-            <span className={cx('time')}>12h00 23/08/2024</span>
+            <span className={cx('time')}>12h00, 23/08/2024</span>
           </Col>
         </Row>
         <Row>
