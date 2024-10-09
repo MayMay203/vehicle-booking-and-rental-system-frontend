@@ -1,0 +1,41 @@
+.service-card-container {
+  display: flex;
+  overflow-x: auto; /* Cho phép kéo ngang */
+  white-space: nowrap; /* Ngăn chặn xuống hàng */
+  padding: 1rem;
+ 
+
+  .col {
+    flex: 0 0 auto; /* Giữ cho mỗi card không co lại */
+    margin-right: 1rem;
+  }
+}
+.circle{
+    display: flex;
+    width: 80%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    margin: 2rem;
+    justify-content: center;
+    align-items: center;
+    background-color: linear-gradient(white 40%, #27AE60 80%) !important;
+}
+.content {
+  display: flex;                  
+  flex-direction: column;         
+  justify-content: center;       
+  align-items: center;        
+  background-color: linear-gradient(white 40%, #27AE60 80%) !important; 
+}
+.icon {
+  font-size: 3rem;              
+  margin: 1rem;        
+}
+
+.name {
+  text-align: center;   
+  margin: 1rem;          
+  font-size: 1.6rem;    
+  font-weight: 600;  
+  color: white;        
+}

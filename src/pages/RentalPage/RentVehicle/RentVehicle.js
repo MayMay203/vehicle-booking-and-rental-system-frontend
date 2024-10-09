@@ -2,7 +2,7 @@ import {Row, Col, Carousel, Button, Breadcrumb } from 'react-bootstrap';
 import styles from './RentVehicle.module.scss'
 import classNames from 'classnames/bind'
 import { images } from '~/assets/images'
-import Voucher from '~/components/Voucher';
+import VoucherList from '~/components/Voucher/VoucherList';
 import AccordionQA from '~/components/AccordionQA';
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -125,22 +125,7 @@ function RentVehicle() {
       </Row>
       <Row className={cx(' pt-5 pb-5', 'background')}>
         <p className={cx('title', 'p-5')}>MÃ GIẢM GIÁ</p>
-        <Col xxl="4" xl="6" className="d-flex flex-column align-items-center ">
-          <Voucher></Voucher>
-        </Col>
-        <Col xxl="4" xl="6" className={cx('d-flex flex-column align-items-center')}>
-          <Voucher></Voucher>
-        </Col>
-        <Col xxl="4" xl="6" className="d-flex flex-column align-items-center ">
-          <Voucher></Voucher>
-        </Col>
-        <Col xxl="4" xl="6" className="d-flex flex-column align-items-center ">
-          <Voucher></Voucher>
-        </Col>
-        <Col xxl="4" xl="6" className="d-flex flex-column align-items-center ">
-          <Voucher></Voucher>
-        </Col>
-        <p className={cx('note', 'p-5 justify-content-center')}>Hãy sử dụng mã giảm giá để tiết kiệm hơn nhé!</p>
+        <VoucherList></VoucherList>
       </Row>
       <Row className="justify-content-center align-items-center pt-5 pb-5">
         <p className={cx('title', 'p-5')}>CÂU HỎI THƯỜNG GẶP</p>

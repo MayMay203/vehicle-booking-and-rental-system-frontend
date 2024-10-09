@@ -4,7 +4,8 @@ import AnswerHub from '~/pages/AnswerHub'
 import BuyTicket from '~/pages/BuyTicket'
 import RentVehicle from '~/pages/RentalPage/RentVehicle'
 import RentalService from '~/pages/RentalPage/RentalService'
-import BookVehicle from '~/pages/BookVehicle'
+import BookVehicle from '~/pages/BookingPage/BookVehicle'
+import BookingService from '~/pages/BookingPage/BookingService'
 import RegisterPartner from '~/pages/RegisterPartner'
 import About from '~/pages/About'
 import OrderManagement from '~/pages/OrderManagement'
@@ -28,6 +29,10 @@ const publicRoutes = [
   {
     path: config.routes.booking,
     component: BookVehicle,
+  },
+  {
+    path: config.routes.bookingService,
+    component: BookingService,
   },
   {
     path: config.routes.partner,

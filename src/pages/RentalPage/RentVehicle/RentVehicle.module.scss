@@ -85,32 +85,6 @@
   margin: 0;
 }
 
-
-@keyframes pulse {
-  0% {
-      transform: scale(1);
-      color: #f66e3c; 
-  }
-  50% {
-      transform: scale(1.04); 
-      color: #E20D0D; 
-  }
-  100% {
-      transform: scale(1);
-      color: #f66e3c; 
-  }
-}
-.note{
-  font-size: 2.4rem;
-  font-weight: 600;
-  color: #D34714;
-  font-style: italic;
-  font-family: 'Inter';
-  text-align: center;
-  animation: pulse 3s infinite;
-  line-height: 1.5;
-}
-
 .nav-button {
   font-size: 2rem; 
   padding: 1rem;
