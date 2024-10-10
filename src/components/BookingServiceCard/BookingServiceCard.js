@@ -6,7 +6,7 @@ function BookingServiceCard({ name, icon, color }) {
   return (
     <div
       className={cx('circle')}
-      style={{ background: `linear-gradient(white 40%, #${color} 75%)`, border: `1px solid #F6F6F6` }}
+      style={{ background: `linear-gradient(white 40%, #${color} 75%)`, border: `1px solid #F6F6F6`, boxShadow: `0px 0px 1px 0.5px #${color}` }}
     >
       <div className={cx('content')}>
         {icon && <FontAwesomeIcon icon={icon} className={cx('icon')} style={{ color: `#${color}` }} />}

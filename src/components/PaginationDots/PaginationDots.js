@@ -5,9 +5,9 @@ import styles from './PaginationDots.module.scss'
 
 const cx = classNames.bind(styles)
 
-function PaginationDots({ totalPages, currentPage, onPageChange }) {
+function PaginationDots({ totalPages, currentPage, onPageChange, className }) {
   return (
-    <div className={cx('pagination-dots')}>
+    <div className={cx('pagination-dots', [className])}>
       {Array(totalPages)
         .fill()
         .map((_, index) => (
@@ -15,8 +15,7 @@ function PaginationDots({ totalPages, currentPage, onPageChange }) {
             key={index}
             className={cx('dot', { active: index === currentPage })}
             onClick={() => onPageChange(index)}
-          >
-          </button>
+          ></button>
         ))}
     </div>
   )

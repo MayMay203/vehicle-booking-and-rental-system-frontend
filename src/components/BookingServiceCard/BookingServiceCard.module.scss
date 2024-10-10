@@ -4,21 +4,26 @@
   white-space: nowrap; /* Ngăn chặn xuống hàng */
   padding: 1rem;
  
-
+  scrollbar-width: none; 
   .col {
     flex: 0 0 auto; /* Giữ cho mỗi card không co lại */
     margin-right: 1rem;
   }
 }
 .circle{
-    display: flex;
-    width: 80%;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    margin: 2rem;
-    justify-content: center;
-    align-items: center;
-    background-color: linear-gradient(white 40%, #27AE60 80%) !important;
+  display: flex;
+  width: 80%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  margin: 2rem;
+  justify-content: center;
+  align-items: center;
+  background-color: linear-gradient(white 40%, #27AE60 80%) !important;
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: scale(1.1); 
+  }
 }
 .content {
   display: flex;                  

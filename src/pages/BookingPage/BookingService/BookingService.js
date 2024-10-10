@@ -7,8 +7,13 @@ import BookingVehicleList from '~/components/BookingVehicle/BookingVehicleList'
 import Button from '~/components/Button'
 import VoucherList from '~/components/Voucher/VoucherList'
 import PaymentMethods from '~/components/PaymentMethod'
+import { useNavigate } from 'react-router-dom'
 const cx = classNames.bind(styles)
 function BookingService() {
+  const navigate = useNavigate() 
+  const handleBooking = (id) => {
+    navigate('/book-vehicle/booking-service/booking-order', { state: { id: id} }) 
+  }
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
@@ -51,7 +56,7 @@ function BookingService() {
         <VoucherList></VoucherList>
       </Row>
       <Row className={cx('justify-content-center')}>
-        <Button primary className={cx('btn-booking')}>
+        <Button primary className={cx('btn-booking')} onClick={()=>handleBooking(1)}>
           Đặt xe
         </Button>
       </Row>

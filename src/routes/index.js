@@ -13,6 +13,7 @@ import HeaderOnly from '~/layouts/HeaderOnly'
 import AccountManagement from '~/pages/AccountManagement'
 import RentalServiceDetail from '~/pages/RentalPage/RentalServiceDetail'
 import RentalOrder from '~/pages/RentalPage/RentalOrder'
+import BookingOrder from '~/pages/BookingPage/BookingOrder'
 
 const publicRoutes = [
   {
@@ -34,6 +35,10 @@ const publicRoutes = [
   {
     path: config.routes.bookingService,
     component: BookingService,
+  },
+  {
+    path: config.routes.bookingOrder,
+    component: BookingOrder,
   },
   {
     path: config.routes.partner,
@@ -68,7 +73,7 @@ const publicRoutes = [
   {
     path: config.routes.rentalOrder,
     component: RentalOrder,
-  }
+  },
 ]
 
 const privateRoutes = []

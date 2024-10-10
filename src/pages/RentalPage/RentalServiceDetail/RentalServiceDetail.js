@@ -94,7 +94,7 @@ function RentalServiceDetail() {
         </Col>
       </Row>
       <Row className="mb-5">
-        <Col lg="8">
+        <Col xl="8" lg="7" md="6">
           <Row className="mb-5">
             <div className={cx('d-flex', 'name-location-vehicle')}>
               <span className={cx('name-vehicle')}>Toyota Vios 2023 </span>
@@ -127,7 +127,7 @@ function RentalServiceDetail() {
                     <span className={cx('title')}>Đặc điểm</span>
                   </Row>
                   <Row>
-                    <Col>
+                    <Col xs="4" md="6" lg="4">
                       <div className={cx('feature', 'type-vehicle')}>
                         <FontAwesomeIcon icon={faCar} className={cx('icon', 'icon-type')} />
                         <div>
@@ -136,7 +136,7 @@ function RentalServiceDetail() {
                         </div>
                       </div>
                     </Col>
-                    <Col>
+                    <Col xs="4" md="6" lg="4">
                       <div className={cx('feature', 'type-vehicle')}>
                         <FontAwesomeIcon icon={faClock} className={cx('icon', 'icon-year')} />
                         <div>
@@ -145,7 +145,7 @@ function RentalServiceDetail() {
                         </div>
                       </div>
                     </Col>
-                    <Col>
+                    <Col xs="4" md="6" lg="4">
                       <div className={cx('feature', 'type-vehicle')}>
                         <FontAwesomeIcon icon={faBoxArchive} className={cx('icon', 'icon-amount')} />
                         <div>
@@ -239,7 +239,7 @@ function RentalServiceDetail() {
             </Tabs>
           </Row>
         </Col>
-        <Col lg="4" className={cx('')}>
+        <Col xl="4" lg="5" md="6" className={cx('')}>
           <Row className={cx('charge')}>
             <div className={cx('icon-txt', 'd-flex justify-content-center align-items-center')}>
               <FontAwesomeIcon icon={faThumbTack} className={cx('icon', 'm-0')} />
@@ -248,8 +248,12 @@ function RentalServiceDetail() {
             <span className={cx('txt', 'charge-old')}>200.000đ/1 giờ</span>
             <span className={cx('txt', 'charge-new')}>200.000đ / 2 giờ</span>
           </Row>
-          <Row className={cx('order')}><InforRental typeService={typeService}></InforRental></Row>
-          <Row className={cx('surcharge')}><SurchargeFee></SurchargeFee></Row>
+          <Row className={cx('order')}>
+            <InforRental typeService={typeService}></InforRental>
+          </Row>
+          <Row className={cx('surcharge')}>
+            <SurchargeFee></SurchargeFee>
+          </Row>
         </Col>
       </Row>
     </div>

@@ -7,9 +7,10 @@ export const routes = {
   rentalOrder: '/rent-vehicle/rental-service/rental-service-detail/rental-order',
   booking: '/book-vehicle',
   bookingService: '/book-vehicle/booking-service',
+  bookingOrder: '/book-vehicle/booking-service/booking-order',
   partner: '/register-partner',
   answer: '/answer-hub',
   about: '/about',
   account: '/manage-account',
-  order: '/manage-orders'
+  order: '/manage-orders',
 }
