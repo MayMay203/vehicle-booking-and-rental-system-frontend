@@ -26,7 +26,7 @@ function Header({ menus }) {
   const headerRef = useRef(null)
   const [lastScrollY, setLastScrollY] = useState()
   const { openModal } = useModal()
-  const userContext = useContext(UserContext)
+  const {isLogin, currentUser} = useContext(UserContext)
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -70,7 +70,7 @@ function Header({ menus }) {
             <button className={cx('btn-back')} onClick={hanldeBack}>
               <BackIcon />
             </button>
-            {!userContext.isLogin ? (
+            {!isLogin? (
               <Button outline className="d-sm-none" onClick={() => openModal('login')}>
                 Đăng nhập
               </Button>
@@ -95,7 +95,7 @@ function Header({ menus }) {
                   )}
                 >
                   <button>
-                    <Image src={images.noImage} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
+                    <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
                   </button>
                 </Tippy>
               </div>
@@ -119,7 +119,7 @@ function Header({ menus }) {
               <span>7h-19h</span>
             </p>
           </div>
-          {!userContext.isLogin && (
+          {!isLogin && (
             <div className={cx('actions')}>
               <Button outline className="d-none d-md-block" onClick={() => openModal('register')}>
                 Đăng ký
@@ -132,7 +132,7 @@ function Header({ menus }) {
               </button>
             </div>
           )}
-          {userContext.isLogin && (
+          {isLogin && (
             <div className={cx('actions')}>
               <button to={config.routes.message} className={cx('btn-action', 'd-none', 'd-md-block')}>
                 <FontAwesomeIcon icon={faMessage} />
@@ -154,7 +154,7 @@ function Header({ menus }) {
                 )}
               >
                 <button>
-                  <Image src={images.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                  <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
                 </button>
               </Tippy>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>

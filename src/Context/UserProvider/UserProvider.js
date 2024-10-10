@@ -1,22 +1,35 @@
 import PropTypes from 'prop-types'
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 const UserContext = createContext()
 
 function UserProvider({ children }) {
-  const [isLogin, setIsLogin] = useState(false)
+  const [isLogin, setIsLogin] = useState(null)
+  console.log(document.cookie)
   const [currentUser, setCurrentUser] = useState({})
   const [email, setEmail] = useState(null)
 
-  //   useEffect(() => {
-  //     async function fetchApi() {
-  //       const data = await getCurrentUser()
-  //       if (data) {
-  //         setCurrentUser(data)
-  //       }
-  //     }
-  //     fetchApi()
-  //   }, [])
+  const checkCookie = () => {
+    const cookies = document.cookie.split('; ')
+    const accessTokenExists = cookies.some((cookie) => cookie.startsWith('refresh_token='))
+    setIsLogin(accessTokenExists)
+  }
+
+  useEffect(() => {
+    // Kiểm tra cookie khi component được mount
+    checkCookie()
+
+    const cookieChangeHandler = () => {
+      checkCookie()
+    }
+
+    window.addEventListener('cookie-change', cookieChangeHandler)
+
+    // Dọn dẹp listener khi component unmount
+    return () => {
+      window.removeEventListener('cookie-change', cookieChangeHandler)
+    }
+  }, [])
 
   const saveEmail = (email) => {
     setEmail(email)
@@ -33,10 +46,10 @@ function UserProvider({ children }) {
   const value = {
     isLogin,
     toggleLogin,
-    setCurrentUser,
     currentUser,
-    saveEmail, 
-    getEmail
+    setCurrentUser,
+    saveEmail,
+    getEmail,
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>

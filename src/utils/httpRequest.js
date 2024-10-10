@@ -2,6 +2,7 @@ import axios from "axios";
 
 const httpRequest = axios.create({
   baseURL: 'http://localhost:8080/api',
+  withCredentials: true,
 })
 
 export const get = async (url, options = {}) => {
@@ -11,6 +12,7 @@ export const get = async (url, options = {}) => {
 
 export const post = async (url, body = {}, options = {}) => {
   const response = await httpRequest.post(url, body, options)
+   console.log('Headers:', response.headers)
   return response.data
 }
 

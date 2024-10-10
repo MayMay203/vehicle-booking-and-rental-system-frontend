@@ -5,9 +5,10 @@ import { useModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { login } from '~/apiServices/login'
 import { UserContext } from '~/Context/UserProvider/UserProvider'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
@@ -24,6 +25,11 @@ function LoginModal() {
     }
   }, [email, password])
 
+  const reset = useCallback(() => {
+    setEmail('')
+    setPassword('')
+  }, [])
+
   const handleShowRegister = () => {
     closeModal('login')
     openModal('register')
@@ -36,13 +42,16 @@ function LoginModal() {
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    const data = await login(email, password)
-    if (data) {
-      alert('Đăng nhập thành công')
+    try {
+      const data = await login(email, password)
+      userContext.setCurrentUser(data.accountLogin)
+      // document.cookie = `access_token=${data.access_token}; path=/; Max-Age=20`
       userContext.toggleLogin()
       closeModal('login')
-    } else {
-      alert('Email hoặc mật khẩu sai')
+      reset()
+      toast.success('Đăng nhập thành công',{autoClose: 1500, position: 'top-center'})
+    } catch (message) {
+      toast.error(String(message))
     }
   }
 
