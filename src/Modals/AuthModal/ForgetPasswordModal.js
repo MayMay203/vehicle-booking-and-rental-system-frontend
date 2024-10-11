@@ -1,14 +1,14 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { useEffect, useRef, useState } from 'react'
 
 const cx = classNames.bind(styles)
 function ForgetPasswordModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenModal, openModal, closeModal } = useAuthModal()
   const [email, setEmail] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)

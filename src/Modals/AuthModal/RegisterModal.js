@@ -1,7 +1,7 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
@@ -10,7 +10,7 @@ import { register } from '~/apiServices/registerService'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenModal, openModal, closeModal } = useAuthModal()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')

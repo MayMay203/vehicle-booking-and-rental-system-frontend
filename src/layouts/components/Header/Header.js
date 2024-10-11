@@ -7,7 +7,7 @@ import Logo from '~/components/Logo'
 import Menu from '../../../components/Menu/Menu'
 import MenuItem from '../../../components/Menu/MenuItem'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-regular-svg-icons'
 import { faMessage } from '@fortawesome/free-regular-svg-icons'
@@ -25,7 +25,7 @@ function Header({ menus }) {
   const contentRef = useRef(null)
   const headerRef = useRef(null)
   const [lastScrollY, setLastScrollY] = useState()
-  const { openModal } = useModal()
+  const { openModal } = useAuthModal()
   const userContext = useContext(UserContext)
 
   const hanldeBack = () => {

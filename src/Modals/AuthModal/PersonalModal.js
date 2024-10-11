@@ -1,15 +1,15 @@
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
 import { useEffect, useRef, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import Button from '~/components/Button'
 import FormGender from '~/components/Form/FormGender'
 import FormInput from '~/components/Form/FormInput'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 
 const cx = classNames.bind(styles)
 function PersonalModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenModal, openModal, closeModal } = useAuthModal()
   const [isValid, setIsValid] = useState(false)
   const [phone, setPhone] = useState('')
   const [fullName, setFullName] = useState('')

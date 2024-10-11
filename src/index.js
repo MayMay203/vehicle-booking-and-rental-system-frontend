@@ -9,13 +9,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AuthModalProvider from './Context/AuthModalProvider'
 import { UserProvider } from './Context/UserProvider/UserProvider'
+import ServiceModalProvider from './Context/ServiceModalProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <UserProvider>
       <AuthModalProvider>
-        <App />
+        <ServiceModalProvider>
+          <App />
+        </ServiceModalProvider>
       </AuthModalProvider>
     </UserProvider>
   </React.StrictMode>,

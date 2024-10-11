@@ -38,4 +38,4 @@ AuthModalProvider.propTypes = {
 }
 
 export default AuthModalProvider
-export const useModal = () => useContext(AuthModalContext)
+export const useAuthModal = () => useContext(AuthModalContext)

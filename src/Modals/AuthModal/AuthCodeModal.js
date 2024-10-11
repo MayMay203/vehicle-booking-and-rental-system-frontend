@@ -1,7 +1,7 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { useEffect, useRef, useState } from 'react'
@@ -10,7 +10,7 @@ import { resendOTP } from '~/apiServices/resendOTP'
 
 const cx = classNames.bind(styles)
 function AuthCodeModal() {
-  const { isOpenModal, openModal, modalData, closeModal } = useModal()
+  const { isOpenModal, openModal, modalData, closeModal } = useAuthModal()
   const { type, email } = modalData
 
   const [isValid, setIsValid] = useState(false)

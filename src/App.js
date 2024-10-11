@@ -2,7 +2,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { publicRoutes } from "./routes"
 import { DefaultLayout } from "./layouts"
-import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal, ResetPasswordModal } from "./Modals"
+import {
+  AuthCodeModal,
+  ForgetPasswordModal,
+  LoginModal,
+  PersonalModal,
+  RegisterModal,
+  ResetPasswordModal,
+} from './Modals/AuthModal'
+
+import { TicketModal } from './Modals/ServiceModal'
 
 function App() {
   return (
@@ -22,7 +31,8 @@ function App() {
       <AuthCodeModal />
       <PersonalModal />
       <ResetPasswordModal />
-      <ForgetPasswordModal/>
+      <ForgetPasswordModal />
+      <TicketModal />
     </div>
   )
 }
