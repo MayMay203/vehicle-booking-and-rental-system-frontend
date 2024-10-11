@@ -156,12 +156,12 @@ function TicketItem({ status }) {
             </button>
             {!status ? (
               <Button rounded onClick={handleChooseTicket}>
-                Chọn chuyến
+                Đặt ngay
               </Button>
             ) : status === 'current' ? (
               <Button rounded>Huỷ</Button>
             ) : (
-              <Button rounded>Đặt lại</Button>
+              <Button rounded onClick={handleChooseTicket}>Đặt lại</Button>
             )}
           </div>
         </div>

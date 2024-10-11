@@ -21,6 +21,8 @@ function TicketModal() {
     setIsValid(phonePattern.test(phone) && phone)
   }, [phone, fullName])
 
+  const handlePayment = () => {}
+
   return (
     <Modal
       className={cx('custom-modal')}
@@ -31,7 +33,7 @@ function TicketModal() {
     >
       <Modal.Header closeButton>
         <div className={cx('header')}>
-          <Modal.Title className={cx('title-header')}>{!type?'THÔNG TIN ĐƠN HÀNG':'CHI TIẾT HOÁ ĐƠN' }</Modal.Title>
+          <Modal.Title className={cx('title-header')}>{!type ? 'THÔNG TIN ĐƠN HÀNG' : 'CHI TIẾT HOÁ ĐƠN'}</Modal.Title>
         </div>
       </Modal.Header>
       <Modal.Body>
@@ -131,8 +133,12 @@ function TicketModal() {
             <span className={cx('title')}>Chi tiết thanh toán</span>
             <div className="p-4">
               <div className="d-flex justify-content-between mb-4">
-                <span>Phí đặt xe</span>
+                <span>Tiền vé xe</span>
                 <span>100.000đ</span>
+              </div>
+              <div className="d-flex justify-content-between mb-4">
+                <span>Số lượng</span>
+                <span>2</span>
               </div>
               <div className="d-flex justify-content-between mb-4">
                 <span>Giảm giá</span>
@@ -145,7 +151,7 @@ function TicketModal() {
                 <span className={type ? '' : '"fw-medium"'}>
                   {type ? 'Tổng tiền đã thanh toán' : 'Tổng tiền cần thanh toán'}
                 </span>
-                <span className="fw-bold">80.000đ</span>
+                <span className="fw-bold">180.000đ</span>
               </div>
 
               {type && (
@@ -170,7 +176,7 @@ function TicketModal() {
               )}
 
               {!type && (
-                <Button text className={cx('m-auto', 'mt-5', 'btn-pay')} disabled={!isValid}>
+                <Button text className={cx('m-auto', 'mt-5', 'btn-pay')} disabled={!isValid} onClick={handlePayment}>
                   Thanh toán
                 </Button>
               )}
