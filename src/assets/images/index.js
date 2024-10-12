@@ -21,5 +21,11 @@ export const images = {
   pillow: require('./pillow.png'),
   beverage: require('./beverage.png'),
   chair: require('./message_chair.png'),
-  sandal: require('./sandel.png')
+  sandal: require('./sandel.png'),
+  home_pin: require('./home_pin.png'),
+  local_taxi: require('./local_taxi.png'),
+  booking_page: require('./booking_page.png'),
+  sensor_occupied: require('./sensor_occupied.png'),
+  health_and_safety: require('./health_and_safety.png'),
+  acute: require('./acute.png'),
 }

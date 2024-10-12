@@ -7,7 +7,7 @@ import Button from '~/components/Button'
 const cx = classNames.bind(styles)
 const now = 60
 
-function Voucher({className}) {
+function Voucher({className, id}) {
   return (
     <div className={cx('wrapper', 'voucher',[className])} style={{ backgroundImage: `url(${images.voucher})` }}>
       <Col xs="3" className={cx('d-flex justify-content-center align-items-center', 'border-right')}>
@@ -16,7 +16,7 @@ function Voucher({className}) {
       <Col xs="9" className="justify-content-center align-items-center p-3">
         <Row className="justify-content-center align-items-center">
           <Col>
-            <p className={cx('voucher-name')}>Khuyến mãi 9/9</p>
+            <p className={cx('voucher-name')}>Khuyến mãi 9/9 {id}</p>
           </Col>
           <Col xs="auto">
             <Button rounded className={cx('claim_voucher')}>

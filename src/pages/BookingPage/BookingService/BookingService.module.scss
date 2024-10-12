@@ -1,0 +1,61 @@
+@use '../../../abstracts' as abstracts;
+
+.wrap-start-location, .wrap-end-location{
+    display: flex;
+    align-items: center;
+}
+.wrap-end-location{
+    text-align: right;
+    
+}
+.img{
+    width: 6rem;
+    margin: 1rem;
+    border-bottom: 2px solid rgba($color: #3c0101, $alpha: 65%);
+    @include abstracts.screen(md){
+       width: 4rem;
+    }
+}
+.wrap-txt{
+    margin: 1rem;
+}
+.border{
+    border: 1px solid #FF7F50;
+    border-radius: 3px;
+    margin: 2rem 0 1rem 0;
+    padding-bottom: 2rem;
+}
+.txt-header{
+    font-weight: 600;
+    font-size: 3rem;
+    text-align: center;
+    margin: 3rem;
+    @include abstracts.screen(md){
+        font-size: 2rem;
+        margin: 2rem;
+    }
+}
+.txt-title{
+    color: #FF7F50;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    @include abstracts.screen(md){
+       font-size: 1.5rem;
+    }
+}
+.txt-location{
+    color: rgba($color: #000000, $alpha: 65%);
+    font-size: 1.6rem;
+    font-weight: 500;
+    padding-bottom: 0.5rem;
+    @include abstracts.screen(md){
+       font-size: 1.5rem;
+    }
+}
+
+.btn-booking{
+    width: 20%;
+    font-size: large;
+    margin: 2rem;
+}

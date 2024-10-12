@@ -71,3 +71,35 @@
   border-radius: 0;
   line-height: 1.5;
 }
+
+
+// css cho list question
+.title {
+  font-weight: 600;
+  font-size:3rem;
+  text-align: center;
+    @include abstracts.screen(sm){
+        font-size:2.4rem;
+    }
+}
+
+.nav-button-page {
+  font-size: 2rem; 
+  padding: 1rem;
+  color: #E20D0D;
+  background-color: white;
+  border: none; 
+  cursor: pointer;
+}
+.nav-button-page:hover, .nav-button-page:active, .nav-button-page:focus {
+  background-color: #FCD4C6;
+  color: #E20D0D;
+  outline: none;
+  box-shadow: none; 
+}
+.nav-button-page:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  background-color: white;
+//   border: none; 
+}

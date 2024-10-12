@@ -4,7 +4,8 @@ import AnswerHub from '~/pages/AnswerHub'
 import BuyTicket from '~/pages/BuyTicket'
 import RentVehicle from '~/pages/RentalPage/RentVehicle'
 import RentalService from '~/pages/RentalPage/RentalService'
-import BookVehicle from '~/pages/BookVehicle'
+import BookVehicle from '~/pages/BookingPage/BookVehicle'
+import BookingService from '~/pages/BookingPage/BookingService'
 import RegisterPartner from '~/pages/RegisterPartner'
 import About from '~/pages/About'
 import OrderManagement from '~/pages/OrderManagement'
@@ -12,6 +13,7 @@ import HeaderOnly from '~/layouts/HeaderOnly'
 import AccountManagement from '~/pages/AccountManagement'
 import RentalServiceDetail from '~/pages/RentalPage/RentalServiceDetail'
 import RentalOrder from '~/pages/RentalPage/RentalOrder'
+import BookingOrder from '~/pages/BookingPage/BookingOrder'
 
 const publicRoutes = [
   {
@@ -29,6 +31,14 @@ const publicRoutes = [
   {
     path: config.routes.booking,
     component: BookVehicle,
+  },
+  {
+    path: config.routes.bookingService,
+    component: BookingService,
+  },
+  {
+    path: config.routes.bookingOrder,
+    component: BookingOrder,
   },
   {
     path: config.routes.partner,
@@ -63,7 +73,7 @@ const publicRoutes = [
   {
     path: config.routes.rentalOrder,
     component: RentalOrder,
-  }
+  },
 ]
 
 const privateRoutes = []

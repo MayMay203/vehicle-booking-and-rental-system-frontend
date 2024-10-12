@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .datetime-rental{
     margin: 0.5rem;
     background-color: white;
@@ -27,14 +29,36 @@
 }
 .date-time{
     margin-left: auto;
+    @include abstracts.screen(md){
+       margin-right: 3rem;
+    }
+    @include abstracts.screen(sm){
+       margin-right: 0rem;
+    }
     margin-bottom: 1rem;
 }
 .time-rental, .date-rental {
     margin-left: 0.6rem;
+    margin-right: 2rem;
+    @include abstracts.screen(xxl){
+       margin-right: 0rem;
+    }
+    @include abstracts.screen(md){
+       margin-right: 2rem;
+    }
+    @include abstracts.screen(sm){
+       margin-right: 0rem;
+    }
 }
 .content-clock, .content-calendar{
     background-color: #FFF6F3;
     padding: 0.6rem;
+    @include abstracts.screen(md){
+       margin-right: 1rem;
+    }
+    @include abstracts.screen(sm){
+       padding: 0.1rem;
+    }
 }
 .align-right{
     margin-left: auto;
@@ -43,12 +67,10 @@
     color: #FF7F50 !important;
     font-size: 1.4rem;
 }
-.voucher{
-    max-width: 30rem; 
-    // height: ; 
-    // margin: 0 auto; 
-    margin: 2rem;
-    padding: 2rem;
+.wrap-voucher{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .txt-content{
     color: rgba($color: #000000, $alpha: 90%);
