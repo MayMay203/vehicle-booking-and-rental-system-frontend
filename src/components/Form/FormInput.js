@@ -1,4 +1,4 @@
-import {useRef, useState } from 'react'
+import {memo, useRef, useState } from 'react'
 import styles from './Form.module.scss'
 import classNames from 'classnames/bind'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
 
 const cx = classNames.bind(styles)
 
-function FormInput({ id,type, title, error, isValid, value, className, password, ...props }) {
+function FormInput({ id, type, title, error, isValid, value, autoComplete, className, password, ...props }) {
   const [showError, setShowError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const inputRef = useRef(null)
@@ -16,7 +16,7 @@ function FormInput({ id,type, title, error, isValid, value, className, password,
       setShowError(!inputRef.current.checkValidity())
     }
     if (password) {
-      setShowError(password !== value)
+      setShowError(password !== value);
     }
   }
 
@@ -43,6 +43,7 @@ function FormInput({ id,type, title, error, isValid, value, className, password,
             }
           }}
           onBlur={handleCheckValidity}
+          autoComplete={autoComplete?autoComplete:'true'}
           {...props}
         />
         {type === 'password' && (
@@ -56,4 +57,4 @@ function FormInput({ id,type, title, error, isValid, value, className, password,
   )
 }
 
-export default FormInput
+export default memo(FormInput)

@@ -16,7 +16,9 @@ function AuthModalProvider({ children }) {
   const [modalData, setModalData] = useState({})
 
   const openModal = (modal, data = {}) => {
-    setModalData(data)
+      if (Object.keys(data).length > 0) {
+        setModalData(data)
+      }
     setModals((prev) => ({ ...prev, [modal]: true }))
   }
 

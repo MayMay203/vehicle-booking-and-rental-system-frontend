@@ -11,7 +11,9 @@ import {
   ResetPasswordModal,
 } from './Modals/AuthModal'
 
-import { TicketModal } from './Modals/ServiceModal'
+import { ReasonModal, TicketModal } from './Modals/ServiceModal'
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   return (
@@ -32,6 +34,12 @@ function App() {
       <PersonalModal />
       <ResetPasswordModal />
       <ForgetPasswordModal />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        style={{width: '340px',textAlign: 'left', lineHeight: '1.3' }}
+      />
+      <ReasonModal/>
       <TicketModal />
     </div>
   )

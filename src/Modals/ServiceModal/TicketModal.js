@@ -7,11 +7,12 @@ import { faArrowRight, faLocationCrosshairs, faLocationDot, faPhone, faUser } fr
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
 import Button from '~/components/Button'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 function TicketModal() {
   const { isOpenModal, closeModal, modalData } = useServiceModal()
-  const { data, type } = modalData
+  const {type} = modalData
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -21,7 +22,9 @@ function TicketModal() {
     setIsValid(phonePattern.test(phone) && phone)
   }, [phone, fullName])
 
-  const handlePayment = () => {}
+  const handlePayment = () => {
+    toast.success('Đặt vé thành công! Hãy chuẩn bị cho chuyến đi của bạn.')
+  }
 
   return (
     <Modal

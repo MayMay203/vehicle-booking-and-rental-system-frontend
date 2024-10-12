@@ -65,3 +65,14 @@
     background-color: var(--primary-bg);
     border-radius: 6px;
 }
+
+.btn-cancel{
+    border-radius: 4px;
+    background-color: #fff;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+
+    &:hover{
+        opacity: 0.9;
+    }
+}

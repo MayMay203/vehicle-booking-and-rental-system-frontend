@@ -61,7 +61,7 @@ function LoginModal() {
             error="Email không đúng định dạng"
             id="email"
             type="email"
-            placeholder="Nhâp email"
+            placeholder="Nhập email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
@@ -70,7 +70,7 @@ function LoginModal() {
           ></FormInput>
           <FormInput
             title="Mật khẩu"
-            error="Mật khẩu có ít nhất 8 kí tự"
+            error={password ? 'Mật khẩu có ít nhất 8 kí tự' : 'Vui lòng nhập mật khẩu'}
             id="password"
             type="password"
             minLength="8"
@@ -79,6 +79,7 @@ function LoginModal() {
             onChange={(e) => setPassword(e.target.value)}
             isValid={isValid}
             required
+            autoComplete="current-password"
           ></FormInput>
           <Button className={cx('btn-submit')} onClick={handleLogin} disabled={!isValid} type="submit">
             Đăng nhập

@@ -90,6 +90,10 @@ function TicketItem({ status }) {
   const handleShowDetailOrder = () => {
     openModal('ticket', { type: 'detailOrder' })
   }
+
+  const handleCancelTicket = () => {
+    openModal('cancel')
+  }
   return (
     <div className={cx('wrapper')}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
@@ -159,7 +163,7 @@ function TicketItem({ status }) {
                 Đặt ngay
               </Button>
             ) : status === 'current' ? (
-              <Button rounded>Huỷ</Button>
+              <Button rounded onClick={handleCancelTicket}>Huỷ</Button>
             ) : (
               <Button rounded onClick={handleChooseTicket}>Đặt lại</Button>
             )}

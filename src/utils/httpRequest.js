@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const httpRequest = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'http://localhost:8080/api',
 })
 
 export const get = async (url, options = {}) => {
@@ -19,5 +19,7 @@ export const DELETE = async (path, options = {}) => {
   return response.data
 }
 
-export default httpRequest;
+export const getMessage = (error) => {
+  return error.response.data.error
+}
 

@@ -4,13 +4,14 @@ const ServiceModalContext = createContext()
 function ServiceModalProvider({ children }) {
   const [modal, setModal] = useState({
     ticket: false,
+    cancel: false,
   })
 
   const [modalData, setModalData] = useState({})
 
-  const openModal = (modal, data = {}) => {
+  const openModal = (modalType, data = {}) => {
     setModalData(data)
-    setModal((prev) => ({ ...prev, [modal]: true }))
+    setModal((prev) => ({ ...prev, [modalType]: true }))
   }
 
   const closeModal = (modal) => {

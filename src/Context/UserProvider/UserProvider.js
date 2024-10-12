@@ -6,6 +6,7 @@ const UserContext = createContext()
 function UserProvider({ children }) {
   const [isLogin, setIsLogin] = useState(true)
   const [currentUser, setCurrentUser] = useState({})
+  const [email, setEmail] = useState(null)
 
   //   useEffect(() => {
   //     async function fetchApi() {
@@ -17,6 +18,14 @@ function UserProvider({ children }) {
   //     fetchApi()
   //   }, [])
 
+  const saveEmail = (email) => {
+    setEmail(email)
+  }
+
+  const getEmail = () => {
+    return email
+  }
+
   const toggleLogin = () => {
     setIsLogin((prev) => !prev)
   }
@@ -26,6 +35,8 @@ function UserProvider({ children }) {
     toggleLogin,
     setCurrentUser,
     currentUser,
+    saveEmail, 
+    getEmail
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
