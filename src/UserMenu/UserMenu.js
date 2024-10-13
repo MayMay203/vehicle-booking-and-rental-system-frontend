@@ -15,8 +15,7 @@ function UserMenu() {
 
   const handleLogout = async () => {
     try {
-      await logout()
-      // document.cookie = 'access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      await logout() 
       toggleLogin()
     } catch (message) {
       toast.error(String(message))

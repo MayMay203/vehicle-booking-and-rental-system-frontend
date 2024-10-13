@@ -1,55 +1,50 @@
 import PropTypes from 'prop-types'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState, useCallback } from 'react'
+import { refreshToken } from '~/apiServices/refreshToken'
 
 const UserContext = createContext()
 
 function UserProvider({ children }) {
   const [isLogin, setIsLogin] = useState(null)
-  console.log(document.cookie)
   const [currentUser, setCurrentUser] = useState({})
   const [email, setEmail] = useState(null)
 
-  const checkCookie = () => {
-    const cookies = document.cookie.split('; ')
-    const accessTokenExists = cookies.some((cookie) => cookie.startsWith('refresh_token='))
-    setIsLogin(accessTokenExists)
-  }
+  const checkLogin = useCallback(async ()=>{
+      const hasCookie = Boolean(document.cookie)
+      if (hasCookie) {
+        setIsLogin(true)
+      } else {
+        const response = await refreshToken()
+        setIsLogin(Boolean(response))
+        if(!response){
+          // alert('Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!')
+        }
+      }
+  },[])
+
+    const checkLoginSession = useCallback(async()=>{
+      if(!document.cookie){
+        const response =  await refreshToken();
+        if(!response){
+          // alert('Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại');
+          setIsLogin(false);
+        }
+      }
+  },[])
 
   useEffect(() => {
-    // Kiểm tra cookie khi component được mount
-    checkCookie()
-
-    const cookieChangeHandler = () => {
-      checkCookie()
-    }
-
-    window.addEventListener('cookie-change', cookieChangeHandler)
-
-    // Dọn dẹp listener khi component unmount
-    return () => {
-      window.removeEventListener('cookie-change', cookieChangeHandler)
-    }
+    checkLogin()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const saveEmail = (email) => {
-    setEmail(email)
-  }
-
-  const getEmail = () => {
-    return email
-  }
-
-  const toggleLogin = () => {
-    setIsLogin((prev) => !prev)
-  }
 
   const value = {
     isLogin,
-    toggleLogin,
+    toggleLogin: () => setIsLogin(prev => !prev),
     currentUser,
     setCurrentUser,
-    saveEmail,
-    getEmail,
+    saveEmail: (email) => setEmail(email),
+    getEmail: () => email,
+    checkLoginSession,
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>

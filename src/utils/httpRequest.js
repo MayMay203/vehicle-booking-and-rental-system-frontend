@@ -6,13 +6,12 @@ const httpRequest = axios.create({
 })
 
 export const get = async (url, options = {}) => {
-    const response = await httpRequest.get(url, options)
-    return response.data
+  const response = await httpRequest.get(url, options)
+  return response.data
 }
 
 export const post = async (url, body = {}, options = {}) => {
   const response = await httpRequest.post(url, body, options)
-   console.log('Headers:', response.headers)
   return response.data
 }
 

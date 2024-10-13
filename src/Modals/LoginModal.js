@@ -45,11 +45,10 @@ function LoginModal() {
     try {
       const data = await login(email, password)
       userContext.setCurrentUser(data.accountLogin)
-      // document.cookie = `access_token=${data.access_token}; path=/; Max-Age=20`
       userContext.toggleLogin()
       closeModal('login')
       reset()
-      toast.success('Đăng nhập thành công',{autoClose: 1500, position: 'top-center'})
+      toast.success('Đăng nhập thành công',{ autoClose: 1500, position: 'top-center'})
     } catch (message) {
       toast.error(String(message))
     }

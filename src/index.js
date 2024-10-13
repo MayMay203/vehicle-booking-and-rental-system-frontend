@@ -12,13 +12,13 @@ import { UserProvider } from './Context/UserProvider/UserProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <UserProvider>
       <AuthModalProvider>
         <App />
       </AuthModalProvider>
     </UserProvider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )
 
 // If you want to start measuring performance in your app, pass a function
