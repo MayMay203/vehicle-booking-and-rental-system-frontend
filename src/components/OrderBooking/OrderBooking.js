@@ -1,24 +1,24 @@
-import classNames from "classnames/bind"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCalendar, faLocationDot, faPhone, faUserLarge } from "@fortawesome/free-solid-svg-icons"
-import { Col, Row } from "react-bootstrap"
+import classNames from 'classnames/bind'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCalendar, faLocationDot, faPhone, faUserLarge } from '@fortawesome/free-solid-svg-icons'
+import { Col, Row } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
-import styles from "./OrderRental.module.scss"
+import styles from './OrderBooking.module.scss'
 import Button from '~/components/Button'
 const cx = classNames.bind(styles)
-function OrderRental({ typeService }) {
+function OrderBooking({ id }) {
   const navigate = useNavigate()
-  const handleOrder = (type) => {
-    navigate('/rent-vehicle/rental-service/rental-service-detail/rental-order', { state: { typeService: type } })
+  const handleOrder = (id) => {
+    navigate('/book-vehicle/booking-service/booking-order', { state: { id: id } })
   }
   return (
     <Row className={cx('order', 'm-0')}>
       <Row className={cx('txt')}>THÔNG TIN ĐƠN HÀNG</Row>
       <Row>
         <Row className={cx('txt-title')}>Người đặt</Row>
-        <Row className={cx('xs-col-2', 'wrap-renter')}>
+        <Row className={cx('xs-col-2', 'wrap-order')}>
           <Col sm="12" md="6" className={cx()}>
-            <div className={cx('d-flex', 'align-items-center', 'box-renter')}>
+            <div className={cx('d-flex', 'align-items-center', 'box-order')}>
               <FontAwesomeIcon icon={faUserLarge} className={cx('icon')}></FontAwesomeIcon>
               <div>
                 <p className={cx('name')}>Họ và tên</p>
@@ -27,7 +27,7 @@ function OrderRental({ typeService }) {
             </div>
           </Col>
           <Col sm="12" md="6" className={cx()}>
-            <div className={cx('d-flex', 'align-items-center', 'box-renter')}>
+            <div className={cx('d-flex', 'align-items-center', 'box-order')}>
               <FontAwesomeIcon icon={faPhone} className={cx('icon')}></FontAwesomeIcon>
               <div>
                 <p className={cx('phone')}>Số điện thoại</p>
@@ -38,30 +38,34 @@ function OrderRental({ typeService }) {
         </Row>
       </Row>
       <Row>
-        <Row className={cx('txt-title')}>Thời gian thuê</Row>
-        <Row className={cx('xs-col-2', 'wrap-time-rental')}>
+        <Row className={cx('txt-title')}>Thời gian đặt xe</Row>
+        <Row className={cx('xs-col-2', 'wrap-infor-order')}>
           <Col className={cx()}>
             <div className={cx('d-flex', 'align-items-center')}>
               <FontAwesomeIcon icon={faCalendar} className={cx('icon')}></FontAwesomeIcon>
               <div>
-                <span className={cx('txt-title')}>Từ:</span>
                 <span className={cx('txt-content')}>13h00, 12/08/2024</span>
-              </div>
-            </div>
-          </Col>
-          <Col className={cx()}>
-            <div className={cx('d-flex', 'align-items-center')}>
-              <div>
-                <span className={cx('txt-title')}>Đến:</span>
-                <span className={cx('txt-content')}>17h00, 21/08/2024</span>
               </div>
             </div>
           </Col>
         </Row>
       </Row>
       <Row>
-        <Row className={cx('txt-title')}>Địa điểm nhận xe</Row>
-        <Row className={cx('xs-col-2', 'wrap-time-rental')}>
+        <Row className={cx('txt-title')}>Địa điểm đón</Row>
+        <Row className={cx('xs-col-2', 'wrap-infor-order')}>
+          <Col className={cx()}>
+            <div className={cx('d-flex', 'align-items-center')}>
+              <FontAwesomeIcon icon={faLocationDot} className={cx('icon')}></FontAwesomeIcon>
+              <div>
+                <span className={cx('txt-content', 'm-0')}>728 Lê Đại Hành, thành phố Đà Nẵng</span>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </Row>
+      <Row>
+        <Row className={cx('txt-title')}>Địa điểm đến</Row>
+        <Row className={cx('xs-col-2', 'wrap-infor-order')}>
           <Col className={cx()}>
             <div className={cx('d-flex', 'align-items-center')}>
               <FontAwesomeIcon icon={faLocationDot} className={cx('icon')}></FontAwesomeIcon>
@@ -74,56 +78,44 @@ function OrderRental({ typeService }) {
       </Row>
       <Row>
         <div className={cx('wrap-infor')}>
-          <span>Số lượng thuê</span>
-          <span className={cx('align-right', 'txt-black')}>3</span>
+          <span>Loại xe đặt</span>
+          <span className={cx('align-right', 'txt-black')}>Xe mô tô</span>
         </div>
       </Row>
       <Row>
         <div className={cx('wrap-infor')}>
-          <span>Phí thuê 1 chiếc</span>
-          <span className={cx('align-right')}>500.000đ</span>
+          <span>Phương thức thanh toán</span>
+          <span className={cx('align-right', 'txt-black')}>Thanh toán bằng tiền mặt</span>
         </div>
       </Row>
       <Row>
         <div className={cx('wrap-infor')}>
+          <span>Phí đặt xe</span>
+          <span className={cx('align-right')}>100.000đ</span>
+        </div>
+      </Row>
+      <Row>
+        <div className={cx('wrap-infor', 'line')}>
           <span>Giảm giá</span>
           <span className={cx('align-right', 'txt-red')}>-0đ</span>
         </div>
       </Row>
       <Row>
-        <div className={cx('wrap-infor')}>
-          <span>Thuế VAT:</span>
-          <span className={cx('align-right')}>200.000đ</span>
-        </div>
-      </Row>
-      <Row>
-        <div className={cx('wrap-infor')}>
-          <span>Tiền cọc xe:</span>
-          <span className={cx('align-right')}>6.000.000đ</span>
-        </div>
-      </Row>
-      <Row>
-        <div className={cx('wrap-infor', 'line')}>
-          <span>Phí giữ chỗ:</span>
-          <span className={cx('align-right')}>200.000đ</span>
-        </div>
-      </Row>
-      <Row>
         <div className={cx('wrap-infor', 'no-line')}>
           <span>Tổng tiền:</span>
-          <span className={cx('align-right', 'txt-bold')}>7.900.000đ</span>
+          <span className={cx('align-right', 'txt-bold')}>100.000đ</span>
         </div>
       </Row>
       <Row>
         <div className={cx('wrap-note')}>
           <span className={cx('note')}>Lưu ý:</span>
           <span className={cx('note-content')}>
-            Mọi tiền bạn đã thanh toán sẽ được hoàn trả 100% nếu chủ xe hủy đơn và hệ thống sẽ đánh giá xe 1 sao.
+            Nếu bạn đã thanh toán mà không có tài xế nhận đơn, tiền sẽ được hoàn trả 100%.
           </span>
         </div>
       </Row>
       <Row className="justify-content-center">
-        <Button primary onClick={() => handleOrder(typeService)} className={cx('btn-order')}>
+        <Button primary onClick={() => handleOrder(id)} className={cx('btn-order')}>
           Xác nhận
         </Button>
       </Row>
@@ -138,4 +130,4 @@ function OrderRental({ typeService }) {
     </Row>
   )
 }
-export default OrderRental
+export default OrderBooking

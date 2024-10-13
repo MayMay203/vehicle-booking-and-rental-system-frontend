@@ -3,7 +3,7 @@ import styles from "./RentalOrder.module.scss"
 import { config } from '~/config'
 import { Breadcrumb, Row } from "react-bootstrap"
 import { useLocation } from 'react-router-dom'
-import StepRental from "~/components/StepRental"
+import StepOrder from "~/components/StepOrder"
 import OrderRental from "~/components/OrderRental"
 const cx = classNames.bind(styles)
 function RentalOrder(){
@@ -26,9 +26,11 @@ function RentalOrder(){
           </Breadcrumb.Item>
         </Breadcrumb>
         <Row className={cx('d-flex', 'align-items-center', 'justify-content-center', 'm-0')}>
-          <StepRental></StepRental>
+          <StepOrder numberSteps={3} typeService={'thuê xe'} stepDoing={2}></StepOrder>
         </Row>
-        <Row><OrderRental typeService={typeService}></OrderRental></Row>
+        <Row>
+          <OrderRental typeService={typeService}></OrderRental>
+        </Row>
       </div>
     )
 }

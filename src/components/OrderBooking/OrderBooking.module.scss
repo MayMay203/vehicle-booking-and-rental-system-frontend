@@ -26,10 +26,10 @@
         font-size:1.4rem;
     }
 }
-.wrap-renter{
+.wrap-order{
     padding: 0;
 }
-.box-renter{
+.box-order{
     background-color: #FFF6F3;
     padding: 0.3rem 2rem;
     // min-width: 60% !important;
@@ -78,7 +78,7 @@
         font-size:1.4rem;
     }
 }
-.wrap-time-rental{
+.wrap-infor-order{
     margin: 1rem 0;
     padding: 0 1.5rem;
 }
@@ -110,6 +110,7 @@
     color: #27AE60;
     font-size: 1.6rem;
     font-weight: 500;
+    text-align: right;
 
     @include abstracts.screen(sm){
         font-size:1.4rem;

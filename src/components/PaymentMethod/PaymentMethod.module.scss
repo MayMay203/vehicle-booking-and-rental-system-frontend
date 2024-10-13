@@ -1,0 +1,74 @@
+@use '../../abstracts' as abstracts;
+
+.btn-payment{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 2rem 0;
+
+    &:hover {
+        .circle{
+            background-color: #FFEBE4; 
+            border-color: #FF7F50;
+            cursor: pointer;
+        }
+        .payment{
+            background-color: #FFF6F3; 
+            box-shadow: 1px #FF7F50;
+            cursor: pointer;
+        }
+    }
+    &.active {
+        .circle {
+            background-color: #FF7F50; 
+        }
+
+        .payment {
+            background-color: #FFF6F3;
+            border-color: #FFEBE4; 
+            font-weight: 500;
+        }
+    }
+}
+.circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: white; 
+    border: 2px solid #FF7F50;
+    border-radius: 50%;
+    margin: 1rem 2rem 1rem 0;
+    @include abstracts.screen(md){
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+     
+    
+}
+
+.payment{
+    display: flex;
+    border: 1px solid #FFEBE4;
+    border-radius: 3px;
+    align-items: center;
+    width: 90%;
+}
+.icon{
+    margin: 1rem 2rem;
+    font-size: 2.5rem;
+    color: #FF7F50;
+    @include abstracts.screen(md){
+        margin: 0.5rem 1rem;
+        font-size: 2rem;
+    }
+}
+
+.wrap-txt{
+    color: black;
+    margin: 1rem;
+}
+.type-payment{
+    line-height: 2rem;
+    @include abstracts.screen(md){
+        font-size: 1.5rem;
+    }
+}

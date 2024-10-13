@@ -7,10 +7,16 @@ import classNames from 'classnames/bind'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
 import Form from 'react-bootstrap/Form'
-import Voucher from '../Voucher'
 import { useNavigate } from 'react-router-dom'
+import VoucherSlider from '../Voucher/VoucherSlider'
 const cx = classNames.bind(styles)
 function InforRental({ typeService }) {
+  const listVoucher = [
+    { id: 1 }, 
+    { id: 2 },
+    {id: 3},
+    {id: 4},
+  ]
   const [startTime, setStartTime] = useState(new Date())
   const [endTime, setEndTime] = useState(new Date())
   const [startDate, setStartDate] = useState(new Date())
@@ -104,8 +110,8 @@ function InforRental({ typeService }) {
       <div className={cx('txt-title', 'd-flex')}>
         <span>Mã giảm giá</span>
       </div>
-      <div classNames={cx('voucher')}>
-        <Voucher></Voucher>
+      <div className={cx('wrap-voucher')}>
+        <VoucherSlider listVoucher={listVoucher}></VoucherSlider>
       </div>
       <div>
         <div className={cx('txt-title')}>Chi phí khác</div>

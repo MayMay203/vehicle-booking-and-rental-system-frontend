@@ -1,0 +1,112 @@
+@use '../../abstracts' as abstracts;
+
+.btn-vehicle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+
+    &:hover {
+        .circle{
+            background-color: #FFEBE4; 
+            border-color: #FF7F50;
+            cursor: pointer;
+        }
+        .vehicle{
+            background-color: #FFF6F3; 
+            box-shadow: 1px #FF7F50;
+            cursor: pointer;
+        }
+    }
+    &.active {
+        .circle {
+            background-color: #FF7F50; 
+        }
+
+        .vehicle {
+            background-color: #FFF6F3;
+            border-color: #FFEBE4; 
+        }
+    }
+}
+.circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: white; 
+    border: 2px solid #FF7F50;
+    border-radius: 50%;
+    margin: 1rem 2rem 1rem 0;
+    @include abstracts.screen(md){
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+     
+    
+}
+
+.vehicle{
+    display: flex;
+    border: 1px solid #FFEBE4;
+    border-radius: 3px;
+    align-items: center;
+    min-width: 70%;
+}
+.icon{
+    margin: 0.5rem 2rem;
+    font-size: 3rem;
+    @include abstracts.screen(md){
+        margin: 0.5rem 1rem;
+        font-size: 2.5rem;
+    }
+}
+.car{
+    color: #FFC700;
+}
+.electric_bike{
+    color: #27AE60;
+}
+.two_wheeler{
+    color: #2474E5;
+}
+.wrap-txt{
+    color: black;
+    margin: 0.5rem 1rem;
+}
+.type-vehicle{
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 1rem 0;
+    @include abstracts.screen(md){
+        font-size: 1.4rem;
+    }
+}
+.amount-vehicle{
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    @include abstracts.screen(md){
+        font-size: 1.3rem;
+    }
+}
+.wrap-charge{
+    text-align: right;
+    margin: 0.5rem 2rem 0.5rem auto;
+    
+}
+.old-charge{
+    font-size: 1.4rem;
+    text-decoration: line-through;
+    margin: 0.4rem 0;
+    @include abstracts.screen(md){
+        font-size: 1.3rem;
+    }
+}
+.new-charge{
+    font-size: 1.6rem;
+    color: #FF7F50;
+    font-weight: 600;
+    margin: 0.4rem 0;
+    @include abstracts.screen(md){
+        font-size: 1.4rem;
+    }
+}

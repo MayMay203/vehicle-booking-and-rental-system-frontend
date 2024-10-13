@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .wrap-step{
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -15,6 +17,9 @@
 .step{
     text-align: center;
     font-size: 1.6rem;
+    @include abstracts.screen(sm){
+        font-size:1.4rem;
+    }
     color: #E20D0D;
     justify-content: center;
     align-items: center;
