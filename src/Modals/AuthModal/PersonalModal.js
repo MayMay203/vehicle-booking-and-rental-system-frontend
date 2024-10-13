@@ -43,11 +43,10 @@ function PersonalModal() {
         birthDay: birthday.toLocaleDateString('en-GB').replace(/\//g, '-'),
         phoneNumber: phone
       }
-      // console.log(JSON.stringify(accountInfo))
       const formData = new FormData()
       formData.append('account_info', new Blob([JSON.stringify(accountInfo)], { type: 'application/json' }))
       await registerInfo(formData)
-      
+
       toast.success('Đăng ký thông tin thành công', { autoClose: 1500 })
       closeAuthModal('info')
       reset()

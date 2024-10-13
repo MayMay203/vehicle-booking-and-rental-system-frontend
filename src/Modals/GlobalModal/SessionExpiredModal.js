@@ -28,10 +28,10 @@ function SessionExpiredModal() {
         </div>
       </Modal.Header>
       <Modal.Body>
-        <p className={cx('message', 'mt-3')}>Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!</p>
+        <p className={cx('message', 'mt-3','text-center')}>Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!</p>
       </Modal.Body>
-      <Modal.Footer className="mt-3">
-        <div className="d-flex mt-4 justify-content-center">
+      <Modal.Footer className={cx("mt-3", 'modal-actions')}>
+        <div className="d-flex mt-4 column-gap-4">
           <Button outline onClick={() => closeGlobalModal('expiredSession')}>Bỏ qua</Button>
           <Button primary onClick={handleReLogin}>
             Đăng nhập

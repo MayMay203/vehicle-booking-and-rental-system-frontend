@@ -139,21 +139,23 @@
 .date-input {
   width: 100%;
   padding: 4px 10px;
-  border: 1px solid #ccc;
+  border: 1.4px solid #ccc;
   border-radius: 8px;
-  height: 42px;
-  font-size: 16px;
+  height: 44px;
   appearance: none; 
   outline: none;
   transition: border-color 0.2s ease;
-  flex: 1;
+
+  &:focus{
+    border-color: #888;
+  }
 }
 
 .calendar-icon {
   position: absolute;
-  right: 12px; // Điều chỉnh vị trí của biểu tượng cho phù hợp
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #888; // Màu cho biểu tượng
-  pointer-events: none; // Để không click vào biểu tượng
+  color: rgba($color: #000, $alpha: 0.7); 
+  pointer-events: none; 
 }

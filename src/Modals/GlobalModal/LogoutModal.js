@@ -23,29 +23,26 @@ function LogoutModal() {
     }
 
     return (
-      <Modal
-      show={isOpenGlobalModal.logout}
-      onHide={() => closeGlobalModal('logout')}
-      centered
-      size="md"
-    >
-      <Modal.Header closeButton>
-        <div className={cx('header')}>
-          <Modal.Title className={cx('title-header')}>Xác nhận đăng xuất</Modal.Title>
-        </div>
-      </Modal.Header>
-      <Modal.Body>
-        <p className={cx('message', 'mt-3')}>Bạn chắc chắn muốn đăng xuất tài khoản?</p>
-      </Modal.Body>
-      <Modal.Footer className="mt-3">
-        <div className="d-flex mt-4 justify-content-center">
-          <Button outline onClick={() => closeGlobalModal('logout')}>Thoát</Button>
-          <Button primary onClick={handleLogout}>
-            Xác nhận
-          </Button>
-        </div>
-      </Modal.Footer>
-        </Modal>
+      <Modal show={isOpenGlobalModal.logout} onHide={() => closeGlobalModal('logout')} centered size="md">
+        <Modal.Header closeButton>
+          <div className={cx('header')}>
+            <Modal.Title className={cx('title-header')}>Xác nhận đăng xuất</Modal.Title>
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          <p className={cx('message', 'mt-3','text-center')}>Bạn chắc chắn muốn đăng xuất tài khoản?</p>
+        </Modal.Body>
+        <Modal.Footer className={cx('mt-3', 'modal-actions')}>
+          <div className="d-flex mt-4 column-gap-4">
+            <Button outline onClick={() => closeGlobalModal('logout')}>
+              Thoát
+            </Button>
+            <Button primary onClick={handleLogout}>
+              Xác nhận
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     )
 }
 
