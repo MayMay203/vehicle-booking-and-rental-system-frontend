@@ -129,3 +129,31 @@
         opacity: 0.8;
     }
 }
+
+
+.date-wrapper {
+  position: relative;
+  width: 100%; // điều chỉnh chiều rộng theo mong muốn
+}
+
+.date-input {
+  width: 100%;
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  height: 42px;
+  font-size: 16px;
+  appearance: none; 
+  outline: none;
+  transition: border-color 0.2s ease;
+  flex: 1;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 12px; // Điều chỉnh vị trí của biểu tượng cho phù hợp
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888; // Màu cho biểu tượng
+  pointer-events: none; // Để không click vào biểu tượng
+}

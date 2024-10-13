@@ -90,7 +90,7 @@ function AuthCodeModal() {
           <FormInput
             title="Nhập OTP gửi từ email"
             id="otp"
-            type="otp"
+            type="text"
             placeholder="Nhập OTP"
             value={otp}
             required
@@ -101,7 +101,7 @@ function AuthCodeModal() {
           <button className={cx('btn-resend')} onClick={handleResendOTP} disabled={timeLeft > 0}>
             Gửi lại mã
           </button>
-          <Button className={cx('btn-submit')} onClick={handleContinue} type="submit" disabled={!isValid}>
+          <Button className={cx('btn-submit')} onClick={handleContinue} disabled={!isValid} type="submit">
             Tiếp tục
           </Button>
         </form>

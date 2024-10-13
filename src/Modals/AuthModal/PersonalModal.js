@@ -1,5 +1,3 @@
-import styles from './AuthModal.module.scss'
-import classNames from 'classnames/bind'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import { toast } from 'react-toastify'
@@ -8,9 +6,15 @@ import Button from '~/components/Button'
 import FormGender from '~/components/Form/FormGender'
 import FormInput from '~/components/Form/FormInput'
 import { useAuthModal } from '~/Context/AuthModalProvider'
-import {useUserContext } from '~/Context/UserProvider'
+import { useUserContext } from '~/Context/UserProvider'
+import classNames from 'classnames/bind'
+import styles from './AuthModal.module.scss'
+import DatePicker from 'react-datepicker'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCalendar } from '@fortawesome/free-regular-svg-icons'
 
 const cx = classNames.bind(styles)
+
 function PersonalModal() {
   const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
   const [isValid, setIsValid] = useState(false)
@@ -18,30 +22,32 @@ function PersonalModal() {
   const [fullName, setFullName] = useState('')
   const [gender, setGender] = useState('MALE')
   const formRef = useRef(null)
-  const { getEmail } = useUserContext();
+  const { getEmail } = useUserContext()
 
-  const formatDate = useCallback((date) => {
-    let d = new Date(date)
-    const month = String(d.getMonth() + 1).padStart(2, '0')
-    const day = String(d.getDate()).padStart(2, '0')
-    const year = d.getFullYear()
-    return [year, month, day].join('-')
-  }, [])
-
-  const [birthday, setBirthday] = useState(formatDate(new Date()))
+  const [birthday, setBirthday] = useState(new Date())
 
   const reset = useCallback(() => {
     setFullName('')
     setGender('MALE')
     setPhone('')
-    setBirthday(formatDate(new Date()))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+    setBirthday((new Date()))
+  }, [])
 
   const handleSignUp = async (e) => {
     e.preventDefault()
     try {
-      await registerInfo(getEmail(), fullName, phone, birthday, gender)
+      const accountInfo = {
+        username: getEmail(),
+        name: fullName,
+        gender,
+        birthDay: birthday.toLocaleDateString('en-GB').replace(/\//g, '-'),
+        phoneNumber: phone
+      }
+      // console.log(JSON.stringify(accountInfo))
+      const formData = new FormData()
+      formData.append('account_info', new Blob([JSON.stringify(accountInfo)], { type: 'application/json' }))
+      await registerInfo(formData)
+      
       toast.success('Đăng ký thông tin thành công', { autoClose: 1500 })
       closeAuthModal('info')
       reset()
@@ -95,19 +101,22 @@ function PersonalModal() {
             isValid={isValid}
             onChange={(e) => handleChange(e.target.value, setPhone)}
           />
-          <FormInput
-            id="date"
-            value={birthday}
-            type="date"
-            title="Ngày sinh"
-            required
-            isValid={isValid}
-            error="Ngày sinh không hợp lệ"
-            onChange={(e) => handleChange(e.target.value, setBirthday)}
-            max={formatDate(new Date())}
-          />
+          <div className='mb-3'>
+            <label className='mb-4'>Ngày sinh</label>
+            <div className={cx('date-wrapper', 'd-flex', 'align-items-center')}>
+              <DatePicker
+                className={cx('date-input')} // Sử dụng class để áp dụng style cho input
+                selected={birthday}
+                onChange={(date) => setBirthday(date)}
+                dateFormat="dd-MM-yyyy"
+                maxDate={new Date()}
+                placeholderText="Chọn ngày sinh"
+              />
+              <FontAwesomeIcon icon={faCalendar} className={cx('calendar-icon')} />
+            </div>
+          </div>
           <FormGender handleGender={handleGender} gender={gender} />
-          <Button className={cx('btn-submit')} onClick={handleSignUp} disabled={!isValid} type='submit'>
+          <Button className={cx('btn-submit')} onClick={handleSignUp} disabled={!isValid} type="submit">
             Đăng ký thông tin
           </Button>
         </form>

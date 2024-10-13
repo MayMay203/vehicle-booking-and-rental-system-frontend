@@ -300,6 +300,10 @@ button {
   }
 }
 
+.react-datepicker-wrapper{
+  flex: 1;
+}
+
 .breadcrumb-item {
   font-size: 1.6rem;
 }

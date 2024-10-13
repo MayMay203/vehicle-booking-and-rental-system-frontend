@@ -50,7 +50,7 @@ function LoginModal() {
       reset()
       toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {
-      toast.error(String(message))
+      toast.error('Email hoặc mật khẩu không đúng')
     }
   }
 
@@ -104,7 +104,7 @@ function LoginModal() {
           </button>
           <div className={cx('bottom')}>
             <span className={cx('content')}>Bạn chưa có tài khoản?</span>
-            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowRegister}>
+            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowRegister} type='button'>
               Đăng ký
             </button>
           </div>
