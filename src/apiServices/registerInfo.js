@@ -9,3 +9,4 @@ export const registerInfo = async (formData) => {
     throw httpRequest.getMessage(error)
   }
 }
+
