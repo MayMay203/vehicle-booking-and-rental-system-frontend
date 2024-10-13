@@ -9,7 +9,6 @@ function FormTextArea({ id, title, show = false, className, customWidth = false,
         {title}
       </label>
       <textarea
-        maxLength={80}
         id={id}
         rows={3}
         className={cx('form-textarea', { customWidth })}

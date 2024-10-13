@@ -101,7 +101,7 @@
 }
 
 .time{
-    margin-top: -10px;
+    margin-top: -8px;
     display: block;
     color: red;
     font-size: 1.4rem;
@@ -113,4 +113,49 @@
     font-size: 1.5rem;
     padding: 6px 8px;
     margin-bottom: 16px;
+    // color: var(--text-color);
+    font-weight: 500;
+}
+
+.btn-verify{
+    height: initial;
+    margin-left: auto;
+    padding: 6px 12px;
+    margin-bottom: 16px;
+    color: var(--orange-color);
+    font-weight: 500;
+    font-size: 1.5rem;
+    &:hover{
+        opacity: 0.8;
+    }
+}
+
+
+.date-wrapper {
+  position: relative;
+  width: 100%; // điều chỉnh chiều rộng theo mong muốn
+}
+
+.date-input {
+  width: 100%;
+  padding: 4px 10px;
+  border: 1.4px solid #ccc;
+  border-radius: 8px;
+  height: 44px;
+  appearance: none; 
+  outline: none;
+  transition: border-color 0.2s ease;
+
+  &:focus{
+    border-color: #888;
+  }
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba($color: #000, $alpha: 0.7); 
+  pointer-events: none; 
 }

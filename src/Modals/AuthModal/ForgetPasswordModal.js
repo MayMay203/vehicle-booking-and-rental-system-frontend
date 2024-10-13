@@ -1,14 +1,14 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { useEffect, useRef, useState } from 'react'
 
 const cx = classNames.bind(styles)
 function ForgetPasswordModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
   const [email, setEmail] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
@@ -20,17 +20,17 @@ function ForgetPasswordModal() {
   }, [email])
 
   const handleReceiveOTP = () => {
-    closeModal('forget')
-    openModal('authCode', { type: 'forget' })
+    closeAuthModal('forget')
+    openAuthModal('authCode', { type: 'forget' })
   }
 
   const handleShowLogin = () => {
-    closeModal('forget')
-    openModal('login')
+    closeAuthModal('forget')
+    openAuthModal('login')
   }
 
   return (
-    <Modal show={isOpenModal.forget} onHide={() => closeModal('forget')} centered>
+    <Modal show={isOpenAuthModal.forget} onHide={() => closeAuthModal('forget')} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Quên mật khẩu</Modal.Title>

@@ -1,22 +1,23 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { login } from '~/apiServices/login'
-import { UserContext } from '~/Context/UserProvider/UserProvider'
+import { useUserContext } from '~/Context/UserProvider/UserProvider'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
-  const userContext = useContext(UserContext)
+  const { setCurrentUser, toggleLogin } = useUserContext()
 
   useEffect(() => {
     if (formRef.current) {
@@ -24,30 +25,37 @@ function LoginModal() {
     }
   }, [email, password])
 
+  const reset = useCallback(() => {
+    setEmail('')
+    setPassword('')
+  }, [])
+
   const handleShowRegister = () => {
-    closeModal('login')
-    openModal('register')
+    closeAuthModal('login')
+    openAuthModal('register')
   }
 
   const handleShowForget = () => {
-    closeModal('login')
-    openModal('forget')
+    closeAuthModal('login')
+    openAuthModal('forget')
   }
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    const data = await login(email, password)
-    if (data) {
-      alert('Đăng nhập thành công')
-      userContext.toggleLogin()
-      closeModal('login')
-    } else {
-      alert('Email hoặc mật khẩu sai')
+    try {
+      const data = await login(email, password)
+      setCurrentUser(data.accountLogin)
+      toggleLogin()
+      closeAuthModal('login')
+      reset()
+      toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
+    } catch (message) {
+      toast.error('Email hoặc mật khẩu không đúng')
     }
   }
 
   return (
-    <Modal show={isOpenModal.login} onHide={() => closeModal('login')} centered>
+    <Modal show={isOpenAuthModal.login} onHide={() => closeAuthModal('login')} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Đăng nhập</Modal.Title>
@@ -61,16 +69,16 @@ function LoginModal() {
             error="Email không đúng định dạng"
             id="email"
             type="email"
-            placeholder="Nhâp email"
+            placeholder="Nhập email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            pattern="[\-a-zA-Z0-9~!$%^&amp;*_=+\}\{'?]+(\.[\-a-zA-Z0-9~!$%^&amp;*_=+\}\{'?]+)*@[a-zA-Z0-9_][\-a-zA-Z0-9_]*(\.[\-a-zA-Z0-9_]+)*\.[cC][oO][mM](:[0-9]{1,5})?"
             isValid={isValid}
             required
           ></FormInput>
           <FormInput
             title="Mật khẩu"
-            error="Mật khẩu có ít nhất 8 kí tự"
+            error={password ? 'Mật khẩu có ít nhất 8 kí tự' : 'Vui lòng nhập mật khẩu'}
             id="password"
             type="password"
             minLength="8"
@@ -79,6 +87,7 @@ function LoginModal() {
             onChange={(e) => setPassword(e.target.value)}
             isValid={isValid}
             required
+            autoComplete="current-password"
           ></FormInput>
           <Button className={cx('btn-submit')} onClick={handleLogin} disabled={!isValid} type="submit">
             Đăng nhập
@@ -95,7 +104,7 @@ function LoginModal() {
           </button>
           <div className={cx('bottom')}>
             <span className={cx('content')}>Bạn chưa có tài khoản?</span>
-            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowRegister}>
+            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowRegister} type='button'>
               Đăng ký
             </button>
           </div>

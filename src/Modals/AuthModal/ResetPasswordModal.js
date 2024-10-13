@@ -1,14 +1,14 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { useEffect, useRef, useState } from 'react'
 
 const cx = classNames.bind(styles)
 function ResetPasswordModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -18,20 +18,23 @@ function ResetPasswordModal() {
     if (formRef.current) {
       setIsValid(formRef.current.checkValidity())
     }
+    if (password !== confirmPass) {
+      setIsValid(false)
+    }
   }, [password, confirmPass])
 
   const handleChangePass = () => {
-    closeModal('reset')
-    openModal('login')
+    closeAuthModal('reset')
+    openAuthModal('login')
   }
 
   const handleShowLogin = () => {
-    closeModal('reset')
-    openModal('login')
+    closeAuthModal('reset')
+    openAuthModal('login')
   }
 
   return (
-    <Modal show={isOpenModal.reset} onHide={() => closeModal('reset')} centered>
+    <Modal show={isOpenAuthModal.reset} onHide={() => closeAuthModal('reset')} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Đặt lại mật khẩu</Modal.Title>

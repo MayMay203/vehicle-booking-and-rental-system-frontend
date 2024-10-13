@@ -1,1 +1,1 @@
-export { default, useModal } from './AuthModalProvider'
+export { default, useAuthModal } from './AuthModalProvider'

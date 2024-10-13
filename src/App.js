@@ -2,7 +2,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { publicRoutes } from "./routes"
 import { DefaultLayout } from "./layouts"
-import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal, ResetPasswordModal } from "./Modals"
+import {
+  AuthCodeModal,
+  ForgetPasswordModal,
+  LoginModal,
+  PersonalModal,
+  RegisterModal,
+  ResetPasswordModal,
+} from './Modals/AuthModal'
+
+import { ReasonModal, TicketModal } from './Modals/ServiceModal'
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
+import {LogoutModal, SessionExpiredModal} from './Modals/GlobalModal'
 
 function App() {
   return (
@@ -22,7 +34,16 @@ function App() {
       <AuthCodeModal />
       <PersonalModal />
       <ResetPasswordModal />
-      <ForgetPasswordModal/>
+      <ForgetPasswordModal />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        style={{ width: '340px', textAlign: 'left', lineHeight: '1.3' }}
+      />
+      <ReasonModal />
+      <TicketModal />
+      <SessionExpiredModal />
+      <LogoutModal/>
     </div>
   )
 }

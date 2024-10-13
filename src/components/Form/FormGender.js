@@ -16,9 +16,9 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
             <input
               id="male"
               name="gender"
-              value="male"
+              value="MALE"
               type="radio"
-              checked={gender === 'male'}
+              checked={gender === 'MALE'}
               onChange={(e) => handleGender(e.target.value)}
             />
           </div>
@@ -27,9 +27,9 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
             <input
               id="female"
               name="gender"
-              value="female"
+              value="FEMALE"
               type="radio"
-              checked={gender === 'female'}
+              checked={gender === 'FEMALE'}
               onChange={(e) => handleGender(e.target.value)}
             />
           </div>
@@ -39,8 +39,8 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               id="other"
               name="gender"
               type="radio"
-              value="orther"
-              checked={gender === 'orther'}
+              value="ORTHER"
+              checked={gender === 'ORTHER'}
               onChange={(e) => handleGender(e.target.value)}
             />
           </div>

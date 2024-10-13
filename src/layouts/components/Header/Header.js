@@ -6,18 +6,17 @@ import { BackIcon, MenuIcon, PhoneIcon } from '~/components/Icon'
 import Logo from '~/components/Logo'
 import Menu from '../../../components/Menu/Menu'
 import MenuItem from '../../../components/Menu/MenuItem'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useModal } from '~/Context/AuthModalProvider'
+import {useEffect, useRef, useState } from 'react'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-regular-svg-icons'
 import { faMessage } from '@fortawesome/free-regular-svg-icons'
 import Image from '~/components/Image'
-import { images } from '~/assets/images'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
 import { config } from '~/config'
-import { UserContext } from '~/Context/UserProvider/UserProvider'
+import { useUserContext } from '~/Context/UserProvider'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
@@ -25,8 +24,8 @@ function Header({ menus }) {
   const contentRef = useRef(null)
   const headerRef = useRef(null)
   const [lastScrollY, setLastScrollY] = useState()
-  const { openModal } = useModal()
-  const userContext = useContext(UserContext)
+  const { openAuthModal } = useAuthModal()
+  const { isLogin, currentUser } = useUserContext();
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -70,8 +69,8 @@ function Header({ menus }) {
             <button className={cx('btn-back')} onClick={hanldeBack}>
               <BackIcon />
             </button>
-            {!userContext.isLogin ? (
-              <Button outline className="d-sm-none" onClick={() => openModal('login')}>
+            {!isLogin? (
+              <Button outline className="d-sm-none" onClick={() => openAuthModal('login')}>
                 Đăng nhập
               </Button>
             ) : (
@@ -95,7 +94,7 @@ function Header({ menus }) {
                   )}
                 >
                   <button>
-                    <Image src={images.noImage} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
+                    <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
                   </button>
                 </Tippy>
               </div>
@@ -119,12 +118,12 @@ function Header({ menus }) {
               <span>7h-19h</span>
             </p>
           </div>
-          {!userContext.isLogin && (
+          {!isLogin && (
             <div className={cx('actions')}>
-              <Button outline className="d-none d-md-block" onClick={() => openModal('register')}>
+              <Button outline className="d-none d-md-block" onClick={() => openAuthModal('register')}>
                 Đăng ký
               </Button>
-              <Button outline className="d-none d-sm-block" onClick={() => openModal('login')}>
+              <Button outline className="d-none d-sm-block" onClick={() => openAuthModal('login')}>
                 Đăng nhập
               </Button>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
@@ -132,7 +131,7 @@ function Header({ menus }) {
               </button>
             </div>
           )}
-          {userContext.isLogin && (
+          {isLogin && (
             <div className={cx('actions')}>
               <button to={config.routes.message} className={cx('btn-action', 'd-none', 'd-md-block')}>
                 <FontAwesomeIcon icon={faMessage} />
@@ -154,7 +153,7 @@ function Header({ menus }) {
                 )}
               >
                 <button>
-                  <Image src={images.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                  <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
                 </button>
               </Tippy>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>

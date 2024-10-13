@@ -1,12 +1,13 @@
 import axios from "axios";
 
 const httpRequest = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'http://localhost:8080/api',
+  withCredentials: true,
 })
 
 export const get = async (url, options = {}) => {
-    const response = await httpRequest.get(url, options)
-    return response.data
+  const response = await httpRequest.get(url, options)
+  return response.data
 }
 
 export const post = async (url, body = {}, options = {}) => {
@@ -19,5 +20,7 @@ export const DELETE = async (path, options = {}) => {
   return response.data
 }
 
-export default httpRequest;
+export const getMessage = (error) => {
+  return error.response.data.error
+}
 
