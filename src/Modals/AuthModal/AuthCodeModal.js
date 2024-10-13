@@ -1,22 +1,22 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { verifyOTP } from '~/apiServices/verifyOTP'
 import { resendOTP } from '~/apiServices/resendOTP'
 import { toast } from 'react-toastify'
-import { UserContext } from '~/Context/UserProvider'
+import { useUserContext } from '~/Context/UserProvider'
 
 const cx = classNames.bind(styles)
 
 function AuthCodeModal() {
-  const { isOpenModal, openModal, modalData, closeModal } = useModal()
-  const { type } = modalData
+  const { isOpenAuthModal, openAuthModal, modalAuthData, closeAuthModal } = useAuthModal()
+  const { type } = modalAuthData
   const [timeLeft, setTimeLeft] = useState(0)
-  const { getEmail } = useContext(UserContext)
+  const { getEmail } = useUserContext()
 
   const [isValid, setIsValid] = useState(false)
   const [otp, setOtp] = useState('')
@@ -40,10 +40,10 @@ function AuthCodeModal() {
   }, [timeLeft])
 
   useEffect(() => {
-    if (isOpenModal.authCode) {
+    if (isOpenAuthModal.authCode) {
       setTimeLeft(120)
     }
-  }, [isOpenModal])
+  }, [isOpenAuthModal])
 
   const formatTime = useCallback((seconds) => {
     const minutes = Math.floor(seconds / 60)
@@ -56,9 +56,9 @@ function AuthCodeModal() {
     try {
       await verifyOTP(getEmail(), otp)
       setTimeLeft(0)
-      closeModal('authCode')
+      closeAuthModal('authCode')
       setOtp('')
-      type === 'forget' ? openModal('reset') : openModal('info')
+      type === 'forget' ? openAuthModal('reset') : openAuthModal('info')
     } catch (message) {
       toast.error(message)
     }
@@ -79,7 +79,7 @@ function AuthCodeModal() {
   const handleChange = useCallback((e) => setOtp(e.target.value), [])
 
   return (
-    <Modal show={isOpenModal.authCode} onHide={() => closeModal('authCode')} centered>
+    <Modal show={isOpenAuthModal.authCode} onHide={() => closeAuthModal('authCode')} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Nhập mã xác thực</Modal.Title>

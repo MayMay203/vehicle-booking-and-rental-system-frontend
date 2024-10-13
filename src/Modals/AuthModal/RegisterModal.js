@@ -1,26 +1,26 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { register } from '~/apiServices/register'
-import { UserContext } from '~/Context/UserProvider'
+import {useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
 import { config } from '~/config'
 import { resendOTP } from '~/apiServices/resendOTP'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
-  const { saveEmail } = useContext(UserContext)
+  const { saveEmail } = useUserContext()
   const [isShow, setIsShow] = useState(false)
 
   useEffect(() => {
@@ -43,9 +43,9 @@ function RegisterModal() {
     try {
       saveEmail(email)
       await register(email, password, confirmPass)
-      await closeModal('register')
+      await closeAuthModal('register')
       reset()
-      openModal('authCode', { type: 'register' })
+      openAuthModal('authCode', { type: 'register' })
     } catch (mesage) {
       toast.error(mesage, { autoClose: 2000 })
       setIsShow(mesage.includes(config.message.emailConfirm))
@@ -53,8 +53,8 @@ function RegisterModal() {
   }
 
   const handleShowLogin = () => {
-    closeModal('register')
-    openModal('login')
+    closeAuthModal('register')
+    openAuthModal('login')
   }
 
   const handleChange = useCallback((value, functionChange) => {
@@ -62,15 +62,15 @@ function RegisterModal() {
   }, [])
 
   const handleShowOTPModal = async () => {
-    closeModal('register')
+    closeAuthModal('register')
     setIsShow(false)
     await resendOTP(email)
     toast.info('Kiểm tra email để nhận OTP')
-    openModal('authCode', { type: 'register' })
+    openAuthModal('authCode', { type: 'register' })
   }
 
   return (
-    <Modal show={isOpenModal.register} onHide={() => closeModal('register')} centered>
+    <Modal show={isOpenAuthModal.register} onHide={() => closeAuthModal('register')} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Đăng ký</Modal.Title>

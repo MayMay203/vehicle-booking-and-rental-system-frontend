@@ -1,0 +1,82 @@
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 4px;
+    flex: 1;
+}
+
+.title-header{
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.custom-modal{
+    font-size: 1.4rem;
+}
+
+.title{
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.input-wrapper{
+    display: flex;
+    column-gap: 12px;
+    background-color: var(--primary-bg);
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.input-text{
+    padding: 8px;
+    font-size: 1.4rem;
+}
+
+.info{
+    flex: 1;
+}
+
+.icon{
+    font-size: 1.7rem;
+    color: var(--primary-color)
+}
+
+.line{
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: var(--primary-color);
+}
+
+.sale-off{
+    color: #E20D0D;
+}
+
+.rule{
+    width: 80%;
+    text-align: center;
+    margin: 20px auto 0;
+    line-height: 1.4;
+}
+
+.btn-pay{
+    color: var(--primary-color);
+    background-color: var(--primary-bg);
+    border-radius: 6px;
+}
+
+.btn-cancel{
+    border-radius: 4px;
+    background-color: #fff;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+
+    &:hover{
+        opacity: 0.9;
+    }
+}
+
+.message{
+    line-height: 1.4;
+}

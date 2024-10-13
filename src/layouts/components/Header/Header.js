@@ -6,8 +6,8 @@ import { BackIcon, MenuIcon, PhoneIcon } from '~/components/Icon'
 import Logo from '~/components/Logo'
 import Menu from '../../../components/Menu/Menu'
 import MenuItem from '../../../components/Menu/MenuItem'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useModal } from '~/Context/AuthModalProvider'
+import {useEffect, useRef, useState } from 'react'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-regular-svg-icons'
 import { faMessage } from '@fortawesome/free-regular-svg-icons'
@@ -16,7 +16,7 @@ import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
 import { config } from '~/config'
-import { UserContext } from '~/Context/UserProvider/UserProvider'
+import { useUserContext } from '~/Context/UserProvider'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
@@ -24,8 +24,8 @@ function Header({ menus }) {
   const contentRef = useRef(null)
   const headerRef = useRef(null)
   const [lastScrollY, setLastScrollY] = useState()
-  const { openModal } = useModal()
-  const {isLogin, currentUser} = useContext(UserContext)
+  const { openAuthModal } = useAuthModal()
+  const { isLogin, currentUser } = useUserContext();
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -70,7 +70,7 @@ function Header({ menus }) {
               <BackIcon />
             </button>
             {!isLogin? (
-              <Button outline className="d-sm-none" onClick={() => openModal('login')}>
+              <Button outline className="d-sm-none" onClick={() => openAuthModal('login')}>
                 Đăng nhập
               </Button>
             ) : (
@@ -120,10 +120,10 @@ function Header({ menus }) {
           </div>
           {!isLogin && (
             <div className={cx('actions')}>
-              <Button outline className="d-none d-md-block" onClick={() => openModal('register')}>
+              <Button outline className="d-none d-md-block" onClick={() => openAuthModal('register')}>
                 Đăng ký
               </Button>
-              <Button outline className="d-none d-sm-block" onClick={() => openModal('login')}>
+              <Button outline className="d-none d-sm-block" onClick={() => openAuthModal('login')}>
                 Đăng nhập
               </Button>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>

@@ -1,265 +1,367 @@
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 body {
-	line-height: 1;
+  line-height: 1;
 }
-ol, ul {
-	list-style: none;
+ol,
+ul {
+  list-style: none;
 }
-blockquote, q {
-	quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
-*,::after,::befor{
-	box-sizing: border-box;
+*,
+::after,
+::befor {
+  box-sizing: border-box;
 }
 
-html{
+html {
   font-size: 62.5%;
 }
 
-body{
-	font-size: 1.6rem;
-	font-family: "Poppins", sans-serif;
-	/* font-family: "Inter", sans-serif; */
-	color: var(--text-color);
-	scroll-behavior: smooth!important;
+body {
+  font-size: 1.6rem;
+  font-family: 'Poppins', sans-serif;
+  /* font-family: "Inter", sans-serif; */
+  color: var(--text-color);
+  scroll-behavior: smooth !important;
 }
 
-a{
-	text-decoration: none;
-	color: var(--text-color)
+a {
+  text-decoration: none;
+  color: var(--text-color);
 }
 
-input, button, textarea, select{
-	font-size: inherit;
-	font-family: inherit;
+input,
+button,
+textarea,
+select {
+  font-size: inherit;
+  font-family: inherit;
 }
 
-button, select, input{
-	background-color: transparent;
-	outline: none;
+button,
+select,
+input {
+  background-color: transparent;
+  outline: none;
 }
 
-button{
-	border: none;
+button {
+  border: none;
 }
 
 /* Custom modal */
-.modal-header{
-	align-items: initial;
+.modal-header {
+  align-items: initial;
 }
 
-.modal-content{
-	padding: 16px 16px 32px 16px;
+.modal-content {
+  padding: 16px;
 }
 
 /* Custom breadcrumbs */
-.breadcrumb{
-	margin-top: 30px;
-	height: 48px;
-	background-color: var(--grey-color);
-	display: flex;
-	align-items: center;
-	border-radius: 6px;
-	padding: 4px 16px;
+.breadcrumb {
+  margin-top: 30px;
+  height: 48px;
+  background-color: var(--grey-color);
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  padding: 4px 16px;
 }
 
-.active{
-	color: var(--text-color)!important;
-	font-weight: 600
+.active {
+  color: var(--text-color) !important;
+  font-weight: 600;
 }
 
-.active::before{
-	color: var(--text-color)!important;
+.active::before {
+  color: var(--text-color) !important;
 }
 
-:root{
-	--primary-bg: #FFF6F3;
-	--primary-color: #D34714;
-	--dark-red-color: #A33A3A;
-	--red-color: #E20D0D;
-	--white-color: #fff;
-	--black-color: #000;
-	--text-color: #161823;
-	--orange-color: #FF7F50;
-	--dark-white: #f2f2f2;
-	--light-orange: #FF7948;
-	--border-color: rgba(204, 204,204, 0.8);
-	--black-color: #000;
-	--heading-color: #D5420C;
-	--grey-color: #F6F6F6;
-	--light-green: #A0CD8A;
-	--green-color: #27AE60;
+:root {
+  --primary-bg: #fff6f3;
+  --primary-color: #d34714;
+  --dark-red-color: #a33a3a;
+  --red-color: #e20d0d;
+  --white-color: #fff;
+  --black-color: #000;
+  --text-color: #161823;
+  --orange-color: #ff7f50;
+  --dark-white: #f2f2f2;
+  --light-orange: #ff7948;
+  --border-color: rgba(204, 204, 204, 0.8);
+  --black-color: #000;
+  --heading-color: #d5420c;
+  --grey-color: #f6f6f6;
+  --light-green: #a0cd8a;
+  --green-color: #27ae60;
 }
 
-.option{
-	width: 100%;
+.option {
+  width: 100%;
 }
 
 .carousel-indicators [data-bs-target] {
   width: 12px;
   height: 12px;
-  border-radius: 50%; 
+  border-radius: 50%;
   margin: 5px;
 }
 
 .carousel-indicators .active {
-  background-color: #FF7F50 !important; 
+  background-color: #ff7f50 !important;
 }
 
 .react-datepicker {
-border: 1px solid #FF7F50;
-background-color: #FFEBE4;
+  border: 1px solid #ff7f50;
+  background-color: #ffebe4;
 
+  .react-datepicker__current-month {
+    /* phần tháng được chọn*/
+    font-size: 1.4rem;
+    color: black;
+  }
 
-.react-datepicker__current-month {/* phần tháng được chọn*/
-	font-size: 1.4rem;
-	color: black; 
-}
+  .react-datepicker__day-name {
+    /* tên ngày */
+    color: black;
+    font-weight: bold;
+    font-size: 1rem;
+  }
 
-.react-datepicker__day-name {/* tên ngày */
-	color: black; 
-	font-weight: bold;
-	font-size: 1rem; 
-}
+  .react-datepicker__day,
+  .react-datepicker__time-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .react-datepicker__day:hover {
+    /*ngày*/
+    color: #ff723e;
+  }
 
-.react-datepicker__day, .react-datepicker__time-name {
-	font-size: 0.9rem;
-	font-weight:500;
-}
-	.react-datepicker__day:hover {/*ngày*/
-	color: #FF723E;
-}
+  .react-datepicker__day--selected {
+    /*ngày*/
+    background-color: #ff7f50;
+    color: white;
+    border: none;
+  }
+  .react-datepicker__day--today {
+    border: none;
+  }
 
-.react-datepicker__day--selected{/*ngày*/
-	background-color: #FF7F50;
-	color: white;
-	border: none;
-}
-.react-datepicker__day--today{
-	border:none;
-}
+  .react-datepicker__header--time {
+    font-size: 1.4rem !important;
+  }
+  .react-datepicker__time {
+    border-left: none;
+    font-size: 1.4rem;
+  }
 
-.react-datepicker__header--time{
-	font-size: 1.4rem !important;
-}
-.react-datepicker__time {
-	border-left: none;
-	font-size: 1.4rem;
-}
+  .react-datepicker__time-box {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: hidden;
+    scroll-behavior: smooth; /*Cuộn mượt mà*/
+  }
 
-.react-datepicker__time-box {
-	width: 100%; 
-	max-height: 200px;
-	overflow-y: hidden; 
-	scroll-behavior: smooth; /*Cuộn mượt mà*/
-}
+  .react-datepicker__time-list-item {
+    height: 30px;
+    line-height: 30px;
+    padding: 5px;
+  }
 
-.react-datepicker__time-list-item {
-	height: 30px; 
-	line-height: 30px;
-	padding: 5px;
-}
+  .react-datepicker__time-list-item--selected {
+    /*thời gian được chọn */
+    background-color: #ff7f50 !important;
+    color: white;
+  }
 
-.react-datepicker__time-list-item--selected {/*thời gian được chọn */
-	background-color: #FF7F50 !important; 
-	color: white;
-}
-
-.react-datepicker__time-list-item:hover {/* khi hover thời gian*/
-	background-color:  #FF7F50 !important; 
-	color: white;
-}
+  .react-datepicker__time-list-item:hover {
+    /* khi hover thời gian*/
+    background-color: #ff7f50 !important;
+    color: white;
+  }
 }
 
 .breadcrumb-item {
   font-size: 1.6rem;
 }
 
-.breadcrumb-item+.breadcrumb-item::before {
+.breadcrumb-item + .breadcrumb-item::before {
   content: '>';
-  font-size: 1.6rem; 
+  font-size: 1.6rem;
 }
 
 .breadcrumb-item a {
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 .breadcrumb-item.active {
-  font-weight: 600; 
+  font-weight: 600;
 }
 
 .progress-bar {
-  background-color: #FF7F50; 
+  background-color: #ff7f50;
 }
 
-.nav-item{
-	min-width: 20%;
-	display: flex;
-	justify-content:center;
-	font-size: 1.8rem;
+.nav-item {
+  min-width: 20%;
+  display: flex;
+  justify-content: center;
+  font-size: 1.8rem;
 }
-.nav-tabs .nav-link{
-	border: none;
-	width: 100%;
-	color: #484848;
-	padding: 1rem
+.nav-tabs .nav-link {
+  border: none;
+  width: 100%;
+  color: #484848;
+  padding: 1rem;
 }
-.nav-tabs .nav-link.active{
-	border-bottom: 2px solid black;
+.nav-tabs .nav-link.active {
+  border-bottom: 2px solid black;
 }
 
 .table {
-	
-	td, th{
-		border: 1px solid #FF7F50;
-	}
-	td{
-		font-weight: 500;
-		background-color: white;
-	}
-	th{
-		font-weight: 600;
-		padding: 1rem 2rem;
-	}
+  td,
+  th {
+    border: 1px solid #ff7f50;
+  }
+  td {
+    font-weight: 500;
+    background-color: white;
+  }
+  th {
+    font-weight: 600;
+    padding: 1rem 2rem;
+  }
 }
 
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px white inset; 
-    -webkit-text-fill-color: var(--text-color);
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+  -webkit-text-fill-color: var(--text-color);
+}
+.form-select {
+  font-size: 1.4rem;
+  width: 15%;
+  color: #ff7f50;
+}
+
+textarea{
+  outline: none;
 }

@@ -1,24 +1,24 @@
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import { registerInfo } from '~/apiServices/registerInfo'
 import Button from '~/components/Button'
 import FormGender from '~/components/Form/FormGender'
 import FormInput from '~/components/Form/FormInput'
-import { useModal } from '~/Context/AuthModalProvider'
-import { UserContext } from '~/Context/UserProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
+import {useUserContext } from '~/Context/UserProvider'
 
 const cx = classNames.bind(styles)
 function PersonalModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
   const [isValid, setIsValid] = useState(false)
   const [phone, setPhone] = useState('')
   const [fullName, setFullName] = useState('')
   const [gender, setGender] = useState('MALE')
   const formRef = useRef(null)
-  const { getEmail } = useContext(UserContext)
+  const { getEmail } = useUserContext();
 
   const formatDate = useCallback((date) => {
     let d = new Date(date)
@@ -43,9 +43,9 @@ function PersonalModal() {
     try {
       await registerInfo(getEmail(), fullName, phone, birthday, gender)
       toast.success('Đăng ký thông tin thành công', { autoClose: 1500 })
-      closeModal('info')
+      closeAuthModal('info')
       reset()
-      openModal('login')
+      openAuthModal('login')
     } catch (message) {
       toast.error('Đã có lỗi xảy ra. Vui lòng thử lại hoặc bỏ qua bước này', { autoClose: 2000 })
     }
@@ -66,7 +66,7 @@ function PersonalModal() {
   }, [])
 
   return (
-    <Modal show={isOpenModal.info} onHide={() => closeModal('info')} centered>
+    <Modal show={isOpenAuthModal.info} onHide={() => closeAuthModal('info')} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Thông tin cá nhân</Modal.Title>

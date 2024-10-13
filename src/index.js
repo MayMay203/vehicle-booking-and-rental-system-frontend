@@ -8,17 +8,21 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AuthModalProvider from './Context/AuthModalProvider'
-import { UserProvider } from './Context/UserProvider/UserProvider'
+import UserProvider from './Context/UserProvider';
+import ServiceModalProvider from './Context/ServiceModalProvider'
+import GlobalModalProvider from './Context/GlobalModalProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  // <React.StrictMode>
-    <UserProvider>
-      <AuthModalProvider>
-        <App />
-      </AuthModalProvider>
-    </UserProvider>
-  // </React.StrictMode>,
+  <GlobalModalProvider>
+      <UserProvider>
+        <AuthModalProvider>
+          <ServiceModalProvider>
+            <App />
+          </ServiceModalProvider>
+        </AuthModalProvider>
+      </UserProvider>
+  </GlobalModalProvider>
 )
 
 // If you want to start measuring performance in your app, pass a function

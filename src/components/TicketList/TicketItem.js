@@ -14,11 +14,13 @@ import Tabs from '../Tabs'
 import { faReadme } from '@fortawesome/free-brands-svg-icons'
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
 import Comment from '../Comment'
+import { useServiceModal } from '~/Context/ServiceModalProvider'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status }) {
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
+  const { openServiceModal } = useServiceModal()
 
   const settings = useMemo(
     () => ({
@@ -80,6 +82,18 @@ function TicketItem({ status }) {
   const handleClickTab = (type) => {
     setType(type)
   }
+
+  const handleChooseTicket = () => {
+    openServiceModal('ticket')
+  }
+
+  const handleShowDetailOrder = () => {
+    openServiceModal('ticket', { type: 'detailOrder' })
+  }
+
+  const handleCancelTicket = () => {
+    openServiceModal('cancel')
+  }
   return (
     <div className={cx('wrapper')}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
@@ -128,8 +142,11 @@ function TicketItem({ status }) {
           </div>
           {!status && <span className={cx('status', 'w-100')}>Còn 19 chỗ trống</span>}
           {status && (
-            <button className={cx('d-flex', 'align-items-center', 'gap-2', 'fs-4', 'detail-btn')}>
-              Chi tiết đơn đặt
+            <button
+              className={cx('d-flex', 'align-items-center', 'gap-2', 'fs-4', 'detail-btn')}
+              onClick={handleShowDetailOrder}
+            >
+              Chi tiết hoá đơn
               <FontAwesomeIcon icon={faReadme} className={cx('icon')}></FontAwesomeIcon>
             </button>
           )}
@@ -142,11 +159,13 @@ function TicketItem({ status }) {
               />
             </button>
             {!status ? (
-              <Button rounded>Đặt ngay</Button>
+              <Button rounded onClick={handleChooseTicket}>
+                Đặt ngay
+              </Button>
             ) : status === 'current' ? (
-              <Button rounded>Huỷ</Button>
+              <Button rounded onClick={handleCancelTicket}>Huỷ</Button>
             ) : (
-              <Button rounded>Đặt lại</Button>
+              <Button rounded onClick={handleChooseTicket}>Đặt lại</Button>
             )}
           </div>
         </div>

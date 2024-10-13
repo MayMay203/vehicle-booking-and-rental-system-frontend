@@ -4,21 +4,17 @@ import classNames from 'classnames/bind'
 import { Link } from 'react-router-dom'
 import { config } from '~/config'
 import Button from '~/components/Button'
-import { useContext } from 'react'
-import { UserContext } from '~/Context/UserProvider'
-import { toast } from 'react-toastify'
-import { logout } from '~/apiServices/logout'
+import { useUserContext } from '~/Context/UserProvider'
+import { useGlobalModal } from '~/Context/GlobalModalProvider'
 
 const cx = classNames.bind(styles)
 function UserMenu() {
-  const { currentUser, toggleLogin } = useContext(UserContext)
+  const { currentUser, checkLoginSession} = useUserContext()
+  const {openGlobalModal} = useGlobalModal()
 
   const handleLogout = async () => {
-    try {
-      await logout() 
-      toggleLogin()
-    } catch (message) {
-      toast.error(String(message))
+    if (await checkLoginSession()) {
+      openGlobalModal('logout')
     }
   }
 

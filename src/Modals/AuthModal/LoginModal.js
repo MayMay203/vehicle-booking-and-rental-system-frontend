@@ -1,23 +1,23 @@
 import { Modal } from 'react-bootstrap'
-import styles from './Modal.module.scss'
+import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useModal } from '~/Context/AuthModalProvider'
+import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { login } from '~/apiServices/login'
-import { UserContext } from '~/Context/UserProvider/UserProvider'
+import { useUserContext } from '~/Context/UserProvider/UserProvider'
 import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
-  const { isOpenModal, openModal, closeModal } = useModal()
+  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
-  const userContext = useContext(UserContext)
+  const { setCurrentUser, toggleLogin } = useUserContext()
 
   useEffect(() => {
     if (formRef.current) {
@@ -31,31 +31,31 @@ function LoginModal() {
   }, [])
 
   const handleShowRegister = () => {
-    closeModal('login')
-    openModal('register')
+    closeAuthModal('login')
+    openAuthModal('register')
   }
 
   const handleShowForget = () => {
-    closeModal('login')
-    openModal('forget')
+    closeAuthModal('login')
+    openAuthModal('forget')
   }
 
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
       const data = await login(email, password)
-      userContext.setCurrentUser(data.accountLogin)
-      userContext.toggleLogin()
-      closeModal('login')
+      setCurrentUser(data.accountLogin)
+      toggleLogin()
+      closeAuthModal('login')
       reset()
-      toast.success('Đăng nhập thành công',{ autoClose: 1500, position: 'top-center'})
+      toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {
       toast.error(String(message))
     }
   }
 
   return (
-    <Modal show={isOpenModal.login} onHide={() => closeModal('login')} centered>
+    <Modal show={isOpenAuthModal.login} onHide={() => closeAuthModal('login')} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Đăng nhập</Modal.Title>
@@ -72,7 +72,7 @@ function LoginModal() {
             placeholder="Nhập email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            pattern="[\-a-zA-Z0-9~!$%^&amp;*_=+\}\{'?]+(\.[\-a-zA-Z0-9~!$%^&amp;*_=+\}\{'?]+)*@[a-zA-Z0-9_][\-a-zA-Z0-9_]*(\.[\-a-zA-Z0-9_]+)*\.[cC][oO][mM](:[0-9]{1,5})?"
             isValid={isValid}
             required
           ></FormInput>

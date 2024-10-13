@@ -13,24 +13,22 @@ function AuthModalProvider({ children }) {
     info: false,
   })
 
-  const [modalData, setModalData] = useState({})
+  const [modalAuthData, setModalAuthData] = useState({})
 
-  const openModal = (modal, data = {}) => {
-      if (Object.keys(data).length > 0) {
-        setModalData(data)
-      }
+  const openAuthModal = (modal, data = {}) => {
+    setModalAuthData(data)
     setModals((prev) => ({ ...prev, [modal]: true }))
   }
 
-  const closeModal = (modal) => {
+  const closeAuthModal = (modal) => {
     setModals((prev) => ({ ...prev, [modal]: false }))
   }
 
   const value = {
-    isOpenModal: modals,
-    modalData,
-    openModal,
-    closeModal
+    isOpenAuthModal: modals,
+    modalAuthData,
+    openAuthModal,
+    closeAuthModal
   }
   return <AuthModalContext.Provider value={value}>{children}</AuthModalContext.Provider>
 }
@@ -40,4 +38,4 @@ AuthModalProvider.propTypes = {
 }
 
 export default AuthModalProvider
-export const useModal = () => useContext(AuthModalContext)
+export const useAuthModal = () => useContext(AuthModalContext)
