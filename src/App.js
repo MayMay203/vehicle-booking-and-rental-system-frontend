@@ -7,8 +7,7 @@ import {
   ForgetPasswordModal,
   LoginModal,
   PersonalModal,
-  RegisterModal,
-  ResetPasswordModal,
+  RegisterModal
 } from './Modals/AuthModal'
 
 import { ReasonModal, TicketModal } from './Modals/ServiceModal'
@@ -34,7 +33,6 @@ function App() {
       <RegisterModal />
       <AuthCodeModal />
       <PersonalModal />
-      <ResetPasswordModal />
       <ForgetPasswordModal />
       <ToastContainer
         position="top-right"
