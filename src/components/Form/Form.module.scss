@@ -62,7 +62,7 @@
 .gender{
     display: flex;
     justify-content: center;
-    column-gap: 36px;
+    column-gap: 42px;
     font-size: 1.5rem;
     margin-bottom: 16px;
 }
@@ -80,4 +80,37 @@
     top: 50%;
     transform: translateY(-50%);
     font-size: 1.7rem;
+}
+
+.label{
+    position: relative;
+}
+
+.label::after,
+.label::before {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.label::before{
+    right: -20px;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: 1.6px solid var(--orange-color);
+}
+
+.label::after{
+    right: -16px;
+    bottom: 3px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--orange-color);
+    display: none;
+}
+
+.radio-button:checked ~ .label::after{
+    display: block;
 }

@@ -61,6 +61,7 @@ function TicketModal() {
                         required
                         placeholder="Nhập họ và tên"
                         onChange={(e) => setFullName(e.target.value)}
+                        autoComplete="off"
                       />
                     )}
                   </div>
@@ -82,10 +83,12 @@ function TicketModal() {
                         id="phone"
                         className={cx('input-text', 'w-100')}
                         type="text"
+                        pattern="[0-9]{10}"
                         required
                         placeholder="Nhập số điện thoại"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
+                        autoComplete="off"
                       />
                     )}
                   </div>

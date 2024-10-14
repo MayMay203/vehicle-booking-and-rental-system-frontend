@@ -178,12 +178,13 @@ button {
 /* Custom breadcrumbs */
 .breadcrumb {
   margin-top: 30px;
-  height: 48px;
+  /* height: 48px; */
   background-color: var(--grey-color);
   display: flex;
   align-items: center;
   border-radius: 6px;
-  padding: 4px 16px;
+  padding: 10px 16px;
+  line-height: 1.6;
 }
 
 .active {
@@ -304,6 +305,11 @@ button {
   flex: 1;
 }
 
+.react-datepicker__month-container{
+    width: 200px;
+    font-size: 1.5rem;
+}
+
 .breadcrumb-item {
   font-size: 1.6rem;
 }
@@ -341,7 +347,7 @@ button {
 }
 
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px white inset;
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
   -webkit-text-fill-color: var(--text-color);
 }
 .form-select {
