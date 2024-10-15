@@ -30,7 +30,7 @@ function ResetPassword() {
       }
     }
     checkValidToken()
-  }, [location.search])
+  }, [location])
 
   useEffect(() => {
     if (formRef.current) {

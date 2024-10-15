@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import { createContext, useEffect, useState, useCallback, useContext } from 'react'
 import { refreshToken } from '~/apiServices/refreshToken'
 import { useGlobalModal } from '../GlobalModalProvider'
+import { checkExistCookie } from '~/utils/cookieUtils'
 
 const UserContext = createContext()
 
@@ -13,8 +14,7 @@ function UserProvider({ children }) {
   const { openGlobalModal } = useGlobalModal()
 
   const checkLogin = useCallback(async () => {
-    const hasCookie = Boolean(document.cookie)
-    if (hasCookie) {
+    if (checkExistCookie('access_token')) {
       setIsLogin(true)
     } else {
       const response = await refreshToken()
@@ -22,14 +22,13 @@ function UserProvider({ children }) {
         setIsLogin(true)
       } else {
         setIsLogin(false)
-        // openGlobalModal('expiredSession')
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const checkLoginSession = useCallback(async () => {
-    if (document.cookie) return true;
+    if (checkExistCookie('access_token')) return true;
     const response = await refreshToken()
     if (!response) {
       openGlobalModal('expiredSession')

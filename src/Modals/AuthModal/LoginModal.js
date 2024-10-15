@@ -55,6 +55,21 @@ function LoginModal() {
     }
   }
 
+  const handleGoogleLogin = (e) => {
+    e.preventDefault()
+    const callbackUrl = 'http://localhost:3000/authenticate'
+    const authUrl = 'https://accounts.google.com/o/oauth2/auth'
+    const googleClientId = process.env.REACT_APP_GG_CLIENT_ID
+    console.log(googleClientId)
+
+    const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
+      callbackUrl,
+    )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`
+
+    console.log(targetUrl)
+    window.location.href = targetUrl
+  }
+
   return (
     <Modal show={isOpenAuthModal.login} onHide={() => closeAuthModal('login')} centered>
       <Modal.Header closeButton>
@@ -97,7 +112,7 @@ function LoginModal() {
             Quên mật khẩu
           </button>
           <div className={cx('other')}>hoặc</div>
-          <button className={cx('btn-google')}>
+          <button className={cx('btn-google')} onClick={handleGoogleLogin}>
             <span className={cx('icon')}>
               <img src={images.google} alt="google" className={cx('google-img')}></img>
             </span>
@@ -105,7 +120,7 @@ function LoginModal() {
           </button>
           <div className={cx('bottom')}>
             <span className={cx('content')}>Bạn chưa có tài khoản?</span>
-            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowRegister} type='button'>
+            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowRegister} type="button">
               Đăng ký
             </button>
           </div>
