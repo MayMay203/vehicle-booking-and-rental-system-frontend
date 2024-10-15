@@ -46,9 +46,9 @@ function RegisterModal() {
       await closeAuthModal('register')
       reset()
       openAuthModal('authCode', { type: 'register' })
-    } catch (mesage) {
-      toast.error(mesage, { autoClose: 2000 })
-      setIsShow(mesage.includes(config.message.emailConfirm))
+    } catch (message) {
+      toast.error(message, { autoClose: 2000 })
+      setIsShow(message.includes(config.message.emailConfirm))
     }
   }
 

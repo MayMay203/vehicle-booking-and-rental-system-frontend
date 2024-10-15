@@ -12,7 +12,6 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
         <label className={cx('form-label')}>Giới tính</label>
         <div className={cx('gender')}>
           <div className={cx('form-gender')}>
-            <label htmlFor="male">Nam</label>
             <input
               id="male"
               name="gender"
@@ -20,10 +19,14 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               type="radio"
               checked={gender === 'MALE'}
               onChange={(e) => handleGender(e.target.value)}
+              hidden
+              className={cx('radio-button')}
             />
+            <label htmlFor="male" className={cx('label')}>
+              Nam
+            </label>
           </div>
           <div className={cx('form-gender')}>
-            <label htmlFor="female">Nữ</label>
             <input
               id="female"
               name="gender"
@@ -31,10 +34,14 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               type="radio"
               checked={gender === 'FEMALE'}
               onChange={(e) => handleGender(e.target.value)}
+              hidden
+              className={cx('radio-button')}
             />
+            <label htmlFor="female" className={cx('label')}>
+              Nữ
+            </label>
           </div>
           <div className={cx('form-gender')}>
-            <label htmlFor="other">Khác</label>
             <input
               id="other"
               name="gender"
@@ -42,7 +49,12 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               value="ORTHER"
               checked={gender === 'ORTHER'}
               onChange={(e) => handleGender(e.target.value)}
+              hidden
+              className={cx('radio-button')}
             />
+            <label htmlFor="other" className={cx('label')}>
+              Khác
+            </label>
           </div>
         </div>
       </div>

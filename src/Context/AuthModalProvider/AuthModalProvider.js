@@ -9,7 +9,6 @@ function AuthModalProvider({ children }) {
     register: false,
     forget: false,
     authCode: false,
-    reset: false,
     info: false,
   })
 

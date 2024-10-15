@@ -35,7 +35,8 @@ function LoginModal() {
     openAuthModal('register')
   }
 
-  const handleShowForget = () => {
+  const handleShowForget = (e) => {
+    e.preventDefault()
     closeAuthModal('login')
     openAuthModal('forget')
   }
