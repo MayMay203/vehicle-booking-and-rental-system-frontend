@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import {LogoutModal, SessionExpiredModal} from './Modals/GlobalModal'
 import { Fragment } from "react"
+import Spinner from "./components/Spinner"
 
 function App() {
   return (
@@ -42,7 +43,8 @@ function App() {
       <ReasonModal />
       <TicketModal />
       <SessionExpiredModal />
-      <LogoutModal/>
+      <LogoutModal />
+      <Spinner/>
     </div>
   )
 }

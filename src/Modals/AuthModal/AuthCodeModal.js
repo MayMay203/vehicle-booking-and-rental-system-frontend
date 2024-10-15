@@ -98,7 +98,7 @@ function AuthCodeModal() {
             isValid={isValid}
           />
           <span className={cx('time')}>{formatTime(timeLeft)}</span>
-          <button className={cx('btn-resend')} onClick={handleResendOTP} disabled={timeLeft > 0}>
+          <button className={cx('btn-resend')} onClick={handleResendOTP} disabled={timeLeft > 0} type='button'>
             Gửi lại mã
           </button>
           <Button className={cx('btn-submit')} onClick={handleContinue} disabled={!isValid} type="submit">

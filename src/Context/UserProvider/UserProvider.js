@@ -11,7 +11,7 @@ function UserProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true)
   const [currentUser, setCurrentUser] = useState({})
   const [email, setEmail] = useState(null)
-  const { openGlobalModal } = useGlobalModal()
+  const { openGlobalModal} = useGlobalModal()
 
   const checkLogin = useCallback(async () => {
     if (checkExistCookie('access_token')) {
@@ -28,14 +28,14 @@ function UserProvider({ children }) {
   }, [])
 
   const checkLoginSession = useCallback(async () => {
-    if (checkExistCookie('access_token')) return true;
+    if (checkExistCookie('access_token')) return true
     const response = await refreshToken()
     if (!response) {
       openGlobalModal('expiredSession')
       setIsLogin(false)
-      return false;
+      return false
     }
-    return true;
+    return true
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -56,10 +56,11 @@ function UserProvider({ children }) {
   }
 
   if (isLoading) {
-    return <div>Loading...</div> //Hiển thị spinner
+    return <></>
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
+
 }
 
 UserProvider.propTypes = {

@@ -5,6 +5,7 @@ function GlobalModalProvider({ children }) {
   const [modal, setModal] = useState({
     expiredSession: false,
     logout: false,
+    loading: false,
   })
 
   const openGlobalModal = (modalType) => {
