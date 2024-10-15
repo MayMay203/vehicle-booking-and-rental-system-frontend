@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
 
 const cx = classNames.bind(styles)
 
-function FormInput({ id, type, title, error, isValid, value, autoComplete, className, password, ...props }) {
+function FormInput({ id, type, title, error, isValid, value, autoComplete, className, password, disabled, ...props }) {
   const [showError, setShowError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const inputRef = useRef(null)
@@ -16,12 +16,12 @@ function FormInput({ id, type, title, error, isValid, value, autoComplete, class
       setShowError(!inputRef.current.checkValidity())
     }
     if (password) {
-      setShowError(password !== value);
+      setShowError(password !== value)
     }
   }
 
   const handleTogglePass = () => {
-     setShowPassword(prev => !prev)
+    setShowPassword((prev) => !prev)
   }
 
   return (
@@ -33,9 +33,9 @@ function FormInput({ id, type, title, error, isValid, value, autoComplete, class
         <input
           id={id}
           value={value}
-          type={ type === 'password' && showPassword? 'text':type}
+          type={type === 'password' && showPassword ? 'text' : type}
           ref={inputRef}
-          className={cx('form-input')}
+          className={cx('form-input', { readOnly: disabled })}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !isValid) {
               handleCheckValidity()
@@ -43,12 +43,13 @@ function FormInput({ id, type, title, error, isValid, value, autoComplete, class
             }
           }}
           onBlur={handleCheckValidity}
-          autoComplete={autoComplete?autoComplete:'true'}
+          autoComplete={autoComplete ? autoComplete : 'true'}
+          disabled={disabled}
           {...props}
         />
         {type === 'password' && (
           <button type="button" className={cx('btn-eye')} onClick={handleTogglePass}>
-            {showPassword ?  <FontAwesomeIcon icon={faEyeSlash}/> : <FontAwesomeIcon icon={faEye}/>}
+            {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
           </button>
         )}
       </div>

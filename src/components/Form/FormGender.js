@@ -22,7 +22,7 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               hidden
               className={cx('radio-button')}
             />
-            <label htmlFor="male" className={cx('label')}>
+            <label htmlFor="male" className={cx('label','label-gender')}>
               Nam
             </label>
           </div>
@@ -37,7 +37,7 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               hidden
               className={cx('radio-button')}
             />
-            <label htmlFor="female" className={cx('label')}>
+            <label htmlFor="female" className={cx('label','label-gender')}>
               Nữ
             </label>
           </div>
@@ -52,7 +52,7 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               hidden
               className={cx('radio-button')}
             />
-            <label htmlFor="other" className={cx('label')}>
+            <label htmlFor="other" className={cx('label','label-gender')}>
               Khác
             </label>
           </div>

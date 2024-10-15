@@ -27,22 +27,22 @@ function App() {
             return <Route key={index} path={route.path} element={<Layout>{<Page />}</Layout>}></Route>
           })}
         </Routes>
+        {/* Render modals */}
+        <LoginModal />
+        <RegisterModal />
+        <AuthCodeModal />
+        <PersonalModal />
+        <ForgetPasswordModal />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          style={{ width: '340px', textAlign: 'left', lineHeight: '1.3' }}
+        />
+        <ReasonModal />
+        <TicketModal />
+        <SessionExpiredModal />
+        <LogoutModal />
       </Router>
-      {/* Render modals */}
-      <LoginModal />
-      <RegisterModal />
-      <AuthCodeModal />
-      <PersonalModal />
-      <ForgetPasswordModal />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        style={{ width: '340px', textAlign: 'left', lineHeight: '1.3' }}
-      />
-      <ReasonModal />
-      <TicketModal />
-      <SessionExpiredModal />
-      <LogoutModal/>
     </div>
   )
 }

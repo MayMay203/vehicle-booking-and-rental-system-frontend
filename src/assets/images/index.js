@@ -28,4 +28,5 @@ export const images = {
   sensor_occupied: require('./sensor_occupied.png'),
   health_and_safety: require('./health_and_safety.png'),
   acute: require('./acute.png'),
+  addAvatar: require('./add-avatar.png'),
 }

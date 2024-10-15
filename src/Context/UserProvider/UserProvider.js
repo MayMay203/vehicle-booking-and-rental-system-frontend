@@ -22,7 +22,6 @@ function UserProvider({ children }) {
         setIsLogin(true)
       } else {
         setIsLogin(false)
-        // openGlobalModal('expiredSession')
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
