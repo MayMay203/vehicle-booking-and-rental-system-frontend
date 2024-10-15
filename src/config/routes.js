@@ -13,5 +13,5 @@ export const routes = {
   about: '/about',
   account: '/manage-account',
   order: '/manage-orders',
-  resetPassword: '/reset-password/verify-token',
+  resetPassword: '/reset-password',
 }

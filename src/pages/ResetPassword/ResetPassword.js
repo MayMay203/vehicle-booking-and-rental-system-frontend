@@ -25,7 +25,9 @@ function ResetPassword() {
       const tokenParam = queryParams.get('token')
       setToken(tokenParam)
       const result = await checkTokenReset(tokenParam)
-      setIsValidToken(result.info)
+      if (result) {
+        setIsValidToken(result.info)
+      }
     }
     checkValidToken()
   }, [location.search])
