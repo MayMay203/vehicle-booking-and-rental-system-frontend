@@ -3,15 +3,16 @@ import { createContext, useEffect, useState, useCallback, useContext } from 'rea
 import { refreshToken } from '~/apiServices/refreshToken'
 import { useGlobalModal } from '../GlobalModalProvider'
 import { checkExistCookie } from '~/utils/cookieUtils'
+import { getMyAccount } from '~/apiServices/getMyAccount'
 
 const UserContext = createContext()
 
 function UserProvider({ children }) {
   const [isLogin, setIsLogin] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState(null)
   const [email, setEmail] = useState(null)
-  const { openGlobalModal} = useGlobalModal()
+  const { openGlobalModal } = useGlobalModal()
 
   const checkLogin = useCallback(async () => {
     if (checkExistCookie('access_token')) {
@@ -45,6 +46,16 @@ function UserProvider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    async function getCurrentUser() {
+      const userData = await getMyAccount()
+      if (userData) {
+        setCurrentUser(userData.accountInfo)
+      }
+    }
+    getCurrentUser()
+  }, [])
+
   const value = {
     isLogin,
     toggleLogin: () => setIsLogin((prev) => !prev),
@@ -60,7 +71,6 @@ function UserProvider({ children }) {
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
-
 }
 
 UserProvider.propTypes = {

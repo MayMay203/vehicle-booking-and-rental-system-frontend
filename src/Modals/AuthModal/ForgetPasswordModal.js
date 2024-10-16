@@ -37,6 +37,7 @@ function ForgetPasswordModal() {
       closeGlobalModal('loading')
       toast.success(data.info, { autoClose: 1500, position: 'top-center' })
     } catch (message) {
+      closeGlobalModal('loading')
       toast.error(message, { autoClose: 1500, position: 'top-center' })
     }
   }

@@ -19,6 +19,7 @@ function Authenticate() {
       const data = await loginWithGoogle(code)
       if (data) {
         setCurrentUser(data.accountLogin)
+        console.log(data.accountLogin)
         toast.success('Đăng nhập thành công', { autoClose: 1500, position: 'top-center' })
       } else {
         toast.error('Đăng nhập thất bại', { autoClose: 1500, position: 'top-center' })

@@ -46,8 +46,8 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               id="other"
               name="gender"
               type="radio"
-              value="ORTHER"
-              checked={gender === 'ORTHER'}
+              value="OTHER"
+              checked={gender === 'OTHER'}
               onChange={(e) => handleGender(e.target.value)}
               hidden
               className={cx('radio-button')}
