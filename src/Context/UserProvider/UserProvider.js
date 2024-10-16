@@ -14,19 +14,27 @@ function UserProvider({ children }) {
   const [email, setEmail] = useState(null)
   const { openGlobalModal } = useGlobalModal()
 
-  const checkLogin = useCallback(async () => {
+  const checkLogin = async () => {
     if (checkExistCookie('access_token')) {
       setIsLogin(true)
+       const userData = await getMyAccount()
+       if (userData) {
+         setCurrentUser(userData.accountInfo)
+         console.log('Vo day roi')
+       }
     } else {
       const response = await refreshToken()
       if (response) {
         setIsLogin(true)
+        const userData = await getMyAccount()
+        if (userData) {
+          setCurrentUser(userData.accountInfo)
+        }
       } else {
         setIsLogin(false)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }
 
   const checkLoginSession = useCallback(async () => {
     if (checkExistCookie('access_token')) return true
@@ -44,18 +52,6 @@ function UserProvider({ children }) {
     checkLogin()
     setIsLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (checkExistCookie()) {
-      async function getCurrentUser() {
-        const userData = await getMyAccount()
-        if (userData) {
-          setCurrentUser(userData.accountInfo)
-        }
-      }
-      getCurrentUser()
-  }
   }, [])
 
   const value = {
