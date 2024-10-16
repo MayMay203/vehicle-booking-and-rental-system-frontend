@@ -139,23 +139,25 @@ function Header({ menus }) {
               <button className={cx('btn-action', 'd-none', 'd-md-block')}>
                 <FontAwesomeIcon icon={faBell} />
               </button>
-              <Tippy
-                offset={[-70, 10]}
-                delay={[100, 500]}
-                interactive
-                placement="bottom"
-                render={(attrs) => (
-                  <div className={cx('menu')} {...attrs}>
-                    <PopperWrapper>
-                      <UserMenu></UserMenu>
-                    </PopperWrapper>
-                  </div>
-                )}
-              >
-                <button>
-                  <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
-                </button>
-              </Tippy>
+             <div>
+                <Tippy
+                  offset={[-70, 10]}
+                  delay={[100, 500]}
+                  interactive
+                  placement="bottom"
+                  render={(attrs) => (
+                    <div className={cx('menu')} {...attrs}>
+                      <PopperWrapper>
+                        <UserMenu></UserMenu>
+                      </PopperWrapper>
+                    </div>
+                  )}
+                >
+                  <button>
+                    <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                  </button>
+                </Tippy>
+             </div>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
                 <MenuIcon />
               </button>

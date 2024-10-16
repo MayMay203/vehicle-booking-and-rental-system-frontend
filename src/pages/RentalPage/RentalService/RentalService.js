@@ -80,27 +80,27 @@ function RentalService() {
           </div>
         </Col>
         <Col xs="2" className="d-flex justify-content-end p-2">
-          <Tippy
-            interactive
-            delay={[50, 400]}
-            placement="bottom-end"
-            render={(attrs) => (
-              <div className={cx('filter')} tabIndex="-1" {...attrs}>
-                <PopperWrapper>
-                  <PopperItem id="1" title="Mặc định" />
-                  <PopperItem id="2" title="Giá tăng dần" />
-                  <PopperItem id="3" title="Giá giảm dần" />
-                </PopperWrapper>
-              </div>
-            )}
-          >
-            <button>
-              <Button rounded className={cx('btn-sort')}>
-                <FontAwesomeIcon icon={faSort} className={cx('icon-sort')} />
-                <span className={cx('d-none d-lg-inline')}>Sắp xếp</span>
-              </Button>
-            </button>
-          </Tippy>
+            <Tippy
+              interactive
+              delay={[50, 400]}
+              placement="bottom-end"
+              render={(attrs) => (
+                <div className={cx('filter')} tabIndex="-1" {...attrs}>
+                  <PopperWrapper>
+                    <PopperItem id="1" title="Mặc định" />
+                    <PopperItem id="2" title="Giá tăng dần" />
+                    <PopperItem id="3" title="Giá giảm dần" />
+                  </PopperWrapper>
+                </div>
+              )}
+            >
+              <button>
+                <Button rounded className={cx('btn-sort')}>
+                  <FontAwesomeIcon icon={faSort} className={cx('icon-sort')} />
+                  <span className={cx('d-none d-lg-inline')}>Sắp xếp</span>
+                </Button>
+              </button>
+            </Tippy>
         </Col>
       </Row>
       <Row className={cx('datetime-rental')}>
@@ -176,7 +176,7 @@ function RentalService() {
             />
           </div>
         </Col>
-        <Col xs="12" md="2" lg="2" xl="4" className={cx('d-flex justify-content-end p-0','btn-search-wrapper')}>
+        <Col xs="12" md="2" lg="2" xl="4" className={cx('d-flex justify-content-end p-0', 'btn-search-wrapper')}>
           <Button variant="none" className={cx('', 'btn-search')}>
             Tìm xe
           </Button>

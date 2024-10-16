@@ -15,6 +15,7 @@ import RentalServiceDetail from '~/pages/RentalPage/RentalServiceDetail'
 import RentalOrder from '~/pages/RentalPage/RentalOrder'
 import BookingOrder from '~/pages/BookingPage/BookingOrder'
 import ResetPassword from '~/pages/ResetPassword'
+import Authenticate from '~/pages/Authenticate'
 
 const publicRoutes = [
   {
@@ -78,7 +79,12 @@ const publicRoutes = [
   {
     path: config.routes.resetPassword,
     component: ResetPassword,
-    layout: null
+    layout: null,
+  },
+  {
+    path: config.routes.authenticate,
+    component: Authenticate,
+    layout: null,
   },
 ]
 

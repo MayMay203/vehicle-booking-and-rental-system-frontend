@@ -1,12 +1,14 @@
+import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '../utils/httpRequest'
 export const logout = async () => {
+  console.log(getAccessToken())
   try {
     const response = await httpRequest.post(
       '/v1/auth/logout',
       {},
       {
         headers: {
-          Authorization: `Bearer ${document.cookie.split('=')[1]}`,
+          Authorization: `Bearer ${getAccessToken()}`,
         },
       },
     )

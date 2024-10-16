@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import {LogoutModal, SessionExpiredModal} from './Modals/GlobalModal'
 import { Fragment } from "react"
+import Spinner from "./components/Spinner"
 
 function App() {
   return (
@@ -27,21 +28,22 @@ function App() {
             return <Route key={index} path={route.path} element={<Layout>{<Page />}</Layout>}></Route>
           })}
         </Routes>
-        {/* Render modals */}
-        <LoginModal />
-        <RegisterModal />
-        <AuthCodeModal />
-        <PersonalModal />
-        <ForgetPasswordModal />
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          style={{ width: '340px', textAlign: 'left', lineHeight: '1.3' }}
-        />
-        <ReasonModal />
-        <TicketModal />
-        <SessionExpiredModal />
-        <LogoutModal />
+      {/* Render modals */}
+      <LoginModal />
+      <RegisterModal />
+      <AuthCodeModal />
+      <PersonalModal />
+      <ForgetPasswordModal />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        style={{ width: '340px', textAlign: 'left', lineHeight: '1.3' }}
+      />
+      <ReasonModal />
+      <TicketModal />
+      <SessionExpiredModal />
+      <LogoutModal />
+      <Spinner/>
       </Router>
     </div>
   )

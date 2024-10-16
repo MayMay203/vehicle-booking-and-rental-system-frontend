@@ -7,10 +7,12 @@ import Button from '~/components/Button'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { forgetPassword } from '~/apiServices/forgetPassword'
+import { useGlobalModal } from '~/Context/GlobalModalProvider'
 
 const cx = classNames.bind(styles)
 function ForgetPasswordModal() {
   const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
+  const { openGlobalModal, closeGlobalModal } = useGlobalModal()
   const [email, setEmail] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
@@ -30,7 +32,9 @@ function ForgetPasswordModal() {
   const handleConfirm = async (e) => {
     e.preventDefault()
     try {
+      openGlobalModal('loading')
       const data = await forgetPassword(email)
+      closeGlobalModal('loading')
       toast.success(data.info, { autoClose: 1500, position: 'top-center' })
     } catch (message) {
       toast.error(message, { autoClose: 1500, position: 'top-center' })
@@ -54,7 +58,7 @@ function ForgetPasswordModal() {
             placeholder="Nhập email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            pattern="[\-a-zA-Z0-9~!$%^&amp;*_=+\}\{'?]+(\.[\-a-zA-Z0-9~!$%^&amp;*_=+\}\{'?]+)*@[a-zA-Z0-9_][\-a-zA-Z0-9_]*(\.[\-a-zA-Z0-9_]+)*\.[cC][oO][mM](:[0-9]{1,5})?"
             isValid={isValid}
             required
           ></FormInput>

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import { createContext, useEffect, useState, useCallback, useContext } from 'react'
 import { refreshToken } from '~/apiServices/refreshToken'
 import { useGlobalModal } from '../GlobalModalProvider'
+import { checkExistCookie } from '~/utils/cookieUtils'
 
 const UserContext = createContext()
 
@@ -10,11 +11,10 @@ function UserProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true)
   const [currentUser, setCurrentUser] = useState({})
   const [email, setEmail] = useState(null)
-  const { openGlobalModal } = useGlobalModal()
+  const { openGlobalModal} = useGlobalModal()
 
   const checkLogin = useCallback(async () => {
-    const hasCookie = Boolean(document.cookie)
-    if (hasCookie) {
+    if (checkExistCookie('access_token')) {
       setIsLogin(true)
     } else {
       const response = await refreshToken()
@@ -28,14 +28,14 @@ function UserProvider({ children }) {
   }, [])
 
   const checkLoginSession = useCallback(async () => {
-    if (document.cookie) return true;
+    if (checkExistCookie('access_token')) return true
     const response = await refreshToken()
     if (!response) {
       openGlobalModal('expiredSession')
       setIsLogin(false)
-      return false;
+      return false
     }
-    return true;
+    return true
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -56,10 +56,11 @@ function UserProvider({ children }) {
   }
 
   if (isLoading) {
-    return <div>Loading...</div> //Hiển thị spinner
+    return <></>
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
+
 }
 
 UserProvider.propTypes = {
