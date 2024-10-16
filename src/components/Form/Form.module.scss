@@ -62,7 +62,7 @@
 .gender{
     display: flex;
     justify-content: center;
-    column-gap: 42px;
+    column-gap: 60px;
     font-size: 1.5rem;
     margin-bottom: 16px;
 }
@@ -70,7 +70,12 @@
 .form-gender{
     display: flex;
     align-items: center;
-    column-gap: 4px;
+    cursor: pointer;
+}
+
+.label-gender{
+    cursor: pointer;
+    padding-right: 8px;
 }
 
 .btn-eye{
@@ -95,7 +100,7 @@
 }
 
 .label::before{
-    right: -20px;
+    right: -16px;
     width: 16px;
     height: 16px;
     background-color: #fff;
@@ -103,7 +108,7 @@
 }
 
 .label::after{
-    right: -16px;
+    right: -12px;
     bottom: 3px;
     width: 8px;
     height: 8px;
@@ -113,4 +118,9 @@
 
 .radio-button:checked ~ .label::after{
     display: block;
+}
+
+.readOnly{
+    color: #888;
+    background-color: #F7F6F6;
 }

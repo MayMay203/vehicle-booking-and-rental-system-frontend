@@ -10,7 +10,7 @@ import RegisterPartner from '~/pages/RegisterPartner'
 import About from '~/pages/About'
 import OrderManagement from '~/pages/OrderManagement'
 import HeaderOnly from '~/layouts/HeaderOnly'
-import AccountManagement from '~/pages/AccountManagement'
+import AccountSetting from '~/pages/AccountSetting'
 import RentalServiceDetail from '~/pages/RentalPage/RentalServiceDetail'
 import RentalOrder from '~/pages/RentalPage/RentalOrder'
 import BookingOrder from '~/pages/BookingPage/BookingOrder'
@@ -60,8 +60,8 @@ const publicRoutes = [
     layout: HeaderOnly,
   },
   {
-    path: config.routes.account,
-    component: AccountManagement,
+    path: config.routes.accountSetting,
+    component: AccountSetting,
     layout: HeaderOnly,
   },
   {

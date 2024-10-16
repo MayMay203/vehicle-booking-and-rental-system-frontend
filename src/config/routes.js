@@ -11,7 +11,7 @@ export const routes = {
   partner: '/register-partner',
   answer: '/answer-hub',
   about: '/about',
-  account: '/manage-account',
+  accountSetting: '/account-setting',
   order: '/manage-orders',
   resetPassword: '/reset-password',
   authenticate: '/authenticate',

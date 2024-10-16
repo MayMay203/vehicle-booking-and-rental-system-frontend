@@ -28,7 +28,6 @@ function App() {
             return <Route key={index} path={route.path} element={<Layout>{<Page />}</Layout>}></Route>
           })}
         </Routes>
-      </Router>
       {/* Render modals */}
       <LoginModal />
       <RegisterModal />
@@ -45,6 +44,7 @@ function App() {
       <SessionExpiredModal />
       <LogoutModal />
       <Spinner/>
+      </Router>
     </div>
   )
 }
