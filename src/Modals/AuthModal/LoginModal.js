@@ -9,6 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { login } from '~/apiServices/login'
 import { useUserContext } from '~/Context/UserProvider/UserProvider'
 import { toast } from 'react-toastify'
+import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
@@ -57,16 +58,14 @@ function LoginModal() {
 
   const handleGoogleLogin = (e) => {
     e.preventDefault()
-    const callbackUrl = 'http://localhost:3000/authenticate'
-    const authUrl = 'https://accounts.google.com/o/oauth2/auth'
-    const googleClientId = process.env.REACT_APP_GG_CLIENT_ID
-    console.log(googleClientId)
+    const redirectUri = config.variables.redirectUrl
+    const authUrl = config.variables.authGoogleUrl
+    const googleClientId = config.variables.googleClientId
 
     const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
-      callbackUrl,
+      redirectUri,
     )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`
 
-    console.log(targetUrl)
     window.location.href = targetUrl
   }
 
