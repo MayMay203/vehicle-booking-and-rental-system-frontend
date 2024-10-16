@@ -1,0 +1,29 @@
+.modal-chat {
+  max-height: 15rem; 
+  overflow: visible; 
+  
+}
+.body-message {
+  max-height: 400px; 
+  overflow-y: auto; 
+}
+.title{
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+.wrap-btn{
+  padding: 0 0 2rem 0;
+  margin: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.175);
+}
+.btn{
+  background-color: white;
+  color: #FF7F50;
+  border: 1px solid #FF7F50;
+  height: 36px;
+  
+}
+.btn.active{
+  background-color: #FF7F50;
+  color: white;
+}

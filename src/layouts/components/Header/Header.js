@@ -17,6 +17,7 @@ import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
 import { config } from '~/config'
 import { useUserContext } from '~/Context/UserProvider'
+import ModalChat from '~/components/ModalChat'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
@@ -26,6 +27,9 @@ function Header({ menus }) {
   const [lastScrollY, setLastScrollY] = useState()
   const { openAuthModal } = useAuthModal()
   const { isLogin, currentUser } = useUserContext();
+  const messageButtonRef = useRef(null)
+  const [isModalChatVisible, setIsModalChatVisible] = useState(true)
+  const [modalPosition, setModalPosition] = useState({ top: 60, left: 0 })
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -37,6 +41,16 @@ function Header({ menus }) {
     contentRef.current.style.transform = 'translateX(0)'
     overlayRef.current.style.visibility = 'visible'
     overlayRef.current.style.opacity = '1'
+  }
+  const handleShowMessage = () => {
+    if (messageButtonRef.current) {
+      const rect = messageButtonRef.current.getBoundingClientRect()
+      setModalPosition({ top: rect.bottom, left: rect.left})
+    }
+    setIsModalChatVisible((prev) => !prev) // Toggle modal
+  }
+  const handleCloseMessage = () => {
+    setIsModalChatVisible(false);
   }
 
   const handleScroll = () => {
@@ -69,7 +83,7 @@ function Header({ menus }) {
             <button className={cx('btn-back')} onClick={hanldeBack}>
               <BackIcon />
             </button>
-            {!isLogin? (
+            {!isLogin ? (
               <Button outline className="d-sm-none" onClick={() => openAuthModal('login')}>
                 Đăng nhập
               </Button>
@@ -133,9 +147,25 @@ function Header({ menus }) {
           )}
           {isLogin && (
             <div className={cx('actions')}>
-              <button to={config.routes.message} className={cx('btn-action', 'd-none', 'd-md-block')}>
+              <button
+                to={config.routes.message}
+                className={cx('btn-action', 'd-none', 'd-md-block')}
+                onClick={handleShowMessage}
+              >
                 <FontAwesomeIcon icon={faMessage} />
               </button>
+              {isModalChatVisible && (
+                <ModalChat
+                  style={{
+                    position: 'absolute',
+                    top: `${modalPosition.top}px`,
+                    left: `${modalPosition.left}px`,
+                    zIndex: 1000,
+                  }}
+                  handleClose={handleCloseMessage}
+                />
+              )}
+
               <button className={cx('btn-action', 'd-none', 'd-md-block')}>
                 <FontAwesomeIcon icon={faBell} />
               </button>
