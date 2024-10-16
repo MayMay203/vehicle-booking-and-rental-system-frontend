@@ -153,23 +153,23 @@ function Header({ menus }) {
                 onClick={handleShowMessage}
               >
                 <FontAwesomeIcon icon={faMessage} />
+                {isModalChatVisible && (
+                  <ModalChat
+                    style={{
+                      position: 'absolute',
+                      top: `${modalPosition.top}px`,
+                      left: `${modalPosition.left}px`,
+                      zIndex: 1000,
+                    }}
+                    handleClose={handleCloseMessage}
+                  />
+                )}
               </button>
-              {isModalChatVisible && (
-                <ModalChat
-                  style={{
-                    position: 'absolute',
-                    top: `${modalPosition.top}px`,
-                    left: `${modalPosition.left}px`,
-                    zIndex: 1000,
-                  }}
-                  handleClose={handleCloseMessage}
-                />
-              )}
 
               <button className={cx('btn-action', 'd-none', 'd-md-block')}>
                 <FontAwesomeIcon icon={faBell} />
               </button>
-             <div>
+              <div>
                 <Tippy
                   offset={[-70, 10]}
                   delay={[100, 500]}
@@ -184,10 +184,14 @@ function Header({ menus }) {
                   )}
                 >
                   <button>
-                    <Image src={currentUser?.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                    <Image
+                      src={currentUser?.avatar}
+                      alt="avatar"
+                      className={cx('avatar', 'd-none', 'd-md-block')}
+                    ></Image>
                   </button>
                 </Tippy>
-             </div>
+              </div>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
                 <MenuIcon />
               </button>
