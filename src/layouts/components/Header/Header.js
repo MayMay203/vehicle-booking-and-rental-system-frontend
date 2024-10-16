@@ -17,6 +17,7 @@ import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
 import { config } from '~/config'
 import { useUserContext } from '~/Context/UserProvider'
+import Notification from '~/components/Notification'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
@@ -69,7 +70,7 @@ function Header({ menus }) {
             <button className={cx('btn-back')} onClick={hanldeBack}>
               <BackIcon />
             </button>
-            {!isLogin? (
+            {!isLogin ? (
               <Button outline className="d-sm-none" onClick={() => openAuthModal('login')}>
                 Đăng nhập
               </Button>
@@ -136,10 +137,26 @@ function Header({ menus }) {
               <button to={config.routes.message} className={cx('btn-action', 'd-none', 'd-md-block')}>
                 <FontAwesomeIcon icon={faMessage} />
               </button>
-              <button className={cx('btn-action', 'd-none', 'd-md-block')}>
-                <FontAwesomeIcon icon={faBell} />
-              </button>
-             <div>
+              <div>
+                <Tippy
+                  offset={[100, 14]}
+                  delay={[100, 500]}
+                  interactive
+                  placement="bottom"
+                  render={(attrs) => (
+                    <div className={cx('menu')} {...attrs}>
+                      <PopperWrapper>
+                        <Notification />
+                      </PopperWrapper>
+                    </div>
+                  )}
+                >
+                  <button className={cx('btn-action', 'd-none', 'd-md-block')}>
+                    <FontAwesomeIcon icon={faBell} />
+                  </button>
+                </Tippy>
+              </div>
+              <div>
                 <Tippy
                   offset={[-70, 10]}
                   delay={[100, 500]}
@@ -154,10 +171,14 @@ function Header({ menus }) {
                   )}
                 >
                   <button>
-                    <Image src={currentUser?.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                    <Image
+                      src={currentUser?.avatar}
+                      alt="avatar"
+                      className={cx('avatar', 'd-none', 'd-md-block')}
+                    ></Image>
                   </button>
                 </Tippy>
-             </div>
+              </div>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
                 <MenuIcon />
               </button>
