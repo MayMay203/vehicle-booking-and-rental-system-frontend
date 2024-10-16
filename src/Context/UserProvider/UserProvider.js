@@ -47,13 +47,15 @@ function UserProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    async function getCurrentUser() {
-      const userData = await getMyAccount()
-      if (userData) {
-        setCurrentUser(userData.accountInfo)
+    if (checkExistCookie()) {
+      async function getCurrentUser() {
+        const userData = await getMyAccount()
+        if (userData) {
+          setCurrentUser(userData.accountInfo)
+        }
       }
-    }
-    getCurrentUser()
+      getCurrentUser()
+  }
   }, [])
 
   const value = {
