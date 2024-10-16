@@ -51,6 +51,7 @@ function RegisterModal() {
       reset()
       openAuthModal('authCode', { type: 'register' })
     } catch (message) {
+      closeGlobalModal('loading')
       toast.error(message, { autoClose: 2000 })
       setIsShow(message.includes(config.message.emailConfirm))
     }

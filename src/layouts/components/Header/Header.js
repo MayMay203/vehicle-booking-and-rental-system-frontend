@@ -94,7 +94,7 @@ function Header({ menus }) {
                   )}
                 >
                   <button>
-                    <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
+                    <Image src={currentUser?.avatar} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
                   </button>
                 </Tippy>
               </div>
@@ -154,7 +154,7 @@ function Header({ menus }) {
                   )}
                 >
                   <button>
-                    <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
+                    <Image src={currentUser?.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
                   </button>
                 </Tippy>
              </div>
