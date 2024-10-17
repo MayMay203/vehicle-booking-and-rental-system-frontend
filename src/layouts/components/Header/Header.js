@@ -18,13 +18,15 @@ import UserMenu from '~/UserMenu'
 import { config } from '~/config'
 import { useUserContext } from '~/Context/UserProvider'
 import Notification from '~/components/Notification'
+import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal } from '~/Modals/AuthModal'
+import { LogoutModal, SessionExpiredModal } from '~/Modals/GlobalModal'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
   const { openAuthModal } = useAuthModal()
-  const { isLogin, currentUser } = useUserContext();
+  const { isLogin, currentUser } = useUserContext()
   const [isShowMenu, setIsShowMenu] = useState(false)
   const [isShowNoti, setIsShowNoti] = useState(false)
 
@@ -121,8 +123,8 @@ function Header({ menus }) {
               <div>
                 <Tippy
                   offset={[0, 15]}
-                  visible={ isShowNoti}
-                  onClickOutside={()=>setIsShowNoti(false)}
+                  visible={isShowNoti}
+                  onClickOutside={() => setIsShowNoti(false)}
                   interactive
                   placement="bottom"
                   render={(attrs) => (
@@ -133,7 +135,10 @@ function Header({ menus }) {
                     </div>
                   )}
                 >
-                  <button className={cx('btn-action', 'd-none', 'd-md-block')} onClick={()=>setIsShowNoti(prev=>!prev)}>
+                  <button
+                    className={cx('btn-action', 'd-none', 'd-md-block')}
+                    onClick={() => setIsShowNoti((prev) => !prev)}
+                  >
                     <FontAwesomeIcon icon={faBell} />
                   </button>
                 </Tippy>
@@ -173,6 +178,13 @@ function Header({ menus }) {
           <MenuItem key={index} menu={menu}></MenuItem>
         ))}
       </Menu>
+      <LoginModal />
+      <RegisterModal />
+      <AuthCodeModal />
+      <PersonalModal />
+      <ForgetPasswordModal />
+      <LogoutModal />
+      <SessionExpiredModal />
     </header>
   )
 }

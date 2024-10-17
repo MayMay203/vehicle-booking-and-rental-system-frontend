@@ -12,9 +12,9 @@ import { faCalendar, faCancel, faClose, faSave, faUpload, faUserLock } from '@fo
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
-import { registerInfo } from '~/apiServices/registerInfo'
 import { useGlobalModal } from '~/Context/GlobalModalProvider'
 import { forgetPassword } from '~/apiServices/forgetPassword'
+import { updateAccount } from '~/apiServices/updateAccount'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {
@@ -94,7 +94,7 @@ function AccountSetting() {
     e.preventDefault()
     try {
       const accountInfo = {
-        username: currentUser.email,
+        id: currentUser.id,
         name: fullName,
         gender,
         birthDay: birthday.toLocaleDateString('en-GB').replace(/\//g, '-'),
@@ -102,7 +102,7 @@ function AccountSetting() {
       }
       const formData = new FormData()
       formData.append('account_info', new Blob([JSON.stringify(accountInfo)], { type: 'application/json' }))
-      if (selectedImage) {
+      if (selectedImage !== currentUser.avatar) {
         const base64Data = selectedImage.split(',')[1]
         const byteCharacters = atob(base64Data)
         const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i))
@@ -110,11 +110,12 @@ function AccountSetting() {
         const imageBlob = new Blob([byteArray], { type: 'image/png' })
         formData.append('fileAvatar', imageBlob, 'avatar.png')
       }
-      const userData = await registerInfo(formData)
+      const userData = await updateAccount(formData)
       toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
       setIsModified(false)
       setCurrentUser(userData.accountInfo)
-    } catch {
+    } catch (error) {
+      console.log(error)
       toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
     }
   }
