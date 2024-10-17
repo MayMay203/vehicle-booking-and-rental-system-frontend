@@ -6,7 +6,7 @@ import { BackIcon, MenuIcon, PhoneIcon } from '~/components/Icon'
 import Logo from '~/components/Logo'
 import Menu from '../../../components/Menu/Menu'
 import MenuItem from '../../../components/Menu/MenuItem'
-import {useEffect, useRef, useState } from 'react'
+import {useRef, useState } from 'react'
 import { useAuthModal } from '~/Context/AuthModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-regular-svg-icons'
@@ -23,10 +23,10 @@ const cx = classNames.bind(styles)
 function Header({ menus }) {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
-  const headerRef = useRef(null)
-  const [lastScrollY, setLastScrollY] = useState()
   const { openAuthModal } = useAuthModal()
   const { isLogin, currentUser } = useUserContext();
+  const [isShowMenu, setIsShowMenu] = useState(false)
+  const [isShowNoti, setIsShowNoti] = useState(false)
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -40,28 +40,8 @@ function Header({ menus }) {
     overlayRef.current.style.opacity = '1'
   }
 
-  const handleScroll = () => {
-    if (window.innerWidth >= 992) {
-      const currentScroll = window.scrollY
-      if (currentScroll > lastScrollY) {
-        headerRef.current.style.transform = 'translateY(-100%)'
-      } else {
-        headerRef.current.style.transform = 'translateY(0)'
-      }
-      setLastScrollY(currentScroll)
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastScrollY])
-
   return (
-    <header className={cx('wrapper')} ref={headerRef}>
+    <header className={cx('wrapper')}>
       {/* Mobile header */}
       <div className={cx('mobile-header', 'd-lg-none')}>
         <div className={cx('overlay')} ref={overlayRef} onClick={hanldeBack}></div>
@@ -83,6 +63,7 @@ function Header({ menus }) {
                   <FontAwesomeIcon icon={faBell} />
                 </button>
                 <Tippy
+                  visible={isShowMenu}
                   delay={[100, 500]}
                   interactive
                   placement="bottom"
@@ -94,7 +75,7 @@ function Header({ menus }) {
                     </div>
                   )}
                 >
-                  <button>
+                  <button onClick={() => setIsShowMenu((prev) => !prev)}>
                     <Image src={currentUser?.avatar} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
                   </button>
                 </Tippy>
@@ -139,8 +120,9 @@ function Header({ menus }) {
               </button>
               <div>
                 <Tippy
-                  offset={[100, 14]}
-                  delay={[100, 500]}
+                  offset={[0, 15]}
+                  visible={ isShowNoti}
+                  onClickOutside={()=>setIsShowNoti(false)}
                   interactive
                   placement="bottom"
                   render={(attrs) => (
@@ -151,17 +133,17 @@ function Header({ menus }) {
                     </div>
                   )}
                 >
-                  <button className={cx('btn-action', 'd-none', 'd-md-block')}>
+                  <button className={cx('btn-action', 'd-none', 'd-md-block')} onClick={()=>setIsShowNoti(prev=>!prev)}>
                     <FontAwesomeIcon icon={faBell} />
                   </button>
                 </Tippy>
               </div>
               <div>
                 <Tippy
-                  offset={[-70, 10]}
-                  delay={[100, 500]}
+                  visible={isShowMenu}
                   interactive
                   placement="bottom"
+                  onClickOutside={() => setIsShowMenu(false)}
                   render={(attrs) => (
                     <div className={cx('menu')} {...attrs}>
                       <PopperWrapper>
@@ -170,7 +152,7 @@ function Header({ menus }) {
                     </div>
                   )}
                 >
-                  <button>
+                  <button onClick={() => setIsShowMenu((prev) => !prev)}>
                     <Image
                       src={currentUser?.avatar}
                       alt="avatar"
