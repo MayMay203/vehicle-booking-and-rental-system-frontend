@@ -15,11 +15,11 @@ import Image from '~/components/Image'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
-import { config } from '~/config'
 import { useUserContext } from '~/Context/UserProvider'
 import Notification from '~/components/Notification'
 import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal } from '~/Modals/AuthModal'
 import { LogoutModal, SessionExpiredModal } from '~/Modals/GlobalModal'
+import ModalChat from '~/components/ModalChat'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
@@ -29,6 +29,7 @@ function Header({ menus }) {
   const { isLogin, currentUser } = useUserContext()
   const [isShowMenu, setIsShowMenu] = useState(false)
   const [isShowNoti, setIsShowNoti] = useState(false)
+  const [isShowMessage, setIsShowMessage] = useState(false)
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -61,9 +62,23 @@ function Header({ menus }) {
                 <button className={cx('btn-action', 'd-md-none')}>
                   <FontAwesomeIcon icon={faMessage} />
                 </button>
-                <button className={cx('btn-action', 'd-md-none')}>
-                  <FontAwesomeIcon icon={faBell} />
-                </button>
+                <Tippy
+                  offset={[0, 15]}
+                  visible={isShowNoti}
+                  interactive
+                  placement="bottom"
+                  render={(attrs) => (
+                    <div className={cx('menu')} {...attrs}>
+                      <PopperWrapper>
+                        <Notification />
+                      </PopperWrapper>
+                    </div>
+                  )}
+                >
+                  <button className={cx('btn-action', 'd-md-none')} onClick={()=>{setIsShowNoti(prev=>!prev)}}>
+                    <FontAwesomeIcon icon={faBell} />
+                  </button>
+               </Tippy>
                 <Tippy
                   visible={isShowMenu}
                   delay={[100, 500]}
@@ -117,9 +132,27 @@ function Header({ menus }) {
           )}
           {isLogin && (
             <div className={cx('actions')}>
-              <button to={config.routes.message} className={cx('btn-action', 'd-none', 'd-md-block')}>
-                <FontAwesomeIcon icon={faMessage} />
-              </button>
+              <Tippy
+                offset={[0, 15]}
+                visible={isShowMessage}
+                onClickOutside={() => setIsShowMessage(false)}
+                interactive
+                placement="bottom"
+                render={(attrs) => (
+                  <div className={cx('menu')} {...attrs}>
+                    <PopperWrapper>
+                      <ModalChat />
+                    </PopperWrapper>
+                  </div>
+                )}
+              >
+                <button
+                  onClick={() => setIsShowMessage((prev) => !prev)}
+                  className={cx('btn-action', 'd-none', 'd-md-block')}
+                >
+                  <FontAwesomeIcon icon={faMessage} />
+                </button>
+              </Tippy>
               <div>
                 <Tippy
                   offset={[0, 15]}

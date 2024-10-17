@@ -1,3 +1,8 @@
+.wrapper{
+    padding: 4px 2px 0 2px;
+    min-width: 380px;
+}
+
 .heading{
     color: var(--text-color);
     font-weight: 600;
@@ -20,10 +25,10 @@
 }
 
 .list{
-    max-height: 67vh;
+    max-height: 66vh;
     overflow-y: auto;
     margin-right: -10px;
-    padding-right: 2px;
+    padding-right: 4px;
     overscroll-behavior: contain;
 }
 
@@ -58,6 +63,7 @@
 .image{
     width: 100%;
     height: 100%;
+    object-fit: cover;
 }
 
 .title{
@@ -73,13 +79,11 @@
 
 .unread{
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background-color: var(--orange-color);
     position: absolute;
-    top: 50%;
-    transform: 0 -50%;
     right: 18px;
 }
 
