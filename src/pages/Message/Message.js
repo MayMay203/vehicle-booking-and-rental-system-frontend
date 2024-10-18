@@ -9,8 +9,7 @@ import CardMessageRight from '~/components/CardMessageRight';
 import { images } from '~/assets/images'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import MessageRecipent from '~/components/Message/MessageRecipient';
-import MessageSender from '~/components/Message/MessageSender';
+import DetailMessage from '~/components/DetailMessage'
 const cx = classNames.bind(styles)
 function Message (){
   const [buttonSelect, setButtonSelect] = useState('All')
@@ -35,6 +34,15 @@ function Message (){
     setIdClicked(id)
   }
   const filteredMessages = buttonSelect === 'Unread' ? messages.filter((msg) => !msg.isSeen) : messages
+
+  const detailMessages = [
+    { id: 1, message: 'Chào bạn....', time: '12h00, 23/08/2024', idSender: 2 },
+    { id: 2, message: 'Xin chào!', time: '12h01, 23/08/2024', idSender: 3 },
+    { id: 3, message: 'Bạn khỏe không?', time: '12h02, 23/08/2024', idSender: 2 },
+    { id: 4, message: 'Tôi khỏe! Bạn dạo này thế nào?', time: '12h03, 23/08/2024', idSender: 3 },
+    { id: 5, message: 'Chúc bạn sức khỏe', time: '12h02, 23/08/2024', idSender: 3 },
+    { id: 6, message: 'Tạm biệt!', time: '12h03, 23/08/2024', idSender: 4 },
+  ]
   return (
     <div className={cx('container', 'wrap-container')}>
       <div className={cx('d-flex', 'wrap-title-search')}>
@@ -42,7 +50,7 @@ function Message (){
         <TxtSearch className={cx('search')}></TxtSearch>
       </div>
       <Row className={cx('wrap-messages-details', 'm-0 p-0')}>
-        <Col lg="4" md='5' className={cx('wrap-list-messages')}>
+        <Col lg="4" md="5" className={cx('wrap-list-messages')}>
           <div className={cx('d-flex', 'wrap-btn')}>
             <Button
               rounded
@@ -80,18 +88,17 @@ function Message (){
             <span className={cx('name', 'p-0')}>{name}</span>
           </div>
           <div className={cx('wrap-detail-message')}>
-            <div>
-              <MessageRecipent></MessageRecipent>
-            </div>
-            <div className={cx('d-flex', 'justify-content-end')}>
-              <MessageSender></MessageSender>
-            </div>
-            <div>
-              <MessageRecipent></MessageRecipent>
-            </div>
-            <div>
-              <MessageRecipent></MessageRecipent>
-            </div>
+            {detailMessages.map((detailmsg) => (
+              // sau thay 1 = id của người đnag đăng nhập
+              <div className={cx({ 'message-sender': detailmsg.idSender === 3 })}>
+                <DetailMessage
+                  key={detailmsg.id}
+                  isSender={detailmsg.idSender === 3}
+                  message={detailmsg.message}
+                  time={detailmsg.time}
+                ></DetailMessage>
+              </div>
+            ))}
           </div>
           <div className={cx('d-flex', 'wrap-sent')}>
             <div className={cx('input-content-sent')}>

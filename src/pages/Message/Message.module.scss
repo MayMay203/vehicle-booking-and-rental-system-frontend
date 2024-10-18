@@ -65,6 +65,10 @@
   height: 44rem;
   overflow-y: auto;
 }
+.message-sender{
+  display: flex;
+  justify-content: end;
+}
 .wrap-sent{
   align-items: center;
   margin: 1rem 0.5rem 0.5rem;

@@ -7,10 +7,10 @@
     padding: 0;
 }
 .wrap-receive{
-    justify-content: flex-start;
+    justify-content: start;
 }
 .wrap-send{
-    justify-content: flex-end;
+    justify-content: end;
 }
 .wrap-avatar{
     margin: 0 1rem;
@@ -21,12 +21,16 @@
     aspect-ratio: 1/1; 
     border: 1px solid #FFEBE4;
 }
+.wrap-content-end{
+    justify-items: end;
+}
 .content-message{
     line-height: 2.5rem;
     border-radius: 20px;
-    padding: 1rem 2rem;
+    padding: 0.8rem 2rem;
     font-size: 1.6rem;
     font-weight: 400;
+    display: inline-flex;
 }
 .content-receive{
     background-color: #FFEBE4;
@@ -37,7 +41,10 @@
 }
 .time{
     margin: 1rem 2rem;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 400;
     color: rgba(0, 0, 0, 0.7);
+}
+.align-right{
+    text-align: end;
 }
