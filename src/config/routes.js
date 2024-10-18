@@ -20,4 +20,5 @@ export const routes = {
   statistics: '/statistics',
   vouchers: '/manage-vouchers',
   partners: '/manage-partners',
+  message: 'message',
 }

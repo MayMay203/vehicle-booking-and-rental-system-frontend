@@ -1,0 +1,52 @@
+.wrap-message{
+    padding: 1rem;
+    border: 1px solid #FFEBE4;
+    color: black;
+    align-items: center;
+    margin: 0;
+    &.seen {
+        background-color: white; 
+    }
+    &.no-seen {
+        background-color: #FFF6F3;
+    }
+    &:hover {
+        background-color: #FFEFE8; 
+        cursor: pointer;
+    }
+    &.isClicked{
+        border-left: 5px solid #FF7F50;
+        background-color: #FFEFE8; 
+    }
+}
+.avatar{
+    border-radius: 50%;
+    width: 90%;
+    aspect-ratio: 1/1; 
+    border: 1px solid #FFEBE4;
+}
+.name{
+    font-size: 1.8rem;
+    line-height: 2.5rem;
+    font-weight: 600;
+}
+.message{
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 2.5rem;
+}
+.time-wrap{
+    justify-content: end;
+}
+.time{
+    font-size: 1.2rem;
+    text-align: right;
+    font-weight: 400;
+    line-height: 2.5rem;
+}
+.icon-no-seen{
+    margin-left: auto;
+    font-size: 1rem;
+    color: #FF7F50;
+    
+}

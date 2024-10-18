@@ -15,6 +15,7 @@ import RentalServiceDetail from '~/pages/RentalPage/RentalServiceDetail'
 import RentalOrder from '~/pages/RentalPage/RentalOrder'
 import BookingOrder from '~/pages/BookingPage/BookingOrder'
 import ResetPassword from '~/pages/ResetPassword'
+import Message from '~/pages/Message'
 import Authenticate from '~/pages/Authenticate'
 import ManageAccounts from '~/pages/Admin/ManageAccounts'
 import ManagePartners from '~/pages/Admin/ManageParners'
@@ -115,6 +116,9 @@ const publicRoutes = [
     path: config.routes.statistics,
     component: Statistics,
     layout: HeaderOnly,
+  },
+  { path: config.routes.message,
+    component: Message,
   },
 ]
 
