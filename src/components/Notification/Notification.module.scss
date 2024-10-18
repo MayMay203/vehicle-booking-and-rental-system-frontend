@@ -1,6 +1,6 @@
 .wrapper{
     padding: 4px 2px 0 2px;
-    min-width: 380px;
+    min-width: 400px;
 }
 
 .heading{
@@ -93,4 +93,14 @@
 
 .status{
     background-color: rgba($color: #FF7F50, $alpha: 0.05);
+}
+
+@media (max-width:400px) {
+    .wrapper{
+        min-width: 340px;
+    }
+
+    .item{
+        width: 100%;
+    }
 }

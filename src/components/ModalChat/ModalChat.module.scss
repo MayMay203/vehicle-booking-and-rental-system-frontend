@@ -37,3 +37,9 @@
   background-color: #FF7F50;
   color: white;
 }
+
+@media (max-width:400px) {
+    .wrapper{
+        min-width: 333px;
+    }
+}
