@@ -36,7 +36,7 @@ function ModalChat({ style, handleClose }) {
             </Button>
           </div>
           <div className={cx('body-message')}>
-            <ListCardMessage buttonSelect={buttonSelect}></ListCardMessage>
+            <ListCardMessage buttonSelect={buttonSelect} handleClose={handleClose}></ListCardMessage>
           </div>
         </Modal.Body>
       </Modal.Dialog>

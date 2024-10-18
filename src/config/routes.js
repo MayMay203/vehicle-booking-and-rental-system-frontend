@@ -14,4 +14,5 @@ export const routes = {
   accountSetting: '/account-setting',
   order: '/manage-orders',
   resetPassword: '/reset-password',
+  message: 'message',
 }

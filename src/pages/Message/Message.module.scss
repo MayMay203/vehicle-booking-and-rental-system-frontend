@@ -1,0 +1,86 @@
+.wrap-container{
+  border-radius: 5px;
+  border: 1px solid #FF7F50;
+  padding: 1rem 0 0 0 ;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  overflow: hidden; 
+}
+.wrap-title-search{
+  padding: 2rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+.title{
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin: 0 4rem;
+}
+.search{
+  width: 50rem !important;
+}
+.wrap-btn{
+  padding: 2rem 1rem;
+}
+.btn{
+  background-color: white;
+  color: #FF7F50;
+  border: 1px solid #FF7F50;
+  height: 36px;
+  
+}
+.btn.active{
+  background-color: #FF7F50;
+  color: white;
+}
+.wrap-list-messages{
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 0;
+  height: 100%;
+}
+.list-message{
+  max-height: 50rem;
+  overflow-y: auto;
+}
+.wrap-recipient{
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 1rem 2rem;
+  margin: 0;
+  align-items: center;
+}
+.avatar{
+  border-radius: 50%;
+  width: 56px;
+  aspect-ratio: 1/1; 
+  border: 1px solid #FFEBE4;
+}
+.name{
+  font-size: 2rem;
+  line-height: 2.5rem;
+  font-weight: 600;
+  margin-left: 2rem;
+}
+.wrap-detail-message{
+  height: 44rem;
+  overflow-y: auto;
+}
+.wrap-sent{
+  align-items: center;
+  margin: 1rem 0.5rem 0.5rem;
+}
+.input-content-sent{
+  width: 95%;
+  margin-right: 1rem;
+}
+.input-content-sent input{
+  border: none;
+  background-color: #FFF6F3;
+  width: 100%;
+  padding: 1rem 2rem;
+  border-radius: 20px;
+}
+.icon-sent{
+  font-size: 2rem;
+  color: #FF7F50;
+}

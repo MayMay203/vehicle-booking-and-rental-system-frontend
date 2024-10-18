@@ -51,6 +51,7 @@ function Header({ menus }) {
   }
   const handleCloseMessage = () => {
     setIsModalChatVisible(false);
+    
   }
 
   const handleScroll = () => {

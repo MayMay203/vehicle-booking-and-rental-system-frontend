@@ -1,0 +1,43 @@
+// nhận tin nhắn
+.wrap{
+    display: flex;
+    align-items:flex-start;
+    width: 80%;
+    margin: 1rem;
+    padding: 0;
+}
+.wrap-receive{
+    justify-content: flex-start;
+}
+.wrap-send{
+    justify-content: flex-end;
+}
+.wrap-avatar{
+    margin: 0 1rem;
+}
+.avatar{
+    width: 42px;
+    border-radius: 50%;
+    aspect-ratio: 1/1; 
+    border: 1px solid #FFEBE4;
+}
+.content-message{
+    line-height: 2.5rem;
+    border-radius: 20px;
+    padding: 1rem 2rem;
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+.content-receive{
+    background-color: #FFEBE4;
+}
+.content-send{
+    background-color: #FF7F50;
+    color: white;
+}
+.time{
+    margin: 1rem 2rem;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.7);
+}
