@@ -6,10 +6,6 @@ import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function DefaultLayout({ children }) {
-    // const userMenu = useMemo(
-    //   () => ['Trang chủ', 'Mua vé', 'Thuê xe', 'Đặt xe', 'Trở thành đối tác', 'Hỏi đáp', 'Về chúng tôi'],
-    //   [],
-  // )
   const userMenu = [
     {
       content: 'Trang chủ',
@@ -40,14 +36,18 @@ function DefaultLayout({ children }) {
       to: config.routes.about,
     },
   ]
-    // const adminMenu = useMemo(() => ['Dịch vụ', 'Tài khoản', 'Đối tác', 'Thống kê', 'Khuyến mãi'], [])
-    // const partnerMenu = useMemo(() => ['Trang chủ', 'Dịch vụ', 'Đơn đặt', 'Thống kê', 'Thanh toán'], [])
+  // const adminMenu = [
+  //   { content: 'Dịch vụ', to: config.routes.services },
+  //   { content: 'Tài khoản', to: config.routes.accounts },
+  //   { content: 'Đối tác', to: config.routes.partners },
+  //   { content: 'Thống kê', to: config.routes.statistics },
+  //   { content: 'Khuyến mãi', to: config.routes.vouchers },
+  // ]
+  // const partnerMenu = useMemo(() => ['Trang chủ', 'Dịch vụ', 'Đơn đặt', 'Thống kê', 'Thanh toán'], [])
   return (
     <div className={cx('wrapper')}>
-      <Header menus={userMenu}/>
-      <div className={cx('content')}>
-        {children}
-      </div>
+      <Header menus={userMenu} />
+      <div className={cx('content')}>{children}</div>
       <Footer />
     </div>
   )

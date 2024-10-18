@@ -1,3 +1,4 @@
+import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '../utils/httpRequest'
 export const logout = async () => {
   try {
@@ -6,7 +7,7 @@ export const logout = async () => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${document.cookie.split('=')[1]}`,
+          Authorization: `Bearer ${getAccessToken()}`,
         },
       },
     )

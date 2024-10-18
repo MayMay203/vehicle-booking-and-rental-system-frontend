@@ -6,7 +6,7 @@ import { BackIcon, MenuIcon, PhoneIcon } from '~/components/Icon'
 import Logo from '~/components/Logo'
 import Menu from '../../../components/Menu/Menu'
 import MenuItem from '../../../components/Menu/MenuItem'
-import {useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuthModal } from '~/Context/AuthModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-regular-svg-icons'
@@ -15,21 +15,32 @@ import Image from '~/components/Image'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
-import { config } from '~/config'
 import { useUserContext } from '~/Context/UserProvider'
+import Notification from '~/components/Notification'
+import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal } from '~/Modals/AuthModal'
+import { LogoutModal, SessionExpiredModal } from '~/Modals/GlobalModal'
 import ModalChat from '~/components/ModalChat'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
-  const headerRef = useRef(null)
-  const [lastScrollY, setLastScrollY] = useState()
   const { openAuthModal } = useAuthModal()
-  const { isLogin, currentUser } = useUserContext();
-  const messageButtonRef = useRef(null)
-  const [isModalChatVisible, setIsModalChatVisible] = useState(true)
-  const [modalPosition, setModalPosition] = useState({ top: 60, left: 0 })
+  const { isLogin, currentUser } = useUserContext()
+  const [isShowMenu, setIsShowMenu] = useState(false)
+  const [isShowNoti, setIsShowNoti] = useState(false)
+  const [isShowMessage, setIsShowMessage] = useState(false)
+  const [isSmall, setIsSmall] = useState(window.innerWidth < 768)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmall(window.innerWidth < 768)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const hanldeBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
@@ -42,40 +53,9 @@ function Header({ menus }) {
     overlayRef.current.style.visibility = 'visible'
     overlayRef.current.style.opacity = '1'
   }
-  const handleShowMessage = () => {
-    if (messageButtonRef.current) {
-      const rect = messageButtonRef.current.getBoundingClientRect()
-      setModalPosition({ top: rect.bottom, left: rect.left})
-    }
-    setIsModalChatVisible((prev) => !prev) // Toggle modal
-  }
-  const handleCloseMessage = () => {
-    setIsModalChatVisible(false);
-    
-  }
-
-  const handleScroll = () => {
-    if (window.innerWidth >= 992) {
-      const currentScroll = window.scrollY
-      if (currentScroll > lastScrollY) {
-        headerRef.current.style.transform = 'translateY(-100%)'
-      } else {
-        headerRef.current.style.transform = 'translateY(0)'
-      }
-      setLastScrollY(currentScroll)
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastScrollY])
 
   return (
-    <header className={cx('wrapper')} ref={headerRef}>
+    <header className={cx('wrapper')}>
       {/* Mobile header */}
       <div className={cx('mobile-header', 'd-lg-none')}>
         <div className={cx('overlay')} ref={overlayRef} onClick={hanldeBack}></div>
@@ -90,28 +70,70 @@ function Header({ menus }) {
               </Button>
             ) : (
               <div className={cx('actions')}>
-                <button className={cx('btn-action', 'd-md-none')}>
-                  <FontAwesomeIcon icon={faMessage} />
-                </button>
-                <button className={cx('btn-action', 'd-md-none')}>
-                  <FontAwesomeIcon icon={faBell} />
-                </button>
-                <Tippy
-                  delay={[100, 500]}
-                  interactive
-                  placement="bottom"
-                  render={(attrs) => (
-                    <div className={cx('menu')} {...attrs}>
-                      <PopperWrapper>
-                        <UserMenu></UserMenu>
-                      </PopperWrapper>
-                    </div>
-                  )}
-                >
-                  <button>
-                    <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-md-none')}></Image>
-                  </button>
-                </Tippy>
+                {isSmall && (
+                  <Tippy
+                    offset={[0, 15]}
+                    visible={isShowMessage}
+                    onClickOutside={() => setIsShowMessage(false)}
+                    interactive
+                    placement="bottom"
+                    render={(attrs) => (
+                      <div className={cx('menu')} {...attrs}>
+                        <PopperWrapper>
+                          <ModalChat />
+                        </PopperWrapper>
+                      </div>
+                    )}
+                  >
+                    <button className={cx('btn-action', 'd-md-none')} onClick={()=>{setIsShowMessage(prev=>!prev)}}>
+                      <FontAwesomeIcon icon={faMessage} />
+                    </button>
+                  </Tippy>
+                )}
+                {isSmall && (
+                  <Tippy
+                    offset={[0, 15]}
+                    visible={isShowNoti}
+                    interactive
+                    placement="bottom"
+                    render={(attrs) => (
+                      <div className={cx('menu')} {...attrs}>
+                        <PopperWrapper>
+                          <Notification />
+                        </PopperWrapper>
+                      </div>
+                    )}
+                  >
+                    <button
+                      className={cx('btn-action')}
+                      onClick={() => {
+                        setIsShowNoti((prev) => !prev)
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faBell} />
+                    </button>
+                  </Tippy>
+                )}
+                {isSmall && (
+                  <Tippy
+                    style={{ display: 'none' }}
+                    visible={isShowMenu}
+                    delay={[100, 500]}
+                    interactive
+                    placement="bottom"
+                    render={(attrs) => (
+                      <div className={cx('menu')} {...attrs}>
+                        <PopperWrapper>
+                          <UserMenu></UserMenu>
+                        </PopperWrapper>
+                      </div>
+                    )}
+                  >
+                    <button onClick={() => setIsShowMenu((prev) => !prev)}>
+                      <Image src={currentUser?.avatar} alt="avatar" className={cx('avatar')}></Image>
+                    </button>
+                  </Tippy>
+                )}
               </div>
             )}
           </div>
@@ -148,45 +170,80 @@ function Header({ menus }) {
           )}
           {isLogin && (
             <div className={cx('actions')}>
-              <button
-                to={config.routes.message}
-                className={cx('btn-action', 'd-none', 'd-md-block')}
-                onClick={handleShowMessage}
-              >
-                <FontAwesomeIcon icon={faMessage} />
-              </button>
-              {isModalChatVisible && (
-                <ModalChat
-                  style={{
-                    position: 'absolute',
-                    top: `${modalPosition.top}px`,
-                    left: `${modalPosition.left}px`,
-                    zIndex: 1000,
-                  }}
-                  handleClose={handleCloseMessage}
-                />
+              {!isSmall && (
+                <Tippy
+                  offset={[0, 15]}
+                  visible={isShowMessage}
+                  onClickOutside={() => setIsShowMessage(false)}
+                  interactive
+                  placement="bottom"
+                  render={(attrs) => (
+                    <div className={cx('menu')} {...attrs}>
+                      <PopperWrapper>
+                        <ModalChat />
+                      </PopperWrapper>
+                    </div>
+                  )}
+                >
+                  <button
+                    onClick={() => setIsShowMessage((prev) => !prev)}
+                    className={cx('btn-action', 'd-none', 'd-md-block')}
+                  >
+                    <FontAwesomeIcon icon={faMessage} />
+                  </button>
+                </Tippy>
               )}
-
-              <button className={cx('btn-action', 'd-none', 'd-md-block')}>
-                <FontAwesomeIcon icon={faBell} />
-              </button>
-              <Tippy
-                offset={[-70, 10]}
-                delay={[100, 500]}
-                interactive
-                placement="bottom"
-                render={(attrs) => (
-                  <div className={cx('menu')} {...attrs}>
-                    <PopperWrapper>
-                      <UserMenu></UserMenu>
-                    </PopperWrapper>
-                  </div>
+              <div>
+                {!isSmall && (
+                  <Tippy
+                    offset={[0, 15]}
+                    visible={isShowNoti}
+                    onClickOutside={() => setIsShowNoti(false)}
+                    interactive
+                    placement="bottom"
+                    render={(attrs) => (
+                      <div className={cx('menu')} {...attrs}>
+                        <PopperWrapper>
+                          <Notification />
+                        </PopperWrapper>
+                      </div>
+                    )}
+                  >
+                    <button
+                      className={cx('btn-action', 'd-none', 'd-md-block')}
+                      onClick={() => setIsShowNoti((prev) => !prev)}
+                    >
+                      <FontAwesomeIcon icon={faBell} />
+                    </button>
+                  </Tippy>
                 )}
-              >
-                <button>
-                  <Image src={currentUser.avatar} alt="avatar" className={cx('avatar', 'd-none', 'd-md-block')}></Image>
-                </button>
-              </Tippy>
+              </div>
+              <div>
+                {!isSmall && (
+                  <Tippy
+                    className="d-none d-md-block"
+                    visible={isShowMenu}
+                    interactive
+                    placement="bottom"
+                    onClickOutside={() => setIsShowMenu(false)}
+                    render={(attrs) => (
+                      <div className={cx('menu')} {...attrs}>
+                        <PopperWrapper>
+                          <UserMenu></UserMenu>
+                        </PopperWrapper>
+                      </div>
+                    )}
+                  >
+                    <button onClick={() => setIsShowMenu((prev) => !prev)}>
+                      <Image
+                        src={currentUser?.avatar}
+                        alt="avatar"
+                        className={cx('avatar', 'd-none', 'd-md-block')}
+                      ></Image>
+                    </button>
+                  </Tippy>
+                )}
+              </div>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
                 <MenuIcon />
               </button>
@@ -199,6 +256,13 @@ function Header({ menus }) {
           <MenuItem key={index} menu={menu}></MenuItem>
         ))}
       </Menu>
+      <LoginModal />
+      <RegisterModal />
+      <AuthCodeModal />
+      <PersonalModal />
+      <ForgetPasswordModal />
+      <LogoutModal />
+      <SessionExpiredModal />
     </header>
   )
 }

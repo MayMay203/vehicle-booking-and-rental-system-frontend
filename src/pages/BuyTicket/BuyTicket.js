@@ -9,6 +9,7 @@ import Button from '~/components/Button'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import PopperItem from '~/components/PopperWrapper/PopperItem'
+import {TicketModal } from '~/Modals/ServiceModal'
 
 const cx = classNames.bind(styles)
 function BuyTicket() {
@@ -56,6 +57,7 @@ function BuyTicket() {
       <Button roundHalf className={cx('btn-more')}>
         Xem thêm
       </Button>
+      <TicketModal />
     </div>
   )
 }

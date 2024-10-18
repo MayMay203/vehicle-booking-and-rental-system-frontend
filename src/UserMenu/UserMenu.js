@@ -21,8 +21,8 @@ function UserMenu() {
   return (
     <div className={cx('wrapper')}>
       <div className="d-flex align-items-center gap-3 mb-3">
-        <Image src={currentUser.avatar} className={cx('avatar', 'ml-0')}></Image>
-        <span className="fw-medium">{currentUser.name}</span>
+        <Image src={currentUser?.avatar} className={cx('avatar', 'ml-0')}></Image>
+        <span className="fw-medium">{currentUser?.name}</span>
       </div>
       <span className={cx('menu')}>Cài đặt chế độ</span>
       <Link to={config.routes.accountSetting} className={cx('menu')}>

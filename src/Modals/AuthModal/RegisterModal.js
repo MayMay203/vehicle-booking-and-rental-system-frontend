@@ -11,10 +11,13 @@ import {useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
 import { config } from '~/config'
 import { resendOTP } from '~/apiServices/resendOTP'
+import { useGlobalModal } from '~/Context/GlobalModalProvider'
+import Spinner from '~/components/Spinner'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
   const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
+  const { openGlobalModal, closeGlobalModal } = useGlobalModal()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
@@ -41,12 +44,15 @@ function RegisterModal() {
   const handleContinue = async (e) => {
     e.preventDefault()
     try {
+      openGlobalModal('loading')
       saveEmail(email)
       await register(email, password, confirmPass)
+      closeGlobalModal('loading')
       await closeAuthModal('register')
       reset()
       openAuthModal('authCode', { type: 'register' })
     } catch (message) {
+      closeGlobalModal('loading')
       toast.error(message, { autoClose: 2000 })
       setIsShow(message.includes(config.message.emailConfirm))
     }
@@ -87,7 +93,7 @@ function RegisterModal() {
             placeholder="Nhập email"
             value={email}
             onChange={(e) => handleChange(e.target.value, setEmail)}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            pattern="[\-a-zA-Z0-9~!$%^&amp;*_=+\}\{'?]+(\.[\-a-zA-Z0-9~!$%^&amp;*_=+\}\{'?]+)*@[a-zA-Z0-9_][\-a-zA-Z0-9_]*(\.[\-a-zA-Z0-9_]+)*\.[cC][oO][mM](:[0-9]{1,5})?"
             isValid={isValid}
             required
           ></FormInput>
@@ -141,6 +147,7 @@ function RegisterModal() {
           </div>
         </form>
       </Modal.Body>
+      <Spinner />
     </Modal>
   )
 }

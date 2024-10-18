@@ -4,7 +4,7 @@
 
 .date-wrapper {
   position: relative;
-  width: 100%; // điều chỉnh chiều rộng theo mong muốn
+  width: 100%;
 }
 
 .date-input {
@@ -64,4 +64,13 @@
       border-color: var(--border-color);
       opacity: 0.8;
     }
+}
+
+.btn-change{
+  margin-top: 80px;
+  float: right;
+  background-color: var(--primary-bg);
+  padding: 24px 50px;
+  font-weight: 600;
+  color: var(--orange-color)
 }

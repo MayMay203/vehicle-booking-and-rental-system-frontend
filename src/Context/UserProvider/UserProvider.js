@@ -2,40 +2,48 @@ import PropTypes from 'prop-types'
 import { createContext, useEffect, useState, useCallback, useContext } from 'react'
 import { refreshToken } from '~/apiServices/refreshToken'
 import { useGlobalModal } from '../GlobalModalProvider'
+import { checkExistCookie } from '~/utils/cookieUtils'
+import { getMyAccount } from '~/apiServices/getMyAccount'
 
 const UserContext = createContext()
 
 function UserProvider({ children }) {
   const [isLogin, setIsLogin] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [currentUser, setCurrentUser] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null)
   const [email, setEmail] = useState(null)
   const { openGlobalModal } = useGlobalModal()
 
-  const checkLogin = useCallback(async () => {
-    const hasCookie = Boolean(document.cookie)
-    if (hasCookie) {
+  const checkLogin = async () => {
+    if (checkExistCookie('access_token')) {
       setIsLogin(true)
+      const userData = await getMyAccount()
+      if (userData) {
+        setCurrentUser(userData.accountInfo)
+      }
     } else {
       const response = await refreshToken()
       if (response) {
         setIsLogin(true)
+        const userData = await getMyAccount()
+        if (userData) {
+          setCurrentUser(userData.accountInfo)
+        }
       } else {
         setIsLogin(false)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }
 
   const checkLoginSession = useCallback(async () => {
-    if (document.cookie) return true;
+    if (checkExistCookie('access_token')) return true
     const response = await refreshToken()
     if (!response) {
       openGlobalModal('expiredSession')
       setIsLogin(false)
-      return false;
+      return false
     }
-    return true;
+    return true
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -56,7 +64,7 @@ function UserProvider({ children }) {
   }
 
   if (isLoading) {
-    return <div>Loading...</div> //Hiển thị spinner
+    return <></>
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>

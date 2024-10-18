@@ -6,8 +6,9 @@ import { config } from '~/config'
 import classNames from 'classnames/bind'
 import styles from './OrderManagement.module.scss'
 import Button from '~/components/Button'
+import { ReasonModal, TicketModal } from '~/Modals/ServiceModal'
 
-const cx = classNames.bind(styles);
+const cx = classNames.bind(styles)
 function OrderManagement() {
   const [status, setStatus] = useState('current')
   const settings = useMemo(
@@ -19,22 +20,28 @@ function OrderManagement() {
     }),
     [],
   )
-    const tabList = useMemo(() => [
-        {
-            label: 'Hiện tại', value: 'current'
-        },
-        {
-            label: 'Đã đi', value: 'completed'
-        },
-        {
-            label: 'Đã huỷ', value: 'canceled'
-        }
-    ], [])
+  const tabList = useMemo(
+    () => [
+      {
+        label: 'Hiện tại',
+        value: 'current',
+      },
+      {
+        label: 'Đã đi',
+        value: 'completed',
+      },
+      {
+        label: 'Đã huỷ',
+        value: 'canceled',
+      },
+    ],
+    [],
+  )
   const handleClickTab = (type) => {
     setStatus(type)
   }
   return (
-    <div className={cx('container','wrapper')}>
+    <div className={cx('container', 'wrapper')}>
       <Breadcrumb>
         <Breadcrumb.Item href={config.routes.home}>Trang chủ</Breadcrumb.Item>
         <Breadcrumb.Item href={config.routes.order} active>
@@ -42,8 +49,12 @@ function OrderManagement() {
         </Breadcrumb.Item>
       </Breadcrumb>
       <Tabs tabList={tabList} settings={settings} type={status} handleClickTab={handleClickTab}></Tabs>
-          <TicketList status={status}></TicketList>
-          <Button roundHalf className={cx('btn-more')}>Xem thêm</Button>
+      <TicketList status={status}></TicketList>
+      <Button roundHalf className={cx('btn-more')}>
+        Xem thêm
+      </Button>
+      <TicketModal />
+      <ReasonModal />
     </div>
   )
 }

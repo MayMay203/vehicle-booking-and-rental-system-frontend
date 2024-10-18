@@ -8,7 +8,7 @@ const cx = classNames.bind(styles)
 function CardMessage({ isSeen, handleShowMessage, name, message, time }) {
   return (
     <div className={cx('wrap-message', 'row', { 'no-seen': !isSeen, seen: isSeen })} onClick={handleShowMessage}>
-      <Col xs="2" className={cx('d-flex align-items-center')}>
+      <Col xs="2">
         <img src={images.avatar} className={cx('avatar')} alt="avatar" />
       </Col>
       <Col xs="10" className={cx('')}>

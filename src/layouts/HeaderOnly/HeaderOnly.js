@@ -35,6 +35,13 @@ function HeaderOnly({ children }) {
        to: config.routes.about,
      },
    ]
+  //  const adminMenu = [
+  //    { content: 'Dịch vụ', to: config.routes.services },
+  //    { content: 'Đối tác', to: config.routes.partners },
+  //    { content: 'Tài khoản', to: config.routes.accounts },
+  //    { content: 'Khuyến mãi', to: config.routes.vouchers },
+  //    { content: 'Thống kê', to: config.routes.statistics },
+  //  ]
   return (
     <div className={cx('wrapper')}>
       <Header menus={userMenu} />

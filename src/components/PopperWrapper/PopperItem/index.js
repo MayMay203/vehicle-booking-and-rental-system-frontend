@@ -1,1 +1,1 @@
-export {default} from './PopperItem'
+export { default } from './PopperItem'

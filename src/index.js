@@ -15,14 +15,14 @@ import GlobalModalProvider from './Context/GlobalModalProvider';
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <GlobalModalProvider>
-      <UserProvider>
-        <AuthModalProvider>
-          <ServiceModalProvider>
-            <App />
-          </ServiceModalProvider>
-        </AuthModalProvider>
-      </UserProvider>
-  </GlobalModalProvider>
+    <UserProvider>
+      <AuthModalProvider>
+        <ServiceModalProvider>
+          <App />
+        </ServiceModalProvider>
+      </AuthModalProvider>
+    </UserProvider>
+  </GlobalModalProvider>,
 )
 
 // If you want to start measuring performance in your app, pass a function
