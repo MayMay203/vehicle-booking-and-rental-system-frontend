@@ -4,11 +4,17 @@ import PropTypes from 'prop-types'
 import LinkItem from '../LinkItem'
 import { BirdayIcon, CallIcon, EmailIcon, GenderIcon } from '../Icon'
 import Button from '../Button'
-import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
+import { faClose, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useServiceModal } from '~/Context/ServiceModalProvider'
 
 const cx = classNames.bind(styles)
 function AccountItem({ data }) {
+  const { openServiceModal } = useServiceModal()
+
+  const handleLockAccount = () => {
+    openServiceModal('lock')
+  }
   return (
     <div className={cx('row', 'item')}>
       <div className="col-12 col-md-8 col-lg-9">
@@ -34,8 +40,22 @@ function AccountItem({ data }) {
         </div>
       </div>
       <div className="col-12 col-md-4 col-lg-3 align-content-end">
+        {!data.active && (
+          <div className={cx('reason')}>
+            <div className="d-flex column-gap-2 mb-3 justify-content-center">
+              <FontAwesomeIcon icon={faClose} />
+              <span>{data.date}</span>
+            </div>
+            <span>{data.reason}</span>
+          </div>
+        )}
         {data.active ? (
-          <Button leftIcon={<FontAwesomeIcon icon={faLock} />} primary className="mb-3 mt-4 mt-md-0 m-auto">
+          <Button
+            leftIcon={<FontAwesomeIcon icon={faLock} />}
+            primary
+            className="mb-3 mt-4 mt-md-0 m-auto"
+            onClick={handleLockAccount}
+          >
             Khoá tài khoản
           </Button>
         ) : (

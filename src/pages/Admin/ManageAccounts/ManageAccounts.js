@@ -6,6 +6,10 @@ import Tabs from '~/components/Tabs'
 import { useState } from 'react'
 import AccountList from '~/components/AccountList'
 import SearchInput from '~/components/SearchInput'
+import Button from '~/components/Button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import LockModal from '~/Modals/ServiceModal/LockModal'
 
 const cx = classNames.bind(styles)
 function ManageAccounts() {
@@ -34,21 +38,31 @@ function ManageAccounts() {
   }
 
   return (
-   <div className='container'>
-      <div className={cx('wrapper')}>
-        <Breadcrumb>
-          <BreadcrumbItem href="#">Trang chủ</BreadcrumbItem>
-          <BreadcrumbItem href={config.accounts} active>
-            Quản lý tài khoản
-          </BreadcrumbItem>
-        </Breadcrumb>
-  
-        <Tabs tabList={tabList} settings={settings} type={type} handleClickTab={handleClickTab}></Tabs>
-  
-        <SearchInput className='mt-5' />
-        <AccountList type={type} />
+    <div className={cx('container', 'wrapper')}>
+      <Breadcrumb>
+        <BreadcrumbItem href="#">Trang chủ</BreadcrumbItem>
+        <BreadcrumbItem href={config.accounts} active>
+          Quản lý tài khoản
+        </BreadcrumbItem>
+      </Breadcrumb>
+
+      <Tabs
+        tabList={tabList}
+        settings={settings}
+        type={type}
+        handleClickTab={handleClickTab}
+        className={cx('custom-margin','custom-fontsize')}
+      ></Tabs>
+
+      <div className={cx('d-flex', 'justify-content-between' ,'align-items-center','custom-margin')}>
+        <SearchInput />
+        <Button primary className={cx('btn-add')}>
+          <FontAwesomeIcon icon={faPlus} />
+        </Button>
       </div>
-   </div>
+      <AccountList type={type} />
+      <LockModal/>
+    </div>
   )
 }
 
