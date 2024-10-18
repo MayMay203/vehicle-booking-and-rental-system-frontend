@@ -9,7 +9,7 @@ const UserContext = createContext()
 
 function UserProvider({ children }) {
   const [isLogin, setIsLogin] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
   const [email, setEmail] = useState(null)
   const { openGlobalModal } = useGlobalModal()
@@ -17,11 +17,10 @@ function UserProvider({ children }) {
   const checkLogin = async () => {
     if (checkExistCookie('access_token')) {
       setIsLogin(true)
-       const userData = await getMyAccount()
-       if (userData) {
-         setCurrentUser(userData.accountInfo)
-         console.log('Vo day roi')
-       }
+      const userData = await getMyAccount()
+      if (userData) {
+        setCurrentUser(userData.accountInfo)
+      }
     } else {
       const response = await refreshToken()
       if (response) {

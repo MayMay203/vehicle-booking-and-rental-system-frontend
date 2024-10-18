@@ -5,18 +5,22 @@ import PropTypes from 'prop-types';
 import { memo } from 'react';
 
 const cx = classNames.bind(styles)
-function LinkItem({ title, to, Icon }) {
+function LinkItem({ title, to, Icon, className }) {
+  let Component = Link
+  if (!to) {
+    Component = 'div'
+  }
   return (
-    <Link to={to} className={cx('link')}>
+    <Component to={to} className={cx('link',[className])}>
       {Icon}
       {title}
-    </Link>
+    </Component>
   )
 }
 
 LinkItem.propTypes = {
   title: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
   Icon: PropTypes.node.isRequired,
 }
 export default memo(LinkItem);

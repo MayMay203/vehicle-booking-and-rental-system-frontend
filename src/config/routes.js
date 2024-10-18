@@ -15,4 +15,9 @@ export const routes = {
   order: '/manage-orders',
   resetPassword: '/reset-password',
   authenticate: '/authenticate',
+  accounts: '/manage-accounts',
+  services: '/manage-services',
+  statistics: '/statistics',
+  vouchers: '/manage-vouchers',
+  partners: '/manage-partners',
 }
