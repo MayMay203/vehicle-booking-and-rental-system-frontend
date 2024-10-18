@@ -13,10 +13,10 @@ function ListCardMessage({ buttonSelect, handleClose }) {
   const navigate = useNavigate()
   const handleShowMessage = (id, name) => {
     setMessages((prevMessages) => prevMessages.map((msg) => (msg.id === id ? { ...msg, isSeen: true } : msg)));
-    navigate('/message', { state: { id: id, name: name} });
     handleClose();
+    navigate('/message', { state: { id: id, name: name} });
+    
   }
-
   const filteredMessages = buttonSelect === 'Unread' ? messages.filter((msg) => !msg.isSeen) : messages
   return (
     <div>
