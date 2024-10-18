@@ -15,6 +15,11 @@ export const post = async (url, body = {}, options = {}) => {
   return response.data
 }
 
+export const put = async (url, body = {}, options = {}) => {
+  const response = await httpRequest.put(url, body, options)
+  return response.data
+}
+
 export const DELETE = async (path, options = {}) => {
   const response = await httpRequest.delete(path, options)
   return response.data

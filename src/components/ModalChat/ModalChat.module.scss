@@ -1,0 +1,45 @@
+.wrapper{
+  padding: 4px 2px 0 2px;
+  min-width: 380px;
+}
+
+.body-message {
+  max-height: 56vh; 
+  overflow-y: auto; 
+  margin-right: -10px;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+}
+
+.heading{
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1.8rem;
+}
+
+.wrap-btn{
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.175);
+}
+
+.btn{
+  font-size: 1.4rem;
+  min-width: 50px!important;
+  height: 32px;
+  font-weight: 400;
+  border-color: var(--orange-color);
+  color: var(--orange-color);
+  background-color: #fff;
+}
+
+.btn.active{
+  background-color: #FF7F50;
+  color: white;
+}
+
+@media (max-width:400px) {
+    .wrapper{
+        min-width: 333px;
+    }
+}

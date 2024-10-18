@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { config } from '~/config'
 import { useUserContext } from '~/Context/UserProvider'
 import { useGlobalModal } from '~/Context/GlobalModalProvider'
+import Spinner from '~/components/Spinner'
 
 function Authenticate() {
   const location = useLocation()
@@ -19,7 +20,6 @@ function Authenticate() {
       const data = await loginWithGoogle(code)
       if (data) {
         setCurrentUser(data.accountLogin)
-        toast.success('Đăng nhập thành công', { autoClose: 1500, position: 'top-center' })
       } else {
         toast.error('Đăng nhập thất bại', { autoClose: 1500, position: 'top-center' })
       }
@@ -29,7 +29,11 @@ function Authenticate() {
     login()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
-  return <></>
+  return (
+    <>
+      <Spinner />
+    </>
+  )
 }
 
 export default Authenticate

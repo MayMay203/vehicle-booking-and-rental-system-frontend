@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { config } from '~/config'
 import { resendOTP } from '~/apiServices/resendOTP'
 import { useGlobalModal } from '~/Context/GlobalModalProvider'
+import Spinner from '~/components/Spinner'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
@@ -146,6 +147,7 @@ function RegisterModal() {
           </div>
         </form>
       </Modal.Body>
+      <Spinner />
     </Modal>
   )
 }

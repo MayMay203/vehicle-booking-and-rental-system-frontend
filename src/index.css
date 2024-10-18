@@ -140,6 +140,7 @@ body {
   /* font-family: "Inter", sans-serif; */
   color: var(--text-color);
   scroll-behavior: smooth !important;
+  overflow-y: overlay;
 }
 
 a {
@@ -213,6 +214,7 @@ button {
   --grey-color: #f6f6f6;
   --light-green: #a0cd8a;
   --green-color: #27ae60;
+  --thumb-bg: rgba(0,0,0,0.16);
 }
 
 .option {
@@ -390,4 +392,19 @@ textarea{
 	border-bottom: 2px solid black;
 }
 
+/* Custom scroll bar */
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px !important;
+}
+
+html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: var(--thumb-bg) !important;
+}
+
+html *::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background-color: rgba(0, 0, 0, 0) !important;
+}
 
