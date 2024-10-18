@@ -16,6 +16,11 @@ import RentalOrder from '~/pages/RentalPage/RentalOrder'
 import BookingOrder from '~/pages/BookingPage/BookingOrder'
 import ResetPassword from '~/pages/ResetPassword'
 import Authenticate from '~/pages/Authenticate'
+import ManageAccounts from '~/pages/Admin/ManageAccounts'
+import ManagePartners from '~/pages/Admin/ManageParners'
+import ManageServices from '~/pages/Admin/ManageServices'
+import ManageVouchers from '~/pages/Admin/ManageVouchers'
+import Statistics from '~/pages/Admin/Statistics'
 
 const publicRoutes = [
   {
@@ -85,6 +90,31 @@ const publicRoutes = [
     path: config.routes.authenticate,
     component: Authenticate,
     layout: null,
+  },
+  {
+    path: config.routes.accounts,
+    component: ManageAccounts,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.partners,
+    component: ManagePartners,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.services,
+    component: ManageServices,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.vouchers,
+    component: ManageVouchers,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.statistics,
+    component: Statistics,
+    layout: HeaderOnly,
   },
 ]
 

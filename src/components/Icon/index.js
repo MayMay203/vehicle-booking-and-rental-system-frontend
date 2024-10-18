@@ -19,5 +19,9 @@ export {
   TicketFeatIcon,
   PaymentIcon,
   FilterIcon,
-  MessageIcon
+  MessageIcon,
+  BirdayIcon,
+  CallIcon,
+  GenderIcon,
+  EmailIcon,
 } from './Icon'
