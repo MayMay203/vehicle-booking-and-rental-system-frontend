@@ -15,6 +15,10 @@ function AccountItem({ data }) {
   const handleLockAccount = () => {
     openServiceModal('lock')
   }
+
+  const handleOpenAccount = () => {
+    openServiceModal('confirm')
+  }
   return (
     <div className={cx('row', 'item')}>
       <div className="col-12 col-md-8 col-lg-9">
@@ -59,7 +63,12 @@ function AccountItem({ data }) {
             Khoá tài khoản
           </Button>
         ) : (
-          <Button leftIcon={<FontAwesomeIcon icon={faLockOpen} />} primary className="mb-3 mt-4 mt-md-0 m-auto">
+          <Button
+            leftIcon={<FontAwesomeIcon icon={faLockOpen} />}
+            primary
+            className="mb-3 mt-4 mt-md-0 m-auto"
+            onClick={handleOpenAccount}
+          >
             Mở tài khoản
           </Button>
         )}

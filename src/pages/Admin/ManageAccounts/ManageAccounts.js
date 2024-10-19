@@ -10,10 +10,14 @@ import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import LockModal from '~/Modals/ServiceModal/LockModal'
+import { useAuthModal } from '~/Context/AuthModalProvider'
+import { RegisterAdminModal } from '~/Modals/AuthModal'
+import { ConfirmModal } from '~/Modals/ServiceModal'
 
 const cx = classNames.bind(styles)
 function ManageAccounts() {
   const [type, setType] = useState('accounts')
+  const { openAuthModal } = useAuthModal()
 
   const tabList = [
     {
@@ -37,6 +41,10 @@ function ManageAccounts() {
     setType(type)
   }
 
+  const handleAddAdminAccount = () => {
+    openAuthModal('registerAdmin')
+  }
+
   return (
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb>
@@ -51,17 +59,19 @@ function ManageAccounts() {
         settings={settings}
         type={type}
         handleClickTab={handleClickTab}
-        className={cx('custom-margin','custom-fontsize')}
+        className={cx('custom-margin', 'custom-fontsize')}
       ></Tabs>
 
-      <div className={cx('d-flex', 'justify-content-between' ,'align-items-center','custom-margin')}>
+      <div className={cx('d-flex', 'justify-content-between', 'align-items-center', 'custom-margin')}>
         <SearchInput />
-        <Button primary className={cx('btn-add')}>
+        <Button primary className={cx('btn-add')} onClick={handleAddAdminAccount}>
           <FontAwesomeIcon icon={faPlus} />
         </Button>
       </div>
       <AccountList type={type} />
-      <LockModal/>
+      <LockModal />
+      <RegisterAdminModal />
+      <ConfirmModal />
     </div>
   )
 }
