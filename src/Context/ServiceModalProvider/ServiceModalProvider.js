@@ -6,6 +6,7 @@ function ServiceModalProvider({ children }) {
   const [modal, setModal] = useState({
     ticket: false,
     cancel: false,
+    lock: false,
   })
 
   const [serviceModalData, setServiceModalData] = useState({})

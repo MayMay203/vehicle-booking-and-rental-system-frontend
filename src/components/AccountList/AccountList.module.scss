@@ -1,11 +1,13 @@
+@use '../../abstracts' as abstracts;
+
 .wrapper{
     margin-top: 40px;
 }
 
 .avatar-wrapper{
     margin: 0 auto;
-    width: 200px;
-    height: 200px;
+    width: 190px;
+    height: 190px;
 }
 
 .avatar{
@@ -19,14 +21,14 @@
     justify-content: initial;
     font-size: 1.6rem;
     column-gap: 14px;
-    padding: 6px 0;
+    padding: 4px 0;
 }
 
 .name{
     color: var(--primary-color);
     font-weight: 600;
     font-size: 1.8rem;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .item{
@@ -36,5 +38,18 @@
 
     & ~ .item{
         margin-top: 14px;
+    }
+}
+
+.reason{
+    color: red;
+    font-weight: 500;
+    font-size: 1.3rem;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 18px;
+
+    @include abstracts.screen(md){
+        margin-top: 20px;
     }
 }

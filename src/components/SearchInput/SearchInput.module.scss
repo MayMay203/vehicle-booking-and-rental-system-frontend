@@ -8,14 +8,13 @@
     height: 44px;
     background-color: #f7f5f5;
     border-radius: 999px;
-    margin-left: auto;
 
     @include abstracts.screen(lg){
         width: 60%;
     }
 
     @include abstracts.screen(md){
-        width: 100%;
+        width: 85%;
     }
 }
 

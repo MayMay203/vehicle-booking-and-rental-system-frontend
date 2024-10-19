@@ -25,6 +25,8 @@ function AccountList({type}) {
       gender: 'MALE',
       birthDay: '12-02-2003',
       active: false,
+      date: 'Đã khoá lúc 10:00 12-09-2023 ',
+      reason: 'Vi phạm tiêu chuẩn cộng đồng',
     },
     {
       id: 3,
@@ -45,6 +47,8 @@ function AccountList({type}) {
       gender: 'FEMALE',
       birthDay: '12-12-2003',
       active: false,
+      date: 'Đã khoá lúc 10:00 12-09-2023 ',
+      reason: 'Vi phạm tiêu chuẩn cộng đồng',
     },
     {
       id: 5,
