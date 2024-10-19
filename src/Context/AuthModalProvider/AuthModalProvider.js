@@ -10,6 +10,7 @@ function AuthModalProvider({ children }) {
     forget: false,
     authCode: false,
     info: false,
+    registerAdmin: false,
   })
 
   const [modalAuthData, setModalAuthData] = useState({})
