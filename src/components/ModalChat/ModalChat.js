@@ -5,7 +5,7 @@ import styles from './ModalChat.module.scss'
 import classNames from 'classnames/bind'
 import { memo, useState } from 'react'
 const cx = classNames.bind(styles)
-function ModalChat() {
+function ModalChat({ handleClose }) {
   const [buttonSelect, setButtonSelect] = useState('All')
   const handleClickButton = (name) => {
     setButtonSelect(name)
@@ -31,7 +31,7 @@ function ModalChat() {
         </Button>
       </div>
       <div className={cx('body-message')}>
-        <ListCardMessage buttonSelect={buttonSelect}></ListCardMessage>
+        <ListCardMessage buttonSelect={buttonSelect} handleClose={handleClose}></ListCardMessage>
       </div>
     </div>
   )

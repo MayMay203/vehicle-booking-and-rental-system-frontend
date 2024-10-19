@@ -15,6 +15,7 @@ import { toast } from 'react-toastify'
 import { useGlobalModal } from '~/Context/GlobalModalProvider'
 import { forgetPassword } from '~/apiServices/forgetPassword'
 import { updateAccount } from '~/apiServices/updateAccount'
+import Spinner from '~/components/Spinner'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {
@@ -40,8 +41,10 @@ function AccountSetting() {
     async function getInfo() {
       if ((await checkLoginSession()) && currentUser) {
         setFullName(currentUser.name)
-        const [day, month, year] = currentUser.birthDay.split('-')
-        setBirthday(new Date(`${year}-${month}-${day}`))
+        if (currentUser.birthDay) {
+          const [day, month, year] = currentUser.birthDay.split('-')
+          setBirthday(new Date(`${year}-${month}-${day}`))
+        }
         setGender(currentUser.gender)
         setPhoneNumber(currentUser.phoneNumber)
         setSelectedImage(currentUser.avatar)
@@ -70,6 +73,7 @@ function AccountSetting() {
     setGender(currentUser.gender)
     setIsModified(false)
     setSelectedImage(currentUser.avatar)
+    setIsValid(true)
   }
 
   const handleChooseImage = (e) => {
@@ -93,6 +97,9 @@ function AccountSetting() {
   const handleSave = async (e) => {
     e.preventDefault()
     try {
+      if (selectedImage !== currentUser.avatar) {
+        openGlobalModal('loading')
+      }
       const accountInfo = {
         id: currentUser.id,
         name: fullName,
@@ -114,7 +121,11 @@ function AccountSetting() {
       toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
       setIsModified(false)
       setCurrentUser(userData.accountInfo)
+      if (selectedImage !== currentUser.avatar) {
+        closeGlobalModal('loading')
+     }
     } catch (error) {
+      closeGlobalModal('loading')
       console.log(error)
       toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
     }
@@ -183,17 +194,18 @@ function AccountSetting() {
                 ></FormInput>
                 <FormInput
                   id="fullname"
-                  value={fullName}
+                  value={fullName ? fullName : ''}
                   type="fullname"
                   title="Họ và tên"
                   error="Vui lòng nhập họ và tên"
                   required
                   isValid={isValid}
                   onChange={(e) => handleChange(e.target.value, setFullName)}
+                  star
                 />
                 <FormInput
                   id="phone"
-                  value={phoneNumber}
+                  value={phoneNumber ? phoneNumber : ''}
                   type="phone"
                   title="Số điện thoại"
                   error={phoneNumber ? 'Số điện thoại không đúng định dạng' : 'Vui lòng nhập số điện thoại'}
@@ -201,9 +213,11 @@ function AccountSetting() {
                   pattern="[0-9]{10}"
                   isValid={isValid}
                   onChange={(e) => handleChange(e.target.value, setPhoneNumber)}
+                  star
                 />
                 <div className="mb-3">
-                  <label className="mb-4">Ngày sinh</label>
+                    <label className="mb-4">Ngày sinh</label>
+                    <span className={cx('star')}>*</span>
                   <div className={cx('date-wrapper', 'd-flex', 'align-items-center')}>
                     <DatePicker
                       className={cx('date-input')} // Sử dụng class để áp dụng style cho input
@@ -212,11 +226,12 @@ function AccountSetting() {
                       dateFormat="dd-MM-yyyy"
                       maxDate={new Date()}
                       placeholderText="Chọn ngày sinh"
+                      required
                     />
                     <FontAwesomeIcon icon={faCalendar} className={cx('calendar-icon')} />
                   </div>
                 </div>
-                <FormGender handleGender={handleGender} gender={gender} />
+                <FormGender handleGender={handleGender} gender={gender} star/>
                 <div className="d-flex column-gap-5 justify-content-center mt-5">
                   <Button
                     className={cx('btn-cancel')}
@@ -251,6 +266,7 @@ function AccountSetting() {
           </div>
         </div>
       </div>
+      <Spinner />
     </div>
   )
 }

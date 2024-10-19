@@ -68,9 +68,11 @@ function RegisterModal() {
   }, [])
 
   const handleShowOTPModal = async () => {
-    closeAuthModal('register')
+    openGlobalModal('loading')
     setIsShow(false)
     await resendOTP(email)
+    closeAuthModal('register')
+    closeGlobalModal('loading')
     toast.info('Kiểm tra email để nhận OTP')
     openAuthModal('authCode', { type: 'register' })
   }

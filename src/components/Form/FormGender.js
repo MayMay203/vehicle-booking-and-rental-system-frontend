@@ -2,14 +2,17 @@ import styles from './Form.module.scss'
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
-function FormGender({ id, title, show = false, gender, handleGender, className, ...props }) {
+function FormGender({ id, title, show = false, gender, handleGender, className, star, ...props }) {
   return (
     <div className={cx('form-group', { [className]: className })}>
       <label className={cx('form-label')} htmlFor={id}>
         {title}
       </label>
       <div className={cx('block-gender')}>
-        <label className={cx('form-label')}>Giới tính</label>
+        <label className={cx('form-label')}>
+          Giới tính
+          {star && <span className={cx('star')}>*</span>}
+        </label>
         <div className={cx('gender')}>
           <div className={cx('form-gender')}>
             <input
@@ -22,7 +25,7 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               hidden
               className={cx('radio-button')}
             />
-            <label htmlFor="male" className={cx('label','label-gender')}>
+            <label htmlFor="male" className={cx('label', 'label-gender')}>
               Nam
             </label>
           </div>
@@ -37,7 +40,7 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               hidden
               className={cx('radio-button')}
             />
-            <label htmlFor="female" className={cx('label','label-gender')}>
+            <label htmlFor="female" className={cx('label', 'label-gender')}>
               Nữ
             </label>
           </div>
@@ -52,7 +55,7 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               hidden
               className={cx('radio-button')}
             />
-            <label htmlFor="other" className={cx('label','label-gender')}>
+            <label htmlFor="other" className={cx('label', 'label-gender')}>
               Khác
             </label>
           </div>

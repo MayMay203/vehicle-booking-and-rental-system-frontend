@@ -54,6 +54,10 @@ function Header({ menus }) {
     overlayRef.current.style.opacity = '1'
   }
 
+  const handleCloseMessage = () => {
+    setIsShowMessage(false)
+  }
+
   return (
     <header className={cx('wrapper')}>
       {/* Mobile header */}
@@ -73,19 +77,24 @@ function Header({ menus }) {
                 {isSmall && (
                   <Tippy
                     offset={[0, 15]}
-                    visible={isShowMessage}
+                    visible={isShowMessage && !window.location.href.includes('/message')}
                     onClickOutside={() => setIsShowMessage(false)}
                     interactive
                     placement="bottom"
                     render={(attrs) => (
-                      <div className={cx('menu')} {...attrs}>
+                      <div {...attrs}>
                         <PopperWrapper>
-                          <ModalChat />
+                          <ModalChat handleClose={handleCloseMessage} />
                         </PopperWrapper>
                       </div>
                     )}
                   >
-                    <button className={cx('btn-action', 'd-md-none')} onClick={()=>{setIsShowMessage(prev=>!prev)}}>
+                    <button
+                      className={cx('btn-action', 'd-md-none')}
+                      onClick={() => {
+                        setIsShowMessage((prev) => !prev)
+                      }}
+                    >
                       <FontAwesomeIcon icon={faMessage} />
                     </button>
                   </Tippy>
@@ -97,7 +106,7 @@ function Header({ menus }) {
                     interactive
                     placement="bottom"
                     render={(attrs) => (
-                      <div className={cx('menu')} {...attrs}>
+                      <div {...attrs}>
                         <PopperWrapper>
                           <Notification />
                         </PopperWrapper>
@@ -116,13 +125,12 @@ function Header({ menus }) {
                 )}
                 {isSmall && (
                   <Tippy
-                    style={{ display: 'none' }}
                     visible={isShowMenu}
                     delay={[100, 500]}
                     interactive
                     placement="bottom"
                     render={(attrs) => (
-                      <div className={cx('menu')} {...attrs}>
+                      <div {...attrs}>
                         <PopperWrapper>
                           <UserMenu></UserMenu>
                         </PopperWrapper>
@@ -173,14 +181,14 @@ function Header({ menus }) {
               {!isSmall && (
                 <Tippy
                   offset={[0, 15]}
-                  visible={isShowMessage}
+                  visible={isShowMessage && !window.location.href.includes('/message')}
                   onClickOutside={() => setIsShowMessage(false)}
                   interactive
                   placement="bottom"
                   render={(attrs) => (
-                    <div className={cx('menu')} {...attrs}>
+                    <div {...attrs}>
                       <PopperWrapper>
-                        <ModalChat />
+                        <ModalChat handleClose={handleCloseMessage} />
                       </PopperWrapper>
                     </div>
                   )}
@@ -202,7 +210,7 @@ function Header({ menus }) {
                     interactive
                     placement="bottom"
                     render={(attrs) => (
-                      <div className={cx('menu')} {...attrs}>
+                      <div {...attrs}>
                         <PopperWrapper>
                           <Notification />
                         </PopperWrapper>
@@ -221,13 +229,12 @@ function Header({ menus }) {
               <div>
                 {!isSmall && (
                   <Tippy
-                    className="d-none d-md-block"
                     visible={isShowMenu}
                     interactive
                     placement="bottom"
                     onClickOutside={() => setIsShowMenu(false)}
                     render={(attrs) => (
-                      <div className={cx('menu')} {...attrs}>
+                      <div {...attrs}>
                         <PopperWrapper>
                           <UserMenu></UserMenu>
                         </PopperWrapper>
@@ -270,4 +277,5 @@ function Header({ menus }) {
 Header.prototypes = {
   menus: PropTypes.array.isRequired,
 }
+
 export default Header

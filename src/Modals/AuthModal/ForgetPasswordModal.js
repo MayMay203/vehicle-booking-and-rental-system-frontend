@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { forgetPassword } from '~/apiServices/forgetPassword'
 import { useGlobalModal } from '~/Context/GlobalModalProvider'
+import Spinner from '~/components/Spinner'
 
 const cx = classNames.bind(styles)
 function ForgetPasswordModal() {
@@ -35,7 +36,7 @@ function ForgetPasswordModal() {
       openGlobalModal('loading')
       const data = await forgetPassword(email)
       closeGlobalModal('loading')
-      toast.success(data.info, { autoClose: 1500, position: 'top-center' })
+      toast.success(data.info, { autoClose: 1200, position: 'top-center' })
     } catch (message) {
       closeGlobalModal('loading')
       toast.error(message, { autoClose: 1500, position: 'top-center' })
@@ -73,6 +74,7 @@ function ForgetPasswordModal() {
             </button>
           </div>
         </form>
+        <Spinner />
       </Modal.Body>
     </Modal>
   )

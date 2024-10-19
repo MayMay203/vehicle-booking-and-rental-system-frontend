@@ -70,6 +70,12 @@ function PersonalModal() {
     functionChange(value)
   }, [])
 
+  const handleCancel = () => {
+    closeAuthModal('info')
+    toast.success('Đăng ký tài khoản thành công.', { autoClose: 1000 })
+    openAuthModal('login')
+  }
+
   return (
     <Modal show={isOpenAuthModal.info} onHide={() => closeAuthModal('info')} centered>
       <Modal.Header closeButton>
@@ -100,8 +106,8 @@ function PersonalModal() {
             isValid={isValid}
             onChange={(e) => handleChange(e.target.value, setPhone)}
           />
-          <div className='mb-3'>
-            <label className='mb-4'>Ngày sinh</label>
+          <div className="mb-3">
+            <label className="mb-4">Ngày sinh</label>
             <div className={cx('date-wrapper', 'd-flex', 'align-items-center')}>
               <DatePicker
                 className={cx('date-input')} // Sử dụng class để áp dụng style cho input
@@ -115,9 +121,14 @@ function PersonalModal() {
             </div>
           </div>
           <FormGender handleGender={handleGender} gender={gender} />
-          <Button className={cx('btn-submit')} onClick={handleSignUp} disabled={!isValid} type="submit">
-            Đăng ký thông tin
-          </Button>
+          <div className="d-flex column-gap-3 mt-5">
+            <Button className={cx('btn-submit','btn-cancel')} onClick={handleCancel} type="button">
+              Bỏ qua bước này
+            </Button>
+            <Button className={cx('btn-submit')} onClick={handleSignUp} disabled={!isValid} type="submit">
+              Đăng ký thông tin
+            </Button>
+          </div>
         </form>
       </Modal.Body>
     </Modal>
