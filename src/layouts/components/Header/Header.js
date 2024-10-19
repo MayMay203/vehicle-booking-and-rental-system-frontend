@@ -9,8 +9,8 @@ import MenuItem from '../../../components/Menu/MenuItem'
 import { useEffect, useRef, useState } from 'react'
 import { useAuthModal } from '~/Context/AuthModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell } from '@fortawesome/free-regular-svg-icons'
-import { faMessage } from '@fortawesome/free-regular-svg-icons'
+import { faBell, faComment } from '@fortawesome/free-regular-svg-icons'
+import {faMessage} from '@fortawesome/free-regular-svg-icons'
 import Image from '~/components/Image'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
@@ -20,6 +20,7 @@ import Notification from '~/components/Notification'
 import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal } from '~/Modals/AuthModal'
 import { LogoutModal, SessionExpiredModal } from '~/Modals/GlobalModal'
 import ModalChat from '~/components/ModalChat'
+import { faCommentDots } from '@fortawesome/free-solid-svg-icons'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
@@ -54,8 +55,8 @@ function Header({ menus }) {
     overlayRef.current.style.opacity = '1'
   }
 
-  const handleCloseMessage = () => {
-    setIsShowMessage(false)
+  const handleCloseMessage = () =>{
+    setIsShowMessage(false);
   }
 
   return (
@@ -197,7 +198,11 @@ function Header({ menus }) {
                     onClick={() => setIsShowMessage((prev) => !prev)}
                     className={cx('btn-action', 'd-none', 'd-md-block')}
                   >
-                    <FontAwesomeIcon icon={faMessage} />
+                    {!window.location.href.includes('/message') ? (
+                      <FontAwesomeIcon icon={faComment} />
+                    ) : (
+                      <FontAwesomeIcon icon={faCommentDots} />
+                    )}
                   </button>
                 </Tippy>
               )}

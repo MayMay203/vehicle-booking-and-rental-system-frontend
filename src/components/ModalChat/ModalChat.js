@@ -12,9 +12,9 @@ function ModalChat({ handleClose }) {
   }
   return (
     <div className={cx('wrapper')}>
-      <h2 className={cx('heading','mb-4')}>Tin nhắn</h2>
+      <h2 className={cx('heading', 'mb-4')}>Tin nhắn</h2>
       <TxtSearch></TxtSearch>
-      <div className={cx('d-flex', 'wrap-btn','mt-4')}>
+      <div className={cx('d-flex', 'wrap-btn', 'mt-4')}>
         <Button
           rounded
           className={cx('btn', { active: buttonSelect === 'All' })}

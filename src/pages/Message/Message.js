@@ -50,7 +50,7 @@ function Message (){
         <TxtSearch className={cx('search')}></TxtSearch>
       </div>
       <Row className={cx('wrap-messages-details', 'm-0 p-0')}>
-        <Col lg="4" md="5" className={cx('wrap-list-messages')}>
+        <Col lg="4" md="5" className={cx('wrap-list-messages', 'd-none', 'd-md-block')}>
           <div className={cx('d-flex', 'wrap-btn')}>
             <Button
               rounded

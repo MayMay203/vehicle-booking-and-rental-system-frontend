@@ -117,9 +117,7 @@ const publicRoutes = [
     component: Statistics,
     layout: HeaderOnly,
   },
-  { path: config.routes.message,
-    component: Message,
-  },
+  { path: config.routes.message, component: Message, layout: HeaderOnly },
 ]
 
 const privateRoutes = []
