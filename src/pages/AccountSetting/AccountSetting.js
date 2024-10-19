@@ -22,6 +22,7 @@ function AccountSetting() {
   const formRef = useRef(null)
   const inputFile = useRef(null)
   const { currentUser, setCurrentUser, checkLoginSession } = useUserContext()
+  const [email, setEmail] = useState()
   const [fullName, setFullName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -45,6 +46,7 @@ function AccountSetting() {
           const [day, month, year] = currentUser.birthDay.split('-')
           setBirthday(new Date(`${year}-${month}-${day}`))
         }
+        setEmail(currentUser.email)
         setGender(currentUser.gender)
         setPhoneNumber(currentUser.phoneNumber)
         setSelectedImage(currentUser.avatar)
@@ -189,7 +191,7 @@ function AccountSetting() {
                   title="Email"
                   id="email"
                   type="email"
-                  value={currentUser ? currentUser.email : ''}
+                  value={email}
                   disabled
                 ></FormInput>
                 <FormInput
