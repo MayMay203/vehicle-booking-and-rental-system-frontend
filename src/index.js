@@ -7,22 +7,26 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import AuthModalProvider from './Context/AuthModalProvider'
 import UserProvider from './Context/UserProvider';
 import ServiceModalProvider from './Context/ServiceModalProvider'
 import GlobalModalProvider from './Context/GlobalModalProvider';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import AuthModalProvider from './Context/AuthModalProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  <GlobalModalProvider>
-    <UserProvider>
-      <AuthModalProvider>
-        <ServiceModalProvider>
-          <App />
-        </ServiceModalProvider>
-      </AuthModalProvider>
-    </UserProvider>
-  </GlobalModalProvider>,
+ <Provider store={store}>
+    <GlobalModalProvider>
+      <UserProvider>
+        <AuthModalProvider>
+          <ServiceModalProvider>
+            <App />
+          </ServiceModalProvider>
+        </AuthModalProvider>
+      </UserProvider>
+    </GlobalModalProvider>,
+ </Provider>
 )
 
 // If you want to start measuring performance in your app, pass a function

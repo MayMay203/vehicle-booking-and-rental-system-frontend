@@ -8,50 +8,50 @@ import { getMyAccount } from '~/apiServices/getMyAccount'
 const UserContext = createContext()
 
 function UserProvider({ children }) {
-  const [isLogin, setIsLogin] = useState(null)
+  const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
   const [email, setEmail] = useState(null)
   const { openGlobalModal } = useGlobalModal()
 
-  const checkLogin = async () => {
-    if (checkExistCookie('access_token')) {
-      setIsLogin(true)
-      const userData = await getMyAccount()
-      if (userData) {
-        setCurrentUser(userData.accountInfo)
-      }
-    } else {
-      const response = await refreshToken()
-      if (response) {
-        setIsLogin(true)
-        const userData = await getMyAccount()
-        if (userData) {
-          setCurrentUser(userData.accountInfo)
-        }
-      } else {
-        setIsLogin(false)
-      }
-    }
-  }
+  // const checkLogin = async () => {
+  //   if (checkExistCookie('access_token')) {
+  //     setIsLogin(true)
+  //     const userData = await getMyAccount()
+  //     if (userData) {
+  //       setCurrentUser(userData.accountInfo)
+  //     }
+  //   } else {
+  //     const response = await refreshToken()
+  //     if (response) {
+  //       setIsLogin(true)
+  //       const userData = await getMyAccount()
+  //       if (userData) {
+  //         setCurrentUser(userData.accountInfo)
+  //       }
+  //     } else {
+  //       setIsLogin(false)
+  //     }
+  //   }
+  // }
 
   const checkLoginSession = useCallback(async () => {
-    if (checkExistCookie('access_token')) return true
-    const response = await refreshToken()
-    if (!response) {
-      openGlobalModal('expiredSession')
-      setIsLogin(false)
-      return false
-    }
+    // if (checkExistCookie('access_token')) return true
+    // const response = await refreshToken()
+    // if (!response) {
+    //   openGlobalModal('expiredSession')
+    //   setIsLogin(false)
+    //   return false
+    // }
     return true
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    checkLogin()
-    setIsLoading(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   checkLogin()
+  //   setIsLoading(false)
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   const value = {
     isLogin,

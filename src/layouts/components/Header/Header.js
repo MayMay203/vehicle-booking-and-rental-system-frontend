@@ -7,31 +7,32 @@ import Logo from '~/components/Logo'
 import Menu from '../../../components/Menu/Menu'
 import MenuItem from '../../../components/Menu/MenuItem'
 import { useEffect, useRef, useState } from 'react'
-import { useAuthModal } from '~/Context/AuthModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell, faComment } from '@fortawesome/free-regular-svg-icons'
-import {faMessage} from '@fortawesome/free-regular-svg-icons'
+import { faMessage } from '@fortawesome/free-regular-svg-icons'
 import Image from '~/components/Image'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
 import { useUserContext } from '~/Context/UserProvider'
 import Notification from '~/components/Notification'
-import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterModal } from '~/Modals/AuthModal'
-import { LogoutModal, SessionExpiredModal } from '~/Modals/GlobalModal'
 import ModalChat from '~/components/ModalChat'
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons'
+import { useDispatch } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
-  const { openAuthModal } = useAuthModal()
+  // const { openAuthModal } = useAuthModal()
   const { isLogin, currentUser } = useUserContext()
   const [isShowMenu, setIsShowMenu] = useState(false)
   const [isShowNoti, setIsShowNoti] = useState(false)
   const [isShowMessage, setIsShowMessage] = useState(false)
   const [isSmall, setIsSmall] = useState(window.innerWidth < 768)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const handleResize = () => {
@@ -55,8 +56,8 @@ function Header({ menus }) {
     overlayRef.current.style.opacity = '1'
   }
 
-  const handleCloseMessage = () =>{
-    setIsShowMessage(false);
+  const handleCloseMessage = () => {
+    setIsShowMessage(false)
   }
 
   return (
@@ -70,7 +71,11 @@ function Header({ menus }) {
               <BackIcon />
             </button>
             {!isLogin ? (
-              <Button outline className="d-sm-none" onClick={() => openAuthModal('login')}>
+              <Button
+                outline
+                className="d-sm-none"
+                onClick={() => dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))}
+              >
                 Đăng nhập
               </Button>
             ) : (
@@ -166,10 +171,18 @@ function Header({ menus }) {
           </div>
           {!isLogin && (
             <div className={cx('actions')}>
-              <Button outline className="d-none d-md-block" onClick={() => openAuthModal('register')}>
+              <Button
+                outline
+                className="d-none d-md-block"
+                onClick={() => dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: true }))}
+              >
                 Đăng ký
               </Button>
-              <Button outline className="d-none d-sm-block" onClick={() => openAuthModal('login')}>
+              <Button
+                outline
+                className="d-none d-sm-block"
+                onClick={() => dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))}
+              >
                 Đăng nhập
               </Button>
               <button className={cx('btn-menu', 'd-lg-none')} onClick={hanldeShowMenu}>
@@ -268,13 +281,6 @@ function Header({ menus }) {
           <MenuItem key={index} menu={menu}></MenuItem>
         ))}
       </Menu>
-      <LoginModal />
-      <RegisterModal />
-      <AuthCodeModal />
-      <PersonalModal />
-      <ForgetPasswordModal />
-      <LogoutModal />
-      <SessionExpiredModal />
     </header>
   )
 }

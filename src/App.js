@@ -5,6 +5,7 @@ import { DefaultLayout } from './layouts'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Fragment } from 'react'
+import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterAdminModal, RegisterModal } from "./Modals/AuthModal"
 
 function App() {
   return (
@@ -22,6 +23,12 @@ function App() {
           autoClose={3000}
           style={{ width: '340px', textAlign: 'left', lineHeight: '1.3' }}
         />
+        <LoginModal />
+        <AuthCodeModal/>
+        <ForgetPasswordModal />
+        <PersonalModal />
+        <RegisterAdminModal />
+        <RegisterModal/>
       </Router>
     </div>
   )

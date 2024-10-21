@@ -7,10 +7,15 @@ import Button from '~/components/Button'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import Spinner from '~/components/Spinner'
+import { useDispatch, useSelector } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
 function RegisterAdminModal() {
-  const { isOpenAuthModal, closeAuthModal } = useAuthModal()
+  console.log('re-render register admin modal')
+  const showAdRegisterModal = useSelector((state) => state.authModal.registerAdmin)
+  const dispatch = useDispatch()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
@@ -42,7 +47,7 @@ function RegisterAdminModal() {
   }, [])
 
   return (
-    <Modal show={isOpenAuthModal.registerAdmin} onHide={() => closeAuthModal('registerAdmin')} centered>
+    <Modal show={showAdRegisterModal} onHide={() => dispatch(setAuthModalVisible({modalName: modalNames.REGISTER_ADMIN, isVisible: false}))} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Đăng ký</Modal.Title>

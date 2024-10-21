@@ -1,7 +1,6 @@
 import { Modal } from 'react-bootstrap'
 import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { useEffect, useRef, useState } from 'react'
@@ -9,10 +8,15 @@ import { toast } from 'react-toastify'
 import { forgetPassword } from '~/apiServices/forgetPassword'
 import { useGlobalModal } from '~/Context/GlobalModalProvider'
 import Spinner from '~/components/Spinner'
+import { useDispatch, useSelector } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
 function ForgetPasswordModal() {
-  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
+  console.log('re-render forget password modal')
+  const showForgotModal = useSelector((state) => state.authModal.forgot)
+  const dispatch = useDispatch()
+
   const { openGlobalModal, closeGlobalModal } = useGlobalModal()
   const [email, setEmail] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -26,8 +30,8 @@ function ForgetPasswordModal() {
 
   const handleShowLogin = () => {
     setEmail('')
-    closeAuthModal('forget')
-    openAuthModal('login')
+    dispatch(setAuthModalVisible({ modalName: modalNames.FORGOT, isVisible: false }))
+    dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
   }
 
   const handleConfirm = async (e) => {
@@ -44,7 +48,11 @@ function ForgetPasswordModal() {
   }
 
   return (
-    <Modal show={isOpenAuthModal.forget} onHide={() => closeAuthModal('forget')} centered>
+    <Modal
+      show={showForgotModal}
+      onHide={() => dispatch(setAuthModalVisible({ modalName: modalNames.FORGOT, isVisible: false }))}
+      centered
+    >
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Quên mật khẩu</Modal.Title>

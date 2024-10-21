@@ -13,10 +13,15 @@ import { config } from '~/config'
 import { resendOTP } from '~/apiServices/resendOTP'
 import { useGlobalModal } from '~/Context/GlobalModalProvider'
 import Spinner from '~/components/Spinner'
+import { useDispatch, useSelector } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
-  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
+  console.log('re-render register modal')
+  const showRegister = useSelector((state) => state.authModal.register)
+  const dispatch = useDispatch()
+
   const { openGlobalModal, closeGlobalModal } = useGlobalModal()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -48,9 +53,9 @@ function RegisterModal() {
       saveEmail(email)
       await register(email, password, confirmPass)
       closeGlobalModal('loading')
-      await closeAuthModal('register')
+      dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
       reset()
-      openAuthModal('authCode', { type: 'register' })
+      dispatch(setAuthModalVisible({ modalName: modalNames.AUTH_CODE, isVisible: true }))
     } catch (message) {
       closeGlobalModal('loading')
       toast.error(message, { autoClose: 2000 })
@@ -59,8 +64,8 @@ function RegisterModal() {
   }
 
   const handleShowLogin = () => {
-    closeAuthModal('register')
-    openAuthModal('login')
+    dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
+    dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
   }
 
   const handleChange = useCallback((value, functionChange) => {
@@ -71,14 +76,18 @@ function RegisterModal() {
     openGlobalModal('loading')
     setIsShow(false)
     await resendOTP(email)
-    closeAuthModal('register')
+    dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
     closeGlobalModal('loading')
     toast.info('Kiểm tra email để nhận OTP')
-    openAuthModal('authCode', { type: 'register' })
+    dispatch(setAuthModalVisible({ modalName: modalNames.AUTH_CODE, isVisible: true }))
   }
 
   return (
-    <Modal show={isOpenAuthModal.register} onHide={() => closeAuthModal('register')} centered>
+    <Modal
+      show={showRegister}
+      onHide={() => dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))}
+      centered
+    >
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Đăng ký</Modal.Title>
