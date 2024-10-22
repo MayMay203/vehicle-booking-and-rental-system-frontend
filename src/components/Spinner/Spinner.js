@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 const cx = classNames.bind(styles)
 function Spinner() {
-  const showLoading = useSelector((state)=>state.generalModal.loading.isOpen)
+  const showLoading = useSelector((state)=>state.generalModal.loading)
   return (
     <div className={cx('loading-container', { show: showLoading })}>
       <ScaleLoader color="#d34714" loading={showLoading} width={5} height={50} />
