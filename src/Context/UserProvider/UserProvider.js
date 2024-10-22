@@ -1,18 +1,19 @@
 import PropTypes from 'prop-types'
 import { createContext, useEffect, useState, useCallback, useContext } from 'react'
 import { refreshToken } from '~/apiServices/refreshToken'
-import { useGlobalModal } from '../GlobalModalProvider'
 import { checkExistCookie } from '~/utils/cookieUtils'
 import { getMyAccount } from '~/apiServices/getMyAccount'
+import { useDispatch } from 'react-redux'
+import { generalModalNames, setGeneralModalVisible } from '~/redux/slices/generalModalSlice'
 
 const UserContext = createContext()
 
 function UserProvider({ children }) {
-  const [isLogin, setIsLogin] = useState(false)
+  const dispatch = useDispatch()
+  const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
   const [email, setEmail] = useState(null)
-  const { openGlobalModal } = useGlobalModal()
 
   // const checkLogin = async () => {
   //   if (checkExistCookie('access_token')) {
@@ -39,7 +40,15 @@ function UserProvider({ children }) {
     // if (checkExistCookie('access_token')) return true
     // const response = await refreshToken()
     // if (!response) {
-    //   openGlobalModal('expiredSession')
+    //   dispatch(
+    //     setGeneralModalVisible({
+    //       modalType: 'confirm',
+    //       isOpen: true,
+    //       title: 'Thông báo',
+    //       description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
+    //       name: generalModalNames.EXPIRED_SESSION,
+    //     }),
+    //   )
     //   setIsLogin(false)
     //   return false
     // }

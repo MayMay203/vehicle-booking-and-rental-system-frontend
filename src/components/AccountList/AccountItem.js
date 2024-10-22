@@ -6,18 +6,35 @@ import { BirdayIcon, CallIcon, EmailIcon, GenderIcon } from '../Icon'
 import Button from '../Button'
 import { faClose, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useServiceModal } from '~/Context/ServiceModalProvider'
+import { useDispatch } from 'react-redux'
+import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function AccountItem({ data }) {
-  const { openServiceModal } = useServiceModal()
+  const dispatch = useDispatch()
 
   const handleLockAccount = () => {
-    openServiceModal('lock')
+    dispatch(
+      setConfirmModalVisible({
+        name: generalModalNames.LOCK_ACCOUNT,
+        title: 'Xác nhận khoá tài khoản',
+        description: 'Lí do khoá:',
+        isOpen: true,
+        modalType: 'inputConfirm'
+      }),
+    )
   }
 
   const handleOpenAccount = () => {
-    openServiceModal('confirm')
+    dispatch(
+      setConfirmModalVisible({
+        modalType: 'confirm',
+        title: 'Xác nhận mở tài khoản',
+        description: 'Bạn chắc chắn muốn mở lại tài khoản này?',
+        isOpen: true,
+        name: generalModalNames.UNLOCK_ACCOUNT
+      }),
+    )
   }
   return (
     <div className={cx('row', 'item')}>

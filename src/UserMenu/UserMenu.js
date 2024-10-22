@@ -5,16 +5,26 @@ import { Link } from 'react-router-dom'
 import { config } from '~/config'
 import Button from '~/components/Button'
 import { useUserContext } from '~/Context/UserProvider'
-import { useGlobalModal } from '~/Context/GlobalModalProvider'
+import { useDispatch } from 'react-redux'
+import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function UserMenu() {
-  const { currentUser, checkLoginSession} = useUserContext()
-  const {openGlobalModal} = useGlobalModal()
+  const dispatch = useDispatch()
+
+  const { currentUser, checkLoginSession } = useUserContext()
 
   const handleLogout = async () => {
     if (await checkLoginSession()) {
-      openGlobalModal('logout')
+      dispatch(
+        setConfirmModalVisible({
+          modalType: 'confirm',
+          isOpen: true,
+          title: 'Xác nhận đăng xuất',
+          description: 'Bạn chắc chắn muốn đăng xuất tài khoản?',
+          name: generalModalNames.LOGOUT,
+        }),
+      )
     }
   }
 

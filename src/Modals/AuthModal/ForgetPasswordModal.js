@@ -6,10 +6,9 @@ import Button from '~/components/Button'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { forgetPassword } from '~/apiServices/forgetPassword'
-import { useGlobalModal } from '~/Context/GlobalModalProvider'
-import Spinner from '~/components/Spinner'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function ForgetPasswordModal() {
@@ -17,7 +16,6 @@ function ForgetPasswordModal() {
   const showForgotModal = useSelector((state) => state.authModal.forgot)
   const dispatch = useDispatch()
 
-  const { openGlobalModal, closeGlobalModal } = useGlobalModal()
   const [email, setEmail] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
@@ -37,12 +35,12 @@ function ForgetPasswordModal() {
   const handleConfirm = async (e) => {
     e.preventDefault()
     try {
-      openGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await forgetPassword(email)
-      closeGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       toast.success(data.info, { autoClose: 1200, position: 'top-center' })
     } catch (message) {
-      closeGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       toast.error(message, { autoClose: 1500, position: 'top-center' })
     }
   }
@@ -82,7 +80,6 @@ function ForgetPasswordModal() {
             </button>
           </div>
         </form>
-        <Spinner />
       </Modal.Body>
     </Modal>
   )

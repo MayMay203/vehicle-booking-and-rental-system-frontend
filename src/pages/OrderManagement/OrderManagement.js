@@ -6,7 +6,6 @@ import { config } from '~/config'
 import classNames from 'classnames/bind'
 import styles from './OrderManagement.module.scss'
 import Button from '~/components/Button'
-import { ReasonModal, TicketModal } from '~/Modals/ServiceModal'
 
 const cx = classNames.bind(styles)
 function OrderManagement() {
@@ -53,8 +52,6 @@ function OrderManagement() {
       <Button roundHalf className={cx('btn-more')}>
         Xem thêm
       </Button>
-      <TicketModal />
-      <ReasonModal />
     </div>
   )
 }

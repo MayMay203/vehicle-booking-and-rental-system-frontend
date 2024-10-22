@@ -14,13 +14,14 @@ import Tabs from '../Tabs'
 import { faReadme } from '@fortawesome/free-brands-svg-icons'
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
 import Comment from '../Comment'
-import { useServiceModal } from '~/Context/ServiceModalProvider'
+import { useDispatch } from 'react-redux'
+import { generalModalNames, setConfirmModalVisible, setTicketModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status }) {
+  const dispatch = useDispatch()
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
-  const { openServiceModal } = useServiceModal()
 
   const settings = useMemo(
     () => ({
@@ -84,16 +85,25 @@ function TicketItem({ status }) {
   }
 
   const handleChooseTicket = () => {
-    openServiceModal('ticket')
+    dispatch(setTicketModalVisible({ name: generalModalNames.BUY_TICKET, type: '', isOpen: true }))
   }
 
   const handleShowDetailOrder = () => {
-    openServiceModal('ticket', { type: 'detailOrder' })
+    dispatch(setTicketModalVisible({ name: generalModalNames.BUY_TICKET, type: 'detailOrder', isOpen: true }))
   }
 
   const handleCancelTicket = () => {
-    openServiceModal('cancel')
+    dispatch(
+      setConfirmModalVisible({
+        modalType: 'inputConfirm',
+        isOpen: true,
+        title: 'Xác nhận huỷ vé',
+        description: 'Bạn chắc chắn muốn huỷ vé xe này?',
+        name: generalModalNames.CANCEL_TICKET,
+      }),
+    )
   }
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
@@ -163,9 +173,13 @@ function TicketItem({ status }) {
                 Đặt ngay
               </Button>
             ) : status === 'current' ? (
-              <Button rounded onClick={handleCancelTicket}>Huỷ</Button>
+              <Button rounded onClick={handleCancelTicket}>
+                Huỷ
+              </Button>
             ) : (
-              <Button rounded onClick={handleChooseTicket}>Đặt lại</Button>
+              <Button rounded onClick={handleChooseTicket}>
+                Đặt lại
+              </Button>
             )}
           </div>
         </div>

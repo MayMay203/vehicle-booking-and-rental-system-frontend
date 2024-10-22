@@ -9,15 +9,13 @@ import SearchInput from '~/components/SearchInput'
 import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import LockModal from '~/Modals/ServiceModal/LockModal'
-import { useAuthModal } from '~/Context/AuthModalProvider'
-import { RegisterAdminModal } from '~/Modals/AuthModal'
-import { ConfirmModal } from '~/Modals/ServiceModal'
+import { useDispatch } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
 function ManageAccounts() {
+  const dispatch = useDispatch()
   const [type, setType] = useState('accounts')
-  const { openAuthModal } = useAuthModal()
 
   const tabList = [
     {
@@ -41,8 +39,8 @@ function ManageAccounts() {
     setType(type)
   }
 
-  const handleAddAdminAccount = () => {
-    openAuthModal('registerAdmin')
+  const handleAddAccount = () => {
+    dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER_ADMIN, isVisible: true }))
   }
 
   return (
@@ -64,14 +62,11 @@ function ManageAccounts() {
 
       <div className={cx('d-flex', 'justify-content-between', 'align-items-center', 'custom-margin')}>
         <SearchInput />
-        <Button primary className={cx('btn-add')} onClick={handleAddAdminAccount}>
+        <Button primary className={cx('btn-add')} onClick={handleAddAccount}>
           <FontAwesomeIcon icon={faPlus} />
         </Button>
       </div>
       <AccountList type={type} />
-      <LockModal />
-      <RegisterAdminModal />
-      <ConfirmModal />
     </div>
   )
 }

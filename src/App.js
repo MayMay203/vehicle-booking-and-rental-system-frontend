@@ -6,6 +6,8 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Fragment } from 'react'
 import { AuthCodeModal, ForgetPasswordModal, LoginModal, PersonalModal, RegisterAdminModal, RegisterModal } from "./Modals/AuthModal"
+import { ConfirmModal, InputConfirmModal, TicketModal } from './Modals/GeneralModal'
+import { Spinner } from 'react-bootstrap'
 
 function App() {
   return (
@@ -24,11 +26,15 @@ function App() {
           style={{ width: '340px', textAlign: 'left', lineHeight: '1.3' }}
         />
         <LoginModal />
-        <AuthCodeModal/>
+        <AuthCodeModal />
         <ForgetPasswordModal />
         <PersonalModal />
         <RegisterAdminModal />
-        <RegisterModal/>
+        <RegisterModal />
+        <ConfirmModal />
+        <InputConfirmModal />
+        <Spinner />
+        <TicketModal />
       </Router>
     </div>
   )

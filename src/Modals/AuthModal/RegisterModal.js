@@ -1,20 +1,18 @@
 import { Modal } from 'react-bootstrap'
 import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { register } from '~/apiServices/register'
-import {useUserContext } from '~/Context/UserProvider'
+import { useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
 import { config } from '~/config'
 import { resendOTP } from '~/apiServices/resendOTP'
-import { useGlobalModal } from '~/Context/GlobalModalProvider'
-import Spinner from '~/components/Spinner'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
@@ -22,7 +20,6 @@ function RegisterModal() {
   const showRegister = useSelector((state) => state.authModal.register)
   const dispatch = useDispatch()
 
-  const { openGlobalModal, closeGlobalModal } = useGlobalModal()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
@@ -49,15 +46,15 @@ function RegisterModal() {
   const handleContinue = async (e) => {
     e.preventDefault()
     try {
-      openGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       saveEmail(email)
       await register(email, password, confirmPass)
-      closeGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
       reset()
       dispatch(setAuthModalVisible({ modalName: modalNames.AUTH_CODE, isVisible: true }))
     } catch (message) {
-      closeGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       toast.error(message, { autoClose: 2000 })
       setIsShow(message.includes(config.message.emailConfirm))
     }
@@ -73,11 +70,11 @@ function RegisterModal() {
   }, [])
 
   const handleShowOTPModal = async () => {
-    openGlobalModal('loading')
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
     setIsShow(false)
     await resendOTP(email)
     dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
-    closeGlobalModal('loading')
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
     toast.info('Kiểm tra email để nhận OTP')
     dispatch(setAuthModalVisible({ modalName: modalNames.AUTH_CODE, isVisible: true }))
   }
@@ -158,7 +155,6 @@ function RegisterModal() {
           </div>
         </form>
       </Modal.Body>
-      <Spinner />
     </Modal>
   )
 }

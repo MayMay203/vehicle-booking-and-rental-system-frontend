@@ -10,7 +10,6 @@ import { toast } from 'react-toastify'
 import { useUserContext } from '~/Context/UserProvider'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { isVisible } from '@testing-library/user-event/dist/utils'
 
 const cx = classNames.bind(styles)
 

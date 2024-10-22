@@ -1,14 +1,14 @@
 import { ScaleLoader } from 'react-spinners'
 import classNames from 'classnames/bind'
 import styles from './Spinner.module.scss'
-import { useGlobalModal } from '~/Context/GlobalModalProvider'
+import { useSelector } from 'react-redux'
 
 const cx = classNames.bind(styles)
 function Spinner() {
-  const { isOpenGlobalModal } = useGlobalModal()
+  const showLoading = useSelector((state)=>state.generalModal.loading.isOpen)
   return (
-    <div className={cx('loading-container', { show: isOpenGlobalModal.loading })}>
-      <ScaleLoader color="#d34714" loading={isOpenGlobalModal.loading} width={5} height={50} />
+    <div className={cx('loading-container', { show: showLoading })}>
+      <ScaleLoader color="#d34714" loading={showLoading} width={5} height={50} />
     </div>
   )
 }

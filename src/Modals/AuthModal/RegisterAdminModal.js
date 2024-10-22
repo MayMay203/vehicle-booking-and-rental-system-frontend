@@ -1,12 +1,10 @@
 import { Modal } from 'react-bootstrap'
 import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
-import Spinner from '~/components/Spinner'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
@@ -100,7 +98,6 @@ function RegisterAdminModal() {
           </Button>
         </form>
       </Modal.Body>
-      <Spinner />
     </Modal>
   )
 }
