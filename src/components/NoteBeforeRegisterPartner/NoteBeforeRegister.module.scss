@@ -1,0 +1,58 @@
+@use '../../abstracts' as abstracts;
+.list-item{
+    margin: 2rem 0;
+    line-height: 2.5rem;
+}
+.item{
+    display: flex;
+    font-size: 2rem;
+    margin: 2rem 0 1rem 0;
+    align-items: center;
+    @include abstracts.screen(sm){
+       font-size: 1.6rem;
+    }
+}
+.item-sub{
+    display: flex;
+    font-size: 2rem;
+    margin: 0.5rem 0 0 3rem;
+    @include abstracts.screen(sm){
+       font-size: 1.6rem;
+    }
+}
+.content{
+    font-size: 2rem;
+    font-weight: 500;
+    @include abstracts.screen(sm){
+       font-size: 1.6rem;
+    }
+}
+.icon-check{
+    color: #27AE60;
+    margin-right: 1rem;
+}
+.icon-xmark{
+    color: #E20D0D;
+    margin-right: 1rem;
+}
+.icon-circle{
+    font-size: 0.8rem;
+    line-height: 2.5rem;
+    margin-top: 1rem;
+}
+.sub-content{
+    font-size: 1.6rem;
+    margin-left: 1rem;
+    line-height: 2.5rem;
+    text-align: justify;
+    @include abstracts.screen(sm){
+       font-size: 1.4rem;
+    }
+}
+.txt{
+    font-size: 1.3rem;
+}
+.margin-top{
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}

@@ -1,0 +1,93 @@
+@use '../../abstracts' as abstracts;
+.wrap-row{
+    margin: 8rem 0;
+    padding: 0 3rem 1rem 3rem;
+    @include abstracts.screen(lg){
+        margin: 2rem 0;
+    }
+    @include abstracts.screen(sm){
+        padding: 0;
+    }
+}
+.wrap-last-row{
+    justify-content: center;
+    margin: 0;
+    padding: 0 3rem 1rem 3rem;
+    @include abstracts.screen(sm){
+        padding: 0;
+    }
+}
+.bg-title{
+    background-color: #FFEBE4;
+    height: 100%; 
+    width: 100%; 
+    position: absolute;
+    top: 50%; 
+    left: 0;
+    z-index: -1;
+}
+.title{
+    font-size: 3.8rem;
+    font-weight: 700;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4rem;
+    @include abstracts.screen(sm){
+       font-size: 3.4rem;
+    }
+}
+.sub-title{
+    font-size: 2.6rem;
+    font-weight: 600;
+    margin: 3rem 0 1rem 0;
+    color: #D5420C;
+    line-height: 2.8rem;
+    @include abstracts.screen(sm){
+       font-size: 2.2rem;
+    }
+}
+.wrap-right{
+    display: flex;  
+    flex-direction: column;
+    align-items: end;
+    @include abstracts.screen(xl){
+       align-items: center;
+    }
+}
+.wrap-form{
+    position: relative;
+    height: 100%;
+    width: 94%;
+    margin-top: 2rem;
+}
+.form{
+    border-radius: 20px;
+    border: 1px solid #FF7F50;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    box-shadow: 1px 1px 5px rgba($color: #FF7F50, $alpha: 0.5);
+    @include abstracts.screen(xl){
+       margin-top: 3rem;
+    }
+    @include abstracts.screen(sm){
+       margin-top: 1rem;
+    }
+}
+.bg-form{
+    background-color: #FFEBE4;
+    border-radius: 20px;
+    height: 100%; 
+    width: 100%; 
+    position: absolute;
+    top: -8%; 
+    left: 8%;
+    z-index: -1;
+    @include abstracts.screen(xl){
+       margin-top: 3rem;
+    }
+}
+.img-why{
+    width: 100%;
+}

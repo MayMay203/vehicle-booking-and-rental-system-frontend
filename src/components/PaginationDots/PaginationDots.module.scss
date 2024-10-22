@@ -1,9 +1,13 @@
+@use '../../abstracts' as abstracts;
 .pagination-dots {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
   margin-top: 3rem;
+  @include abstracts.screen(sm){
+    margin-top: 1rem;
+  }
 }
 .pagination-dots-small{
   margin-top: 0;

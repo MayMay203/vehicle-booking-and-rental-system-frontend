@@ -396,6 +396,7 @@ textarea{
 html *::-webkit-scrollbar {
     border-radius: 0;
     width: 8px !important;
+    height: 8px;
 }
 
 html *::-webkit-scrollbar-thumb {

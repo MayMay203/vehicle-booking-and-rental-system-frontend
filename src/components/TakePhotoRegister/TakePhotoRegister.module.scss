@@ -1,0 +1,20 @@
+.img{
+    height: 16rem;
+    width: 16rem;
+    margin: 0.5rem 1rem;
+    cursor: pointer;
+}
+.btn{
+    min-width: 5rem !important;
+    height: 3rem;
+    border: #2474E5;
+    font-weight: 400;
+    margin: 2rem 4rem 1rem 2rem;
+}
+.btn-cancel{
+    color: #2474E5;
+    background-color: #f8fbff;
+}
+.btn-save{
+    background-color: #2474E5;
+}

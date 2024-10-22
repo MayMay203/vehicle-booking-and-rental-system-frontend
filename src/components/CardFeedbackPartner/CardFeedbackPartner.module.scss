@@ -1,0 +1,53 @@
+@use '../../abstracts' as abstracts;
+.list-feedback{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center; 
+}
+.card-feedback{
+    margin: 1rem 1.2rem;
+    flex: 1 1 calc(50% - 2rem); 
+    max-width: 32rem; 
+    min-width: 26rem;
+    max-height: 48rem;
+    text-align: center;
+    padding: 0 1.5rem;
+}
+.img{
+    width: 12rem;
+    border: 1px solid #FCD4C6;
+}
+.nav-button-page {
+  font-size: 2rem; 
+  padding: 1rem;
+  color: #E20D0D;
+  background-color: white;
+  border: none; 
+  cursor: pointer;
+}
+.nav-button-page:hover, .nav-button-page:active, .nav-button-page:focus {
+  background-color: #FCD4C6;
+  color: #E20D0D;
+  outline: none;
+  box-shadow: none; 
+}
+.nav-button-page:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  background-color: white;
+}
+.name{
+    font-size: 2rem;
+    font-weight: 500;
+    margin-top: 1.5rem;
+}
+.feedback{
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 2.3rem;
+    text-align: justify;
+    margin-top: 1.5rem;
+    @include abstracts.screen(sm){
+        font-size: 1.4rem;
+    }
+}
