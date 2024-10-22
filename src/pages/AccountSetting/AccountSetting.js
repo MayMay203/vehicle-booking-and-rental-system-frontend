@@ -8,23 +8,31 @@ import FormInput from '~/components/Form/FormInput'
 import DatePicker from 'react-datepicker'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FormGender from '~/components/Form/FormGender'
-import { faCalendar, faCancel, faClose, faSave, faUpload, faUserLock } from '@fortawesome/free-solid-svg-icons'
+import {
+  faBullseye,
+  faCalendar,
+  faCancel,
+  faClose,
+  faSave,
+  faUpload,
+  faUserLock,
+} from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
 import { forgetPassword } from '~/apiServices/forgetPassword'
 import { updateAccount } from '~/apiServices/updateAccount'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {
   console.log('re-render account settings')
+  const { currentUser, isLoading } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const formRef = useRef(null)
   const inputFile = useRef(null)
-  const { currentUser, setCurrentUser, checkLoginSession } = useUserContext()
-  const [email, setEmail] = useState()
+  const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -34,22 +42,26 @@ function AccountSetting() {
   const [isModified, setIsModified] = useState(false)
 
   useEffect(() => {
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: isLoading }))
+  }, [isLoading, dispatch])
+
+  useEffect(() => {
     if (formRef.current) {
       setIsValid(formRef.current.checkValidity())
     }
-  }, [fullName, birthday, phoneNumber])
+  }, [fullName, birthday, phoneNumber, gender])
 
   useEffect(() => {
     async function getInfo() {
-      if ((await checkLoginSession()) && currentUser) {
-        setFullName(currentUser.name)
+      if (dispatch(checkLoginSession) && currentUser) {
+        setFullName(currentUser.name || '')
         if (currentUser.birthDay) {
           const [day, month, year] = currentUser.birthDay.split('-')
           setBirthday(new Date(`${year}-${month}-${day}`))
         }
-        setEmail(currentUser.email)
-        setGender(currentUser.gender)
-        setPhoneNumber(currentUser.phoneNumber)
+        setEmail(currentUser.email || '')
+        setGender(currentUser.gender || '')
+        setPhoneNumber(currentUser.phoneNumber || '')
         setSelectedImage(currentUser.avatar)
       }
     }
@@ -121,11 +133,11 @@ function AccountSetting() {
         formData.append('fileAvatar', imageBlob, 'avatar.png')
       }
       const userData = await updateAccount(formData)
-      toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
+      dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
       setIsModified(false)
-      setCurrentUser(userData.accountInfo)
+      toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
       if (selectedImage !== currentUser.avatar) {
-        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: faBullseye }))
       }
     } catch (error) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
@@ -266,5 +278,6 @@ function AccountSetting() {
     </div>
   )
 }
+
 
 export default AccountSetting

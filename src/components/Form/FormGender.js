@@ -54,6 +54,7 @@ function FormGender({ id, title, show = false, gender, handleGender, className, 
               onChange={(e) => handleGender(e.target.value)}
               hidden
               className={cx('radio-button')}
+              required
             />
             <label htmlFor="other" className={cx('label', 'label-gender')}>
               Khác

@@ -6,11 +6,11 @@ import Button from '~/components/Button'
 import { images } from '~/assets/images'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { login } from '~/apiServices/login'
-import { useUserContext } from '~/Context/UserProvider/UserProvider'
 import { toast } from 'react-toastify'
 import { config } from '~/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { setCurrentUser } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
@@ -22,7 +22,6 @@ function LoginModal() {
   const [password, setPassword] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
-  const { setCurrentUser, toggleLogin } = useUserContext()
 
   useEffect(() => {
     if (formRef.current) {
@@ -50,9 +49,8 @@ function LoginModal() {
     e.preventDefault()
     try {
       const data = await login(email, password)
-      setCurrentUser(data.accountLogin)
-      toggleLogin()
-      dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+      dispatch(setCurrentUser({currentUser: data.accountLogin}))
+      dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()
       toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {

@@ -4,18 +4,17 @@ import classNames from 'classnames/bind'
 import { Link } from 'react-router-dom'
 import { config } from '~/config'
 import Button from '~/components/Button'
-import { useUserContext } from '~/Context/UserProvider'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function UserMenu() {
   const dispatch = useDispatch()
-
-  const { currentUser, checkLoginSession } = useUserContext()
+  const currentUser = useSelector((state) => state.user.currentUser)
 
   const handleLogout = async () => {
-    if (await checkLoginSession()) {
+    if (dispatch(checkLoginSession())) {
       dispatch(
         setConfirmModalVisible({
           modalType: 'confirm',

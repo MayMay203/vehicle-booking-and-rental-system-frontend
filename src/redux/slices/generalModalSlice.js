@@ -50,7 +50,8 @@ const generalModalSlice = createSlice({
       }
     },
     setLoadingModalVisible: (state, action) => {
-      state[action.payload.modalName] = action.payload.isOpen
+      console.log(action.payload)
+      state[action.payload.name] = action.payload.isOpen
     },
   },
 })

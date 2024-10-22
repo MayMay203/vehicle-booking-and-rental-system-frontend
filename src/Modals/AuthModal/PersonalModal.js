@@ -5,7 +5,6 @@ import { registerInfo } from '~/apiServices/registerInfo'
 import Button from '~/components/Button'
 import FormGender from '~/components/Form/FormGender'
 import FormInput from '~/components/Form/FormInput'
-import { useUserContext } from '~/Context/UserProvider'
 import classNames from 'classnames/bind'
 import styles from './AuthModal.module.scss'
 import DatePicker from 'react-datepicker'
@@ -19,6 +18,7 @@ const cx = classNames.bind(styles)
 function PersonalModal() {
   console.log('re-render personal modal')
   const showInfoModal = useSelector((state) => state.authModal.info)
+  const email = useSelector((state) => state.authModal.email)
   const dispatch = useDispatch()
 
   const [isValid, setIsValid] = useState(false)
@@ -26,7 +26,6 @@ function PersonalModal() {
   const [fullName, setFullName] = useState('')
   const [gender, setGender] = useState('MALE')
   const formRef = useRef(null)
-  const { getEmail } = useUserContext()
 
   const [birthday, setBirthday] = useState(new Date())
 
@@ -41,7 +40,7 @@ function PersonalModal() {
     e.preventDefault()
     try {
       const accountInfo = {
-        username: getEmail(),
+        username: email,
         name: fullName,
         gender,
         birthDay: birthday.toLocaleDateString('en-GB').replace(/\//g, '-'),

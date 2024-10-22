@@ -2,13 +2,14 @@ import { Modal } from 'react-bootstrap'
 import styles from './GeneralModal.module.scss'
 import classNames from 'classnames/bind'
 import Button from '~/components/Button'
-import { useUserContext } from '~/Context/UserProvider'
-import { logout } from '~/apiServices/logout'
+import { logoutService } from '~/apiServices/logoutService'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { logout } from '~/redux/slices/userSlice'
+
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -16,14 +17,13 @@ function ConfirmModal() {
   const showConfirmModal = useSelector((state) => state.generalModal.confirm)
   const dispatch = useDispatch()
 
-  const { toggleLogin } = useUserContext()
   const navigate = useNavigate()
 
   const handleConfirm = async () => {
     if (showConfirmModal.name === generalModalNames.LOGOUT) {
       try {
-        await logout()
-        toggleLogin()
+        await logoutService()
+        dispatch(logout())
         handleClose()
         navigate('/')
       } catch (message) {

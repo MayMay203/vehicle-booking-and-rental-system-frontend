@@ -7,7 +7,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { verifyOTP } from '~/apiServices/verifyOTP'
 import { resendOTP } from '~/apiServices/resendOTP'
 import { toast } from 'react-toastify'
-import { useUserContext } from '~/Context/UserProvider'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
@@ -16,10 +15,10 @@ const cx = classNames.bind(styles)
 function AuthCodeModal() {
   console.log('re-render auth code modal')
   const showAuthCodeModal = useSelector((state) => state.authModal.authCodeModal)
+  const email  = useSelector((state) => state.user.email)
   const dispatch = useDispatch()
 
   const [timeLeft, setTimeLeft] = useState(0)
-  const { getEmail } = useUserContext()
 
   const [isValid, setIsValid] = useState(false)
   const [otp, setOtp] = useState('')
@@ -57,7 +56,7 @@ function AuthCodeModal() {
   const handleContinue = async (e) => {
     e.preventDefault()
     try {
-      await verifyOTP(getEmail(), otp)
+      await verifyOTP(email, otp)
       setTimeLeft(0)
       dispatch(setAuthModalVisible({ modalName: modalNames.AUTH_CODE, isVisible: false }))
       setOtp('')
@@ -71,7 +70,7 @@ function AuthCodeModal() {
     e.preventDefault()
     setOtp('')
     try {
-      await resendOTP(getEmail())
+      await resendOTP(email)
       setTimeLeft(120)
       toast.info('Kiểm tra lại email để nhận OTP')
     } catch (message) {

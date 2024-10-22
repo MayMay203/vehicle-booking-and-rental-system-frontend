@@ -3,14 +3,13 @@ import { useLocation } from 'react-router-dom'
 import { loginWithGoogle } from '~/apiServices/loginWithGoogle'
 import { toast } from 'react-toastify'
 import { config } from '~/config'
-import { useUserContext } from '~/Context/UserProvider'
 import { useDispatch } from 'react-redux'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { setCurrentUser } from '~/redux/slices/userSlice'
 
 function Authenticate() {
   const dispatch = useDispatch()
   const location = useLocation()
-  const { setCurrentUser } = useUserContext()
 
   useEffect(() => {
     async function login() {
@@ -19,7 +18,7 @@ function Authenticate() {
       const code = urlSearch.get('code')
       const data = await loginWithGoogle(code)
       if (data) {
-        setCurrentUser(data.accountLogin)
+        dispatch(setCurrentUser({currentUser: data.accountInfo}))
       } else {
         toast.error('Đăng nhập thất bại', { autoClose: 1500, position: 'top-center' })
       }

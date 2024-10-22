@@ -14,19 +14,17 @@ import Image from '~/components/Image'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
-import { useUserContext } from '~/Context/UserProvider'
 import Notification from '~/components/Notification'
 import ModalChat from '~/components/ModalChat'
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
-  // const { openAuthModal } = useAuthModal()
-  const { isLogin, currentUser } = useUserContext()
+  const {isLogin, currentUser} = useSelector((state)=>state.user)
   const [isShowMenu, setIsShowMenu] = useState(false)
   const [isShowNoti, setIsShowNoti] = useState(false)
   const [isShowMessage, setIsShowMessage] = useState(false)

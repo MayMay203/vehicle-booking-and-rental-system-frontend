@@ -6,13 +6,13 @@ import Button from '~/components/Button'
 import { images } from '~/assets/images'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { register } from '~/apiServices/register'
-import { useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
 import { config } from '~/config'
 import { resendOTP } from '~/apiServices/resendOTP'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { saveEmail } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
@@ -25,7 +25,6 @@ function RegisterModal() {
   const [confirmPass, setConfirmPass] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
-  const { saveEmail } = useUserContext()
   const [isShow, setIsShow] = useState(false)
 
   useEffect(() => {
@@ -47,7 +46,7 @@ function RegisterModal() {
     e.preventDefault()
     try {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
-      saveEmail(email)
+      dispatch(saveEmail(email))
       await register(email, password, confirmPass)
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
