@@ -41,7 +41,7 @@
     margin: 0 1rem;
 }
 .icon-previous, .txt-previous,
-.icon-next, .txt-next{
+.icon-next.active, .txt-next.active{
     color: #27AE60;
     text-align: end;
     margin-top: 2rem;
@@ -52,6 +52,11 @@
     @include abstracts.screen(sm){
         font-size: 1.4rem;
     }
+}
+.icon-next, .txt-next{
+    text-align: end;
+    margin-top: 2rem;
+    color: #898989;
 }
 .txt-large{
     font-size: 2rem;

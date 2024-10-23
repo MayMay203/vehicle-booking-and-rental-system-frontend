@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind'
 import styles from './FormRegisterDriver.module.scss'
 import { Accordion, Collapse } from 'react-bootstrap'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import GuideTakePhoto from '../GuideTakePhoto'
 import TakePhotoRegister from '../TakePhotoRegister'
 import FormBank from '../FormBank'
@@ -28,7 +28,7 @@ function RequiredFieldIndicator({isActive}) {
     </>
   )
 }
-function FormDocuments() {
+function FormDocuments({ setActiveNextFormDocs }) {
   const [openGuideAvatar, setOpenGuideAvatar] = useState(false)
   const guidesAvatar = [
     {
@@ -55,6 +55,33 @@ function FormDocuments() {
     },
   ]
   const photosAvatar = ['guide_avatar_1', 'guide_avatar_2']
+
+  const [openGuideContact, setOpenGuideContact] = useState(false)
+  const guidesContact = [
+    {
+      id: 1,
+      content: 'Yêu cầu',
+      sub_contents: [
+        { id: 1, value: 'Chụp ảnh trên nền trơn.' },
+        { id: 2, value: 'Chụp ảnh rõ nét không loé sáng.' },
+        { id: 3, value: 'Chụp ảnh chính diện, nhìn thẳng, không nhắm mắt.' },
+      ],
+      icon: 'faCircleCheck',
+    },
+    {
+      id: 2,
+      content: 'Không được:',
+      sub_contents: [
+        {
+          id: 1,
+          value: 'Còn hạn ít nhất 1 tháng.',
+        },
+        { id: 2, value: 'Công dân Việt Nam (từ 18-60 tuổi)' },
+      ],
+      icon: 'faCircleXmark',
+    },
+  ]  
+  const photosContact = ['guide_avatar_1', 'guide_avatar_2']
 
   const [openGuideID, setOpenGuideID] = useState(false)
   const guidesID = [
@@ -206,11 +233,17 @@ function FormDocuments() {
     updateActive[id] = true
     setActive(updateActive)
   }
-  const handleSaveFormBank = () =>{
+  const handleSaveFormBank = () => {
     const updateActive = [...active]
     updateActive[3] = true
     setActive(updateActive)
   }
+  useEffect(() => {
+    const allActive = active.every((item) => item === true)
+    if (allActive) {
+      setActiveNextFormDocs(true)
+    }
+  }, [active, setActiveNextFormDocs])
   return (
     <div>
       <p className={cx('txt-large')}>Gửi tài liệu</p>
@@ -250,7 +283,30 @@ function FormDocuments() {
                 <span className={cx('txt-small')}>Thông tin liên hệ khẩn cấp, địa chỉ tạm trú</span>
                 <RequiredFieldIndicator isActive={active[1]}></RequiredFieldIndicator>
               </Accordion.Header>
-              <Accordion.Body></Accordion.Body>
+              <Accordion.Body>
+                <p
+                  onClick={() => setOpenGuideContact(!openGuideContact)}
+                  aria-controls="collapse-guide-contact"
+                  aria-expanded={openGuideContact}
+                  className={cx('txt-small', 'btn-collapse')}
+                >
+                  Hướng dẫn chụp
+                </p>
+                <Collapse in={openGuideContact}>
+                  <div id="collapse-guide-contact" className={cx('row')}>
+                    <GuideTakePhoto
+                      type_photo={'contact'}
+                      photos={photosContact}
+                      notes={guidesContact}
+                    ></GuideTakePhoto>
+                  </div>
+                </Collapse>
+                <TakePhotoRegister
+                  number_photo={1}
+                  name_photos={['Ảnh tạm trú/thường trú']}
+                  handleSave={() => handleSave(1)}
+                ></TakePhotoRegister>
+              </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
               <Accordion.Header>

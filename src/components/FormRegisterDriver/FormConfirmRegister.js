@@ -40,7 +40,7 @@ function FormConfirmRegister({ isRegister, handleRegister }) {
               Hủy
             </Button>
             <Button primary className={cx('btn', 'btn-save')} onClick={() => handleRegister()}>
-              Lưu
+              Xác nhận
             </Button>
           </div>
         </Form>

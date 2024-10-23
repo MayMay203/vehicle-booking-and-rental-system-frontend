@@ -1,8 +1,9 @@
 import classNames from 'classnames/bind'
 import styles from './FormRegisterDriver.module.scss'
 import { Form } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
-function FormInformation() {
+function FormInformation({ setActiveNextFormInfor }) {
   const provinces = [
     { value: '', label: 'Chọn tỉnh/thành phố' },
     { value: 'An Giang', label: 'An Giang' },
@@ -75,17 +76,45 @@ function FormInformation() {
     { value: 'Xe điện', label: 'Xe điện' },
     { value: 'Xe ô tô 4 chỗ', label: 'Xe ô tô 4 chỗ' },
   ]
+  const [formData, setFormData] = useState({
+    name: '',
+    phonenumber: '',
+    gmail: '',
+    location: '',
+    vehicleType: '',
+    licensePlate: '',
+  })
+  useEffect(() => {
+    const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
+    setActiveNextFormInfor(allFieldsFilled)
+  }, [formData, setActiveNextFormInfor])
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+  }
   return (
     <Form className={cx('form-infor')}>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput1">
         <Form.Label>Họ và tên</Form.Label>
-        <Form.Control type="text" placeholder="Nguyễn Văn A" aria-label="name" className={cx('txt')} />
+        <Form.Control
+          type="text"
+          placeholder="Nguyễn Văn A"
+          name="name"
+          aria-label="name"
+          className={cx('txt')}
+          onChange={handleInputChange}
+        />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput2">
         <Form.Label>Số điện thoại</Form.Label>
         <Form.Control
           type="text"
           placeholder="0842059055"
+          name="phonenumber"
           aria-label="phonenumber"
           className={cx('txt')}
           onInput={(e) => {
@@ -94,15 +123,28 @@ function FormInformation() {
               e.target.value = e.target.value.slice(0, 10) // Giới hạn số ký tự nhập vào 10 số
             }
           }}
+          onChange={handleInputChange}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput3">
         <Form.Label>Địa chỉ email</Form.Label>
-        <Form.Control type="email" placeholder="pbl06@gmail.com" aria-label="gmail" className={cx('txt')} />
+        <Form.Control
+          type="gmail"
+          placeholder="pbl06@gmail.com"
+          name="gmail"
+          aria-label="gmail"
+          className={cx('txt')}
+          onChange={handleInputChange}
+        />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput4">
         <Form.Label>Khu vực</Form.Label>
-        <Form.Select aria-label="location" className={cx('txt', 'selectbox')}>
+        <Form.Select
+          name="location"
+          aria-label="location"
+          className={cx('txt', 'selectbox')}
+          onChange={handleInputChange}
+        >
           {provinces.map((province, index) => (
             <option key={index} value={province.value}>
               {province.label}
@@ -113,7 +155,12 @@ function FormInformation() {
       <div className="row">
         <Form.Group className={cx('txt', 'mb-3', 'col-6')} controlId="formInfor.ControlInput5">
           <Form.Label>Loại xe</Form.Label>
-          <Form.Select aria-label="type-vehicle" className={cx('txt', 'selectbox')}>
+          <Form.Select
+            name="vehicleType"
+            aria-label="type-vehicle"
+            className={cx('txt', 'selectbox')}
+            onChange={handleInputChange}
+          >
             {type_vehicle.map((type, index) => (
               <option key={index} value={type.value}>
                 {type.label}
@@ -123,7 +170,14 @@ function FormInformation() {
         </Form.Group>
         <Form.Group className={cx('txt', 'mb-3', 'col-6')} controlId="formInfor.ControlInput1">
           <Form.Label>Biển số xe</Form.Label>
-          <Form.Control type="text" placeholder="92H-63 3647" aria-label="name" className={cx('txt')} />
+          <Form.Control
+            type="text"
+            placeholder="92H-63 3647"
+            name="licensePlate"
+            aria-label="license-plate"
+            className={cx('txt')}
+            onChange={handleInputChange}
+          />
         </Form.Group>
       </div>
     </Form>
