@@ -1,11 +1,33 @@
 import classNames from 'classnames/bind'
 import styles from './FormRegisterDriver.module.scss'
-import { Form, Accordion, Collapse } from 'react-bootstrap'
+import { Accordion, Collapse } from 'react-bootstrap'
 import { useState } from 'react'
 import GuideTakePhoto from '../GuideTakePhoto'
 import TakePhotoRegister from '../TakePhotoRegister'
 import FormBank from '../FormBank'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 const cx = classNames.bind(styles)
+function RequiredFieldIndicator({isActive}) {
+  return (
+    <>
+      {isActive ? (
+        <div className={cx('txt-right', 'd-flex', 'justify-content-end')}>
+          <span className={cx('txt-small', 'txt-green', 'd-none', 'd-sm-block')}>Hoàn tất</span>
+          <FontAwesomeIcon
+            icon={faCheck}
+            className={cx('txt-small', 'txt-green', 'd-block', 'd-sm-none')}
+          ></FontAwesomeIcon>
+        </div>
+      ) : (
+        <div className={cx('txt-right', 'd-flex', 'justify-content-end')}>
+          <span className={cx('txt-small', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
+          <span className={cx('txt-small', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+        </div>
+      )}
+    </>
+  )
+}
 function FormDocuments() {
   const [openGuideAvatar, setOpenGuideAvatar] = useState(false)
   const guidesAvatar = [
@@ -178,8 +200,16 @@ function FormDocuments() {
   ]
   const photosRegistrationCertificate = ['guide_registration_certificate_1', 'guide_registration_certificate_2']
 
-  const handleSave = () => {
-    
+  const [active, setActive] = useState(Array(8).fill(false))
+  const handleSave = (id) => {
+    const updateActive = [...active]
+    updateActive[id] = true
+    setActive(updateActive)
+  }
+  const handleSaveFormBank = () =>{
+    const updateActive = [...active]
+    updateActive[3] = true
+    setActive(updateActive)
   }
   return (
     <div>
@@ -187,13 +217,12 @@ function FormDocuments() {
       <p className={cx('txt-small')}>Hãy đảm bảo rằng tất cả dữ liệu của bạn đều được cập nhập </p>
       <div className={cx('form-doc')}>
         <p className={cx('txt-medium')}>Thông tin cá nhân</p>
-        <Form className={cx('margin-bottom')}>
+        <div className={cx('margin-bottom')}>
           <Accordion>
             <Accordion.Item eventKey="0">
               <Accordion.Header>
                 <span className={cx('txt-small')}>Ảnh chân dung</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+                <RequiredFieldIndicator isActive={active[0]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
                 <p
@@ -209,22 +238,24 @@ function FormDocuments() {
                     <GuideTakePhoto type_photo={'avatar'} photos={photosAvatar} notes={guidesAvatar}></GuideTakePhoto>
                   </div>
                 </Collapse>
-                <TakePhotoRegister number_photo={1} name_photos={['Ảnh chân dung']} handleSave={handleSave}></TakePhotoRegister>
+                <TakePhotoRegister
+                  number_photo={1}
+                  name_photos={['Ảnh chân dung']}
+                  handleSave={() => handleSave(0)}
+                ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1">
               <Accordion.Header>
                 <span className={cx('txt-small')}>Thông tin liên hệ khẩn cấp, địa chỉ tạm trú</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+                <RequiredFieldIndicator isActive={active[1]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body></Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
               <Accordion.Header>
                 <span className={cx('txt-small')}>CMND/CCCD/Hộ chiếu</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+                <RequiredFieldIndicator isActive={active[2]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
                 <p
@@ -240,29 +271,31 @@ function FormDocuments() {
                     <GuideTakePhoto type_photo={'ID'} notes={guidesID} photos={photosID}></GuideTakePhoto>
                   </div>
                 </Collapse>
-                <TakePhotoRegister number_photo={2} name_photos={['Mặt trước', 'Mặt sau']} handleSave={handleSave}></TakePhotoRegister>
+                <TakePhotoRegister
+                  number_photo={2}
+                  name_photos={['Mặt trước', 'Mặt sau']}
+                  handleSave={() => handleSave(2)}
+                ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="4">
               <Accordion.Header>
                 <span className={cx('txt-small')}>Tài khoản ngân hàng</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+                <RequiredFieldIndicator isActive={active[3]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
-                <FormBank></FormBank>
+                <FormBank handleSaveFormBank={handleSaveFormBank}></FormBank>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
-        </Form>
+        </div>
         <p className={cx('txt-medium')}>Thông tin phương tiện di chuyển </p>
-        <Form className={cx('margin-bottom')}>
+        <div className={cx('margin-bottom')}>
           <Accordion>
             <Accordion.Item eventKey="0">
               <Accordion.Header>
                 <span className={cx('txt-small')}>Hình xe</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+                <RequiredFieldIndicator isActive={active[4]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
                 <p
@@ -285,14 +318,14 @@ function FormDocuments() {
                 <TakePhotoRegister
                   number_photo={4}
                   name_photos={['Mặt trước', 'Mặt sau', 'Mặt bên phải', 'Mặt bên trái']}
-                 handleSave={handleSave}></TakePhotoRegister>
+                  handleSave={() => handleSave(4)}
+                ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1">
               <Accordion.Header>
                 <span className={cx('txt-small')}>Bằng lái xe</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+                <RequiredFieldIndicator isActive={active[5]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
                 <p
@@ -312,14 +345,17 @@ function FormDocuments() {
                     ></GuideTakePhoto>
                   </div>
                 </Collapse>
-                <TakePhotoRegister number_photo={2} name_photos={['Mặt trước', 'Mặt sau']} handleSave={handleSave}></TakePhotoRegister>
+                <TakePhotoRegister
+                  number_photo={2}
+                  name_photos={['Mặt trước', 'Mặt sau']}
+                  handleSave={() => handleSave(5)}
+                ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
               <Accordion.Header>
                 <span className={cx('txt-small')}>Giấy đăng ký xe</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+                <RequiredFieldIndicator isActive={active[6]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
                 <p
@@ -339,14 +375,17 @@ function FormDocuments() {
                     ></GuideTakePhoto>
                   </div>
                 </Collapse>
-                <TakePhotoRegister number_photo={2} name_photos={['Mặt trước', 'Mặt sau']} handleSave={handleSave}></TakePhotoRegister>
+                <TakePhotoRegister
+                  number_photo={2}
+                  name_photos={['Mặt trước', 'Mặt sau']}
+                  handleSave={() => handleSave(6)}
+                ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="3">
               <Accordion.Header>
                 <span className={cx('txt-small')}>Bảo hiểm xe</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-none', 'd-sm-block')}>Bắt buộc*</span>
-                <span className={cx('txt-small', 'txt-right', 'txt-red', 'd-block', 'd-sm-none')}>*</span>
+                <RequiredFieldIndicator isActive={active[7]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
                 <p
@@ -366,11 +405,15 @@ function FormDocuments() {
                     ></GuideTakePhoto>
                   </div>
                 </Collapse>
-                <TakePhotoRegister number_photo={2} name_photos={['Mặt trước', 'Mặt sau']} handleSave={handleSave}></TakePhotoRegister>
+                <TakePhotoRegister
+                  number_photo={2}
+                  name_photos={['Mặt trước', 'Mặt sau']}
+                  handleSave={() => handleSave(7)}
+                ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
-        </Form>
+        </div>
       </div>
     </div>
   )

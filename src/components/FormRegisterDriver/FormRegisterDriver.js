@@ -16,6 +16,9 @@ function FormRegisterDriver() {
     setNow(now - 50)
   }
   const handleShowNextForm = () => {
+    if (showForm === 0){
+      console.log("Lưu form infor")
+    }
     setShowForm(showForm + 1)
     setNow(now + 50)
   }
