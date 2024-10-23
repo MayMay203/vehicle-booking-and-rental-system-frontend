@@ -7,42 +7,77 @@ import NoteBeforeRegisterPartner from '~/components/NoteBeforeRegisterPartner'
 import ProcedureResgisterPartner from '~/components/ProcedureResgisterPartner'
 import { images } from '~/assets/images'
 import CardsFeedbackPartner from '~/components/CardFeedbackPartner'
+import FormRegisterBus from '~/components/FormRegisterBus'
 const cx = classNames.bind(styles)
-function RegisterPartner() {
-  const listFeedback = [
+function RegisterPartner({typePartner='bus'}) {
+  const driver = 'driver'
+  const carRental = 'carRental'
+  const bus = 'bus'
+  const feedbackForDriver = [
     {
       id: 1,
       name: 'Nguyễn Thị Lan',
-      feedback: 'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
+      feedback:
+        'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
     },
     {
       id: 2,
       name: 'Nguyễn Bảo Lâm',
-      feedback: 'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
+      feedback:
+        'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
     },
     {
       id: 3,
       name: 'Nguyễn Thị Lan',
-      feedback: 'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
+      feedback:
+        'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
     },
     {
       id: 4,
       name: 'Nguyễn Bảo Lâm',
-      feedback: 'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
+      feedback:
+        'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
     },
     {
       id: 5,
       name: 'Nguyễn Thị Lan',
-      feedback: 'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
+      feedback:
+        'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
     },
     {
       id: 6,
       name: 'Nguyễn Bảo Lâm',
-      feedback: 'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
+      feedback:
+        'Cảm ơn Safety Travel vì đã tạo cho tôi cơ hội để kiếm thêm thu nhập... Mọi người rất. nhiều. Chức Safety Travel ngày càng phát triển!!!',
     },
   ]
-  const questionsAndAnswers = [
-    { question: 'Tôi có cần vệ sinh khi trả xe?', answer: 'Có, bạn cần đảm bảo xe sạch sẽ khi trả lại.' },
+  const feedbackForCarRental = [
+    {
+      id: 1,
+      name: 'Trần Văn A',
+      feedback: 'Dịch vụ cho thuê xe rất tốt, tôi đã có trải nghiệm tuyệt vời!',
+    },
+    {
+      id: 2,
+      name: 'Lê Thị B',
+      feedback: 'Xe mới và sạch sẽ, tôi sẽ tiếp tục sử dụng dịch vụ!',
+    },
+  ]
+  const feedbackForBus = [
+    {
+      id: 1,
+      name: 'Nguyễn Văn C',
+      feedback: 'Chuyến xe rất thoải mái, tôi rất thích!',
+    },
+    {
+      id: 2,
+      name: 'Phạm Thị D',
+      feedback: 'Dịch vụ xe buýt rất đáng tin cậy, tôi sẽ giới thiệu cho bạn bè.',
+    },
+  ]
+  
+  const questionsAndAnswersForCarRental = [
+    { question: 'Tôi có cần vệ sinh khi trả xe thuê?', answer: 'Có, bạn cần đảm bảo xe sạch sẽ khi trả lại.' },
     { question: 'Xe có đầy bình xăng khi nhận không?', answer: 'Có, xe sẽ được cung cấp đầy bình xăng khi nhận.' },
     { question: 'Thủ tục thuê xe có phức tạp không?', answer: 'Không, thủ tục rất đơn giản và nhanh chóng.' },
     { question: 'Có yêu cầu đặt cọc không?', answer: 'Có, chúng tôi yêu cầu một khoản đặt cọc nhỏ.' },
@@ -55,6 +90,35 @@ function RegisterPartner() {
       answer: 'Vui lòng liên hệ với chúng tôi ngay lập tức để được hỗ trợ.',
     },
   ]
+  const questionsAndAnswersForBus = [
+    { question: 'Tôi có cần vệ sinh khi trả xe khách?', answer: 'Có, bạn cần đảm bảo xe sạch sẽ khi trả lại.' },
+    { question: 'Xe có đầy bình xăng khi nhận không?', answer: 'Có, xe sẽ được cung cấp đầy bình xăng khi nhận.' },
+    { question: 'Thủ tục thuê xe có phức tạp không?', answer: 'Không, thủ tục rất đơn giản và nhanh chóng.' },
+    { question: 'Có yêu cầu đặt cọc không?', answer: 'Có, chúng tôi yêu cầu một khoản đặt cọc nhỏ.' },
+    { question: 'Lái xe có được hỗ trợ không?', answer: 'Có, chúng tôi cung cấp hỗ trợ 24/7 cho khách hàng.' },
+    { question: 'Có giới hạn quãng đường không?', answer: 'Có, có một số giới hạn tùy vào loại xe.' },
+    { question: 'Xe có bảo hiểm không?', answer: 'Có, tất cả xe đều được bảo hiểm.' },
+    { question: 'Tôi có cần mang theo giấy tờ gì khi thuê?', answer: 'Bạn cần mang theo CMND và bằng lái xe.' },
+    {
+      question: 'Nếu xe hỏng, tôi phải làm gì?',
+      answer: 'Vui lòng liên hệ với chúng tôi ngay lập tức để được hỗ trợ.',
+    },
+  ]
+  const questionsAndAnswersForDriver = [
+    { question: 'Tôi có cần vệ sinh khi trả xe tài xế?', answer: 'Có, bạn cần đảm bảo xe sạch sẽ khi trả lại.' },
+    { question: 'Xe có đầy bình xăng khi nhận không?', answer: 'Có, xe sẽ được cung cấp đầy bình xăng khi nhận.' },
+    { question: 'Thủ tục thuê xe có phức tạp không?', answer: 'Không, thủ tục rất đơn giản và nhanh chóng.' },
+    { question: 'Có yêu cầu đặt cọc không?', answer: 'Có, chúng tôi yêu cầu một khoản đặt cọc nhỏ.' },
+    { question: 'Lái xe có được hỗ trợ không?', answer: 'Có, chúng tôi cung cấp hỗ trợ 24/7 cho khách hàng.' },
+    { question: 'Có giới hạn quãng đường không?', answer: 'Có, có một số giới hạn tùy vào loại xe.' },
+    { question: 'Xe có bảo hiểm không?', answer: 'Có, tất cả xe đều được bảo hiểm.' },
+    { question: 'Tôi có cần mang theo giấy tờ gì khi thuê?', answer: 'Bạn cần mang theo CMND và bằng lái xe.' },
+    {
+      question: 'Nếu xe hỏng, tôi phải làm gì?',
+      answer: 'Vui lòng liên hệ với chúng tôi ngay lập tức để được hỗ trợ.',
+    },
+  ]
+
   const notesPartnerDriver = [
     { id: 1, content: 'Đọc kĩ quy định và chính sách bảo mật', sub_contents: [], icon: 'faCircleCheck'},
     { id: 2, content: 'Không chia sẽ', sub_contents: [], icon: 'faCircleCheck'},
@@ -92,12 +156,27 @@ function RegisterPartner() {
       icon: 'faCircleCheck',
     },
   ]
+  
+  let questionsAndAnswers
+  let listFeedback
+  if (typePartner === driver) {
+    listFeedback = feedbackForDriver
+    questionsAndAnswers = questionsAndAnswersForDriver
+  } else if (typePartner === carRental) {
+    listFeedback = feedbackForCarRental
+    questionsAndAnswers = questionsAndAnswersForCarRental
+  } else if (typePartner === bus) {
+    listFeedback = feedbackForBus
+    questionsAndAnswers = questionsAndAnswersForBus
+  }
   return (
     <div className={cx('container')}>
       <Row className={cx('wrap-row')}>
         <Col xl="6">
           <div className={cx('title')}>
-            Đối tác tài xế
+            {typePartner === driver && 'Đối tác tài xế'}
+            {typePartner === carRental && 'Đối tác cho thuê xe'}
+            {typePartner === bus && 'Đối tác nhà xe'}
             <div className={cx('bg-title')}></div>
           </div>
 
@@ -111,7 +190,8 @@ function RegisterPartner() {
         <Col xl="6" className={cx('wrap-right')}>
           <div className={cx('wrap-form')}>
             <div className={cx('form')}>
-              <FormRegisterDriver></FormRegisterDriver>
+              {typePartner === driver && <FormRegisterDriver></FormRegisterDriver>}
+              {typePartner === bus && <FormRegisterBus></FormRegisterBus>}
             </div>
             <div className={cx('bg-form', 'd-none', 'd-sm-block')}></div>
           </div>
@@ -119,10 +199,20 @@ function RegisterPartner() {
       </Row>
       <Row className={cx('wrap-row align-items-center')}>
         <Col md="6">
-          <img src={images.why_driver} alt="why-driver" className={cx('img-why')}></img>
+          {typePartner === driver && <img src={images.why_driver} alt="why-driver" className={cx('img-why')}></img>}
+          {typePartner === carRental && (
+            <img src={images.why_car_rental} alt="why-car-rental" className={cx('img-why')}></img>
+          )}
+          {typePartner === bus && (
+            <img src={images.why_passenger_bus} alt="why-passenger-bus" className={cx('img-why')}></img>
+          )}
         </Col>
         <Col md="6">
-          <p className={cx('sub-title')}>Trở thành đối tác tài xế của Safety Travel</p>
+          <p className={cx('sub-title')}>
+            {typePartner === driver && 'Trở thành đối tác tài xế của Safety Travel'}
+            {typePartner === carRental && 'Trở thành đối tác cho thuê xe của Safety Travel'}
+            {typePartner === bus && 'Trở thành đối tác nhà xe của Safety Travel'}
+          </p>
           <NoteBeforeRegisterPartner notes={notesIsPartnerDriver}></NoteBeforeRegisterPartner>
         </Col>
       </Row>

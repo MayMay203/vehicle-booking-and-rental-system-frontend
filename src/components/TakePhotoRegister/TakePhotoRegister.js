@@ -48,7 +48,9 @@ function TakePhotoRegister({ number_photo, name_photos, handleSave }) {
         <Button outline className={cx('btn', 'btn-cancel')}>
           Hủy
         </Button>
-        <Button primary className={cx('btn', 'btn-save')} disabled={!allImagesSelected} onClick={() => handleSave()}>
+        <Button primary className={cx('btn', 'btn-save')} disabled={!allImagesSelected} onClick={(event) => {
+          event.preventDefault()
+          handleSave()}}>
           Lưu
         </Button>
       </div>

@@ -33,6 +33,8 @@ export const images = {
   step_2_register_partner: require('./step-2-register-partner.png'),
   step_3_register_partner: require('./step-3-register-partner.png'),
   why_driver: require('./why-driver.png'),
+  why_car_rental: require('./why-car-rental.png'),
+  why_passenger_bus: require('./why-passenger-bus.png'),
   guide_avatar_1: require('./guide-avatar-1.jpg'),
   guide_avatar_2: require('./guide-avatar-2.png'),
   no_picture: require('./no-picture.png'),
