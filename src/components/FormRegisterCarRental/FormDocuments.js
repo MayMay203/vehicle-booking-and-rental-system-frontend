@@ -1,13 +1,11 @@
 import classNames from 'classnames/bind'
-import styles from './FormRegisterBus.module.scss'
+import styles from './FormRegisterCarRental.module.scss'
 import { useEffect, useState } from 'react'
-import { Form } from 'react-bootstrap'
 import TakePhotoRegister from '../TakePhotoRegister'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSquarePlus, faSquareMinus } from '@fortawesome/free-solid-svg-icons'
-
+import { Form } from 'react-bootstrap'
+import { faSquareMinus, faSquarePlus } from '@fortawesome/free-solid-svg-icons'
 const cx = classNames.bind(styles)
-
 function FormDocuments({ setActiveNextFormDocs }) {
   const [formData, setFormData] = useState({
     description: '',
@@ -70,7 +68,7 @@ function FormDocuments({ setActiveNextFormDocs }) {
               onChange={(e) => handlePolicyChange(e, policy.id)}
               className={cx('txt')}
             />
-            {index === policies.length -1 ? (
+            {index === policies.length - 1 ? (
               <FontAwesomeIcon icon={faSquarePlus} className={cx('add-policy')} onClick={handleAddPolicy} />
             ) : (
               <FontAwesomeIcon
@@ -91,5 +89,4 @@ function FormDocuments({ setActiveNextFormDocs }) {
     </Form>
   )
 }
-
 export default FormDocuments

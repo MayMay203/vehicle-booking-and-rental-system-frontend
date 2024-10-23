@@ -8,8 +8,9 @@ import ProcedureResgisterPartner from '~/components/ProcedureResgisterPartner'
 import { images } from '~/assets/images'
 import CardsFeedbackPartner from '~/components/CardFeedbackPartner'
 import FormRegisterBus from '~/components/FormRegisterBus'
+import FormRegisterCarRental from '~/components/FormRegisterCarRental'
 const cx = classNames.bind(styles)
-function RegisterPartner({typePartner='bus'}) {
+function RegisterPartner({typePartner='driver'}) {
   const driver = 'driver'
   const carRental = 'carRental'
   const bus = 'bus'
@@ -192,6 +193,7 @@ function RegisterPartner({typePartner='bus'}) {
             <div className={cx('form')}>
               {typePartner === driver && <FormRegisterDriver></FormRegisterDriver>}
               {typePartner === bus && <FormRegisterBus></FormRegisterBus>}
+              {typePartner === carRental && <FormRegisterCarRental></FormRegisterCarRental>}
             </div>
             <div className={cx('bg-form', 'd-none', 'd-sm-block')}></div>
           </div>

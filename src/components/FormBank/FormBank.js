@@ -31,19 +31,26 @@ function FormBank({ handleSaveFormBank }) {
     name: '',
     numberBank: '',
     nameBank: '',
-    commit: ''
+    commit: false
   })
   const [activeSave, setActiveSave] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
   useEffect(() => {
-    const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
+    const allFieldsFilled = Object.values(formData).every((value) => {
+      if (typeof value === 'boolean') {
+        return value === true
+      }
+      return value.trim() !== ''
+    })
     setActiveSave(allFieldsFilled)
   }, [formData])
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value, type, checked } = e.target
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }))
+    setIsSaved(false)
   }
   const handleCancel = (e) =>{
   }
@@ -114,10 +121,12 @@ function FormBank({ handleSaveFormBank }) {
           disabled={!activeSave}
           onClick={(event) => {
             event.preventDefault() // Ngăn chặn việc tải lại trang
+            setIsSaved(true)
+            setActiveSave(false)
             handleSaveFormBank()
           }}
         >
-          Lưu
+          {!isSaved ? 'Lưu' : 'Đã lưu'}
         </Button>
       </div>
     </Form>

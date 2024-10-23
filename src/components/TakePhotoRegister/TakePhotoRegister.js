@@ -11,6 +11,7 @@ function TakePhotoRegister({ number_photo, name_photos, handleSave }) {
   const handleImageClick = (index) => {
     fileInputRefs.current[index].click()
   }
+  const [isSaved, setIsSaved] = useState(false)
 
   const handleFileChange = (index, event) => {
     const file = event.target.files[0]
@@ -19,6 +20,7 @@ function TakePhotoRegister({ number_photo, name_photos, handleSave }) {
       newFiles[index] = URL.createObjectURL(file)
       setSelectedFiles(newFiles)
     }
+    setIsSaved(false)
   }
   const allImagesSelected = selectedFiles.every((file) => file !== null)  
   return (
@@ -48,10 +50,11 @@ function TakePhotoRegister({ number_photo, name_photos, handleSave }) {
         <Button outline className={cx('btn', 'btn-cancel')}>
           Hủy
         </Button>
-        <Button primary className={cx('btn', 'btn-save')} disabled={!allImagesSelected} onClick={(event) => {
+        <Button primary className={cx('btn', 'btn-save')} disabled={!allImagesSelected || isSaved} onClick={(event) => {
           event.preventDefault()
+          setIsSaved(true)
           handleSave()}}>
-          Lưu
+          {!isSaved ? ('Lưu') : ('Đã lưu')}
         </Button>
       </div>
     </div>

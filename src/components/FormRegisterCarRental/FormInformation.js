@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind'
-import styles from './FormRegisterDriver.module.scss'
+import styles from './FormRegisterCarRental.module.scss'
 import { Form } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
@@ -70,19 +70,11 @@ function FormInformation({ setActiveNextFormInfor }) {
     { value: 'Vĩnh Phúc', label: 'Vĩnh Phúc' },
     { value: 'Yên Bái', label: 'Yên Bái' },
   ]
-  const type_vehicle = [
-    { value: '', label: 'Chọn loại xe' },
-    { value: 'Xe máy', label: 'Xe máy' },
-    { value: 'Xe điện', label: 'Xe điện' },
-    { value: 'Xe ô tô 4 chỗ', label: 'Xe ô tô 4 chỗ' },
-  ]
   const [formData, setFormData] = useState({
     name: '',
     phonenumber: '',
     gmail: '',
     location: '',
-    vehicleType: '',
-    licensePlate: '',
   })
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
@@ -98,6 +90,19 @@ function FormInformation({ setActiveNextFormInfor }) {
   }
   return (
     <Form className={cx('form-infor')}>
+      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput0">
+        <Form.Label>
+          Tên đại lý cho thuê xe
+        </Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Đại lý xe Phương Nam"
+          name="nameBusiness"
+          aria-label="name-business"
+          className={cx('txt')}
+          onChange={handleInputChange}
+        />
+      </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput1">
         <Form.Label>
           Họ và tên<span className="text-danger">*</span>
@@ -160,38 +165,19 @@ function FormInformation({ setActiveNextFormInfor }) {
           ))}
         </Form.Select>
       </Form.Group>
-      <div className="row">
-        <Form.Group className={cx('txt', 'mb-3', 'col-6')} controlId="formInfor.ControlInput5">
-          <Form.Label>
-            Loại xe<span className="text-danger">*</span>
-          </Form.Label>
-          <Form.Select
-            name="vehicleType"
-            aria-label="type-vehicle"
-            className={cx('txt', 'selectbox')}
-            onChange={handleInputChange}
-          >
-            {type_vehicle.map((type, index) => (
-              <option key={index} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-        <Form.Group className={cx('txt', 'mb-3', 'col-6')} controlId="formInfor.ControlInput1">
-          <Form.Label>
-            Biển số xe<span className="text-danger">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="92H-63 3647"
-            name="licensePlate"
-            aria-label="license-plate"
-            className={cx('txt')}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-      </div>
+      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput5">
+        <Form.Label>
+          Url fanpage
+        </Form.Label>
+        <Form.Control
+          type="link"
+          placeholder="https://tankimchi.vn/"
+          name="urlFanpage"
+          aria-label="urlFanpage"
+          className={cx('txt')}
+          onChange={handleInputChange}
+        />
+      </Form.Group>
     </Form>
   )
 }

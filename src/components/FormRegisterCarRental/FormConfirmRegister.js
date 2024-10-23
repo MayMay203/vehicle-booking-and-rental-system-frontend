@@ -1,5 +1,5 @@
 import { Form } from 'react-bootstrap'
-import styles from './FormRegisterDriver.module.scss'
+import styles from './FormRegisterCarRental.module.scss'
 import classNames from 'classnames/bind'
 import Button from '../Button'
 import Notice from '../Notice'
@@ -90,7 +90,7 @@ function FormConfirmRegister({ isRegister, handleRegister }) {
           type={'success'}
           subtitle={'Đăng ký thành công!'}
           content={
-            'Chúc mừng bạn đã trở thành đối tác tài xế!\nCảm ơn vì đã tin tưởng và đồng hành cùng chúng tôi. Safety Travel chúc bạn sẽ có nhiều hành trình tuyệt vời và an toàn nhé!'
+            'Chúc mừng bạn đã trở thành đối tác cho thuê xe!\nCảm ơn vì đã tin tưởng và đồng hành cùng chúng tôi. Safety Travel chúc bạn sẽ có nhiều đơn đặt thuê xe nhé!'
           }
         ></Notice>
       )}
