@@ -1,62 +1,64 @@
 @use '../../abstracts' as abstracts;
 
 .wrapper {
-    // display: flex; 
-    justify-content: center;
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
+  justify-content: center;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
 }
 .question {
-    display: flex; 
-    justify-content: space-between; 
-    text-align: left;
-    width: 100%; 
-    padding: 1.2rem;
-    padding-inline-start: 2rem; 
-    background-color: white;
-    color: #333;
-    font-size: 1.7rem;
-    font-weight: 600;
-    font-family: 'Inter';
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  text-align: left;
+  line-height: 2.5rem;
+  width: 100%; 
+  padding: 1.2rem;
+  padding-inline-start: 2rem; 
+  background-color: white;
+  color: #333;
+  font-size: 1.7rem;
+  font-weight: 600;
+  font-family: 'Inter';
+  border: 0.1rem solid #FFEBE4;
+  cursor: pointer; 
+  transition: background-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background-color: #FFF6F3;
+    color: black;
     border: 0.1rem solid #FFEBE4;
-    cursor: pointer; 
-    transition: background-color 0.3s, transform 0.3s;
+    font-weight: 600;
+  }
 
-    &:hover {
-        background-color: #FFF6F3;
-        color: black;
-        border: 0.1rem solid #FFEBE4;
-        font-weight: 600;
-    }
+  &.active { 
+    background-color: #FFEBE4;
+    font-weight: 600;
+    border-radius: 0.3rem 0;
+  }
 
-    &.active { 
-        background-color: #FFEBE4;
-        font-weight: 600;
-        border-radius: 0.3rem 0;
-    }
+  @include abstracts.screen(md){
+    padding-inline-start: 3rem;
+  }
 
-    @include abstracts.screen(md){
-         padding-inline-start: 3rem;
-    }
-
-    @include abstracts.screen(sm){
-        padding-inline-start: 2rem;
-    }
+  @include abstracts.screen(sm){
+    padding-inline-start: 1rem;
+  }
 }
 
 .nav-button {
-    margin-right: 5rem; 
-    font-size: 2rem;
-    color: #333333;
-    transition: transform 0.3s; 
-    &.rotate {
-        transform: rotate(90deg); 
-        color: #333;
-    }
+  margin-right: 5rem; 
+  font-size: 2rem;
+  line-height: 2.5rem;
+  color: #333333;
+  transition: transform 0.3s; 
+  &.rotate {
+    transform: rotate(90deg); 
+    color: #333;
+  }
 
-    @include abstracts.screen(md){
-        margin-right: 1rem;
-    }
+  @include abstracts.screen(md){
+    margin-right: 1rem;
+  }
 }
 
 .accordion-body {
@@ -78,9 +80,10 @@
   font-weight: 600;
   font-size:3rem;
   text-align: center;
-    @include abstracts.screen(sm){
-        font-size:2.4rem;
-    }
+  @include abstracts.screen(sm){
+    font-size:2.4rem;
+    padding: 0 1rem 1.5rem 1rem !important;
+  }
 }
 
 .nav-button-page {
