@@ -11,6 +11,7 @@ import { config } from '~/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { setCurrentUser } from '~/redux/slices/userSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
@@ -36,25 +37,28 @@ function LoginModal() {
 
   const handleShowRegister = () => {
     dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
-    dispatch(setAuthModalVisible({ modalNames: modalNames.REGISTER, isVisible: true }))
+    dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: true }))
   }
 
   const handleShowForget = (e) => {
     e.preventDefault()
     dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
-    // openAuthModal('forget')
+    dispatch(setAuthModalVisible({ modalName: modalNames.FORGOT, isVisible: true }))
   }
 
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await login(email, password)
-      dispatch(setCurrentUser({currentUser: data.accountLogin}))
+      dispatch(setCurrentUser({ currentUser: data.accountLogin}))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {
-      toast.error('Email hoặc mật khẩu không đúng')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      toast.error(message, { autoClose: 1200 })
     }
   }
 

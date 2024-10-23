@@ -6,10 +6,9 @@ import { logoutService } from '~/apiServices/logoutService'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
+import { generalModalNames, setConfirmModalVisible, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { logout } from '~/redux/slices/userSlice'
-
+import { checkLoginSession, logout } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -22,12 +21,17 @@ function ConfirmModal() {
   const handleConfirm = async () => {
     if (showConfirmModal.name === generalModalNames.LOGOUT) {
       try {
-        await logoutService()
-        dispatch(logout())
-        handleClose()
-        navigate('/')
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+        if (dispatch(checkLoginSession())) {
+          await logoutService()
+          dispatch(logout())
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          navigate('/')
+        }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       } catch (message) {
-        toast.error(String(message))
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        console.error(message)
       }
     } else if (showConfirmModal.name === generalModalNames.EXPIRED_SESSION) {
       dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
@@ -37,6 +41,9 @@ function ConfirmModal() {
 
   const handleClose = () => {
     dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+    if (showConfirmModal.name === generalModalNames.EXPIRED_SESSION) {
+      navigate('/')
+    }
   }
 
   return (

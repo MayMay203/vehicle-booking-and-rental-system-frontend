@@ -74,8 +74,21 @@ function RegisterModal() {
     await resendOTP(email)
     dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-    toast.info('Kiểm tra email để nhận OTP')
     dispatch(setAuthModalVisible({ modalName: modalNames.AUTH_CODE, isVisible: true }))
+    toast.info('Kiểm tra email để nhận OTP', { autoClose: 1200 })
+  }
+
+  const handleGoogleLogin = (e) => {
+    e.preventDefault()
+    const redirectUri = config.variables.redirectUrl
+    const authUrl = config.variables.authGoogleUrl
+    const googleClientId = config.variables.googleClientId
+
+    const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
+      redirectUri,
+    )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`
+
+    window.location.href = targetUrl
   }
 
   return (
@@ -140,7 +153,7 @@ function RegisterModal() {
             Tiếp tục
           </Button>
           <div className={cx('other')}>hoặc</div>
-          <button className={cx('btn-google')}>
+          <button className={cx('btn-google')} onClick={handleGoogleLogin}>
             <span className={cx('icon')}>
               <img src={images.google} alt="google" className={cx('google-img')}></img>
             </span>
@@ -148,7 +161,7 @@ function RegisterModal() {
           </button>
           <div className={cx('bottom')}>
             <span className={cx('content')}>Bạn đã có tài khoản?</span>
-            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowLogin}>
+            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowLogin} type="button">
               Đăng nhập
             </button>
           </div>

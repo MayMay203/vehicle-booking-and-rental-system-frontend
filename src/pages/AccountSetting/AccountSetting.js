@@ -9,7 +9,6 @@ import DatePicker from 'react-datepicker'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FormGender from '~/components/Form/FormGender'
 import {
-  faBullseye,
   faCalendar,
   faCancel,
   faClose,
@@ -132,12 +131,15 @@ function AccountSetting() {
         const imageBlob = new Blob([byteArray], { type: 'image/png' })
         formData.append('fileAvatar', imageBlob, 'avatar.png')
       }
-      const userData = await updateAccount(formData)
-      dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
+      if (dispatch(checkLoginSession())) {
+        const userData = await updateAccount(formData)
+        console.log(userData)
+        dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
+      }
       setIsModified(false)
       toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
       if (selectedImage !== currentUser.avatar) {
-        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: faBullseye }))
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       }
     } catch (error) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
@@ -243,10 +245,10 @@ function AccountSetting() {
                 <FormGender handleGender={handleGender} gender={gender} star />
                 <div className="d-flex column-gap-5 justify-content-center mt-5">
                   <Button
+                    type="button"
                     className={cx('btn-cancel')}
                     outline
                     onClick={handleCancel}
-                    type="button"
                     disabled={!isModified}
                     leftIcon={<FontAwesomeIcon icon={faCancel} />}
                   >

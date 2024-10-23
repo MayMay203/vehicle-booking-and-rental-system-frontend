@@ -20,7 +20,6 @@ export const checkLogin = createAsyncThunk('user/checkLogin', async (_, { dispat
   if (checkExistCookie('access_token')) {
     const userData = await getMyAccount()
     if (userData) {
-      console.log(userData)
       dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
     }
   } else {
@@ -60,8 +59,8 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUser: (state, action) => {
-      state.currentUser = action.payload.currentUser
       state.isLogin = true
+      state.currentUser = action.payload.currentUser
     },
     toggleLogin: (state, action) => {
       state.isLogin = action.payload
@@ -70,9 +69,7 @@ const userSlice = createSlice({
       state.email = action.payload
     },
     logout: (state) => {
-      state.currentUser = {}
       state.isLogin = false
-      state.email = ''
     },
   },
   extraReducers: (builder) => {
@@ -85,13 +82,14 @@ const userSlice = createSlice({
         state.currentUser = action.payload
       })
       .addCase(checkLogin.pending, (state) => {
-        state.loading = false
-      })
-
-      .addCase(checkLogin.fulfilled, (state) => {
         state.loading = true
       })
-      .addCase(checkLoginSession.fulfilled, () => {})
+      .addCase(checkLogin.fulfilled, (state) => {
+        state.loading = false
+      })
+      .addCase(checkLoginSession.fulfilled, (state) => {
+        state.loading = false
+      })
   },
 })
 
