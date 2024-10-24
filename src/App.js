@@ -24,10 +24,10 @@ function App() {
   console.log('re-render app.js')
   console.log(getAccessToken())
 
-  useEffect(() => {
-    dispatch(checkLogin())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   dispatch(checkLogin())
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   return (
     <div className="App">

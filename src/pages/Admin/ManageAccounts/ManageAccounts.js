@@ -76,7 +76,7 @@ function ManageAccounts() {
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb>
         <BreadcrumbItem href="#">Trang chủ</BreadcrumbItem>
-        <BreadcrumbItem href={config.accounts} active>
+        <BreadcrumbItem href={config.routes.accounts} active>
           Quản lý tài khoản
         </BreadcrumbItem>
       </Breadcrumb>

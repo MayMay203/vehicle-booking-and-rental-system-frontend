@@ -46,7 +46,10 @@ function HeaderOnly({ children }) {
   ]
   return (
     <div className={cx('wrapper')}>
-      <Header menus={currentUser.roles?.includes('ADMIN') ? adminMenu : userMenu} />
+      <Header
+        // menus={currentUser.roles?.includes('ADMIN') ? adminMenu : userMenu}
+        menus={adminMenu}
+      />
       <div className={cx('container')}>{children}</div>
     </div>
   )

@@ -24,4 +24,5 @@ export {
   CallIcon,
   GenderIcon,
   EmailIcon,
+  LocationIcon
 } from './Icon'
