@@ -21,4 +21,5 @@ export const routes = {
   vouchers: '/manage-vouchers',
   partners: '/manage-partners',
   message: 'message',
+  busTrip: 'bus-trip',
 }
