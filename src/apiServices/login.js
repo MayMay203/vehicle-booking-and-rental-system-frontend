@@ -8,6 +8,6 @@ export const login = async (email, password) => {
     })
     return response.data
   } catch (error) {
-    throw httpRequest.getMessage(error)
+    throw error.response.data.message
   }
 }

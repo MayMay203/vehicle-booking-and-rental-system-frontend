@@ -1,18 +1,22 @@
 import { Modal } from 'react-bootstrap'
-import styles from './ServiceModal.module.scss'
+import styles from './GeneralModal.module.scss'
 import classNames from 'classnames/bind'
-import { useServiceModal } from '~/Context/ServiceModalProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faLocationCrosshairs, faLocationDot, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
 import Button from '~/components/Button'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { useDispatch, useSelector } from 'react-redux'
+import { generalModalNames, setTicketModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function TicketModal() {
-  const { isOpenServiceModal, closeServiceModal, serviceModalData } = useServiceModal()
-  const {type} = serviceModalData
+  console.log('re-render ticket modal')
+  const showTicketModal = useSelector((state) => state.generalModal.buyTicket)
+  const { type } = showTicketModal
+  const dispatch = useDispatch()
+
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -26,14 +30,12 @@ function TicketModal() {
     toast.success('Đặt vé thành công! Hãy chuẩn bị cho chuyến đi của bạn.')
   }
 
+  const handleClose = () => {
+    dispatch(setTicketModalVisible({ name: generalModalNames.BUY_TICKET, isOpen: false }))
+  }
+
   return (
-    <Modal
-      className={cx('custom-modal')}
-      show={isOpenServiceModal.ticket}
-      onHide={() => closeServiceModal('ticket')}
-      centered
-      size="md"
-    >
+    <Modal className={cx('custom-modal')} show={showTicketModal.isOpen} onHide={handleClose} centered size="md">
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title-header')}>{!type ? 'THÔNG TIN ĐƠN HÀNG' : 'CHI TIẾT HOÁ ĐƠN'}</Modal.Title>

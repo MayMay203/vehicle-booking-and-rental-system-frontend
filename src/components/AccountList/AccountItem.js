@@ -6,18 +6,37 @@ import { BirdayIcon, CallIcon, EmailIcon, GenderIcon } from '../Icon'
 import Button from '../Button'
 import { faClose, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useServiceModal } from '~/Context/ServiceModalProvider'
+import { useDispatch } from 'react-redux'
+import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
+import { images } from '~/assets/images'
 
 const cx = classNames.bind(styles)
 function AccountItem({ data }) {
-  const { openServiceModal } = useServiceModal()
+  const dispatch = useDispatch()
 
   const handleLockAccount = () => {
-    openServiceModal('lock')
+    dispatch(
+      setConfirmModalVisible({
+        name: generalModalNames.LOCK_ACCOUNT,
+        title: 'Xác nhận khoá tài khoản',
+        description: 'Lí do khoá:',
+        isOpen: true,
+        modalType: 'inputConfirm',
+        id: data.id
+      }),
+    )
   }
 
   const handleOpenAccount = () => {
-    openServiceModal('confirm')
+    dispatch(
+      setConfirmModalVisible({
+        modalType: 'confirm',
+        title: 'Xác nhận mở tài khoản',
+        description: 'Bạn chắc chắn muốn mở lại tài khoản này?',
+        isOpen: true,
+        name: generalModalNames.UNLOCK_ACCOUNT,
+      }),
+    )
   }
   return (
     <div className={cx('row', 'item')}>
@@ -25,20 +44,20 @@ function AccountItem({ data }) {
         <div className="row align-items-center row-gap-5">
           <div className="col-12 col-md-6 col-lg-5">
             <div className={cx('avatar-wrapper')}>
-              <img src={data.avatar} alt={data.name} className={cx('avatar')} />
+              <img src={data.avatar || images.noImage} alt={data.name} className={cx('avatar')} />
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-7">
             <div className="d-flex flex-column row-gap-2 align-items-center align-items-md-baseline">
-              <span className={cx('name')}>{data.name}</span>
+              <span className={cx('name')}>{data.name || 'Chưa cập nhật'}</span>
               <LinkItem title={data.email} Icon={<EmailIcon />} className={cx('custom')} />
-              <LinkItem title={data.phoneNumber} Icon={<CallIcon />} className={cx('custom')} />
+              <LinkItem title={data.phoneNumber || 'Chưa cập nhật'} Icon={<CallIcon />} className={cx('custom')} />
               <LinkItem
-                title={data.gender === 'FEMALE' ? 'Nữ' : data.gender === 'MALE' ? 'Nam' : 'Khác'}
+                title={data.gender? (data.gender === 'FEMALE' ? 'Nữ' : data.gender === 'MALE' ? 'Nam' : 'Khác'):'Chưa cập nhật'}
                 Icon={<GenderIcon />}
                 className={cx('custom')}
               />
-              <LinkItem title={data.birthDay} Icon={<BirdayIcon />} className={cx('custom')} />
+              <LinkItem title={data.birthDay || 'Chưa cập nhật'} Icon={<BirdayIcon />} className={cx('custom')} />
             </div>
           </div>
         </div>

@@ -8,21 +8,30 @@ import FormInput from '~/components/Form/FormInput'
 import DatePicker from 'react-datepicker'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FormGender from '~/components/Form/FormGender'
-import { faCalendar, faCancel, faClose, faSave, faUpload, faUserLock } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCalendar,
+  faCancel,
+  faClose,
+  faSave,
+  faUpload,
+  faUserLock,
+} from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
-import { useGlobalModal } from '~/Context/GlobalModalProvider'
 import { forgetPassword } from '~/apiServices/forgetPassword'
 import { updateAccount } from '~/apiServices/updateAccount'
-import Spinner from '~/components/Spinner'
+import { useDispatch, useSelector } from 'react-redux'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {
+  console.log('re-render account settings')
+  const { currentUser, isLoading } = useSelector((state) => state.user)
+  const dispatch = useDispatch()
   const formRef = useRef(null)
   const inputFile = useRef(null)
-  const { currentUser, setCurrentUser, checkLoginSession } = useUserContext()
-  const [email, setEmail] = useState()
+  const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -30,25 +39,28 @@ function AccountSetting() {
   const [gender, setGender] = useState('')
   const [selectedImage, setSelectedImage] = useState(null)
   const [isModified, setIsModified] = useState(false)
-  const { openGlobalModal, closeGlobalModal } = useGlobalModal()
+
+  useEffect(() => {
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: isLoading }))
+  }, [isLoading, dispatch])
 
   useEffect(() => {
     if (formRef.current) {
       setIsValid(formRef.current.checkValidity())
     }
-  }, [fullName, birthday, phoneNumber])
+  }, [fullName, birthday, phoneNumber, gender])
 
   useEffect(() => {
     async function getInfo() {
-      if ((await checkLoginSession()) && currentUser) {
-        setFullName(currentUser.name)
+      if (dispatch(checkLoginSession) && currentUser) {
+        setFullName(currentUser.name || '')
         if (currentUser.birthDay) {
           const [day, month, year] = currentUser.birthDay.split('-')
           setBirthday(new Date(`${year}-${month}-${day}`))
         }
-        setEmail(currentUser.email)
-        setGender(currentUser.gender)
-        setPhoneNumber(currentUser.phoneNumber)
+        setEmail(currentUser.email || '')
+        setGender(currentUser.gender || '')
+        setPhoneNumber(currentUser.phoneNumber || '')
         setSelectedImage(currentUser.avatar)
       }
     }
@@ -99,9 +111,6 @@ function AccountSetting() {
   const handleSave = async (e) => {
     e.preventDefault()
     try {
-      if (selectedImage !== currentUser.avatar) {
-        openGlobalModal('loading')
-      }
       const accountInfo = {
         id: currentUser.id,
         name: fullName,
@@ -119,15 +128,20 @@ function AccountSetting() {
         const imageBlob = new Blob([byteArray], { type: 'image/png' })
         formData.append('fileAvatar', imageBlob, 'avatar.png')
       }
-      const userData = await updateAccount(formData)
-      toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
-      setIsModified(false)
-      setCurrentUser(userData.accountInfo)
-      if (selectedImage !== currentUser.avatar) {
-        closeGlobalModal('loading')
-     }
+      if (dispatch(checkLoginSession())) {
+        if (selectedImage !== currentUser.avatar) {
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+        }
+        const userData = await updateAccount(formData)
+        dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
+        setIsModified(false)
+        toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
+        if (selectedImage !== currentUser.avatar) {
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        }
+      }
     } catch (error) {
-      closeGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       console.log(error)
       toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
     }
@@ -136,12 +150,12 @@ function AccountSetting() {
   const handleChangePassword = async (e) => {
     e.preventDefault()
     try {
-      openGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await forgetPassword(currentUser.email)
-      closeGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       toast.success(data.info, { autoClose: 1500, position: 'top-center' })
     } catch (message) {
-      closeGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       toast.error(message, { autoClose: 1500, position: 'top-center' })
     }
   }
@@ -187,13 +201,7 @@ function AccountSetting() {
           <div className="col-12 col-lg-7">
             <div className={cx('item')}>
               <form ref={formRef}>
-                <FormInput
-                  title="Email"
-                  id="email"
-                  type="email"
-                  value={email}
-                  disabled
-                ></FormInput>
+                <FormInput title="Email" id="email" type="email" value={email} disabled></FormInput>
                 <FormInput
                   id="fullname"
                   value={fullName ? fullName : ''}
@@ -218,8 +226,8 @@ function AccountSetting() {
                   star
                 />
                 <div className="mb-3">
-                    <label className="mb-4">Ngày sinh</label>
-                    <span className={cx('star')}>*</span>
+                  <label className="mb-4">Ngày sinh</label>
+                  <span className={cx('star')}>*</span>
                   <div className={cx('date-wrapper', 'd-flex', 'align-items-center')}>
                     <DatePicker
                       className={cx('date-input')} // Sử dụng class để áp dụng style cho input
@@ -233,13 +241,13 @@ function AccountSetting() {
                     <FontAwesomeIcon icon={faCalendar} className={cx('calendar-icon')} />
                   </div>
                 </div>
-                <FormGender handleGender={handleGender} gender={gender} star/>
+                <FormGender handleGender={handleGender} gender={gender} star />
                 <div className="d-flex column-gap-5 justify-content-center mt-5">
                   <Button
+                    type="button"
                     className={cx('btn-cancel')}
                     outline
                     onClick={handleCancel}
-                    type="button"
                     disabled={!isModified}
                     leftIcon={<FontAwesomeIcon icon={faCancel} />}
                   >
@@ -268,9 +276,9 @@ function AccountSetting() {
           </div>
         </div>
       </div>
-      <Spinner />
     </div>
   )
 }
+
 
 export default AccountSetting

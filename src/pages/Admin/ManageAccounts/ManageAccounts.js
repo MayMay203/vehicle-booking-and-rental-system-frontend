@@ -3,21 +3,23 @@ import styles from './ManageAccount.module.scss'
 import classNames from 'classnames/bind'
 import { config } from '~/config'
 import Tabs from '~/components/Tabs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AccountList from '~/components/AccountList'
 import SearchInput from '~/components/SearchInput'
 import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import LockModal from '~/Modals/ServiceModal/LockModal'
-import { useAuthModal } from '~/Context/AuthModalProvider'
-import { RegisterAdminModal } from '~/Modals/AuthModal'
-import { ConfirmModal } from '~/Modals/ServiceModal'
+import { useDispatch } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { getAllAccounts } from '~/apiServices/getAllAccounts'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function ManageAccounts() {
+  const dispatch = useDispatch()
   const [type, setType] = useState('accounts')
-  const { openAuthModal } = useAuthModal()
+  const [accountList, setAccountList] = useState([])
+  const [filterData, setFilterData] = useState([])
 
   const tabList = [
     {
@@ -37,12 +39,37 @@ function ManageAccounts() {
     draggable: false,
   }
 
+  useEffect(() => {
+    async function fetchAllAccounts() {
+      if (dispatch(checkLoginSession())) {
+        let data = await getAllAccounts()
+        if (data) {
+          setAccountList(data.result)
+        }
+      }
+    }
+    fetchAllAccounts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountList])
+
+  useEffect(() => {
+    if (accountList.length > 0) {
+      let data
+      if (type === 'accounts') {
+        data = accountList.filter((account) => account.accountInfo.active === true)
+      } else {
+        data = accountList.filter((account) => account.accountInfo.active === false)
+      }
+      setFilterData(data)
+    }
+},[accountList, type])
+
   const handleClickTab = (type) => {
     setType(type)
   }
 
-  const handleAddAdminAccount = () => {
-    openAuthModal('registerAdmin')
+  const handleAddAccount = () => {
+    dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER_ADMIN, isVisible: true }))
   }
 
   return (
@@ -64,14 +91,11 @@ function ManageAccounts() {
 
       <div className={cx('d-flex', 'justify-content-between', 'align-items-center', 'custom-margin')}>
         <SearchInput />
-        <Button primary className={cx('btn-add')} onClick={handleAddAdminAccount}>
+        <Button primary className={cx('btn-add')} onClick={handleAddAccount}>
           <FontAwesomeIcon icon={faPlus} />
         </Button>
       </div>
-      <AccountList type={type} />
-      <LockModal />
-      <RegisterAdminModal />
-      <ConfirmModal />
+      {accountList && <AccountList dataList={filterData} />}
     </div>
   )
 }

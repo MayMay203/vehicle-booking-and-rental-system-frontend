@@ -90,9 +90,8 @@ function Message (){
           <div className={cx('wrap-detail-message')}>
             {detailMessages.map((detailmsg) => (
               // sau thay 1 = id của người đnag đăng nhập
-              <div className={cx({ 'message-sender': detailmsg.idSender === 3 })}>
+              <div className={cx({ 'message-sender': detailmsg.idSender === 3 })} key={detailMessages.id}>
                 <DetailMessage
-                  key={detailmsg.id}
                   isSender={detailmsg.idSender === 3}
                   message={detailmsg.message}
                   time={detailmsg.time}

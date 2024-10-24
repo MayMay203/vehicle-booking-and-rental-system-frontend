@@ -20,6 +20,7 @@ function ResetPassword() {
   const [success, setSucess] = useState(false)
   const location = useLocation()
   const formRef = useRef(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function checkValidToken() {
@@ -30,6 +31,7 @@ function ResetPassword() {
       if (result) {
         setIsValidToken(result.info)
       }
+      setLoading(false)
     }
     checkValidToken()
   }, [location])
@@ -51,6 +53,10 @@ function ResetPassword() {
     } catch (message) {
       toast.error(message)
     }
+  }
+
+  if (loading) {
+    return <div></div>
   }
 
   return (

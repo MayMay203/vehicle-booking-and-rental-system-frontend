@@ -1,24 +1,28 @@
 import { Modal } from 'react-bootstrap'
 import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { login } from '~/apiServices/login'
-import { useUserContext } from '~/Context/UserProvider/UserProvider'
 import { toast } from 'react-toastify'
 import { config } from '~/config'
+import { useDispatch, useSelector } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { setCurrentUser } from '~/redux/slices/userSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
-  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
+  console.log('re-render-login modal')
+  const showLoginModal = useSelector((state) => state.authModal.login)
+  const dispatch = useDispatch()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
-  const { setCurrentUser, toggleLogin } = useUserContext()
 
   useEffect(() => {
     if (formRef.current) {
@@ -32,27 +36,35 @@ function LoginModal() {
   }, [])
 
   const handleShowRegister = () => {
-    closeAuthModal('login')
-    openAuthModal('register')
+    dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
+    dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: true }))
   }
 
   const handleShowForget = (e) => {
     e.preventDefault()
-    closeAuthModal('login')
-    openAuthModal('forget')
+    dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
+    dispatch(setAuthModalVisible({ modalName: modalNames.FORGOT, isVisible: true }))
   }
 
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await login(email, password)
-      setCurrentUser(data.accountLogin)
-      toggleLogin()
-      closeAuthModal('login')
+      dispatch(setCurrentUser({ currentUser: data.accountLogin}))
+      dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {
-      toast.error('Email hoặc mật khẩu không đúng')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      if (String(message).includes('Tài khoản')) {
+        toast.error(message, {autoClose: 1300})
+      }
+      else {
+        toast.error('Email hoặc mật khẩu sai. Vui lòng thử lại!', { autoClose: 1300 })
+      }
+
     }
   }
 
@@ -70,7 +82,11 @@ function LoginModal() {
   }
 
   return (
-    <Modal show={isOpenAuthModal.login} onHide={() => closeAuthModal('login')} centered>
+    <Modal
+      show={showLoginModal}
+      onHide={() => dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))}
+      centered
+    >
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Đăng nhập</Modal.Title>
