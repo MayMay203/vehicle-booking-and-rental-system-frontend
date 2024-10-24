@@ -138,3 +138,33 @@
 .show{
     color: black;
 }
+
+.drop-down{
+    height: 100%;
+    color: var(--red-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 24px;
+    column-gap: 6px;
+
+    @include abstracts.screen(lg){
+        padding: 16px 24px;
+        justify-content: flex-start;
+    }
+
+    @include abstracts.screen(md){
+        padding: 16px 20px;
+    }
+}
+
+.custom-border{
+    border-radius: 0;
+    width: 200px;
+    background-color: var(--primary-bg);
+}
+
+.link{
+    color: rgba($color: #E20D0D, $alpha: 0.9)!important;
+    font-weight: 400;
+}

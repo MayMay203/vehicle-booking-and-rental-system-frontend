@@ -9,8 +9,13 @@ import { images } from '~/assets/images'
 import CardsFeedbackPartner from '~/components/CardFeedbackPartner'
 import FormRegisterBus from '~/components/FormRegisterBus'
 import FormRegisterCarRental from '~/components/FormRegisterCarRental'
+import { createSearchParams, useLocation } from 'react-router-dom'
 const cx = classNames.bind(styles)
-function RegisterPartner({typePartner='driver'}) {
+function RegisterPartner() {
+  const location = useLocation()
+  const searchParam = createSearchParams(location.search)
+  const typePartner = searchParam.get('type')
+  console.log(typePartner)
   const driver = 'driver'
   const carRental = 'carRental'
   const bus = 'bus'
@@ -170,6 +175,11 @@ function RegisterPartner({typePartner='driver'}) {
     listFeedback = feedbackForBus
     questionsAndAnswers = questionsAndAnswersForBus
   }
+
+  if (typePartner !== bus && typePartner !== carRental && typePartner !== driver) {
+    return <div></div>
+  }
+
   return (
     <div className={cx('container')}>
       <Row className={cx('wrap-row')}>

@@ -49,10 +49,7 @@ function DefaultLayout({ children }) {
   // const partnerMenu = useMemo(() => ['Trang chủ', 'Dịch vụ', 'Đơn đặt', 'Thống kê', 'Thanh toán'], [])
   return (
     <div className={cx('wrapper')}>
-      <Header
-        // menus={currentUser.roles?.includes('ADMIN') ? adminMenu : userMenu}
-        menus={adminMenu}
-      />
+      <Header menus={currentUser.roles?.includes('ADMIN') ? adminMenu : userMenu} />
       <div className={cx('content')}>{children}</div>
       <Footer />
     </div>
