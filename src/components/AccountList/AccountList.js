@@ -1,81 +1,21 @@
 import classNames from 'classnames/bind'
 import styles from './AccountList.module.scss'
-import { images } from '~/assets/images'
 import AccountItem from './AccountItem'
+import PropTypes from 'prop-types';
 
 const cx = classNames.bind(styles)
-function AccountList({type}) {
-  const dataList = [
-    {
-      id: 1,
-      avatar: images.noImage,
-      name: 'Nguyễn Khánh Quỳnh',
-      email: 'khanhquynh@gmail.com',
-      phoneNumber: '0884848885',
-      gender: 'FEMALE',
-      birthDay: '12-12-2003',
-      active: true,
-    },
-    {
-      id: 2,
-      avatar: images.noImage,
-      name: 'Nguyễn Văn Huỳnh',
-      email: 'vanhuynh@gmail.com',
-      phoneNumber: '0884848885',
-      gender: 'MALE',
-      birthDay: '12-02-2003',
-      active: false,
-      date: 'Đã khoá lúc 10:00 12-09-2023 ',
-      reason: 'Vi phạm tiêu chuẩn cộng đồng',
-    },
-    {
-      id: 3,
-      avatar: images.noImage,
-      name: 'Nguyễn Khánh Chi',
-      email: 'khanhchi@gmail.com',
-      phoneNumber: '0884848885',
-      gender: 'FEMALE',
-      birthDay: '12-12-2003',
-      active: true,
-    },
-    {
-      id: 4,
-      avatar: images.noImage,
-      name: 'Lê Ngọc Hà',
-      email: 'lengocha@gmail.com',
-      phoneNumber: '0884848885',
-      gender: 'FEMALE',
-      birthDay: '12-12-2003',
-      active: false,
-      date: 'Đã khoá lúc 10:00 12-09-2023 ',
-      reason: 'Vi phạm tiêu chuẩn cộng đồng',
-    },
-    {
-      id: 5,
-      avatar: images.noImage,
-      name: 'Trần Xuân Quỳnh',
-      email: 'tranxuanquynh@gmail.com',
-      phoneNumber: '0884848885',
-      gender: 'MALE',
-      birthDay: '10-12-2003',
-      active: true,
-    },
-  ]
-
-  const filters = dataList.filter(account => {
-    if (type === 'accounts') {
-      return account.active === true
-    } else {
-      return account.active === false
-    }
-  })
+function AccountList({ dataList }) {
   return (
     <div className={cx('wrapper')}>
-      {filters.map((account) => (
-        <AccountItem key={account.id} data={account} />
+      {dataList.map((account) => (
+        <AccountItem key={account.accountInfo.id} data={account.accountInfo} />
       ))}
     </div>
   )
+}
+
+AccountList.propTypes = {
+  dataList: PropTypes.array.isRequired
 }
 
 export default AccountList

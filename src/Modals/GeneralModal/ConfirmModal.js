@@ -23,9 +23,9 @@ function ConfirmModal() {
       try {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
         if (dispatch(checkLoginSession())) {
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
           await logoutService()
           dispatch(logout())
-          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
           navigate('/')
         }
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))

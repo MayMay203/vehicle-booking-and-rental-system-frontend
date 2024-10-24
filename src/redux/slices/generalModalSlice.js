@@ -17,6 +17,7 @@ const initialState = {
     title: '',
     description: '',
     name: '',
+    id: '',
   },
   inputConfirm: {
     isOpen: false,
@@ -50,7 +51,6 @@ const generalModalSlice = createSlice({
       }
     },
     setLoadingModalVisible: (state, action) => {
-      console.log(action.payload)
       state[action.payload.name] = action.payload.isOpen
     },
   },

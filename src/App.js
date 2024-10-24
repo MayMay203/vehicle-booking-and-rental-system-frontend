@@ -17,10 +17,12 @@ import { ConfirmModal, InputConfirmModal, TicketModal } from './Modals/GeneralMo
 import { useDispatch} from 'react-redux'
 import { checkLogin } from './redux/slices/userSlice'
 import Spinner from './components/Spinner'
+import { getAccessToken } from "./utils/cookieUtils"
 
 function App() {
   const dispatch = useDispatch()
   console.log('re-render app.js')
+  console.log(getAccessToken())
 
   useEffect(() => {
     dispatch(checkLogin())

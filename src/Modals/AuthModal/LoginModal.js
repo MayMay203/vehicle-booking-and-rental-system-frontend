@@ -58,7 +58,13 @@ function LoginModal() {
       toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-      toast.error(message, { autoClose: 1200 })
+      if (String(message).includes('Tài khoản')) {
+        toast.error(message, {autoClose: 1300})
+      }
+      else {
+        toast.error('Email hoặc mật khẩu sai. Vui lòng thử lại!', { autoClose: 1300 })
+      }
+
     }
   }
 

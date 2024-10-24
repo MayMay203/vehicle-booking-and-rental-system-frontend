@@ -111,9 +111,6 @@ function AccountSetting() {
   const handleSave = async (e) => {
     e.preventDefault()
     try {
-      if (selectedImage !== currentUser.avatar) {
-        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
-      }
       const accountInfo = {
         id: currentUser.id,
         name: fullName,
@@ -132,14 +129,16 @@ function AccountSetting() {
         formData.append('fileAvatar', imageBlob, 'avatar.png')
       }
       if (dispatch(checkLoginSession())) {
+        if (selectedImage !== currentUser.avatar) {
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+        }
         const userData = await updateAccount(formData)
-        console.log(userData)
         dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
-      }
-      setIsModified(false)
-      toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
-      if (selectedImage !== currentUser.avatar) {
-        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        setIsModified(false)
+        toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
+        if (selectedImage !== currentUser.avatar) {
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        }
       }
     } catch (error) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))

@@ -20,11 +20,11 @@ function Authenticate() {
         const data = await loginWithGoogle(code)
         if (data) {
           dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-          window.location.href = config.routes.home // Chuyển hướng sau khi đã đăng nhập
         } else {
           toast.error('Đăng nhập thất bại', { autoClose: 1500, position: 'top-center' })
           dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
         }
+        window.location.href = config.routes.home
       }
       else {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))

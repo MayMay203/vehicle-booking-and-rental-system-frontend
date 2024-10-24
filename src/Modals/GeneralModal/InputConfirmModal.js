@@ -7,6 +7,8 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
+import { lockAccount } from '~/apiServices/lockAccount'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function InputConfirmModal() {
@@ -16,12 +18,20 @@ function InputConfirmModal() {
 
   const [reason, setReason] = useState('')
 
-  const handleConfirm = (e) => {
+  const handleConfirm = async (e) => {
     e.preventDefault()
     if (showInputConfirm.name === generalModalNames.CANCEL_TICKET) {
       toast.success('Huỷ vé xe thành công.', { autoClose: 1200, position: 'top-center' })
     } else if (showInputConfirm.name === generalModalNames.LOCK_ACCOUNT) {
-      toast.success('Khoá tài khoản thành công', { autoClose: 1200, position: 'top-center' })
+      const accountId = showInputConfirm.id
+      try {
+        if (dispatch(checkLoginSession())) {
+          await lockAccount(accountId)
+          toast.success('Khoá tài khoản thành công', { autoClose: 800, position: 'top-center' })
+        }
+      } catch (message) {
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+      }
     }
     handleClose()
   }

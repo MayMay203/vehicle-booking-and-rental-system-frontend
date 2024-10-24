@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import styles from './DefaultLayout.module.scss'
@@ -6,6 +7,8 @@ import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function DefaultLayout({ children }) {
+  const currentUser = useSelector((state) => state.user.currentUser)
+
   const userMenu = [
     {
       content: 'Trang chủ',
@@ -36,17 +39,17 @@ function DefaultLayout({ children }) {
       to: config.routes.about,
     },
   ]
-  // const adminMenu = [
-  //   { content: 'Dịch vụ', to: config.routes.services },
-  //   { content: 'Tài khoản', to: config.routes.accounts },
-  //   { content: 'Đối tác', to: config.routes.partners },
-  //   { content: 'Thống kê', to: config.routes.statistics },
-  //   { content: 'Khuyến mãi', to: config.routes.vouchers },
-  // ]
+  const adminMenu = [
+    { content: 'Dịch vụ', to: config.routes.services },
+    { content: 'Tài khoản', to: config.routes.accounts },
+    { content: 'Đối tác', to: config.routes.partners },
+    { content: 'Thống kê', to: config.routes.statistics },
+    { content: 'Khuyến mãi', to: config.routes.vouchers },
+  ]
   // const partnerMenu = useMemo(() => ['Trang chủ', 'Dịch vụ', 'Đơn đặt', 'Thống kê', 'Thanh toán'], [])
   return (
     <div className={cx('wrapper')}>
-      <Header menus={userMenu} />
+      <Header menus={currentUser.roles?.includes('ADMIN') ? adminMenu : userMenu} />
       <div className={cx('content')}>{children}</div>
       <Footer />
     </div>
