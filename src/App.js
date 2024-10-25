@@ -4,7 +4,7 @@ import { publicRoutes } from "./routes"
 import { DefaultLayout } from './layouts'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Fragment, useEffect} from 'react'
+import { Fragment} from 'react'
 import {
   AuthCodeModal,
   ForgetPasswordModal,
@@ -14,20 +14,20 @@ import {
   RegisterModal,
 } from './Modals/AuthModal'
 import { ConfirmModal, InputConfirmModal, TicketModal } from './Modals/GeneralModal'
-import { useDispatch} from 'react-redux'
-import { checkLogin } from './redux/slices/userSlice'
+// import { useDispatch} from 'react-redux'
+// import { checkLogin } from './redux/slices/userSlice'
 import Spinner from './components/Spinner'
 import { getAccessToken } from "./utils/cookieUtils"
 
 function App() {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   console.log('re-render app.js')
   console.log(getAccessToken())
 
-  useEffect(() => {
-    dispatch(checkLogin())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   dispatch(checkLogin())
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   return (
     <div className="App">
