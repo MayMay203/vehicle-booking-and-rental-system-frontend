@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 import styles from './TakePhotoRegister.module.scss'
 import { Image } from 'react-bootstrap'
 import { images } from '~/assets/images'
-import Button from '../Button'
+// import Button from '../Button'
 const cx = classNames.bind(styles)
 function TakePhotoRegister({ number_photo, name_photos, handleSave, obligatory, noButton }) {
   const fileInputRefs = useRef(Array(number_photo).fill(null))
@@ -11,7 +11,7 @@ function TakePhotoRegister({ number_photo, name_photos, handleSave, obligatory, 
   const handleImageClick = (index) => {
     fileInputRefs.current[index].click()
   }
-  const [isSaved, setIsSaved] = useState(false)
+  // const [isSaved, setIsSaved] = useState(false)
 
   const handleFileChange = (index, event) => {
     const file = event.target.files[0]
@@ -20,7 +20,7 @@ function TakePhotoRegister({ number_photo, name_photos, handleSave, obligatory, 
       newFiles[index] = URL.createObjectURL(file)
       setSelectedFiles(newFiles)
     }
-    setIsSaved(false)
+    // setIsSaved(false)
   }
   const allImagesSelected = selectedFiles.every((file) => file !== null)  
   useEffect(() => {
