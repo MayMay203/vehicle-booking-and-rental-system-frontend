@@ -51,13 +51,10 @@ function FormDocuments({ setActiveNextFormDocs }) {
 
   return (
     <Form className={cx('form-more-infor')}>
-      <Form.Group className={cx('txt', 'mb-3', 'pt-2')} controlId="formMoreInfor.ControlInput0">
-        <Form.Label>
-          Ảnh giấy phép kinh doanh<span className="text-danger">*</span>
-        </Form.Label>
-        <TakePhotoRegister number_photo={1} name_photos={['Ảnh giấy phép kinh doanh']} handleSave={handleSavePhoto} />
+      <Form.Group className={cx('txt', 'mb-3', 'pt-2')} controlId="formMoreInfor.ControlInput1">
+        <TakePhotoRegister number_photo={2} name_photos={['Ảnh đại diện nhà xe', 'Ảnh giấy phép kinh doanh']} obligatory={true} handleSave={handleSavePhoto} />
       </Form.Group>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formMoreInfor.ControlInput1">
+      <Form.Group className={cx('txt', 'mb-3')} controlId="formMoreInfor.ControlInput2">
         <Form.Label>
           Chính sách <span className="text-danger">*</span>
         </Form.Label>
@@ -70,7 +67,7 @@ function FormDocuments({ setActiveNextFormDocs }) {
               onChange={(e) => handlePolicyChange(e, policy.id)}
               className={cx('txt')}
             />
-            {index === policies.length -1 ? (
+            {index === policies.length - 1 ? (
               <FontAwesomeIcon icon={faSquarePlus} className={cx('add-policy')} onClick={handleAddPolicy} />
             ) : (
               <FontAwesomeIcon
@@ -82,7 +79,7 @@ function FormDocuments({ setActiveNextFormDocs }) {
           </div>
         ))}
       </Form.Group>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formMoreInfor.ControlTextarea1">
+      <Form.Group className={cx('txt', 'mb-3')} controlId="formMoreInfor.ControlTextarea3">
         <Form.Label>
           Mô tả<span className="text-danger">*</span>
         </Form.Label>

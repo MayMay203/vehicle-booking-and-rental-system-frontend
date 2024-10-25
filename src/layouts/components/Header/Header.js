@@ -16,10 +16,10 @@ import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
 import Notification from '~/components/Notification'
 import ModalChat from '~/components/ModalChat'
-import { faCaretDown, faChevronDown, faCommentDots } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faCommentDots } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { config } from '~/config'
 
 const cx = classNames.bind(styles)
@@ -317,16 +317,34 @@ function Header({ menus }) {
               render={(attrs) => (
                 <div {...attrs}>
                   <PopperWrapper className={cx('custom-border')}>
-                    <div className="d-flex flex-column row-gap-4">
-                      <NavLink className={cx('link')} to={`${config.routes.partner}?type=bus`}>
-                        Đối tác nhà xe
-                      </NavLink>
-                      <NavLink className={cx('link')} to={`${config.routes.partner}?type=carRental`}>
-                        Đối tác cho thuê xe
-                      </NavLink>
-                      <NavLink className={cx('link')} to={`${config.routes.partner}?type=driver`}>
-                        Đối tác tài xế
-                      </NavLink>
+                    <div className="d-flex flex-column">
+                      <div className={cx('wrap-link')}>
+                        <NavLink
+                          className={cx('link')}
+                          to={`${config.routes.partner}?type=bus`}
+                          onClick={() => setShowDetailPartner(false)}
+                        >
+                          Đối tác nhà xe
+                        </NavLink>
+                      </div>
+                      <div className={cx('wrap-link')}>
+                        <NavLink
+                          className={cx('link')}
+                          to={`${config.routes.partner}?type=carRental`}
+                          onClick={() => setShowDetailPartner(false)}
+                        >
+                          Đối tác cho thuê xe
+                        </NavLink>
+                      </div>
+                      <div className={cx('wrap-link')}>
+                        <NavLink
+                          className={cx('link')}
+                          to={`${config.routes.partner}?type=driver`}
+                          onClick={() => setShowDetailPartner(false)}
+                        >
+                          Đối tác tài xế
+                        </NavLink>
+                      </div>
                     </div>
                   </PopperWrapper>
                 </div>

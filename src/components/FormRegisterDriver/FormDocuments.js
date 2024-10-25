@@ -7,6 +7,9 @@ import TakePhotoRegister from '../TakePhotoRegister'
 import FormBank from '../FormBank'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import FormEmergencyContact from '../FormEmergencyContact/FormEmergencyContact'
+import FormInforID from '../FormInforID'
+import FormDriverLicense from '../FormDriverLicense'
 const cx = classNames.bind(styles)
 function RequiredFieldIndicator({isActive}) {
   return (
@@ -55,33 +58,6 @@ function FormDocuments({ setActiveNextFormDocs }) {
     },
   ]
   const photosAvatar = ['guide_avatar_1', 'guide_avatar_2']
-
-  const [openGuideContact, setOpenGuideContact] = useState(false)
-  const guidesContact = [
-    {
-      id: 1,
-      content: 'Yêu cầu',
-      sub_contents: [
-        { id: 1, value: 'Chụp ảnh trên nền trơn.' },
-        { id: 2, value: 'Chụp ảnh rõ nét không loé sáng.' },
-        { id: 3, value: 'Chụp ảnh chính diện, nhìn thẳng, không nhắm mắt.' },
-      ],
-      icon: 'faCircleCheck',
-    },
-    {
-      id: 2,
-      content: 'Không được:',
-      sub_contents: [
-        {
-          id: 1,
-          value: 'Còn hạn ít nhất 1 tháng.',
-        },
-        { id: 2, value: 'Công dân Việt Nam (từ 18-60 tuổi)' },
-      ],
-      icon: 'faCircleXmark',
-    },
-  ]  
-  const photosContact = ['guide_avatar_1', 'guide_avatar_2']
 
   const [openGuideID, setOpenGuideID] = useState(false)
   const guidesID = [
@@ -238,6 +214,11 @@ function FormDocuments({ setActiveNextFormDocs }) {
     updateActive[3] = true
     setActive(updateActive)
   }
+  const handleSaveFormEmergencyContact = () => {
+    const updateActive = [...active]
+    updateActive[1] = true
+    setActive(updateActive)
+  }
   useEffect(() => {
     const allActive = active.every((item) => item === true)
     if (allActive) {
@@ -284,28 +265,9 @@ function FormDocuments({ setActiveNextFormDocs }) {
                 <RequiredFieldIndicator isActive={active[1]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
-                <p
-                  onClick={() => setOpenGuideContact(!openGuideContact)}
-                  aria-controls="collapse-guide-contact"
-                  aria-expanded={openGuideContact}
-                  className={cx('txt-small', 'btn-collapse')}
-                >
-                  Hướng dẫn chụp
-                </p>
-                <Collapse in={openGuideContact}>
-                  <div id="collapse-guide-contact" className={cx('row')}>
-                    <GuideTakePhoto
-                      type_photo={'contact'}
-                      photos={photosContact}
-                      notes={guidesContact}
-                    ></GuideTakePhoto>
-                  </div>
-                </Collapse>
-                <TakePhotoRegister
-                  number_photo={1}
-                  name_photos={['Ảnh tạm trú/thường trú']}
-                  handleSave={() => handleSave(1)}
-                ></TakePhotoRegister>
+                <FormEmergencyContact
+                  handleSaveFormEmergencyContact={handleSaveFormEmergencyContact}
+                ></FormEmergencyContact>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
@@ -327,11 +289,7 @@ function FormDocuments({ setActiveNextFormDocs }) {
                     <GuideTakePhoto type_photo={'ID'} notes={guidesID} photos={photosID}></GuideTakePhoto>
                   </div>
                 </Collapse>
-                <TakePhotoRegister
-                  number_photo={2}
-                  name_photos={['Mặt trước', 'Mặt sau']}
-                  handleSave={() => handleSave(2)}
-                ></TakePhotoRegister>
+                <FormInforID handleSaveFormInforID={() => handleSave(2)}></FormInforID>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="4">
@@ -401,11 +359,12 @@ function FormDocuments({ setActiveNextFormDocs }) {
                     ></GuideTakePhoto>
                   </div>
                 </Collapse>
-                <TakePhotoRegister
+                {/* <TakePhotoRegister
                   number_photo={2}
                   name_photos={['Mặt trước', 'Mặt sau']}
                   handleSave={() => handleSave(5)}
-                ></TakePhotoRegister>
+                ></TakePhotoRegister> */}
+                <FormDriverLicense handleSaveFormDriverLicense={() => handleSave(5)}></FormDriverLicense>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
