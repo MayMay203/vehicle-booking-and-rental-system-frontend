@@ -27,11 +27,13 @@ import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
 const cx = classNames.bind(styles)
 function AccountSetting() {
   console.log('re-render account settings')
-  const { currentUser, isLoading } = useSelector((state) => state.user)
+  const { currentUser, isLoading } = useSelector((state) => {
+    console.log(state.user)
+    return state.user
+  })
   const dispatch = useDispatch()
   const formRef = useRef(null)
   const inputFile = useRef(null)
-  const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -58,7 +60,6 @@ function AccountSetting() {
           const [day, month, year] = currentUser.birthDay.split('-')
           setBirthday(new Date(`${year}-${month}-${day}`))
         }
-        setEmail(currentUser.email || '')
         setGender(currentUser.gender || '')
         setPhoneNumber(currentUser.phoneNumber || '')
         setSelectedImage(currentUser.avatar)
@@ -201,7 +202,7 @@ function AccountSetting() {
           <div className="col-12 col-lg-7">
             <div className={cx('item')}>
               <form ref={formRef}>
-                <FormInput title="Email" id="email" type="email" value={email} disabled></FormInput>
+                <FormInput title="Email" id="email" type="email" value={currentUser.email || currentUser.username} disabled></FormInput>
                 <FormInput
                   id="fullname"
                   value={fullName ? fullName : ''}

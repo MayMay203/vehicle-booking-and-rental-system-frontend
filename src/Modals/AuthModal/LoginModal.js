@@ -51,7 +51,8 @@ function LoginModal() {
     try {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await login(email, password)
-      dispatch(setCurrentUser({ currentUser: data.accountLogin}))
+      console.log(data.accountLogin)
+      dispatch(setCurrentUser({ currentUser: data.accountLogin }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
@@ -64,7 +65,6 @@ function LoginModal() {
       else {
         toast.error('Email hoặc mật khẩu sai. Vui lòng thử lại!', { autoClose: 1300 })
       }
-
     }
   }
 

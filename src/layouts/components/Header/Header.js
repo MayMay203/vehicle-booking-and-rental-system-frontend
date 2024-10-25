@@ -24,9 +24,13 @@ import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
+  console.log('re-render header')
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
-  const { isLogin, currentUser, loading } = useSelector((state) => state.user)
+  const { isLogin, currentUser, loading } = useSelector((state) => {
+    console.log(state.user)
+    return state.user
+  })
   const [isShowMenu, setIsShowMenu] = useState(false)
   const [isShowNoti, setIsShowNoti] = useState(false)
   const [isShowMessage, setIsShowMessage] = useState(false)
@@ -160,21 +164,48 @@ function Header({ menus }) {
           </div>
           <Menu>
             {menus.map((menu, index) =>
-              menu.content === 'Trở thành đối tác' ? (
-                <Tippy
-                  interactive
-                  placement="bottom"
-                  render={(attrs) => (
-                    <div {...attrs}>
-                      <PopperWrapper>
-                        <UserMenu></UserMenu>
-                      </PopperWrapper>
+              menu.content.includes('đối tác') ? (
+                <>
+                  <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
+                    Trở thành đối tác
+                    <FontAwesomeIcon icon={faCaretDown} />
+                  </button>
+                  <div className={cx('d-flex', 'flex-column', { hidden: !isShowDetailPartner })}>
+                    <div className={cx('wrap-link')}>
+                      <NavLink
+                        className={cx('link')}
+                        to={`${
+                          currentUser.roles?.includes('ADMIN') ? config.routes.partner : config.routes.managePartners
+                        }?type=bus`}
+                        onClick={() => setShowDetailPartner(false)}
+                      >
+                        Đối tác nhà xe
+                      </NavLink>
                     </div>
-                  )}
-                >
-                  {/* <MenuItem key={index} menu={menu}></MenuItem> */}
-                  <div>Trở thành đối tác</div>
-                </Tippy>
+                    <div className={cx('wrap-link')}>
+                      <NavLink
+                        className={cx('link')}
+                        to={`${
+                          currentUser.roles?.includes('ADMIN') ? config.routes.partner : config.routes.managePartners
+                        }?type=carRental`}
+                        onClick={() => setShowDetailPartner(false)}
+                      >
+                        Đối tác cho thuê xe
+                      </NavLink>
+                    </div>
+                    <div className={cx('wrap-link')}>
+                      <NavLink
+                        className={cx('link')}
+                        to={`${
+                          currentUser.roles?.includes('ADMIN') ? config.routes.partner : config.routes.managePartners
+                        }?type=driver`}
+                        onClick={() => setShowDetailPartner(false)}
+                      >
+                        Đối tác tài xế
+                      </NavLink>
+                    </div>
+                  </div>
+                </>
               ) : (
                 <MenuItem key={index} menu={menu}></MenuItem>
               ),
@@ -308,55 +339,68 @@ function Header({ menus }) {
       </div>
       <Menu className="d-none d-lg-flex">
         {menus.map((menu, index) =>
-          menu.content === 'Trở thành đối tác' ? (
-            <Tippy
-              offset={[-1, 0]}
-              visible={isShowDetailPartner}
-              interactive
-              placement="bottom"
-              render={(attrs) => (
-                <div {...attrs}>
-                  <PopperWrapper className={cx('custom-border')}>
-                    <div className="d-flex flex-column">
-                      <div className={cx('wrap-link')}>
-                        <NavLink
-                          className={cx('link')}
-                          to={`${config.routes.partner}?type=bus`}
-                          onClick={() => setShowDetailPartner(false)}
-                        >
-                          Đối tác nhà xe
-                        </NavLink>
+          menu.content.includes('đối tác') ? (
+            <div>
+              <Tippy
+                offset={[-1, 0]}
+                visible={isShowDetailPartner}
+                interactive
+                placement="bottom"
+                render={(attrs) => (
+                  <div {...attrs}>
+                    <PopperWrapper className={cx('custom-border')}>
+                      <div className="d-flex flex-column">
+                        <div className={cx('wrap-link')}>
+                          <NavLink
+                            className={cx('link')}
+                            to={`${
+                              currentUser.roles?.includes('ADMIN')
+                                ? config.routes.partner
+                                : config.routes.managePartners
+                            }?type=bus`}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
+                            Đối tác nhà xe
+                          </NavLink>
+                        </div>
+                        <div className={cx('wrap-link')}>
+                          <NavLink
+                            className={cx('link')}
+                            to={`${
+                              currentUser.roles?.includes('ADMIN')
+                                ? config.routes.partner
+                                : config.routes.managePartners
+                            }?type=carRental`}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
+                            Đối tác cho thuê xe
+                          </NavLink>
+                        </div>
+                        <div className={cx('wrap-link')}>
+                          <NavLink
+                            className={cx('link')}
+                            to={`${
+                              currentUser.roles?.includes('ADMIN')
+                                ? config.routes.partner
+                                : config.routes.managePartners
+                            }?type=driver`}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
+                            Đối tác tài xế
+                          </NavLink>
+                        </div>
                       </div>
-                      <div className={cx('wrap-link')}>
-                        <NavLink
-                          className={cx('link')}
-                          to={`${config.routes.partner}?type=carRental`}
-                          onClick={() => setShowDetailPartner(false)}
-                        >
-                          Đối tác cho thuê xe
-                        </NavLink>
-                      </div>
-                      <div className={cx('wrap-link')}>
-                        <NavLink
-                          className={cx('link')}
-                          to={`${config.routes.partner}?type=driver`}
-                          onClick={() => setShowDetailPartner(false)}
-                        >
-                          Đối tác tài xế
-                        </NavLink>
-                      </div>
-                    </div>
-                  </PopperWrapper>
-                </div>
-              )}
-              onClickOutside={() => setShowDetailPartner(false)}
-            >
-              {/* <MenuItem key={index} menu={menu}></MenuItem> */}
-              <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
-                Trở thành đối tác
-                <FontAwesomeIcon icon={faCaretDown} />
-              </button>
-            </Tippy>
+                    </PopperWrapper>
+                  </div>
+                )}
+                onClickOutside={() => setShowDetailPartner(false)}
+              >
+                <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
+                  Trở thành đối tác
+                  <FontAwesomeIcon icon={faCaretDown} />
+                </button>
+              </Tippy>
+            </div>
           ) : (
             <MenuItem key={index} menu={menu}></MenuItem>
           ),
