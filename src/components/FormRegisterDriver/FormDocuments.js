@@ -204,7 +204,9 @@ function FormDocuments({ setActiveNextFormDocs }) {
   const photosRegistrationCertificate = ['guide_registration_certificate_1', 'guide_registration_certificate_2']
 
   const [active, setActive] = useState(Array(8).fill(false))
-  const handleSave = (id) => {
+  const handleSave = (id, images) => {
+    console.log('id', id)
+    console.log('images:', images)
     const updateActive = [...active]
     updateActive[id] = true
     setActive(updateActive)
@@ -254,8 +256,9 @@ function FormDocuments({ setActiveNextFormDocs }) {
                 </Collapse>
                 <TakePhotoRegister
                   number_photo={1}
+                  id={0}
                   name_photos={['Ảnh chân dung']}
-                  handleSave={() => handleSave(0)}
+                  handleSave={handleSave}
                 ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
@@ -332,7 +335,7 @@ function FormDocuments({ setActiveNextFormDocs }) {
                 <TakePhotoRegister
                   number_photo={4}
                   name_photos={['Mặt trước', 'Mặt sau', 'Mặt bên phải', 'Mặt bên trái']}
-                  handleSave={() => handleSave(4)}
+                  // handleSave={() => handleSave(4)}
                 ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
@@ -393,7 +396,7 @@ function FormDocuments({ setActiveNextFormDocs }) {
                 <TakePhotoRegister
                   number_photo={2}
                   name_photos={['Mặt trước', 'Mặt sau']}
-                  handleSave={() => handleSave(6)}
+                  // handleSave={() => handleSave(6)}
                 ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
@@ -423,7 +426,7 @@ function FormDocuments({ setActiveNextFormDocs }) {
                 <TakePhotoRegister
                   number_photo={2}
                   name_photos={['Mặt trước', 'Mặt sau']}
-                  handleSave={() => handleSave(7)}
+                  // handleSave={() => handleSave(7)}
                 ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>

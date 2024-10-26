@@ -5,29 +5,37 @@ import { Image } from 'react-bootstrap'
 import { images } from '~/assets/images'
 // import Button from '../Button'
 const cx = classNames.bind(styles)
-function TakePhotoRegister({ number_photo, name_photos, handleSave, obligatory, noButton }) {
+function TakePhotoRegister({ id, number_photo, name_photos, handleSave, obligatory, noButton }) {
   const fileInputRefs = useRef(Array(number_photo).fill(null))
   const [selectedFiles, setSelectedFiles] = useState(Array(number_photo).fill(null))
+  const [hasSaved, setHasSaved] = useState(false)
   const handleImageClick = (index) => {
     fileInputRefs.current[index].click()
+    
   }
   // const [isSaved, setIsSaved] = useState(false)
-
   const handleFileChange = (index, event) => {
     const file = event.target.files[0]
     if (file) {
       const newFiles = [...selectedFiles]
       newFiles[index] = URL.createObjectURL(file)
       setSelectedFiles(newFiles)
+      setHasSaved(false)
     }
-    // setIsSaved(false)
   }
-  const allImagesSelected = selectedFiles.every((file) => file !== null)  
+
   useEffect(() => {
-    if (allImagesSelected) {
-      handleSave()
+    const allImagesSelected = selectedFiles.every((file) => file !== null)
+    // Chỉ gọi handleSave khi tất cả ảnh đã chọn và handleSave chưa được gọi
+    if (allImagesSelected && !hasSaved) {
+      handleSave(id, selectedFiles)
+      setHasSaved(true) // Đánh dấu là đã gọi handleSave
+    } else if (!allImagesSelected && hasSaved) {
+      setHasSaved(false) // Đặt lại cờ khi có thay đổi và chưa đủ ảnh được chọn
     }
-  }, [allImagesSelected, handleSave])
+  }, [selectedFiles, id, handleSave, hasSaved])
+  
+
   return (
     <div>
       <div className="mt-3 mb-2 d-flex">
