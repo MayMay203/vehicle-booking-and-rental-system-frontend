@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { registerAdAccount } from '~/apiServices/registerAdAccount'
 
 const cx = classNames.bind(styles)
 function RegisterAdminModal() {
@@ -37,8 +38,15 @@ function RegisterAdminModal() {
 
   const handleRegister = async (e) => {
     e.preventDefault()
-    toast.success('Đăng ký tài khoản thành công.',{autoClose: 800, position: 'top-center'})
-    reset();
+    try {
+      await registerAdAccount(email, password, confirmPass)
+      dispatch(setAuthModalVisible({modalName: modalNames.REGISTER_ADMIN, isVisible: false}))
+      toast.success('Đăng ký tài khoản thành công.', { autoClose: 800, position: 'top-center' })
+      reset()
+    }
+    catch (message) {
+      toast.error(message)
+    }
 }
   const handleChange = useCallback((value, functionChange) => {
     functionChange(value)

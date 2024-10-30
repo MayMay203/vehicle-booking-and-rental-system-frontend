@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { checkLoginSession, logout } from '~/redux/slices/userSlice'
+import { lockAccount } from '~/apiServices/lockAccount'
+import { toast } from 'react-toastify'
+import { unlockAccount } from '~/apiServices/unlockAccount'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -35,6 +38,29 @@ function ConfirmModal() {
     } else if (showConfirmModal.name === generalModalNames.EXPIRED_SESSION) {
       dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+    } else if (showConfirmModal.name === generalModalNames.LOCK_ACCOUNT) {
+      const accountId = showConfirmModal.id
+      try {
+        if (dispatch(checkLoginSession())) {
+          await lockAccount(accountId)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          toast.success('Khoá tài khoản thành công', { autoClose: 800, position: 'top-center' })
+        }
+      } catch (message) {
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+      }
+    } else if (showConfirmModal.name === generalModalNames.UNLOCK_ACCOUNT) {
+      const accountId = showConfirmModal.id
+      console.log('Vo day mo tai khoan')
+      try {
+        if (dispatch(checkLoginSession())) {
+          await unlockAccount(accountId)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          toast.success('Mở tài khoản thành công', { autoClose: 800, position: 'top-center' })
+        }
+      } catch (message) {
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+      }
     }
   }
 

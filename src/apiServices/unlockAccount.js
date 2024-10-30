@@ -1,9 +1,9 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
-export const lockAccount = async (id) => {
+export const unlockAccount = async (id) => {
   try {
     const response = await httpRequest.put(
-      `/v1/accounts/deactivate?idAccount=${id}`,
+      `/v1/accounts/activate?idAccount=${id}`,
       {},
       {
         headers: {

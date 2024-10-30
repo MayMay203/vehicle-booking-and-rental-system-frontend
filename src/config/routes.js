@@ -19,6 +19,6 @@ export const routes = {
   services: '/manage-services',
   statistics: '/statistics',
   vouchers: '/manage-vouchers',
-  partners: '/manage-partners',
+  managePartners: '/manage-partners',
   message: 'message',
 }

@@ -98,7 +98,7 @@ const publicRoutes = [
     layout: HeaderOnly,
   },
   {
-    path: config.routes.partners,
+    path: config.routes.managePartners,
     component: ManagePartners,
     layout: HeaderOnly,
   },
