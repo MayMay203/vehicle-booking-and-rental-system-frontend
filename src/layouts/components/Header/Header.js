@@ -27,10 +27,7 @@ function Header({ menus }) {
   console.log('re-render header')
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
-  const { isLogin, currentUser, loading } = useSelector((state) => {
-    console.log(state.user)
-    return state.user
-  })
+  const { isLogin, currentUser, loading } = useSelector((state) => state.user)
   const [isShowMenu, setIsShowMenu] = useState(false)
   const [isShowNoti, setIsShowNoti] = useState(false)
   const [isShowMessage, setIsShowMessage] = useState(false)
@@ -164,10 +161,10 @@ function Header({ menus }) {
           </div>
           <Menu>
             {menus.map((menu, index) =>
-              menu.content.includes('đối tác') ? (
+              menu.content.toLowerCase().includes('đối tác') ? (
                 <>
                   <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
-                    Trở thành đối tác
+                    {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
                     <FontAwesomeIcon icon={faCaretDown} />
                   </button>
                   <div className={cx('d-flex', 'flex-column', { hidden: !isShowDetailPartner })}>
@@ -175,7 +172,7 @@ function Header({ menus }) {
                       <NavLink
                         className={cx('link')}
                         to={`${
-                          currentUser.roles?.includes('ADMIN') ? config.routes.partner : config.routes.managePartners
+                          currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
                         }?type=bus`}
                         onClick={() => setShowDetailPartner(false)}
                       >
@@ -186,7 +183,7 @@ function Header({ menus }) {
                       <NavLink
                         className={cx('link')}
                         to={`${
-                          currentUser.roles?.includes('ADMIN') ? config.routes.partner : config.routes.managePartners
+                          currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
                         }?type=carRental`}
                         onClick={() => setShowDetailPartner(false)}
                       >
@@ -197,7 +194,9 @@ function Header({ menus }) {
                       <NavLink
                         className={cx('link')}
                         to={`${
-                          currentUser.roles?.includes('ADMIN') ? config.routes.partner : config.routes.managePartners
+                          currentUser.roles?.includes('ADMIN')
+                            ? config.routes.managePartners
+                            : config.routes.partner
                         }?type=driver`}
                         onClick={() => setShowDetailPartner(false)}
                       >
@@ -339,7 +338,7 @@ function Header({ menus }) {
       </div>
       <Menu className="d-none d-lg-flex">
         {menus.map((menu, index) =>
-          menu.content.includes('đối tác') ? (
+          menu.content.toLowerCase().includes('đối tác') ? (
             <div>
               <Tippy
                 offset={[-1, 0]}
@@ -355,8 +354,8 @@ function Header({ menus }) {
                             className={cx('link')}
                             to={`${
                               currentUser.roles?.includes('ADMIN')
-                                ? config.routes.partner
-                                : config.routes.managePartners
+                                ? config.routes.managePartners
+                                : config.routes.partner
                             }?type=bus`}
                             onClick={() => setShowDetailPartner(false)}
                           >
@@ -368,8 +367,8 @@ function Header({ menus }) {
                             className={cx('link')}
                             to={`${
                               currentUser.roles?.includes('ADMIN')
-                                ? config.routes.partner
-                                : config.routes.managePartners
+                                ? config.routes.managePartners
+                                : config.routes.partner
                             }?type=carRental`}
                             onClick={() => setShowDetailPartner(false)}
                           >
@@ -381,8 +380,8 @@ function Header({ menus }) {
                             className={cx('link')}
                             to={`${
                               currentUser.roles?.includes('ADMIN')
-                                ? config.routes.partner
-                                : config.routes.managePartners
+                                ? config.routes.managePartners
+                                : config.routes.partner
                             }?type=driver`}
                             onClick={() => setShowDetailPartner(false)}
                           >
@@ -396,7 +395,7 @@ function Header({ menus }) {
                 onClickOutside={() => setShowDetailPartner(false)}
               >
                 <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
-                  Trở thành đối tác
+                  {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
                   <FontAwesomeIcon icon={faCaretDown} />
                 </button>
               </Tippy>

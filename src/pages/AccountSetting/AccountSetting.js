@@ -202,7 +202,7 @@ function AccountSetting() {
           <div className="col-12 col-lg-7">
             <div className={cx('item')}>
               <form ref={formRef}>
-                <FormInput title="Email" id="email" type="email" value={currentUser.email || currentUser.username} disabled></FormInput>
+                <FormInput title="Email" id="email" type="email" value={currentUser.email} disabled></FormInput>
                 <FormInput
                   id="fullname"
                   value={fullName ? fullName : ''}

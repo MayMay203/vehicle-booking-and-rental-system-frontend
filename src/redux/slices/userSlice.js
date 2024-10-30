@@ -30,15 +30,15 @@ export const checkLogin = createAsyncThunk('user/checkLogin', async (_, { dispat
         dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
       }
     } else {
-        dispatch(
-          setConfirmModalVisible({
-            modalType: 'confirm',
-            isOpen: true,
-            title: 'Thông báo',
-            description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
-            name: generalModalNames.EXPIRED_SESSION,
-          }),
-        )
+        // dispatch(
+        //   setConfirmModalVisible({
+        //     modalType: 'confirm',
+        //     isOpen: true,
+        //     title: 'Thông báo',
+        //     description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
+        //     name: generalModalNames.EXPIRED_SESSION,
+        //   }),
+        // )
       dispatch(toggleLogin(false))
     }
   }
@@ -68,7 +68,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUser: (state, action) => {
-      console.log(action)
       state.isLogin = true
       state.currentUser = action.payload.currentUser
     },

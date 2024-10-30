@@ -5,7 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 
 const cx = classNames.bind(styles)
-function SearchInput({ className }) {
+function SearchInput({ className, handleChange }) {
   const [searchValue, setSearchValue] = useState('')
   return (
     <div className={cx('wrapper', [className])}>
@@ -17,6 +17,7 @@ function SearchInput({ className }) {
         onChange={(e) => {
           e.target.value = e.target.value.trimStart()
           setSearchValue(e.target.value)
+          handleChange(e.target.value)
         }}
       ></input>
       <button className={cx('btn-search', { disabled: searchValue === '' })}>

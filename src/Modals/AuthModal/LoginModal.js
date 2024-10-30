@@ -123,7 +123,7 @@ function LoginModal() {
           <Button className={cx('btn-submit')} onClick={handleLogin} disabled={!isValid} type="submit">
             Đăng nhập
           </Button>
-          <button className={cx('btn-link')} onClick={handleShowForget}>
+          <button className={cx('btn-link')} onClick={handleShowForget} type='button'>
             Quên mật khẩu
           </button>
           <div className={cx('other')}>hoặc</div>

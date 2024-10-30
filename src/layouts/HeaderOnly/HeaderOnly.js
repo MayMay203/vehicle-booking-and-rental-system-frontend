@@ -39,17 +39,14 @@ function HeaderOnly({ children }) {
   ]
   const adminMenu = [
     { content: 'Dịch vụ', to: config.routes.services },
-    { content: 'Đối tác', to: config.routes.partners },
+    { content: 'Đối tác', to: config.routes.managePartners },
     { content: 'Tài khoản', to: config.routes.accounts },
     { content: 'Khuyến mãi', to: config.routes.vouchers },
     { content: 'Thống kê', to: config.routes.statistics },
   ]
   return (
     <div className={cx('wrapper')}>
-      <Header
-        menus={currentUser.roles?.includes('ADMIN') ? adminMenu : userMenu}
-        // menus={adminMenu}
-      />
+      <Header menus={currentUser.roles?.includes('ADMIN') ? adminMenu : userMenu} />
       <div className={cx('container')}>{children}</div>
     </div>
   )
