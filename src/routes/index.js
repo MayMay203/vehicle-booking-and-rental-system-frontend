@@ -22,7 +22,9 @@ import ManagePartners from '~/pages/Admin/ManageParners'
 import ManageServices from '~/pages/Admin/ManageServices'
 import ManageVouchers from '~/pages/Admin/ManageVouchers'
 import Statistics from '~/pages/Admin/Statistics'
-import BusTrip from '~/pages/BusPartner/BusTrip'
+import BusTrip from '~/pages/BusPartner/BusTripManage/BusTrip'
+import DetailBusTrip from '~/pages/BusPartner/BusTripManage/DetailBusTrip'
+import Utility from '~/pages/BusPartner/Utility'
 
 const publicRoutes = [
   {
@@ -121,6 +123,14 @@ const publicRoutes = [
   {
     path: config.routes.busTrip,
     component: BusTrip,
+  },
+  {
+    path: config.routes.detailBusTrip,
+    component: DetailBusTrip,
+  },
+  {
+    path: config.routes.utility,
+    component: Utility,
   },
   { path: config.routes.message, component: Message, layout: HeaderOnly },
 ]

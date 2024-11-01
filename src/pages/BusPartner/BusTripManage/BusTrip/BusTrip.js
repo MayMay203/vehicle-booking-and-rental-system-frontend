@@ -10,11 +10,16 @@ import PopperItem from '~/components/PopperWrapper/PopperItem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort } from "@fortawesome/free-solid-svg-icons"
 import TicketBusTrip from "~/components/TicketBusTrip"
+import { useNavigate } from "react-router-dom"
 const cx = classNames.bind(styles)
 function BusTrip(){
     const [activeTypeFilter, setActiveTypeFilter] = useState('all')
     const handleTypeFilterClick = (btnType) => {
         setActiveTypeFilter(btnType)
+    }
+    const navigate = useNavigate()
+    const handleShowDetail = (id) => {
+      navigate('detail-bus-trip', { state: { id: id } })
     }
     return (
       <div className={cx('container')}>
@@ -23,7 +28,7 @@ function BusTrip(){
         <div className="d-flex justify-content-center mt-4 align-items-center">
           <Button primary>Thêm chuyến xe</Button>
         </div>
-        <Row>
+        <Row className='mt-4 justify-content-center'>
           <Col xs="10" className="p-2">
             <div className={cx('type-filter-container')}>
               <Button
@@ -75,11 +80,7 @@ function BusTrip(){
             </Tippy>
           </Col>
         </Row>
-        <TicketBusTrip></TicketBusTrip>
-        <TicketBusTrip></TicketBusTrip>
-        <TicketBusTrip></TicketBusTrip>
-        <TicketBusTrip></TicketBusTrip>
-        <TicketBusTrip></TicketBusTrip>
+        <TicketBusTrip id={1} handleShowDetail={() => handleShowDetail(1)}></TicketBusTrip>
         <div className="mb-5"></div>
       </div>
     )

@@ -1,11 +1,10 @@
-@use '../../../abstracts' as abstracts;
+@use '../../../../abstracts' as abstracts;
 .type-filter-container {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    margin-top: 3rem;
 }
 .type-filter{
     flex-shrink: 0; /* Ngăn không cho button bị co lại */

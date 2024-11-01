@@ -22,4 +22,6 @@ export const routes = {
   partners: '/manage-partners',
   message: 'message',
   busTrip: 'bus-trip',
+  detailBusTrip: 'bus-trip/detail-bus-trip',
+  utility: 'utility',
 }
