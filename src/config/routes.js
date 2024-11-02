@@ -23,5 +23,6 @@ export const routes = {
   message: 'message',
   busTrip: 'bus-trip',
   detailBusTrip: 'bus-trip/detail-bus-trip',
+  updateBusTrip: 'bus-trip/update-bus-trip',
   utility: 'utility',
 }
