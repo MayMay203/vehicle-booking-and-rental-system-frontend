@@ -24,8 +24,9 @@ import ManageVouchers from '~/pages/Admin/ManageVouchers'
 import Statistics from '~/pages/Admin/Statistics'
 import BusTrip from '~/pages/BusPartner/BusTripManage/BusTrip'
 import DetailBusTrip from '~/pages/BusPartner/BusTripManage/DetailBusTrip'
-import UpdateBusTrip from '~/pages/BusPartner/BusTripManage/UpdateBusTrip'
+import AddBusTrip from '~/pages/BusPartner/BusTripManage/AddBusTrip'
 import Utility from '~/pages/BusPartner/Utility'
+
 
 const publicRoutes = [
   {
@@ -130,8 +131,8 @@ const publicRoutes = [
     component: DetailBusTrip,
   },
   {
-    path: config.routes.updateBusTrip,
-    component: UpdateBusTrip,
+    path: config.routes.addBusTrip,
+    component: AddBusTrip,
   },
   {
     path: config.routes.utility,

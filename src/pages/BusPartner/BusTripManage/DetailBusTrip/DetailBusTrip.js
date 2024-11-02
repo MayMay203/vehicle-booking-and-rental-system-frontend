@@ -15,6 +15,8 @@ import {
   faHammer,
   faMattressPillow,
 } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useState } from "react"
+import Button from "~/components/Button"
 const cx = classNames.bind(styles)
 function DetailBusTrip(){
   const listUtilities = [
@@ -28,15 +30,67 @@ function DetailBusTrip(){
       description: 'Dùng để phá kính ô tô thoát hiểm trong trường hợp khẩn cấp..',
     },
   ]
+  const statuses = [
+    { value: 'Đang hoạt động', label: 'Đang hoạt động' },
+    { value: 'Tạm dừng hoạt động', label: 'Tạm dừng hoạt động' },
+    { value: 'Dừng hoạt động', label: 'Dừng hoạt động' },
+  ]
+  const [formData, setFormData] = useState({
+    departure: 'Đà Nẵng',
+    date: '22/10/2024',
+    price: '340.000',
+    reduce: '20%',
+    typeVehicle: 'Limousine34GiuongNam',
+    licensePlateNumber: '30G-49344',
+    destination: 'Hà Nội',
+    time: '13:00',
+    extendTime: '2 tiếng',
+    numberSeat: '34',
+    emptySeat: '11',
+    status: 'Dừng hoạt động',
+  })
+  const [activeUpdate, setActiveUpdate] = useState(false)
+  const handleInputChange = (e) =>{
+    const {name, value} = e.target
+    setFormData((prevState) => ({
+      ...prevState,
+      [name] : value,
+    }))
+    console.log(formData)
+  }
+  useEffect(() => {
+    const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
+    console.log('Có vô', formData)
+    console.log(allFieldsFilled)
+    setActiveUpdate(allFieldsFilled)
+  }, [formData])
+  const handleCancel = () =>{
+    setFormData({
+      departure: 'Đà Nẵng',
+      date: '22/10/2024',
+      price: '340.000',
+      reduce: '20%',
+      typeVehicle: 'Limousine34GiuongNam',
+      licensePlateNumber: '30G-49344',
+      destination: 'Hà Nội',
+      time: '13:00',
+      extendTime: '2 tiếng',
+      numberSeat: '34',
+      emptySeat: '11',
+      status: 'Dừng hoạt động',
+    })
+  }
     return (
       <div className={cx('container mt-5 mb-5', 'wrap-container')}>
         <Row className={cx('form-infor-bus-trip', 'justify-content-center')}>
           <p className={cx('title-form')}>Thông tin chuyến xe</p>
+          <div className={cx('line')}></div>
           <Col className={cx('col-sm-12 col-md-6', 'col-form')}>
             <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput1">
               <Form.Label className="mb-3">Địa điểm xuất phát</Form.Label>
               <Form.Select
-                value="Đà Nẵng"
+                value={formData.departure}
+                name="departure"
                 aria-label="departure"
                 className={cx('txt', 'selectbox', 'infor-item')}
                 readOnly
@@ -51,7 +105,7 @@ function DetailBusTrip(){
               <InputGroup className={cx('txt', 'infor-item')}>
                 <Form.Control
                   type="text"
-                  value="22/10/2024"
+                  value={formData.date}
                   name="date"
                   aria-label="date"
                   className={cx('txt')}
@@ -63,33 +117,54 @@ function DetailBusTrip(){
                 </InputGroup.Text>
               </InputGroup>
             </Form.Group>
-            <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput3">
-              <Form.Label className="mb-3">Giá vé</Form.Label>
-              <InputGroup className={cx('txt', 'infor-item')}>
-                <Form.Control
-                  type="text"
-                  value="340.000"
-                  name="price"
-                  aria-label="price"
-                  className={cx('txt')}
-                  readOnly
-                  disabled
-                />
-                <InputGroup.Text className={cx('txt')}>
-                  <FontAwesomeIcon icon={faTicket} />
-                </InputGroup.Text>
-              </InputGroup>
-            </Form.Group>
+            <div className="d-flex">
+              <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput3">
+                <Form.Label className="mb-3">
+                  Giá vé<span className="text-danger">*</span>
+                </Form.Label>
+                <InputGroup className={cx('txt', 'infor-item')}>
+                  <Form.Control
+                    type="text"
+                    value={formData.price}
+                    name="price"
+                    aria-label="price"
+                    className={cx('txt')}
+                    onChange={handleInputChange}
+                  />
+                  <InputGroup.Text className={cx('txt')}>
+                    <FontAwesomeIcon icon={faTicket} />
+                  </InputGroup.Text>
+                </InputGroup>
+              </Form.Group>
+              <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput33">
+                <Form.Label className="mb-3">
+                  Giảm giá<span className="text-danger">*</span>
+                </Form.Label>
+                <InputGroup className={cx('txt', 'infor-item')}>
+                  <Form.Control
+                    type="text"
+                    value={formData.reduce}
+                    name="reduce"
+                    aria-label="reduce"
+                    className={cx('txt')}
+                    onChange={handleInputChange}
+                  />
+                  <InputGroup.Text className={cx('txt')}>
+                    <FontAwesomeIcon icon={faTicket} />
+                  </InputGroup.Text>
+                </InputGroup>
+              </Form.Group>
+            </div>
             <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput4">
               <Form.Label className="mb-3">Loại phương tiện</Form.Label>
               <Form.Select
-                value="Limousine34GiuongNam"
+                name="typeVehicle"
                 aria-label="typeVehicle"
                 className={cx('txt', 'selectbox', 'infor-item')}
                 readOnly
                 disabled
               >
-                <option value="Limousine34GiuongNam">Limousine 34 giường nằm</option>
+                <option value={formData.typeVehicle}>{formData.typeVehicle}</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput5">
@@ -97,7 +172,7 @@ function DetailBusTrip(){
               <InputGroup className={cx('txt', 'infor-item')}>
                 <Form.Control
                   type="text"
-                  value="30G-49344"
+                  value={formData.licensePlateNumber}
                   name="licensePlateNumber"
                   aria-label="licensePlateNumber"
                   className={cx('txt')}
@@ -110,11 +185,11 @@ function DetailBusTrip(){
               </InputGroup>
             </Form.Group>
           </Col>
-          <Col className={cx('col-sm-12 col-md-6')}>
+          <Col className={cx('col-sm-12 col-md-6', 'col-form')}>
             <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput11">
               <Form.Label className="mb-3">Địa điểm đến</Form.Label>
               <Form.Select
-                value="Hà Nội"
+                value={formData.destination}
                 aria-label="destination"
                 className={cx('txt', 'selectbox', 'infor-item')}
                 readOnly
@@ -128,7 +203,7 @@ function DetailBusTrip(){
               <InputGroup className={cx('txt', 'infor-item')}>
                 <Form.Control
                   type="text"
-                  value="13:00"
+                  value={formData.time}
                   name="time"
                   aria-label="time"
                   className={cx('txt')}
@@ -146,7 +221,7 @@ function DetailBusTrip(){
                 <Form.Control
                   type="text"
                   value="2 tiếng"
-                  name="extend-time"
+                  name="extendTime"
                   aria-label="extend-time"
                   className={cx('txt')}
                   readOnly
@@ -157,56 +232,59 @@ function DetailBusTrip(){
                 </InputGroup.Text>
               </InputGroup>
             </Form.Group>
-            <Row>
-              <Col>
-                <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput14">
-                  <Form.Label className="mb-3">Số ghế</Form.Label>
-                  <InputGroup className={cx('txt', 'infor-item')}>
-                    <Form.Control
-                      type="text"
-                      value="34"
-                      name="numberSeat"
-                      aria-label="numberSeat"
-                      className={cx('txt')}
-                      readOnly
-                      disabled
-                    />
-                    <InputGroup.Text className={cx('txt')}>
-                      <FontAwesomeIcon icon={faCouch} />
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput15">
-                  <Form.Label className="mb-3">Còn trống</Form.Label>
-                  <InputGroup className={cx('txt', 'infor-item')}>
-                    <Form.Control
-                      type="text"
-                      value="11"
-                      name="emptySeat"
-                      aria-label="emptySeat"
-                      className={cx('txt')}
-                      readOnly
-                      disabled
-                    />
-                    <InputGroup.Text className={cx('txt')}>
-                      <FontAwesomeIcon icon={faCouch} />
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-              </Col>
-            </Row>
+            <div className="d-flex">
+              <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput14">
+                <Form.Label className="mb-3">Số ghế</Form.Label>
+                <InputGroup className={cx('txt', 'infor-item')}>
+                  <Form.Control
+                    type="text"
+                    value={formData.numberSeat}
+                    name="numberSeat"
+                    aria-label="numberSeat"
+                    className={cx('txt')}
+                    readOnly
+                    disabled
+                  />
+                  <InputGroup.Text className={cx('txt')}>
+                    <FontAwesomeIcon icon={faCouch} />
+                  </InputGroup.Text>
+                </InputGroup>
+              </Form.Group>
+
+              <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput15">
+                <Form.Label className="mb-3">Còn trống</Form.Label>
+                <InputGroup className={cx('txt', 'infor-item')}>
+                  <Form.Control
+                    type="text"
+                    value={formData.emptySeat}
+                    name="emptySeat"
+                    aria-label="emptySeat"
+                    className={cx('txt')}
+                    readOnly
+                    disabled
+                  />
+                  <InputGroup.Text className={cx('txt')}>
+                    <FontAwesomeIcon icon={faCouch} />
+                  </InputGroup.Text>
+                </InputGroup>
+              </Form.Group>
+            </div>
             <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput16">
-              <Form.Label className="mb-3">Trạng thái hoạt động</Form.Label>
+              <Form.Label className="mb-3">
+                Trạng thái hoạt động<span className="text-danger">*</span>
+              </Form.Label>
               <Form.Select
-                value="status"
+                name="status"
                 aria-label="status"
                 className={cx('txt', 'selectbox', 'infor-item')}
-                readOnly
-                disabled
+                value={formData.status}
+                onChange={handleInputChange}
               >
-                <option value="on">Đang hoạt động</option>
+                {statuses.map((status, index) => (
+                  <option key={index} value={status.label}>
+                    {status.label}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
           </Col>
@@ -233,7 +311,7 @@ function DetailBusTrip(){
             <Tab eventKey="policy" title="Chính sách">
               <Row className={cx('content-tab')}>
                 <span className={cx('title')}>Chính sách</span>
-                <span className={cx('content')}>
+                <p className={cx('content')}>
                   - Sử dụng xe đúng mục đích.
                   <br /> - Không sử dụng xe thuê vào mục đích phi pháp, trái pháp luật.
                   <br /> - Không sử dụng xe thuê để cầm cố, thế chấp.
@@ -245,7 +323,7 @@ function DetailBusTrip(){
                   <br /> - Xe được giới hạn di chuyển ở mức 400km cho 24h, và lần lượt là 250km, 300km, 350 km cho gói
                   4h, 8h, 12h.
                   <br /> Trân trọng cảm ơn, chúc quý khách hàng có những chuyến đi tuyệt vời !
-                </span>
+                </p>
               </Row>
             </Tab>
             <Tab eventKey="utility" title="Tiện ích">
@@ -293,6 +371,21 @@ function DetailBusTrip(){
             </Tab>
           </Tabs>
         </div>
+        <div className="d-flex justify-content-center ">
+          <div className={cx('line', 'text-center')}></div>
+        </div>
+        <Row className="justify-content-center mt-4">
+          <Col></Col>
+          <Col className="d-flex justify-content-center">
+            <Button outline className="ms-5 me-5" onClick={handleCancel}>
+              Hủy
+            </Button>
+            <Button primary className="ms-5 me-5" disabled={!activeUpdate}>
+              Cập nhật
+            </Button>
+          </Col>
+          <Col></Col>
+        </Row>
       </div>
     )
 }

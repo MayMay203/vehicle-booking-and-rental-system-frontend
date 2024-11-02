@@ -13,7 +13,8 @@
     justify-content: center;
 }
 .col-form{
-    padding-left: 14rem;
+    padding-left: 12rem;
+    margin-top: 2rem;
     @include abstracts.screen(xl){
         padding-left: 8rem;
     }
@@ -30,11 +31,21 @@
     align-items: center;
     justify-content: center;
     margin: 0 auto;
+    max-height: 50rem;
+    overflow-y: auto;
 }
 .title{
   font-size: 2rem;
   font-weight: 600;
   margin: 2rem 0 1rem 0;
+}
+.line{
+    display: block;
+    width: 90%;
+    background-color: #FFEBE4;
+    height: 0.1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
 }
 .content{
   margin-left: 2rem;
@@ -58,7 +69,7 @@
     font-size: 2.6rem;
     font-weight: 600;
     color: #D34714;
-    margin-bottom: 3rem;
+    padding-bottom: 1rem;
     @include abstracts.screen(sm){
         font-size: 1.8rem;
         line-height: 2.5rem;

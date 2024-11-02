@@ -21,12 +21,16 @@ function BusTrip(){
     const handleShowDetail = (id) => {
       navigate('detail-bus-trip', { state: { id: id } })
     }
+    const handelAddBusTrip = () => {
+      navigate('add-bus-trip')
+    }
+
     return (
       <div className={cx('container')}>
         <div className="mb-5"></div>
         <Search noSelectBus={true}></Search>
         <div className="d-flex justify-content-center mt-4 align-items-center">
-          <Button primary>Thêm chuyến xe</Button>
+          <Button primary onClick={() => handelAddBusTrip()}>Thêm chuyến xe</Button>
         </div>
         <Row className='mt-4 justify-content-center'>
           <Col xs="10" className="p-2">

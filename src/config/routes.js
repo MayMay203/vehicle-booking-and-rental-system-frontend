@@ -1,3 +1,5 @@
+import AddBusTrip from "~/pages/BusPartner/BusTripManage/AddBusTrip";
+
 export const routes = {
   home: '/',
   ticket: '/buy-ticket',
@@ -23,6 +25,6 @@ export const routes = {
   message: 'message',
   busTrip: 'bus-trip',
   detailBusTrip: 'bus-trip/detail-bus-trip',
-  updateBusTrip: 'bus-trip/update-bus-trip',
+  addBusTrip: 'bus-trip/add-bus-trip',
   utility: 'utility',
 }
