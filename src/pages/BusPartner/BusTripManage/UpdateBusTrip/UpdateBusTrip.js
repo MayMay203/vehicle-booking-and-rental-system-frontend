@@ -39,8 +39,7 @@ function UpdateBusTrip() {
               value="Đà Nẵng"
               aria-label="departure"
               className={cx('txt', 'selectbox', 'infor-item')}
-              readOnly
-              disabled
+              
             >
               <option value="Đà Nẵng">Đà Nẵng</option>
             </Form.Select>
@@ -86,8 +85,6 @@ function UpdateBusTrip() {
               value="Limousine34GiuongNam"
               aria-label="typeVehicle"
               className={cx('txt', 'selectbox', 'infor-item')}
-              readOnly
-              disabled
             >
               <option value="Limousine34GiuongNam">Limousine 34 giường nằm</option>
             </Form.Select>
@@ -117,8 +114,6 @@ function UpdateBusTrip() {
               value="Hà Nội"
               aria-label="destination"
               className={cx('txt', 'selectbox', 'infor-item')}
-              readOnly
-              disabled
             >
               <option value="Hà Nội">Hà Nội</option>
             </Form.Select>
@@ -187,8 +182,6 @@ function UpdateBusTrip() {
                     name="emptySeat"
                     aria-label="emptySeat"
                     className={cx('txt')}
-                    readOnly
-                    disabled
                   />
                   <InputGroup.Text className={cx('txt')}>
                     <FontAwesomeIcon icon={faCouch} />
@@ -203,8 +196,6 @@ function UpdateBusTrip() {
               value="status"
               aria-label="status"
               className={cx('txt', 'selectbox', 'infor-item')}
-              readOnly
-              disabled
             >
               <option value="on">Đang hoạt động</option>
             </Form.Select>
@@ -296,4 +287,4 @@ function UpdateBusTrip() {
     </div>
   )
 }
-export default DetailBusTrip
+export default UpdateBusTrip
