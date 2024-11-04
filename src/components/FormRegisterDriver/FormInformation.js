@@ -78,12 +78,15 @@ function FormInformation({ setActiveNextFormInfor }) {
   ]
   const [formData, setFormData] = useState({
     name: '',
+    gender: '',
+    birthday: '',
     phonenumber: '',
     gmail: '',
     location: '',
     vehicleType: '',
     licensePlate: '',
   })
+  const [isCorrectDate, setIsCorrectDate] = useState(false)
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
     setActiveNextFormInfor(allFieldsFilled)
@@ -91,6 +94,15 @@ function FormInformation({ setActiveNextFormInfor }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
+    if (name === 'birthday') {
+      const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
+      if (!regex.test(value)) {
+        setIsCorrectDate(false)
+        return
+      }
+    }
+    
+    setIsCorrectDate(true)
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -98,7 +110,7 @@ function FormInformation({ setActiveNextFormInfor }) {
   }
   return (
     <Form className={cx('form-infor')}>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput1">
+      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput0">
         <Form.Label>
           Họ và tên<span className="text-danger">*</span>
         </Form.Label>
@@ -111,7 +123,39 @@ function FormInformation({ setActiveNextFormInfor }) {
           onChange={handleInputChange}
         />
       </Form.Group>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput2">
+      <div className="row">
+        <Form.Group className={cx('txt', 'mb-1', 'col-6')} controlId="formInfor.ControlInput1">
+          <Form.Label>
+            Giới tính<span className="text-danger">*</span>
+          </Form.Label>
+          <Form.Select
+            name="gender"
+            aria-label="gender"
+            className={cx('txt', 'selectbox')}
+            onChange={handleInputChange}
+          >
+            <option>Chọn giới tính</option>
+            <option value="nam">Nam</option>
+            <option value="nữ">Nữ</option>
+            <option value="khác">Khác</option>
+          </Form.Select>
+        </Form.Group>
+        <Form.Group className={cx('txt', 'mb-1', 'col-6')} controlId="formInfor.ControlInput2">
+          <Form.Label>
+            Ngày sinh<span className="text-danger">*</span>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="12-01-2003"
+            name="birthday"
+            aria-label="birthday"
+            className={cx('txt', 'm-0')}
+            onChange={handleInputChange}
+          />
+          {!isCorrectDate && <p className={cx('txt-warn')}>Vui lòng nhập theo dạng: dd-mm-yyyy</p>}
+        </Form.Group>
+      </div>
+      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput3">
         <Form.Label>
           Số điện thoại<span className="text-danger">*</span>
         </Form.Label>
@@ -130,7 +174,7 @@ function FormInformation({ setActiveNextFormInfor }) {
           onChange={handleInputChange}
         />
       </Form.Group>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput3">
+      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput4">
         <Form.Label>
           Địa chỉ email<span className="text-danger">*</span>
         </Form.Label>
@@ -143,7 +187,7 @@ function FormInformation({ setActiveNextFormInfor }) {
           onChange={handleInputChange}
         />
       </Form.Group>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput4">
+      <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput5">
         <Form.Label>
           Khu vực<span className="text-danger">*</span>
         </Form.Label>
@@ -151,6 +195,7 @@ function FormInformation({ setActiveNextFormInfor }) {
           name="location"
           aria-label="location"
           className={cx('txt', 'selectbox')}
+          size={5}
           onChange={handleInputChange}
         >
           {provinces.map((province, index) => (
@@ -161,7 +206,7 @@ function FormInformation({ setActiveNextFormInfor }) {
         </Form.Select>
       </Form.Group>
       <div className="row">
-        <Form.Group className={cx('txt', 'mb-3', 'col-6')} controlId="formInfor.ControlInput5">
+        <Form.Group className={cx('txt', 'mb-3', 'col-6')} controlId="formInfor.ControlInput6">
           <Form.Label>
             Loại xe<span className="text-danger">*</span>
           </Form.Label>
@@ -178,7 +223,7 @@ function FormInformation({ setActiveNextFormInfor }) {
             ))}
           </Form.Select>
         </Form.Group>
-        <Form.Group className={cx('txt', 'mb-3', 'col-6')} controlId="formInfor.ControlInput1">
+        <Form.Group className={cx('txt', 'mb-3', 'col-6')} controlId="formInfor.ControlInput7">
           <Form.Label>
             Biển số xe<span className="text-danger">*</span>
           </Form.Label>

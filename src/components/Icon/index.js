@@ -24,4 +24,11 @@ export {
   CallIcon,
   GenderIcon,
   EmailIcon,
+  LocationIcon,
+  FanPage,
+  DescriptionIcon,
+  PolicyIcon,
+  LicenceIcon,
+  ImageIcon,
+  BankIcon
 } from './Icon'

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import LinkItem from '../LinkItem'
 import { BirdayIcon, CallIcon, EmailIcon, GenderIcon } from '../Icon'
 import Button from '../Button'
-import { faClose, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
+import {faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
@@ -12,6 +12,7 @@ import { images } from '~/assets/images'
 
 const cx = classNames.bind(styles)
 function AccountItem({ data }) {
+  console.log('re-render account item')
   const dispatch = useDispatch()
 
   const handleLockAccount = () => {
@@ -19,10 +20,11 @@ function AccountItem({ data }) {
       setConfirmModalVisible({
         name: generalModalNames.LOCK_ACCOUNT,
         title: 'Xác nhận khoá tài khoản',
-        description: 'Lí do khoá:',
+        // description: 'Lí do khoá:',
+        description: 'Bạn chắc chắn muốn khoá tài khoản này?',
         isOpen: true,
-        modalType: 'inputConfirm',
-        id: data.id
+        modalType: 'confirm',
+        id: data.id,
       }),
     )
   }
@@ -35,6 +37,7 @@ function AccountItem({ data }) {
         description: 'Bạn chắc chắn muốn mở lại tài khoản này?',
         isOpen: true,
         name: generalModalNames.UNLOCK_ACCOUNT,
+        id: data.id,
       }),
     )
   }
@@ -53,7 +56,15 @@ function AccountItem({ data }) {
               <LinkItem title={data.email} Icon={<EmailIcon />} className={cx('custom')} />
               <LinkItem title={data.phoneNumber || 'Chưa cập nhật'} Icon={<CallIcon />} className={cx('custom')} />
               <LinkItem
-                title={data.gender? (data.gender === 'FEMALE' ? 'Nữ' : data.gender === 'MALE' ? 'Nam' : 'Khác'):'Chưa cập nhật'}
+                title={
+                  data.gender
+                    ? data.gender === 'FEMALE'
+                      ? 'Nữ'
+                      : data.gender === 'MALE'
+                      ? 'Nam'
+                      : 'Khác'
+                    : 'Chưa cập nhật'
+                }
                 Icon={<GenderIcon />}
                 className={cx('custom')}
               />
@@ -63,7 +74,7 @@ function AccountItem({ data }) {
         </div>
       </div>
       <div className="col-12 col-md-4 col-lg-3 align-content-end">
-        {!data.active && (
+        {/* {!data.active && (
           <div className={cx('reason')}>
             <div className="d-flex column-gap-2 mb-3 justify-content-center">
               <FontAwesomeIcon icon={faClose} />
@@ -71,7 +82,7 @@ function AccountItem({ data }) {
             </div>
             <span>{data.reason}</span>
           </div>
-        )}
+        )} */}
         {data.active ? (
           <Button
             leftIcon={<FontAwesomeIcon icon={faLock} />}

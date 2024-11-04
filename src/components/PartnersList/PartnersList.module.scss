@@ -1,0 +1,74 @@
+
+.custom{
+    justify-content: initial;
+    font-size: 1.6rem;
+    column-gap: 14px;
+    padding: 4px 0;
+    line-height: 1.4;
+}
+
+.name{
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.item{
+    border: 1px solid var(--border-color);
+    padding: 12px 0;
+    border-radius: 16px;
+
+    & ~ .item{
+        margin-top: 14px;
+    }
+}
+
+.avatar{
+    max-width: 400px;
+}
+
+.wrapper{
+    margin-top: 40px;
+}
+
+.avatar-wrapper{
+    margin: 0 auto;
+    width: 190px;
+    height: 190px;
+}
+
+.avatar{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.action{
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--primary-color);
+}
+
+.represent{
+    font-weight: 500;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.checked{
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+    align-items: center;
+    color: #5DAE70;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.reason{
+    color: red;
+    margin-bottom: 30px;
+}

@@ -1,25 +1,65 @@
-import { Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
 import styles from './ManageAccount.module.scss'
 import classNames from 'classnames/bind'
-import { config } from '~/config'
 import Tabs from '~/components/Tabs'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import AccountList from '~/components/AccountList'
 import SearchInput from '~/components/SearchInput'
 import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { getAllAccounts } from '~/apiServices/getAllAccounts'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import useDebounce from '~/hook'
+import { searchAccByEmail } from '~/apiServices/searchAccByEmail'
+import { fetchAllAccounts } from '~/redux/slices/accountSlice'
 
 const cx = classNames.bind(styles)
 function ManageAccounts() {
+  console.log('re-render manage accounts')
   const dispatch = useDispatch()
+  const accountList = useSelector((state) => state.accounts.dataAccounts)
   const [type, setType] = useState('accounts')
-  const [accountList, setAccountList] = useState([])
   const [filterData, setFilterData] = useState([])
+  const [filterSearch, setFilterSearch] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const searchDebounce = useDebounce(searchInput.trim(), 500)
+
+  useEffect(() => {
+    dispatch(fetchAllAccounts())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    async function searchByEmail() {
+      try {
+        setIsLoading(true)
+        if (!searchDebounce) {
+          setFilterSearch(filterData)
+          setIsLoading(false)
+          return
+        }
+        if (checkLoginSession()) {
+          const data = await searchAccByEmail(searchDebounce)
+          let searchList
+          if (type === 'accounts') {
+            searchList = data.result.filter((account) => account.accountInfo.active === true)
+          } else {
+            searchList = data.result.filter((account) => account.accountInfo.active === false)
+            console.log(filterSearch)
+          }
+          setFilterSearch(searchList)
+          setIsLoading(false)
+        }
+      } catch (message) {
+        setIsLoading(false)
+        console.log(message)
+      }
+    }
+    searchByEmail()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchDebounce])
 
   const tabList = [
     {
@@ -40,19 +80,6 @@ function ManageAccounts() {
   }
 
   useEffect(() => {
-    async function fetchAllAccounts() {
-      if (dispatch(checkLoginSession())) {
-        let data = await getAllAccounts()
-        if (data) {
-          setAccountList(data.result)
-        }
-      }
-    }
-    fetchAllAccounts()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountList])
-
-  useEffect(() => {
     if (accountList.length > 0) {
       let data
       if (type === 'accounts') {
@@ -61,8 +88,9 @@ function ManageAccounts() {
         data = accountList.filter((account) => account.accountInfo.active === false)
       }
       setFilterData(data)
+      setFilterSearch(data)
     }
-},[accountList, type])
+  }, [accountList, type])
 
   const handleClickTab = (type) => {
     setType(type)
@@ -72,15 +100,12 @@ function ManageAccounts() {
     dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER_ADMIN, isVisible: true }))
   }
 
+  const handleChange = useCallback((value) => {
+    setSearchInput(value)
+  }, [])
+
   return (
     <div className={cx('container', 'wrapper')}>
-      <Breadcrumb>
-        <BreadcrumbItem href="#">Trang chủ</BreadcrumbItem>
-        <BreadcrumbItem href={config.accounts} active>
-          Quản lý tài khoản
-        </BreadcrumbItem>
-      </Breadcrumb>
-
       <Tabs
         tabList={tabList}
         settings={settings}
@@ -90,12 +115,12 @@ function ManageAccounts() {
       ></Tabs>
 
       <div className={cx('d-flex', 'justify-content-between', 'align-items-center', 'custom-margin')}>
-        <SearchInput />
+        <SearchInput handleChange={handleChange} isLoading={isLoading} />
         <Button primary className={cx('btn-add')} onClick={handleAddAccount}>
           <FontAwesomeIcon icon={faPlus} />
         </Button>
       </div>
-      {accountList && <AccountList dataList={filterData} />}
+      {accountList && <AccountList dataList={filterSearch} />}
     </div>
   )
 }

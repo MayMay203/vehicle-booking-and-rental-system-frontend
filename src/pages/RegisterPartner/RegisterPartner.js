@@ -9,8 +9,12 @@ import { images } from '~/assets/images'
 import CardsFeedbackPartner from '~/components/CardFeedbackPartner'
 import FormRegisterBus from '~/components/FormRegisterBus'
 import FormRegisterCarRental from '~/components/FormRegisterCarRental'
+import { createSearchParams, useLocation } from 'react-router-dom'
 const cx = classNames.bind(styles)
-function RegisterPartner({typePartner='driver'}) {
+function RegisterPartner() {
+  const location = useLocation()
+  const searchParam = createSearchParams(location.search)
+  const typePartner = searchParam.get('type')
   const driver = 'driver'
   const carRental = 'carRental'
   const bus = 'bus'
@@ -170,10 +174,15 @@ function RegisterPartner({typePartner='driver'}) {
     listFeedback = feedbackForBus
     questionsAndAnswers = questionsAndAnswersForBus
   }
+
+  if (typePartner !== bus && typePartner !== carRental && typePartner !== driver) {
+    return <div></div>
+  }
+
   return (
     <div className={cx('container')}>
-      <Row className={cx('wrap-row')}>
-        <Col xl="6">
+      <Row className={cx('wrap-row', 'align-items-center')}>
+        <Col xl="6" className="align-items-center">
           <div className={cx('title')}>
             {typePartner === driver && 'Đối tác tài xế'}
             {typePartner === carRental && 'Đối tác cho thuê xe'}
@@ -219,6 +228,7 @@ function RegisterPartner({typePartner='driver'}) {
         </Col>
       </Row>
       <Row className={cx('wrap-row')}>
+        <p className={cx('title-feedback')}>Một số chia sẻ từ đối tác</p>
         <CardsFeedbackPartner listFeedback={listFeedback}></CardsFeedbackPartner>
       </Row>
       <Row className={cx('wrap-last-row')}>

@@ -50,10 +50,12 @@ function FormDocuments({ setActiveNextFormDocs }) {
   return (
     <Form className={cx('form-more-infor')}>
       <Form.Group className={cx('txt', 'mb-3', 'pt-2')} controlId="formMoreInfor.ControlInput0">
-        <Form.Label>
-          Ảnh giấy phép kinh doanh<span className="text-danger">*</span>
-        </Form.Label>
-        <TakePhotoRegister number_photo={1} name_photos={['Ảnh giấy phép kinh doanh']} handleSave={handleSavePhoto} />
+        <TakePhotoRegister
+          number_photo={2}
+          name_photos={['Ảnh đại diện đại lý', 'Ảnh giấy phép kinh doanh']}
+          obligatory={true}
+          handleSave={handleSavePhoto}
+        />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formMoreInfor.ControlInput1">
         <Form.Label>

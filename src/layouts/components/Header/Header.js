@@ -16,18 +16,22 @@ import PopperWrapper from '~/components/PopperWrapper'
 import UserMenu from '~/UserMenu'
 import Notification from '~/components/Notification'
 import ModalChat from '~/components/ModalChat'
-import { faCommentDots } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faCommentDots } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { NavLink } from 'react-router-dom'
+import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function Header({ menus }) {
+  console.log('re-render header')
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
-  const { isLogin, currentUser, loading} = useSelector((state) => state.user)
+  const { isLogin, currentUser, loading } = useSelector((state) => state.user)
   const [isShowMenu, setIsShowMenu] = useState(false)
   const [isShowNoti, setIsShowNoti] = useState(false)
   const [isShowMessage, setIsShowMessage] = useState(false)
+  const [isShowDetailPartner, setShowDetailPartner] = useState(false)
   const [isSmall, setIsSmall] = useState(window.innerWidth < 768)
 
   const dispatch = useDispatch()
@@ -156,9 +160,55 @@ function Header({ menus }) {
             )}
           </div>
           <Menu>
-            {menus.map((menu, index) => (
-              <MenuItem key={index} menu={menu}></MenuItem>
-            ))}
+            {menus.map((menu, index) =>
+              menu.content.toLowerCase().includes('đối tác') ? (
+                <>
+                  <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
+                    {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
+                    <FontAwesomeIcon icon={faCaretDown} />
+                  </button>
+                  <div className={cx('d-flex', 'flex-column', { hidden: !isShowDetailPartner })}>
+                    <div className={cx('wrap-link')}>
+                      <NavLink
+                        className={cx('link')}
+                        to={`${
+                          currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+                        }?type=${config.variables.busPartner}`}
+                        onClick={() => setShowDetailPartner(false)}
+                      >
+                        Đối tác nhà xe
+                      </NavLink>
+                    </div>
+                    <div className={cx('wrap-link')}>
+                      <NavLink
+                        className={cx('link')}
+                        to={`${
+                          currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+                        }?type=${config.variables.carRentalPartner}`}
+                        onClick={() => setShowDetailPartner(false)}
+                      >
+                        Đối tác cho thuê xe
+                      </NavLink>
+                    </div>
+                    <div className={cx('wrap-link')}>
+                      <NavLink
+                        className={cx('link')}
+                        to={`${
+                          currentUser.roles?.includes('ADMIN')
+                            ? config.routes.managePartners
+                            : config.routes.partner
+                        }?type=${config.variables.driverPartner}`}
+                        onClick={() => setShowDetailPartner(false)}
+                      >
+                        Đối tác tài xế
+                      </NavLink>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <MenuItem key={index} menu={menu}></MenuItem>
+              ),
+            )}
           </Menu>
         </div>
       </div>
@@ -287,9 +337,73 @@ function Header({ menus }) {
         </div>
       </div>
       <Menu className="d-none d-lg-flex">
-        {menus.map((menu, index) => (
-          <MenuItem key={index} menu={menu}></MenuItem>
-        ))}
+        {menus.map((menu, index) =>
+          menu.content.toLowerCase().includes('đối tác') ? (
+            <div>
+              <Tippy
+                offset={[-1, 0]}
+                visible={isShowDetailPartner}
+                interactive
+                placement="bottom"
+                render={(attrs) => (
+                  <div {...attrs}>
+                    <PopperWrapper className={cx('custom-border')}>
+                      <div className="d-flex flex-column">
+                        <div className={cx('wrap-link')}>
+                          <NavLink
+                            className={cx('link')}
+                            to={`${
+                              currentUser.roles?.includes('ADMIN')
+                                ? config.routes.managePartners
+                                : config.routes.partner
+                            }?type=${config.variables.busPartner}`}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
+                            Đối tác nhà xe
+                          </NavLink>
+                        </div>
+                        <div className={cx('wrap-link')}>
+                          <NavLink
+                            className={cx('link')}
+                            to={`${
+                              currentUser.roles?.includes('ADMIN')
+                                ? config.routes.managePartners
+                                : config.routes.partner
+                            }?type=${config.variables.carRentalPartner}`}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
+                            Đối tác cho thuê xe
+                          </NavLink>
+                        </div>
+                        <div className={cx('wrap-link')}>
+                          <NavLink
+                            className={cx('link')}
+                            to={`${
+                              currentUser.roles?.includes('ADMIN')
+                                ? config.routes.managePartners
+                                : config.routes.partner
+                            }?type=${config.variables.driverPartner}`}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
+                            Đối tác tài xế
+                          </NavLink>
+                        </div>
+                      </div>
+                    </PopperWrapper>
+                  </div>
+                )}
+                onClickOutside={() => setShowDetailPartner(false)}
+              >
+                <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
+                  {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
+                  <FontAwesomeIcon icon={faCaretDown} />
+                </button>
+              </Tippy>
+            </div>
+          ) : (
+            <MenuItem key={index} menu={menu}></MenuItem>
+          ),
+        )}
       </Menu>
     </header>
   )

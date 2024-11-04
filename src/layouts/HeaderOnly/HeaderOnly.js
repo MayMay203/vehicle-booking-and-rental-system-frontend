@@ -37,12 +37,12 @@ function HeaderOnly({ children }) {
       to: config.routes.about,
     },
   ]
-  const adminMenu = [
+ const adminMenu = [
     { content: 'Dịch vụ', to: config.routes.services },
-    { content: 'Tài khoản', to: config.routes.accounts },
-    { content: 'Đối tác', to: config.routes.partners },
-    { content: 'Thống kê', to: config.routes.statistics },
+    { content: 'Đối tác', to: config.routes.managePartners },
+    { content: 'Tài khoản', to: config.routes.manageAccounts},
     { content: 'Khuyến mãi', to: config.routes.vouchers },
+    { content: 'Thống kê', to: config.routes.statistics },
   ]
   const busPartnerMenu = [
     { content: 'Chuyến xe', to: config.routes.busTrip },
