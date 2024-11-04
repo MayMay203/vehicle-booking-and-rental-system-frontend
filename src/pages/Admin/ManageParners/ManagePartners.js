@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styles from './ManagePartners.module.scss'
 import classNames from 'classnames/bind'
 import { Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
@@ -57,6 +57,10 @@ function ManagePartners() {
     setType(type)
   }
 
+  const handleChange = useCallback(() => {
+    
+  },[])
+
   return (
     <div className={cx('wrapper')}>
       <Breadcrumb>
@@ -76,7 +80,7 @@ function ManagePartners() {
       ></Tabs>
 
       <div className={cx('d-flex', 'justify-content-end', 'custom-margin')}>
-        <SearchInput />
+        <SearchInput handleChange={handleChange}/>
       </div>
 
       {partnerList && <PartnersList dataList={partnerList} />}

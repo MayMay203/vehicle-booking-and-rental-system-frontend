@@ -107,11 +107,12 @@ function DetailPartner() {
         setConfirmModalVisible({
           name: generalModalNames.CANCEL_PARTNER,
           title: 'Xác nhận huỷ đối tác',
-          description: 'Lý do huỷ đối tác:',
+          description: `Huỷ mối quan hệ đối tác đồng nghĩa với dừng mọi hoạt động của đối tác này.
+          Nếu tiếp tục hãy nhập vào lí do:`,
           isOpen: true,
           modalType: 'inputConfirm',
           id,
-          type: detailData.type,
+          type: detailData.businessInfo.partnerType,
         }),
       )
     }

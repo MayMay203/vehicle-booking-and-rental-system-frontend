@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from './SearchInput.module.scss'
 import classNames from 'classnames/bind'
 import { faSearch} from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 const cx = classNames.bind(styles)
 function SearchInput({ className, handleChange, isLoading }) {
@@ -31,4 +31,4 @@ function SearchInput({ className, handleChange, isLoading }) {
   )
 }
 
-export default SearchInput
+export default memo(SearchInput)
