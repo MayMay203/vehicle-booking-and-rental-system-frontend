@@ -85,7 +85,7 @@ function DetailBusTrip(){
         <Row className={cx('form-infor-bus-trip', 'justify-content-center')}>
           <p className={cx('title-form')}>Thông tin chuyến xe</p>
           <div className={cx('line')}></div>
-          <Col className={cx('col-sm-12 col-md-6', 'col-form')}>
+          <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
             <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput1">
               <Form.Label className="mb-3">Địa điểm xuất phát</Form.Label>
               <Form.Select
@@ -185,7 +185,7 @@ function DetailBusTrip(){
               </InputGroup>
             </Form.Group>
           </Col>
-          <Col className={cx('col-sm-12 col-md-6', 'col-form')}>
+          <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
             <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput11">
               <Form.Label className="mb-3">Địa điểm đến</Form.Label>
               <Form.Select

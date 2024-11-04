@@ -6,6 +6,7 @@ import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Image } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 const cx = classNames.bind(styles)
 function Bus() {
   const columns = [
@@ -148,6 +149,10 @@ function Bus() {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
+  const navigate = useNavigate()
+  const handleAddBus = () => {
+    navigate('add-bus')
+  }
   return (
     <div className="container mt-4 mb-5">
       <div className={cx('header')}>
@@ -155,7 +160,7 @@ function Bus() {
       </div>
       <div className={cx('d-flex', 'mb-4')}>
         <TxtSearch content={'Tìm xe khách'}></TxtSearch>
-        <Button primary className={cx('btn-add')}>
+        <Button primary className={cx('btn-add')} onClick={handleAddBus}>
           Thêm xe
         </Button>
       </div>

@@ -10,7 +10,7 @@ import {
   faTicket,
 } from '@fortawesome/free-solid-svg-icons'
 import Button from "~/components/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 const cx = classNames.bind(styles)
 function AddBusTrip(){
     const provinces = [
@@ -89,9 +89,56 @@ function AddBusTrip(){
       { value: 'Tạm dừng hoạt động', label: 'Tạm dừng hoạt động' },
       { value: 'Dừng hoạt động', label: 'Dừng hoạt động' },
     ]
-    const [formAdd, setFormAdd] = useState({
-        
+    const licensePlateNumbers = [
+      { value: '', label: 'Chọn biển số xe' },
+      { value: '30G-49344', label: '30G-49344' },
+    ]
+    const [activeAdd, setActiveAdd] = useState(false)
+    const [formData, setFormData] = useState({
+      departure: '',
+      date: '',
+      licensePlateNumber: '',
+      // typeVehicle: '',
+      price: '',
+      reduce: '',
+      destination: '',
+      time: '',
+      extendTime: '',
+      status: '',
+      // numberSeat: '',
     })
+    useEffect(() => {
+      const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
+      setActiveAdd(allFieldsFilled)
+      console.log('Có vô', formData)
+      console.log(allFieldsFilled)
+    }, [formData])
+    const handleInputChange = (e) => {
+      const {name, value} = e.target
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }))
+      console.log(formData)
+    }
+    const handleCancel = () => {
+      setFormData({
+        departure: '',
+        date: '',
+        licensePlateNumber: '',
+        // typeVehicle: '',
+        price: '',
+        reduce: '',
+        destination: '',
+        time: '',
+        extendTime: '',
+        status: '',
+        // numberSeat: '',
+      })
+    }
+    const handleAdd = () => {
+
+    }
     return (
       <div className={cx('container mt-5 mb-5', 'wrap-container')}>
         <Row className={cx('form-add-bus-trip', 'justify-content-center')}>
@@ -101,7 +148,13 @@ function AddBusTrip(){
               <Form.Label className="mb-3">
                 Địa điểm xuất phát<span className="text-danger">*</span>
               </Form.Label>
-              <Form.Select aria-label="departure" className={cx('txt', 'selectbox', 'add-item')}>
+              <Form.Select
+                aria-label="departure"
+                name="departure"
+                value={formData.departure}
+                onChange={handleInputChange}
+                className={cx('txt', 'selectbox', 'add-item')}
+              >
                 {provinces.map((province, index) => (
                   <option key={index} value={province.value}>
                     {province.label}
@@ -120,7 +173,9 @@ function AddBusTrip(){
                   placeholder="dd/mm/yyyy"
                   name="date"
                   aria-label="date"
+                  value={formData.date}
                   className={cx('txt')}
+                  onChange={handleInputChange}
                 />
                 <InputGroup.Text className={cx('txt')}>
                   <FontAwesomeIcon icon={faCalendar} />
@@ -139,7 +194,9 @@ function AddBusTrip(){
                       placeholder="0 vnđ"
                       name="price"
                       aria-label="price"
+                      value={formData.price}
                       className={cx('txt')}
+                      onChange={handleInputChange}
                     />
                     <InputGroup.Text className={cx('txt')}>
                       <FontAwesomeIcon icon={faTicket} />
@@ -156,7 +213,9 @@ function AddBusTrip(){
                       placeholder="0%"
                       name="reduce"
                       aria-label="reduce"
+                      value={formData.reduce}
                       className={cx('txt')}
+                      onChange={handleInputChange}
                     />
                     <InputGroup.Text className={cx('txt')}>
                       <FontAwesomeIcon icon={faTicket} />
@@ -170,13 +229,19 @@ function AddBusTrip(){
                 Biển số xe <span className="text-danger">*</span>
               </Form.Label>
               <InputGroup className={cx('txt', 'infor-item')}>
-                <Form.Control
-                  type="text"
-                  placeholder="30G-49344"
-                  name="licensePlateNumber"
+                <Form.Select
                   aria-label="licensePlateNumber"
-                  className={cx('txt')}
-                />
+                  name="licensePlateNumber"
+                  className={cx('txt', 'selectbox', 'infor-item')}
+                  onChange={handleInputChange}
+                  value={formData.licensePlateNumber}
+                >
+                  {licensePlateNumbers.map((licensePlateNumber, index) => (
+                    <option key={index} value={licensePlateNumber.value}>
+                      {licensePlateNumber.label}
+                    </option>
+                  ))}
+                </Form.Select>
                 <InputGroup.Text className={cx('txt')}>
                   <FontAwesomeIcon icon={faTicket} />
                 </InputGroup.Text>
@@ -186,7 +251,14 @@ function AddBusTrip(){
               <Form.Label className="mb-3">
                 Loại phương tiện<span className="text-danger">*</span>
               </Form.Label>
-              <Form.Select aria-label="typeVehicle" className={cx('txt', 'selectbox', 'infor-item')} disabled>
+              <Form.Select
+                aria-label="typeVehicle"
+                name="typeVehicle"
+                className={cx('txt', 'selectbox', 'infor-item')}
+                disabled
+                onChange={handleInputChange}
+                // value={formData.typeVehicle}
+              >
                 {typeVehicles.map((typeVehicle, index) => (
                   <option key={index} value={typeVehicle.value}>
                     {typeVehicle.label}
@@ -200,7 +272,13 @@ function AddBusTrip(){
               <Form.Label className="mb-3">
                 Địa điểm đến<span className="text-danger">*</span>
               </Form.Label>
-              <Form.Select aria-label="destination" className={cx('txt', 'selectbox', 'infor-item')}>
+              <Form.Select
+                aria-label="destination"
+                name="destination"
+                value={formData.destination}
+                onChange={handleInputChange}
+                className={cx('txt', 'selectbox', 'infor-item')}
+              >
                 {provinces.map((province, index) => (
                   <option key={index} value={province.value}>
                     {province.label}
@@ -213,7 +291,15 @@ function AddBusTrip(){
                 Giờ khởi hành<span className="text-danger">*</span>
               </Form.Label>
               <InputGroup className={cx('txt', 'infor-item')}>
-                <Form.Control type="text" placeholder="hh:mm" name="time" aria-label="time" className={cx('txt')} />
+                <Form.Control
+                  type="text"
+                  placeholder="hh:mm"
+                  name="time"
+                  aria-label="time"
+                  value={formData.time}
+                  className={cx('txt')}
+                  onChange={handleInputChange}
+                />
                 <InputGroup.Text className={cx('txt')}>
                   <FontAwesomeIcon icon={faClock} />
                 </InputGroup.Text>
@@ -227,9 +313,11 @@ function AddBusTrip(){
                 <Form.Control
                   type="text"
                   placeholder="0 tiếng"
-                  name="extend-time"
-                  aria-label="extend-time"
+                  name="extendTime"
+                  aria-label="extendTime"
+                  value={formData.extendTime}
                   className={cx('txt')}
+                  onChange={handleInputChange}
                 />
                 <InputGroup.Text className={cx('txt')}>
                   <FontAwesomeIcon icon={faClockRotateLeft} />
@@ -240,7 +328,13 @@ function AddBusTrip(){
               <Form.Label className="mb-3">
                 Trạng thái hoạt động<span className="text-danger">*</span>
               </Form.Label>
-              <Form.Select aria-label="status" className={cx('txt', 'selectbox', 'infor-item')}>
+              <Form.Select
+                aria-label="status"
+                name="status"
+                value={formData.status}
+                className={cx('txt', 'selectbox', 'infor-item')}
+                onChange={handleInputChange}
+              >
                 {statuses.map((status, index) => (
                   <option key={index} value={status.value}>
                     {status.label}
@@ -259,9 +353,11 @@ function AddBusTrip(){
                       type="text"
                       placeholder="0"
                       name="numberSeat"
+                      // value={formData.numberSeat}
                       aria-label="numberSeat"
                       className={cx('txt')}
                       disabled
+                      onChange={handleInputChange}
                     />
                     <InputGroup.Text className={cx('txt')}>
                       <FontAwesomeIcon icon={faCouch} />
@@ -275,10 +371,10 @@ function AddBusTrip(){
         <Row className="justify-content-center mt-4">
           <Col></Col>
           <Col className="d-flex justify-content-center">
-            <Button outline className="ms-5 me-5">
+            <Button outline className={cx('ms-5 me-5', 'btn')} onClick={handleCancel}>
               Hủy
             </Button>
-            <Button primary className="ms-5 me-5">
+            <Button primary className={cx('ms-5 me-5', 'btn')} disabled={!activeAdd} onClick={handleAdd}>
               Thêm
             </Button>
           </Col>

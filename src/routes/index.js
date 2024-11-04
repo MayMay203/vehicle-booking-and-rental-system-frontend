@@ -27,6 +27,7 @@ import DetailBusTrip from '~/pages/BusPartner/BusTripManage/DetailBusTrip'
 import AddBusTrip from '~/pages/BusPartner/BusTripManage/AddBusTrip'
 import Utility from '~/pages/BusPartner/Utility'
 import Bus from '~/pages/BusPartner/BusManage/Bus'
+import AddBus from '~/pages/BusPartner/BusManage/AddBus'
 
 
 const publicRoutes = [
@@ -138,6 +139,10 @@ const publicRoutes = [
   {
     path: config.routes.bus,
     component: Bus,
+  },
+  {
+    path: config.routes.addBus,
+    component: AddBus,
   },
   {
     path: config.routes.utility,

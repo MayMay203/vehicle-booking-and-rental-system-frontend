@@ -9,6 +9,9 @@
 }
 .col-form{
     padding: 0 5rem;
+    @include abstracts.screen(sm){
+        padding: 0.5rem;
+    }
     // padding-left: 12rem;
     // @include abstracts.screen(xl){
     //     padding-left: 8rem;
@@ -16,9 +19,9 @@
     // @include abstracts.screen(md){
     //     padding-left: 4rem;
     // }
-    @include abstracts.screen(sm){
-        padding: 0.5rem;
-    }
+    // @include abstracts.screen(sm){
+    //     padding-left: 1rem;
+    // }
 }
 .title{
   font-size: 2rem;
@@ -54,7 +57,7 @@
     }
 }
 .txt{
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     // margin-bottom: 1rem;
     font-weight: 500;
     color: black;
@@ -62,7 +65,7 @@
         border-color: #FF9800;
         box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); 
     }
-    @include abstracts.screen(sm){
+     @include abstracts.screen(sm){
         font-size: 1.4rem;
     }
 }
@@ -75,7 +78,34 @@
     font-weight: 400;
     margin: 0 2rem;
     @include abstracts.screen(sm){
-        min-width: 8rem !important;
-        height: 2.6rem;
+        min-width: 7rem !important;
+        height: 2.5rem;
     }
+}
+.padding-5{
+    padding: 0 5rem;
+     @include abstracts.screen(sm){
+       padding: 0.5rem;
+    }
+}
+.list-img{
+    border: 1px solid rgba($color: #D34714, $alpha: 0.2);
+    border-radius: 5px;
+    max-width: 66.5rem;
+    max-height: 42.2rem;
+    align-items: center;
+    justify-content: center;
+    // display: flex;
+}
+.img-vehicle{
+    width: 20rem;
+    height: 16rem;
+    margin: 0.5rem;
+    object-fit: cover;
+}
+.warn{
+    font-size: 1.4rem;
+    background: none;
+    border: none;
+    color: red;
 }
