@@ -7,7 +7,7 @@ const cx = classNames.bind(styles)
 function RatingContent() {
     return (
       <Row className={cx('rating-card')}>
-        <Row>
+        <Row className='align-items-center'>
           <Col xs="2" md="1">
             <img src={images.avatar} className={cx('avatar')} alt='avatar' />
           </Col>

@@ -19,6 +19,12 @@ export const routes = {
   services: '/manage-services',
   statistics: '/statistics',
   vouchers: '/manage-vouchers',
+  busTrip: 'bus-trip',
+  detailBusTrip: 'bus-trip/detail-bus-trip',
+  addBusTrip: 'bus-trip/add-bus-trip',
+  bus: 'bus-manage',
+  addBus: 'bus-manage/add-bus',
+  utility: 'utility',
   managePartners: '/manage-partners',
   message: '/message',
   error: '/error'

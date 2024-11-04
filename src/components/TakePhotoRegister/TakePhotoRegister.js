@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import classNames from 'classnames/bind'
 import styles from './TakePhotoRegister.module.scss'
-import { Image } from 'react-bootstrap'
+import { Image, Alert } from 'react-bootstrap'
 import { images } from '~/assets/images'
 // import Button from '../Button'
 const cx = classNames.bind(styles)
@@ -11,14 +11,17 @@ function TakePhotoRegister({ number_photo, name_photos, handleSave, obligatory, 
   const handleImageClick = (index) => {
     fileInputRefs.current[index].click()
   }
-  // const [isSaved, setIsSaved] = useState(false)
-
+//   const [isSaved, setIsSaved] = useState(false)
+  const [warningMessage, setWarningMessage] = useState('')
   const handleFileChange = (index, event) => {
     const file = event.target.files[0]
-    if (file) {
+    if (file && file.type.startsWith('image/')) {
       const newFiles = [...selectedFiles]
       newFiles[index] = URL.createObjectURL(file)
       setSelectedFiles(newFiles)
+      setWarningMessage('')
+    } else if (file && !file.type.startsWith('image/')) {
+      setWarningMessage('Vui lòng chọn file ảnh!')
     }
     // setIsSaved(false)
   }
@@ -50,6 +53,7 @@ function TakePhotoRegister({ number_photo, name_photos, handleSave, obligatory, 
               className={cx('img')}
               onClick={() => handleImageClick(index)}
             />
+            {warningMessage && <Alert variant="danger" className={cx('warn')}>{warningMessage}</Alert>}
             <p className="fs-5">{name}</p>
           </div>
         ))}

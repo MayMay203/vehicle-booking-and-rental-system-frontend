@@ -1,0 +1,215 @@
+@use '../../../../abstracts' as abstracts;
+.wrap-container {
+  border-radius: 5px;
+  border: 1px solid #d34714;
+  padding: 3rem;
+}
+.wrap-form-infor {
+  // width: 60%;
+  justify-content: center;
+  // align-items: center;
+}
+.form-infor-bus-trip {
+  justify-content: center;
+}
+.col-form {
+  padding-left: 12rem;
+  margin-top: 2rem;
+  @include abstracts.screen(xl) {
+    padding-left: 8rem;
+  }
+  @include abstracts.screen(md) {
+    padding-left: 4rem;
+  }
+  @include abstracts.screen(sm) {
+    padding-left: 1rem;
+  }
+}
+.content-tab {
+  // display: flex;
+  width: 80%;
+  @include abstracts.screen(sm) {
+    width: 100%;
+  }
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  max-height: 50rem;
+  overflow-y: auto;
+}
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem 0;
+  @include abstracts.screen(sm) {
+    font-size: 1.7rem;
+  }
+  @include abstracts.screen(md) {
+    font-size: 1.8rem;
+  }
+}
+.line {
+  display: block;
+  width: 90%;
+  background-color: #ffebe4;
+  height: 0.1rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.content {
+  padding: 0.5rem 2rem;
+//   margin-left: 2rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+  text-align: justify;
+  line-height: 5rem;
+  @include abstracts.screen(md) {
+    font-size: 1.5rem;
+    line-height: 2.8rem;
+  }
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+    line-height: 2.5rem;
+  }
+}
+.wrap-form {
+  padding: 1.5rem;
+  margin: 1rem;
+}
+.div-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title-form {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: #d34714;
+  padding-bottom: 1rem;
+  @include abstracts.screen(sm) {
+    font-size: 1.8rem;
+    line-height: 2.5rem;
+  }
+}
+.progress {
+  margin: 1rem 0;
+}
+.txt {
+  font-size: 1.5rem;
+  // margin-bottom: 1rem;
+  font-weight: 500;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+}
+.selectbox {
+  width: 100%;
+}
+.icon-next,
+.icon-previous {
+  margin: 0 1rem;
+}
+.icon-previous,
+.txt-previous,
+.icon-next.active,
+.txt-next.active {
+  color: #27ae60;
+  text-align: end;
+  margin-top: 2rem;
+  &:hover {
+    cursor: pointer;
+    font-weight: 500;
+  }
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.icon-next,
+.txt-next {
+  text-align: end;
+  margin-top: 2rem;
+  color: #898989;
+}
+.txt-large {
+  font-size: 2rem;
+  font-weight: 500;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+.txt-medium {
+  font-size: 1.7rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  @include abstracts.screen(sm) {
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+  }
+}
+.txt-small {
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 2rem;
+}
+.txt-right {
+  text-align: right;
+  flex: 1;
+  margin-right: 1rem;
+}
+.txt-red {
+  color: #d34714;
+}
+.txt-green {
+  color: #27ae60;
+}
+.margin-bottom {
+  margin-bottom: 2rem;
+}
+.txt-confirm {
+  text-align: justify;
+  line-height: 2.3rem;
+}
+.btn {
+  min-width: 10rem !important;
+  height: 3rem;
+  font-weight: 400;
+  margin: 0 2rem;
+  @include abstracts.screen(sm) {
+    min-width: 7rem !important;
+    height: 2.5rem;
+  }
+}
+
+.add-policy {
+  font-size: 2.5rem;
+  margin-left: 0.5rem;
+  text-align: center;
+  margin-top: 0.35rem;
+  color: #7eb0f7;
+  &:hover {
+    cursor: pointer;
+    color: #2474e5;
+  }
+}
+
+.table-container .txt {
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: black;
+}
+.image-vehicle {
+  width: 32rem;
+  margin-bottom: 1.5rem;
+  // height: 20rem;
+}
+.infor-item {
+  width: 60%;
+}
+.icon-utility {
+  color: #ff7f50;
+  font-size: 2.4rem;
+}
