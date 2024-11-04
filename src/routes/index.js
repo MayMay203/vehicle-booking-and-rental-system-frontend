@@ -26,6 +26,7 @@ import AddBus from '~/pages/BusPartner/BusManage/AddBus'
 import Error from '~/pages/Error'
 import { ManageAccounts, ManageParners, ManageServices, ManageVouchers, Statistics } from '~/pages/Admin'
 import UpdateBus from '~/pages/BusPartner/BusManage/UpdateBus/index.js'
+import PolicyManage from '~/pages/BusPartner/PolicyManage'
 
 const publicRoutes = [
   {
@@ -144,6 +145,10 @@ const publicRoutes = [
   {
     path: config.routes.updateBus,
     component: UpdateBus,
+  },
+  {
+    path: config.routes.policyManage,
+    component: PolicyManage,
   },
   {
     path: config.routes.utility,
