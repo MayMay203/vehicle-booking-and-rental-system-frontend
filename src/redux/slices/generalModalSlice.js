@@ -5,10 +5,11 @@ export const generalModalNames = {
   EXPIRED_SESSION: 'session',
   LOCK_ACCOUNT: 'lock-account',
   UNLOCK_ACCOUNT: 'unlock-account',
-  CANCEL_PARTNER: 'cancel-partner',
-  CANCEL_TICKET: 'cancel-ticket',
+  CANCEL_PARTNER: 'cancelPartner',
+  CANCEL_TICKET: 'cancelTicket',
   LOADING: 'loading',
   BUY_TICKET: 'buyTicket',
+  DETAIL_PARTNER: 'detailPartner',
 }
 
 const initialState = {
@@ -24,12 +25,20 @@ const initialState = {
     title: '',
     description: '',
     name: '',
+    id: '',
+    type: ''
   },
   buyTicket: {
     isOpen: false,
     type: '',
   },
   loading: false,
+  detailPartner: {
+    isOpen: false,
+    id: '',
+    type: '',
+    status: '',
+  },
 }
 
 const generalModalSlice = createSlice({
@@ -53,8 +62,17 @@ const generalModalSlice = createSlice({
     setLoadingModalVisible: (state, action) => {
       state[action.payload.name] = action.payload.isOpen
     },
+    setDetailModalVisible: (state, action) => {
+      const {isOpen, ...modalProps } = action.payload
+      state.detailPartner = {
+        ...state.detailPartner,
+        isOpen,
+        ...modalProps
+      }
+    },
   },
 })
 
-export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible } = generalModalSlice.actions
+export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible, setDetailModalVisible } =
+  generalModalSlice.actions
 export default generalModalSlice.reducer

@@ -8,34 +8,41 @@ import SearchInput from '~/components/SearchInput'
 import PartnersList from '~/components/PartnersList/PartnersList'
 import { createSearchParams, useLocation } from 'react-router-dom'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
+
 const cx = classNames.bind(styles)
 function ManagePartners() {
   console.log('re-render managePartners')
-  const [type, setType] = useState('current')
+  const partnerList = useSelector((state) => state.partners.partnerList)
+  const [type, setType] = useState(config.variables.current)
   const [partnerType, setPartnerType] = useState('')
   const location = useLocation()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const searchParam = createSearchParams(location.search)
     setPartnerType(searchParam.get('type'))
-    console.log(partnerType)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
-  
+
   // Partner type change call API method
+  useEffect(() => {
+    dispatch(fetchAllRegisterPartners({ partnerType, type }))
+  },[partnerType, type, dispatch])
 
   const tabList = [
     {
       label: 'Hiện tại',
-      value: 'current',
+      value: config.variables.current,
     },
     {
       label: 'Chờ xác nhận',
-      value: 'notConfirmed',
+      value: config.variables.notConfirmed,
     },
     {
       label: 'Đã huỷ',
-      value: 'canceled',
+      value: config.variables.cancelled,
     },
   ]
 
@@ -49,8 +56,9 @@ function ManagePartners() {
   const handleClickTab = (type) => {
     setType(type)
   }
+
   return (
-    <div>
+    <div className={cx('wrapper')}>
       <Breadcrumb>
         <BreadcrumbItem href="#">Trang chủ</BreadcrumbItem>
         <BreadcrumbItem href={config.routes.managePartners}>Quản lý đối tác</BreadcrumbItem>
@@ -71,7 +79,7 @@ function ManagePartners() {
         <SearchInput />
       </div>
 
-      <PartnersList />
+      {partnerList && <PartnersList dataList={partnerList} />}
     </div>
   )
 }

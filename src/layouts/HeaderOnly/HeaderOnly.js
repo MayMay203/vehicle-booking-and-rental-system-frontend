@@ -40,7 +40,7 @@ function HeaderOnly({ children }) {
   const adminMenu = [
     { content: 'Dịch vụ', to: config.routes.services },
     { content: 'Đối tác', to: config.routes.managePartners },
-    { content: 'Tài khoản', to: config.routes.accounts },
+    { content: 'Tài khoản', to: config.routes.manageAccounts},
     { content: 'Khuyến mãi', to: config.routes.vouchers },
     { content: 'Thống kê', to: config.routes.statistics },
   ]

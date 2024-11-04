@@ -173,7 +173,7 @@ function Header({ menus }) {
                         className={cx('link')}
                         to={`${
                           currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-                        }?type=bus`}
+                        }?type=${config.variables.busPartner}`}
                         onClick={() => setShowDetailPartner(false)}
                       >
                         Đối tác nhà xe
@@ -184,7 +184,7 @@ function Header({ menus }) {
                         className={cx('link')}
                         to={`${
                           currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-                        }?type=carRental`}
+                        }?type=${config.variables.carRentalPartner}`}
                         onClick={() => setShowDetailPartner(false)}
                       >
                         Đối tác cho thuê xe
@@ -197,7 +197,7 @@ function Header({ menus }) {
                           currentUser.roles?.includes('ADMIN')
                             ? config.routes.managePartners
                             : config.routes.partner
-                        }?type=driver`}
+                        }?type=${config.variables.driverPartner}`}
                         onClick={() => setShowDetailPartner(false)}
                       >
                         Đối tác tài xế
@@ -356,7 +356,7 @@ function Header({ menus }) {
                               currentUser.roles?.includes('ADMIN')
                                 ? config.routes.managePartners
                                 : config.routes.partner
-                            }?type=bus`}
+                            }?type=${config.variables.busPartner}`}
                             onClick={() => setShowDetailPartner(false)}
                           >
                             Đối tác nhà xe
@@ -369,7 +369,7 @@ function Header({ menus }) {
                               currentUser.roles?.includes('ADMIN')
                                 ? config.routes.managePartners
                                 : config.routes.partner
-                            }?type=carRental`}
+                            }?type=${config.variables.carRentalPartner}`}
                             onClick={() => setShowDetailPartner(false)}
                           >
                             Đối tác cho thuê xe
@@ -382,7 +382,7 @@ function Header({ menus }) {
                               currentUser.roles?.includes('ADMIN')
                                 ? config.routes.managePartners
                                 : config.routes.partner
-                            }?type=driver`}
+                            }?type=${config.variables.driverPartner}`}
                             onClick={() => setShowDetailPartner(false)}
                           >
                             Đối tác tài xế

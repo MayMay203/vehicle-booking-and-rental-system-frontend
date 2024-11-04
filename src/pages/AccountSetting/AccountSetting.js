@@ -18,11 +18,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
-import { forgetPassword } from '~/apiServices/forgetPassword'
 import { updateAccount } from '~/apiServices/updateAccount'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { isVisible } from '@testing-library/user-event/dist/utils'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {
@@ -150,15 +151,7 @@ function AccountSetting() {
 
   const handleChangePassword = async (e) => {
     e.preventDefault()
-    try {
-      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
-      const data = await forgetPassword(currentUser.email)
-      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-      toast.success(data.info, { autoClose: 1500, position: 'top-center' })
-    } catch (message) {
-      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-      toast.error(message, { autoClose: 1500, position: 'top-center' })
-    }
+    dispatch(setAuthModalVisible({ modalName: modalNames.CHANGE_PASSWORD, isVisible: true }))
   }
 
   return (

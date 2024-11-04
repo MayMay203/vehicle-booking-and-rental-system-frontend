@@ -5,7 +5,7 @@ import styles from './ResetPassword.module.scss'
 import Button from '~/components/Button'
 import {useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { changePassword } from '~/apiServices/changePassword'
+import {resetPassword } from '~/apiServices/resetPassword'
 import { checkTokenReset } from '~/apiServices/checkTokenReset'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
@@ -48,7 +48,7 @@ function ResetPassword() {
   const handleChangePass = async (e) => {
     e.preventDefault()
     try {
-      await changePassword(token, password, confirmPass)
+      await resetPassword(token, password, confirmPass)
       setSucess(true)
     } catch (message) {
       toast.error(message)

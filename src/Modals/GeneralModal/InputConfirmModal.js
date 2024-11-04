@@ -32,6 +32,8 @@ function InputConfirmModal() {
       } catch (message) {
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
       }
+    } else if (showInputConfirm.name === generalModalNames.CANCEL_PARTNER) {
+      // handle logic
     }
     handleClose()
   }
