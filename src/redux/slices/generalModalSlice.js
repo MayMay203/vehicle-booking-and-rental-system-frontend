@@ -9,7 +9,7 @@ export const generalModalNames = {
   CANCEL_TICKET: 'cancelTicket',
   LOADING: 'loading',
   BUY_TICKET: 'buyTicket',
-  DETAIL_PARTNER: 'detailPartner',
+  DETAIL_PARTNER: 'detailPartner'
 }
 
 const initialState = {
@@ -26,7 +26,7 @@ const initialState = {
     description: '',
     name: '',
     id: '',
-    type: ''
+    type: '',
   },
   buyTicket: {
     isOpen: false,
@@ -39,6 +39,7 @@ const initialState = {
     type: '',
     status: '',
   },
+  addVoucher: false,
 }
 
 const generalModalSlice = createSlice({
@@ -70,9 +71,12 @@ const generalModalSlice = createSlice({
         ...modalProps
       }
     },
+    setAddVoucherVisible: (state, action) => {
+      state.addVoucher = action.payload
+    },
   },
 })
 
-export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible, setDetailModalVisible } =
+export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible, setDetailModalVisible, setAddVoucherVisible} =
   generalModalSlice.actions
 export default generalModalSlice.reducer

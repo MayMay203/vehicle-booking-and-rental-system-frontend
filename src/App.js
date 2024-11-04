@@ -14,19 +14,15 @@ import {
   RegisterModal,
 } from './Modals/AuthModal'
 import { ConfirmModal, DetailPartnerModal, InputConfirmModal, TicketModal } from './Modals/GeneralModal'
-// import { useDispatch} from 'react-redux'
-// import { checkLogin } from './redux/slices/userSlice'
 import Spinner from './components/Spinner'
-import { getAccessToken } from './utils/cookieUtils'
 import { checkLogin } from './redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
 import ChangePassword from './Modals/AuthModal/ChangePassword'
 import { config } from './config'
+import VoucherModal from './Modals/GeneralModal/VoucherModal'
 
 function App() {
   const dispatch = useDispatch()
-  console.log('re-render app.js')
-  console.log(getAccessToken())
 
   useEffect(() => {
     dispatch(checkLogin())
@@ -71,6 +67,7 @@ function App() {
         <TicketModal />
         <ChangePassword />
         <DetailPartnerModal />
+        <VoucherModal/>
       </Router>
     </div>
   )
