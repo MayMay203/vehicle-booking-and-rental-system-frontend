@@ -23,7 +23,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { isVisible } from '@testing-library/user-event/dist/utils'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {

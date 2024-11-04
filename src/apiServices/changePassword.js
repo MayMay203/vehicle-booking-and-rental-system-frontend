@@ -4,7 +4,7 @@ import * as httpRequest from '../utils/httpRequest'
 export const changePassword = async (currentPassword, newPassword, confirmPassword) => {
   try {
     const response = await httpRequest.put(
-      `/v1/accounts/update-password`,
+    `/v1/accounts/update-password`,
       {
         currentPassword,
         newPassword,

@@ -7,7 +7,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { registerAdAccount } from '~/apiServices/registerAdAccount'
 import { changePassword } from '~/apiServices/changePassword'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 

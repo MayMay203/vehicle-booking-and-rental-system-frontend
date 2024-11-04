@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
-import { Navigate, parsePath } from 'react-router-dom'
-import { config } from '~/config'
+// import { Navigate, parsePath } from 'react-router-dom'
+// import { config } from '~/config'
 
 function ProtectedRoute({ children, route }) {
   const currentUser = useSelector((state) => state.user.currentUser)
