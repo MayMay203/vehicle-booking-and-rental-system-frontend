@@ -41,8 +41,8 @@ function DefaultLayout({ children }) {
   ]
   const adminMenu = [
     { content: 'Dịch vụ', to: config.routes.services },
-    { content: 'Tài khoản', to: config.routes.accounts },
-    { content: 'Đối tác', to: config.routes.partners },
+    { content: 'Tài khoản', to: config.routes.manageAccounts },
+    { content: 'Đối tác', to: config.routes.managePartners },
     { content: 'Thống kê', to: config.routes.statistics },
     { content: 'Khuyến mãi', to: config.routes.vouchers },
   ]

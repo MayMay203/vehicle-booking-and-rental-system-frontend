@@ -11,6 +11,7 @@ import { checkLoginSession, logout } from '~/redux/slices/userSlice'
 import { lockAccount } from '~/apiServices/lockAccount'
 import { toast } from 'react-toastify'
 import { unlockAccount } from '~/apiServices/unlockAccount'
+import { fetchAllAccounts } from '~/redux/slices/accountSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -44,6 +45,7 @@ function ConfirmModal() {
         if (dispatch(checkLoginSession())) {
           await lockAccount(accountId)
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllAccounts())
           toast.success('Khoá tài khoản thành công', { autoClose: 800, position: 'top-center' })
         }
       } catch (message) {
@@ -51,11 +53,11 @@ function ConfirmModal() {
       }
     } else if (showConfirmModal.name === generalModalNames.UNLOCK_ACCOUNT) {
       const accountId = showConfirmModal.id
-      console.log('Vo day mo tai khoan')
       try {
         if (dispatch(checkLoginSession())) {
           await unlockAccount(accountId)
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllAccounts())
           toast.success('Mở tài khoản thành công', { autoClose: 800, position: 'top-center' })
         }
       } catch (message) {

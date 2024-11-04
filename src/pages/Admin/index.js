@@ -1,0 +1,5 @@
+export { default as ManageAccounts } from './ManageAccounts'
+export { default as ManageParners } from './ManageParners'
+export { default as ManageVouchers } from './ManageVouchers'
+export { default as ManageServices } from './ManageServices'
+export { default as Statistics } from './Statistics'

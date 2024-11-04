@@ -12,6 +12,7 @@ import { images } from '~/assets/images'
 
 const cx = classNames.bind(styles)
 function AccountItem({ data }) {
+  console.log('re-render account item')
   const dispatch = useDispatch()
 
   const handleLockAccount = () => {
@@ -23,7 +24,7 @@ function AccountItem({ data }) {
         description: 'Bạn chắc chắn muốn khoá tài khoản này?',
         isOpen: true,
         modalType: 'confirm',
-        id: data.id
+        id: data.id,
       }),
     )
   }
@@ -55,7 +56,15 @@ function AccountItem({ data }) {
               <LinkItem title={data.email} Icon={<EmailIcon />} className={cx('custom')} />
               <LinkItem title={data.phoneNumber || 'Chưa cập nhật'} Icon={<CallIcon />} className={cx('custom')} />
               <LinkItem
-                title={data.gender? (data.gender === 'FEMALE' ? 'Nữ' : data.gender === 'MALE' ? 'Nam' : 'Khác'):'Chưa cập nhật'}
+                title={
+                  data.gender
+                    ? data.gender === 'FEMALE'
+                      ? 'Nữ'
+                      : data.gender === 'MALE'
+                      ? 'Nam'
+                      : 'Khác'
+                    : 'Chưa cập nhật'
+                }
                 Icon={<GenderIcon />}
                 className={cx('custom')}
               />

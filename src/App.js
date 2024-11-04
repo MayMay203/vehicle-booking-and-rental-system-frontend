@@ -1,10 +1,10 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { publicRoutes } from "./routes"
-import { DefaultLayout } from './layouts'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { publicRoutes } from './routes'
+import { DefaultLayout, ProtectedRoute } from './layouts'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Fragment, useEffect} from 'react'
+import { Fragment, useEffect } from 'react'
 import {
   AuthCodeModal,
   ForgetPasswordModal,
@@ -13,23 +13,24 @@ import {
   RegisterAdminModal,
   RegisterModal,
 } from './Modals/AuthModal'
-import { ConfirmModal, InputConfirmModal, TicketModal } from './Modals/GeneralModal'
+import { ConfirmModal, DetailPartnerModal, InputConfirmModal, TicketModal } from './Modals/GeneralModal'
 // import { useDispatch} from 'react-redux'
 // import { checkLogin } from './redux/slices/userSlice'
 import Spinner from './components/Spinner'
-import { getAccessToken } from "./utils/cookieUtils"
-import { checkLogin } from "./redux/slices/userSlice"
-import { useDispatch } from "react-redux"
+import { getAccessToken } from './utils/cookieUtils'
+import { checkLogin } from './redux/slices/userSlice'
+import { useDispatch } from 'react-redux'
+import ChangePassword from './Modals/AuthModal/ChangePassword'
+import { config } from './config'
 
 function App() {
   const dispatch = useDispatch()
   console.log('re-render app.js')
   console.log(getAccessToken())
 
-
   useEffect(() => {
     dispatch(checkLogin())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -39,8 +40,19 @@ function App() {
           {publicRoutes.map((route, index) => {
             const Layout = route.layout === null ? Fragment : route.layout || DefaultLayout
             const Page = route.component
-            return <Route key={index} path={route.path} element={<Layout>{<Page />}</Layout>}></Route>
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <ProtectedRoute route={route.path}>
+                    <Layout>{<Page />}</Layout>
+                  </ProtectedRoute>
+                }
+              ></Route>
+            )
           })}
+          <Route path="*" element={<Navigate to={config.routes.error} />} />
         </Routes>
         <ToastContainer
           position="top-right"
@@ -57,6 +69,8 @@ function App() {
         <InputConfirmModal />
         <Spinner />
         <TicketModal />
+        <ChangePassword />
+        <DetailPartnerModal />
       </Router>
     </div>
   )

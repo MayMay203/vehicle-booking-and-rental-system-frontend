@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 const cx = classNames.bind(styles)
 function Tabs({ tabList, settings, handleClickTab, type, className }) {
+  console.log('re-render tabs')
   return (
     <Slider {...settings} className={cx('mt-5', { [className]: className })}>
       {tabList.map((tab, index) => (

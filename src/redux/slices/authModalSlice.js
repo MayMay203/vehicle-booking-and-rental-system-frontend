@@ -7,6 +7,7 @@ export const modalNames = {
   AUTH_CODE: 'authCode',
   INFO: 'info',
   REGISTER_ADMIN: 'registerAdmin',
+  CHANGE_PASSWORD: 'changePassword'
 }
 
 const initialState = {
@@ -15,7 +16,8 @@ const initialState = {
   forgot: false,
   authCode: false,
   info: false,
-  registerAdmin: false,
+  registerAdmin: false, 
+  changePassword: false,
 }
 
 const authModalSlice = createSlice({
@@ -23,6 +25,7 @@ const authModalSlice = createSlice({
   initialState,
   reducers: {
     setAuthModalVisible: (state, action) => {
+      console.log(action.payload)
       const { modalName, isVisible } = action.payload
       state[modalName] = isVisible
     },
