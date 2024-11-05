@@ -56,7 +56,7 @@ function LoginModal() {
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-      toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
+      // toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       if (String(message).includes('Tài khoản')) {

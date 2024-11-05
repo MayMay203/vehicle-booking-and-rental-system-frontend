@@ -11,8 +11,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import useDebounce from '~/hook'
-import { searchAccByEmail } from '~/apiServices/searchAccByEmail'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
+import { Pagination } from 'antd'
 
 const cx = classNames.bind(styles)
 function ManageAccounts() {
@@ -20,38 +20,35 @@ function ManageAccounts() {
   const dispatch = useDispatch()
   const accountList = useSelector((state) => state.accounts.dataAccounts)
   const [type, setType] = useState('accounts')
-  const [filterData, setFilterData] = useState([])
-  const [filterSearch, setFilterSearch] = useState([])
   const [searchInput, setSearchInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const searchDebounce = useDebounce(searchInput.trim(), 500)
+  // Pagination
+  const { pageSize, total } = accountList.meta || {}
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    dispatch(fetchAllAccounts())
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllAccounts({ active: type === 'accounts', page: currentPage }))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [type, currentPage])
 
   useEffect(() => {
     async function searchByEmail() {
       try {
         setIsLoading(true)
         if (!searchDebounce) {
-          setFilterSearch(filterData)
+          if (dispatch(checkLoginSession())) {
+            dispatch(fetchAllAccounts({ active: type === 'accounts', page: currentPage }))
+          }
           setIsLoading(false)
           return
         }
-        if (checkLoginSession()) {
-          const data = await searchAccByEmail(searchDebounce)
-          let searchList
-          if (type === 'accounts') {
-            searchList = data.result.filter((account) => account.accountInfo.active === true)
-          } else {
-            searchList = data.result.filter((account) => account.accountInfo.active === false)
-            console.log(filterSearch)
-          }
-          setFilterSearch(searchList)
-          setIsLoading(false)
+        if (dispatch(checkLoginSession())) {
+          dispatch(fetchAllAccounts({ email: searchDebounce, active: type === 'accounts', page: currentPage }))
         }
+        setIsLoading(false)
       } catch (message) {
         setIsLoading(false)
         console.log(message)
@@ -78,19 +75,6 @@ function ManageAccounts() {
     swipe: false,
     draggable: false,
   }
-
-  useEffect(() => {
-    if (accountList.length > 0) {
-      let data
-      if (type === 'accounts') {
-        data = accountList.filter((account) => account.accountInfo.active === true)
-      } else {
-        data = accountList.filter((account) => account.accountInfo.active === false)
-      }
-      setFilterData(data)
-      setFilterSearch(data)
-    }
-  }, [accountList, type])
 
   const handleClickTab = (type) => {
     setType(type)
@@ -120,7 +104,15 @@ function ManageAccounts() {
           <FontAwesomeIcon icon={faPlus} />
         </Button>
       </div>
-      {accountList && <AccountList dataList={filterSearch} />}
+      {accountList.result && <AccountList dataList={accountList.result} />}
+      <Pagination
+        className="mt-5"
+        align="center"
+        current={currentPage}
+        pageSize={1}
+        total={total === 0 ? pageSize : pageSize * total}
+        onChange={(page)=>setCurrentPage(page)}
+      />
     </div>
   )
 }

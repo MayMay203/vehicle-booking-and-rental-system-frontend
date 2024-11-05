@@ -20,10 +20,9 @@ function AccountItem({ data }) {
       setConfirmModalVisible({
         name: generalModalNames.LOCK_ACCOUNT,
         title: 'Xác nhận khoá tài khoản',
-        // description: 'Lí do khoá:',
-        description: 'Bạn chắc chắn muốn khoá tài khoản này?',
+        description: 'Lí do khoá:',
         isOpen: true,
-        modalType: 'confirm',
+        modalType: 'inputConfirm',
         id: data.id,
       }),
     )

@@ -39,25 +39,13 @@ function ConfirmModal() {
     } else if (showConfirmModal.name === generalModalNames.EXPIRED_SESSION) {
       dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
-    } else if (showConfirmModal.name === generalModalNames.LOCK_ACCOUNT) {
-      const accountId = showConfirmModal.id
-      try {
-        if (dispatch(checkLoginSession())) {
-          await lockAccount(accountId)
-          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
-          dispatch(fetchAllAccounts())
-          toast.success('Khoá tài khoản thành công', { autoClose: 800, position: 'top-center' })
-        }
-      } catch (message) {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
-      }
     } else if (showConfirmModal.name === generalModalNames.UNLOCK_ACCOUNT) {
       const accountId = showConfirmModal.id
       try {
         if (dispatch(checkLoginSession())) {
           await unlockAccount(accountId)
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
-          dispatch(fetchAllAccounts())
+          dispatch(fetchAllAccounts({active: false}))
           toast.success('Mở tài khoản thành công', { autoClose: 800, position: 'top-center' })
         }
       } catch (message) {

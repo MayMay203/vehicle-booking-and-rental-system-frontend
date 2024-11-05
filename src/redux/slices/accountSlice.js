@@ -4,12 +4,13 @@ import { lockAccount } from '~/apiServices/lockAccount'
 import { unlockAccount } from '~/apiServices/unlockAccount'
 
 const initialState = {
-  dataAccounts: [],
+  dataAccounts: {},
 }
 
-export const fetchAllAccounts = createAsyncThunk('account/getAllAccounts', async () => {
-    const data = await getAllAccounts()
-  return data.result
+export const fetchAllAccounts = createAsyncThunk('account/getAllAccounts', async (params) => {
+  const { email, active, page, size } = params
+  const data = await getAllAccounts(email, active, page, size)
+  return data
 })
 
 export const fetchLockAccount = createAsyncThunk('account/lockAccount', async (id) => {
