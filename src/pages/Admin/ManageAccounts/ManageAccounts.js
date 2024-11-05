@@ -1,7 +1,7 @@
 import styles from './ManageAccount.module.scss'
 import classNames from 'classnames/bind'
 import Tabs from '~/components/Tabs'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import AccountList from '~/components/AccountList'
 import SearchInput from '~/components/SearchInput'
 import Button from '~/components/Button'
@@ -24,7 +24,7 @@ function ManageAccounts() {
   const [isLoading, setIsLoading] = useState(false)
   const searchDebounce = useDebounce(searchInput.trim(), 500)
   // Pagination
-  const { pageSize, total } = accountList.meta || {}
+  const { pageSize, total } = accountList?.meta || {}
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
@@ -46,7 +46,7 @@ function ManageAccounts() {
           return
         }
         if (dispatch(checkLoginSession())) {
-          dispatch(fetchAllAccounts({ email: searchDebounce, active: type === 'accounts', page: currentPage }))
+          dispatch(fetchAllAccounts({ email: searchDebounce, active: type === 'accounts'}))
         }
         setIsLoading(false)
       } catch (message) {
@@ -58,27 +58,33 @@ function ManageAccounts() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchDebounce])
 
-  const tabList = [
-    {
-      label: 'Tài khoản',
-      value: 'accounts',
-    },
-    {
-      label: 'Đã khoá',
-      value: 'locked',
-    },
-  ]
+  const tabList = useMemo(
+    () => [
+      {
+        label: 'Tài khoản',
+        value: 'accounts',
+      },
+      {
+        label: 'Đã khoá',
+        value: 'locked',
+      },
+    ],
+    [],
+  )
 
-  const settings = {
-    slidesToShow: 2,
-    infinite: false,
-    swipe: false,
-    draggable: false,
-  }
+  const settings = useMemo(
+    () => ({
+      slidesToShow: 2,
+      infinite: false,
+      swipe: false,
+      draggable: false,
+    }),
+    [],
+  )
 
-  const handleClickTab = (type) => {
+  const handleClickTab = useCallback((type) => {
     setType(type)
-  }
+  },[])
 
   const handleAddAccount = () => {
     dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER_ADMIN, isVisible: true }))
@@ -104,15 +110,17 @@ function ManageAccounts() {
           <FontAwesomeIcon icon={faPlus} />
         </Button>
       </div>
-      {accountList.result && <AccountList dataList={accountList.result} />}
-      <Pagination
-        className="mt-5"
-        align="center"
-        current={currentPage}
-        pageSize={1}
-        total={total === 0 ? pageSize : pageSize * total}
-        onChange={(page)=>setCurrentPage(page)}
-      />
+      {accountList?.result && <AccountList dataList={accountList.result} />}
+      {accountList?.result?.length > 0 && (
+        <Pagination
+          className="mt-5"
+          align="center"
+          current={currentPage}
+          pageSize={1}
+          total={total === 0 ? pageSize : pageSize * total}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </div>
   )
 }

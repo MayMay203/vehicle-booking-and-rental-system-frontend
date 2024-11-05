@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 
 const httpRequest = axios.create({
   baseURL: 'http://localhost:8080/api',
@@ -6,6 +6,7 @@ const httpRequest = axios.create({
 })
 
 export const get = async (url, options = {}) => {
+  console.log(url)
   const response = await httpRequest.get(url, options)
   return response.data
 }
@@ -28,4 +29,3 @@ export const DELETE = async (path, options = {}) => {
 export const getMessage = (error) => {
   return error.response.data.error
 }
-
