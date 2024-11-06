@@ -26,7 +26,7 @@ const initialState = {
     description: '',
     name: '',
     id: '',
-    type: ''
+    type: '',
   },
   buyTicket: {
     isOpen: false,
@@ -39,6 +39,7 @@ const initialState = {
     type: '',
     status: '',
   },
+  addUtility: false,
 }
 
 const generalModalSlice = createSlice({
@@ -63,16 +64,19 @@ const generalModalSlice = createSlice({
       state[action.payload.name] = action.payload.isOpen
     },
     setDetailModalVisible: (state, action) => {
-      const {isOpen, ...modalProps } = action.payload
+      const { isOpen, ...modalProps } = action.payload
       state.detailPartner = {
         ...state.detailPartner,
         isOpen,
-        ...modalProps
+        ...modalProps,
       }
+    },
+    setAddUtilityModalVisible: (state, action) => {
+      state.addUtility = action.payload
     },
   },
 })
 
-export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible, setDetailModalVisible } =
+export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible, setDetailModalVisible, setAddUtilityModalVisible} =
   generalModalSlice.actions
 export default generalModalSlice.reducer

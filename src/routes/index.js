@@ -20,11 +20,10 @@ import Authenticate from '~/pages/Authenticate'
 import BusTrip from '~/pages/BusPartner/BusTripManage/BusTrip'
 import DetailBusTrip from '~/pages/BusPartner/BusTripManage/DetailBusTrip'
 import AddBusTrip from '~/pages/BusPartner/BusTripManage/AddBusTrip'
-import Utility from '~/pages/BusPartner/Utility'
 import Bus from '~/pages/BusPartner/BusManage/Bus'
 import AddBus from '~/pages/BusPartner/BusManage/AddBus'
 import Error from '~/pages/Error'
-import { ManageAccounts, ManageParners, ManageServices, ManageVouchers, Statistics } from '~/pages/Admin'
+import { ManageAccounts, ManageParners, ManageVouchers, ManageUtilities, Statistics } from '~/pages/Admin'
 
 const publicRoutes = [
   {
@@ -106,8 +105,8 @@ const publicRoutes = [
     layout: HeaderOnly,
   },
   {
-    path: config.routes.services,
-    component: ManageServices,
+    path: config.routes.manageUtilities,
+    component: ManageUtilities,
     layout: HeaderOnly,
   },
   {
@@ -141,10 +140,6 @@ const publicRoutes = [
     component: AddBus,
   },
   {
-    path: config.routes.utility,
-    component: Utility,
-  },
-  {
     path: config.routes.message,
     component: Message,
     layout: HeaderOnly,
@@ -152,7 +147,7 @@ const publicRoutes = [
   {
     path: config.routes.error,
     component: Error,
-    layout: null
+    layout: null,
   },
 ]
 

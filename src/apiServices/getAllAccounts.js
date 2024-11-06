@@ -6,7 +6,7 @@ export const getAllAccounts = async (email, active, page = 1, size = 1) => {
     const params = {
       size: size,
       page: page,
-      filter: `active:${active}${email ? ` and email=~'${email}'` : ''}`, // Kết hợp filter
+      filter: `active:${active}${email ? ` and email='${email}'` : ''}`, // Kết hợp filter
     }
 
     const response = await httpRequest.get('/v1/accounts', {

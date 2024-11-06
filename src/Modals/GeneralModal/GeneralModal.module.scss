@@ -120,3 +120,26 @@
 .line-height-1-4{
     line-height: 1.4;
 }
+
+.choose-wrapper{
+    position: relative;
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.choose-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.input-file{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}

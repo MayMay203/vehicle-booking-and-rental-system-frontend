@@ -22,6 +22,7 @@ import { checkLogin } from './redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
 import ChangePassword from './Modals/AuthModal/ChangePassword'
 import { config } from './config'
+import AddUtility from './Modals/GeneralModal/AddUtilityModal'
 
 function App() {
   const dispatch = useDispatch()
@@ -71,6 +72,7 @@ function App() {
         <TicketModal />
         <ChangePassword />
         <DetailPartnerModal />
+        <AddUtility/>
       </Router>
     </div>
   )
