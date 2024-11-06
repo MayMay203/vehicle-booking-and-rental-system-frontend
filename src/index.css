@@ -415,3 +415,6 @@ html *::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0) !important;
 }
 
+:where(.css-dev-only-do-not-override-apn68).ant-table-wrapper .ant-table-thead >tr>th, :where(.css-dev-only-do-not-override-apn68).ant-table-wrapper .ant-table-thead >tr>td {
+  background-color: #FFEBE4;
+}
