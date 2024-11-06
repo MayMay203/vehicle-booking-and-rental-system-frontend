@@ -17,11 +17,17 @@ import BookingOrder from '~/pages/BookingPage/BookingOrder'
 import ResetPassword from '~/pages/ResetPassword'
 import Message from '~/pages/Message'
 import Authenticate from '~/pages/Authenticate'
-import ManageAccounts from '~/pages/Admin/ManageAccounts'
-import ManagePartners from '~/pages/Admin/ManageParners'
-import ManageServices from '~/pages/Admin/ManageServices'
-import ManageVouchers from '~/pages/Admin/ManageVouchers'
-import Statistics from '~/pages/Admin/Statistics'
+import BusTrip from '~/pages/BusPartner/BusTripManage/BusTrip'
+import DetailBusTrip from '~/pages/BusPartner/BusTripManage/DetailBusTrip'
+import AddBusTrip from '~/pages/BusPartner/BusTripManage/AddBusTrip'
+import Utility from '~/pages/BusPartner/Utility'
+import Bus from '~/pages/BusPartner/BusManage/Bus'
+import AddBus from '~/pages/BusPartner/BusManage/AddBus'
+import Error from '~/pages/Error'
+import { ManageAccounts, ManageParners, ManageServices, ManageVouchers, Statistics } from '~/pages/Admin'
+import UpdateBus from '~/pages/BusPartner/BusManage/UpdateBus/index.js'
+import PolicyManage from '~/pages/BusPartner/PolicyManage'
+import StatisticsBus from '~/pages/BusPartner/StatisticsBus'
 
 const publicRoutes = [
   {
@@ -93,13 +99,13 @@ const publicRoutes = [
     layout: null,
   },
   {
-    path: config.routes.accounts,
+    path: config.routes.manageAccounts,
     component: ManageAccounts,
     layout: HeaderOnly,
   },
   {
-    path: config.routes.partners,
-    component: ManagePartners,
+    path: config.routes.managePartners,
+    component: ManageParners,
     layout: HeaderOnly,
   },
   {
@@ -117,7 +123,52 @@ const publicRoutes = [
     component: Statistics,
     layout: HeaderOnly,
   },
-  { path: config.routes.message, component: Message, layout: HeaderOnly },
+  {
+    path: config.routes.busTrip,
+    component: BusTrip,
+  },
+  {
+    path: config.routes.detailBusTrip,
+    component: DetailBusTrip,
+  },
+  {
+    path: config.routes.addBusTrip,
+    component: AddBusTrip,
+  },
+  {
+    path: config.routes.bus,
+    component: Bus,
+  },
+  {
+    path: config.routes.addBus,
+    component: AddBus,
+  },
+  {
+    path: config.routes.updateBus,
+    component: UpdateBus,
+  },
+  {
+    path: config.routes.policyManage,
+    component: PolicyManage,
+  },
+  {
+    path: config.routes.statisticsBus,
+    component: StatisticsBus,
+  },
+  {
+    path: config.routes.utility,
+    component: Utility,
+  },
+  {
+    path: config.routes.message,
+    component: Message,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.error,
+    component: Error,
+    layout: null,
+  },
 ]
 
 const privateRoutes = []

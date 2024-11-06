@@ -4,30 +4,36 @@ import styles from './Search.module.scss'
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
-function Search() {
+function Search({noSelectBus}) {
   return (
     <div className={cx('wrapper')}>
-      <div className="row row-cols-1 gy-4 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 row-cols-xl-5">
-        <div className="col">
-          <div className={cx('item')}>
-            <p className={cx('title')}>Chọn nhà xe</p>
-            <div className={cx('custom-select')}>
-              <select className='w-100'>
-                <option>Chọn nhà xe</option>
-                <option value="Xuân Thảo">Xuân Thảo</option>
-                <option value="Xuân Thảo">Minh Phương</option>
-                <option value="Xuân Thảo">Minh Tiến</option>
-              </select>
+      <div
+        className={
+          noSelectBus
+            ? 'row row-cols-1 gy-4 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4'
+            : 'row row-cols-1 gy-4 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 row-cols-xl-5'
+        }
+      >
+        {!noSelectBus && (
+          <div className="col">
+            <div className={cx('item')}>
+              <p className={cx('title')}>Chọn nhà xe</p>
+              <div className={cx('custom-select')}>
+                <select className="w-100">
+                  <option>Chọn nhà xe</option>
+                  <option value="Xuân Thảo">Xuân Thảo</option>
+                  <option value="Xuân Thảo">Minh Phương</option>
+                  <option value="Xuân Thảo">Minh Tiến</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
+        )}
         <div className="col">
           <div className={cx('item')}>
-            <p className={cx('title')}>
-                Nơi xuất phát
-            </p>
+            <p className={cx('title')}>Nơi xuất phát</p>
             <div className={cx('custom-select')}>
-              <select className='w-100'>
+              <select className="w-100">
                 <option>Nơi xuất phát</option>
                 <option value="Xuân Thảo">Hà Nội</option>
                 <option value="Xuân Thảo">Hải Phòng</option>
@@ -38,11 +44,9 @@ function Search() {
         </div>
         <div className="col">
           <div className={cx('item')}>
-            <p className={cx('title')}>
-              Nơi đến
-            </p>
+            <p className={cx('title')}>Nơi đến</p>
             <div className={cx('custom-select')}>
-              <select className='w-100'>
+              <select className="w-100">
                 <option>Nơi đến</option>
                 <option value="Xuân Thảo">Nghệ An</option>
                 <option value="Xuân Thảo">Hà Tĩnh</option>
@@ -54,7 +58,7 @@ function Search() {
         <div className="col col-md-6">
           <div className={cx('item')}>
             <p className={cx('title')}>Ngày đi</p>
-            <input type="date" className='w-100'></input>
+            <input type="date" className="w-100"></input>
           </div>
         </div>
         <div className="col-sm-12 col-md-5 m-lg-auto">

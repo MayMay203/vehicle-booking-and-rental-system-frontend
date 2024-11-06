@@ -41,15 +41,29 @@ function DefaultLayout({ children }) {
   ]
   const adminMenu = [
     { content: 'Dịch vụ', to: config.routes.services },
-    { content: 'Tài khoản', to: config.routes.accounts },
-    { content: 'Đối tác', to: config.routes.partners },
+    { content: 'Tài khoản', to: config.routes.manageAccounts },
+    { content: 'Đối tác', to: config.routes.managePartners },
     { content: 'Thống kê', to: config.routes.statistics },
     { content: 'Khuyến mãi', to: config.routes.vouchers },
+  ]
+  const busPartnerMenu = [
+    { content: 'Chuyến xe', to: config.routes.busTrip },
+    { content: 'ĐƠn đặt', to: config.routes.accounts },
+    { content: 'Loại xe', to: config.routes.statistics },
+    { content: 'Thống kê', to: config.routes.vouchers },
   ]
   // const partnerMenu = useMemo(() => ['Trang chủ', 'Dịch vụ', 'Đơn đặt', 'Thống kê', 'Thanh toán'], [])
   return (
     <div className={cx('wrapper')}>
-      <Header menus={currentUser.roles?.includes('ADMIN') ? adminMenu : userMenu} />
+      <Header
+        menus={
+          currentUser.roles?.includes('ADMIN')
+            ? adminMenu
+            : currentUser.roles?.includes('BUS_PARTNER')
+            ? busPartnerMenu
+            : userMenu
+        }
+      />
       <div className={cx('content')}>{children}</div>
       <Footer />
     </div>

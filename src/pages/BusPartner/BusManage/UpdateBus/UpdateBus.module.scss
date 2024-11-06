@@ -1,0 +1,120 @@
+@use '../../../../abstracts' as abstracts;
+.wrap-container {
+  border-radius: 5px;
+  border: 1px solid #d34714;
+  padding: 3rem;
+}
+.form-add-bus-trip {
+  justify-content: center;
+}
+.col-form {
+  padding: 0 5rem;
+  @include abstracts.screen(sm) {
+    padding: 0.5rem;
+  }
+  // padding-left: 12rem;
+  // @include abstracts.screen(xl){
+  //     padding-left: 8rem;
+  // }
+  // @include abstracts.screen(md){
+  //     padding-left: 4rem;
+  // }
+  // @include abstracts.screen(sm){
+  //     padding-left: 1rem;
+  // }
+}
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem 0;
+}
+.content {
+  margin-left: 2rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+  text-align: justify;
+  line-height: 5rem;
+}
+.wrap-form {
+  padding: 1.5rem;
+  margin: 1rem;
+}
+.div-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title-form {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: #d34714;
+  margin-bottom: 3rem;
+  @include abstracts.screen(sm) {
+    font-size: 1.8rem;
+    line-height: 2.5rem;
+  }
+}
+.txt {
+  font-size: 1.7rem;
+  // margin-bottom: 1rem;
+  font-weight: 500;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.selectbox {
+  width: 100%;
+}
+.btn {
+  // min-width: 10rem !important;
+  // height: 3rem;
+  font-size: 1.7rem;
+  font-weight: 400;
+  margin: 0 2rem;
+  @include abstracts.screen(sm) {
+    min-width: 7rem !important;
+    height: 2.5rem;
+  }
+}
+.padding-5 {
+  padding: 0 5rem;
+  @include abstracts.screen(sm) {
+    padding: 0.5rem;
+  }
+}
+.list-img {
+  border: 1px solid rgba($color: #d34714, $alpha: 0.2);
+  border-radius: 5px;
+  max-width: 66.5rem;
+  max-height: 42.2rem;
+  align-items: center;
+  justify-content: center;
+  // display: flex;
+  @include abstracts.screen(md) {
+    max-height: 66.5rem;
+    max-width: 42.2rem;
+  }
+  @include abstracts.screen(sm) {
+    max-height: 133rem;
+    max-width: 42.2rem;
+  }
+}
+.img-vehicle {
+  width: 20rem;
+  height: 16rem;
+  margin: 0.5rem;
+  object-fit: cover;
+}
+.warn {
+  font-size: 1.4rem;
+  background: none;
+  border: none;
+  color: red;
+}

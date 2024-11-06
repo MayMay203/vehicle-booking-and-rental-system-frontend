@@ -1,0 +1,11 @@
+/* Container styles */
+.nav-tabs .nav-link.active{
+	background-color: aquamarine;
+}
+
+/* Active tab styling */
+#fill-tab-statistics .nav-link.active {
+    color: white; /* Standout color for active tab */
+    background-color: #c8c8c8; /* Adjust as per your theme */
+    border-radius: 4px; /* Rounded corners for a polished look */
+}

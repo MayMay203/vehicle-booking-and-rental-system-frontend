@@ -85,3 +85,38 @@
     margin-bottom: -18px;
     justify-content: center!important;
 }
+
+.image-partner{
+    object-fit: cover;
+    width: 220px;
+    height: 200px;
+    border-radius: 10px;
+}
+
+.custom{
+    justify-content: initial;
+    font-size: 1.6rem;
+    column-gap: 14px;
+    padding: 4px 0;
+    font-weight: 400!important;
+
+    &:first-child{
+        background-color: initial;
+        color: initial;
+        font-weight: 500;
+    }
+}
+
+.detail-description{
+    padding: 12px;
+    line-height: 1.4;
+}
+
+.list{
+    list-style-type: disc;
+    padding: 4px 40px;
+}
+
+.line-height-1-4{
+    line-height: 1.4;
+}
