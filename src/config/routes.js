@@ -26,6 +26,7 @@ export const routes = {
   addBus: 'bus-manage/add-bus',
   updateBus: 'bus-manage/update-bus',
   policyManage: 'policy-manage',
+  statisticsBus: 'statistics-bus',
   utility: 'utility',
   managePartners: '/manage-partners',
   message: '/message',

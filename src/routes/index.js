@@ -27,6 +27,7 @@ import Error from '~/pages/Error'
 import { ManageAccounts, ManageParners, ManageServices, ManageVouchers, Statistics } from '~/pages/Admin'
 import UpdateBus from '~/pages/BusPartner/BusManage/UpdateBus/index.js'
 import PolicyManage from '~/pages/BusPartner/PolicyManage'
+import StatisticsBus from '~/pages/BusPartner/StatisticsBus'
 
 const publicRoutes = [
   {
@@ -149,6 +150,10 @@ const publicRoutes = [
   {
     path: config.routes.policyManage,
     component: PolicyManage,
+  },
+  {
+    path: config.routes.statisticsBus,
+    component: StatisticsBus,
   },
   {
     path: config.routes.utility,
