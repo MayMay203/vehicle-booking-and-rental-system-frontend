@@ -21,10 +21,10 @@ function ManageAccounts() {
   const accountList = useSelector((state) => state.accounts.dataAccounts)
   const [type, setType] = useState('accounts')
   const [searchInput, setSearchInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const searchDebounce = useDebounce(searchInput.trim(), 500)
   // Pagination
-  const { pageSize, total } = accountList?.meta || {}
+  const { pageSize, pages} = accountList?.meta || {}
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
@@ -117,7 +117,7 @@ function ManageAccounts() {
           align="center"
           current={currentPage}
           pageSize={1}
-          total={total === 0 ? pageSize : pageSize * total}
+          total={pageSize * pages}
           onChange={(page) => setCurrentPage(page)}
         />
       )}
