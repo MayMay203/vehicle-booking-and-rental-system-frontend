@@ -36,45 +36,6 @@ function DetailPartner() {
   const [detailData, setDetailData] = useState()
   const dispatch = useDispatch()
 
-  // const detailData = {
-  //   businessInfo: {
-  //     id: 1,
-  //     businessName: 'Nhà xe Thanh Hồng Sơn',
-  //     emailOfRepresentative: 'thanhhongson1995@gmail.com',
-  //     nameOfRepresentative: 'Nguyễn Thị Thảo',
-  //     phoneOfRepresentative: '0912348192',
-  //     address: '16 Thái Hòa, Nghệ An',
-  //     partnerType: 'BUS_PARTNER',
-  //     approvalStatus: 'APPROVED',
-  //     avatar:
-  //       'https://vehiclerentalbookingsystem.s3.ap-southeast-2.amazonaws.com/7af6fff9-5f5b-4f12-9d97-700b342ebed9_avatar.jpg',
-  //     accountInfo: {
-  //       id: 1,
-  //       email: 'admin@gmail.com',
-  //     },
-  //   },
-  //   timeCancel: '18:00 01-11-2024',
-  //   busPartnerInfo: {
-  //     description:
-  //       'Nhà xe đến từ Nghệ An được thành lập vào năm 2010, chuyên phục vụ các chuyến đi xuyên tỉnh từ Đà Nẵng - Nghệ An, Nghệ An - Hà Nội, HCM',
-  //     urlFanpage: 'thanhhongson1995.com.vn',
-  //     policy: ['Chính sách hoàn tiền trong 24 giờ nếu chuyến xe bị hủy', 'Đảm bảo an toàn'],
-  //     urlLicenses: [
-  //       'https://vehiclerentalbookingsystem.s3.ap-southeast-2.amazonaws.com/b7e07f7b-b8d0-4eb3-87f0-6834d372ba27_giayphepkinhdoanh2.jpg',
-  //     ],
-  //     urlImages: [
-  //       'https://vehiclerentalbookingsystem.s3.ap-southeast-2.amazonaws.com/29c91b13-d2a7-4bec-9eec-72caaf098256_nhaxehongson.jpg',
-  //       'https://vehiclerentalbookingsystem.s3.ap-southeast-2.amazonaws.com/ec678c1e-6488-4965-9dd8-bbb959789263_nhaxehongson2.jpg',
-  //     ],
-  //     bankAccount: {
-  //       accountNumber: '0707030308',
-  //       accountHolderName: 'Nguyễn Hữu Thọ',
-  //       bankName: 'Ngân hàng ABC',
-  //       idAccount: 1,
-  //     },
-  //   },
-  // }
-
   useEffect(() => {
     async function fetchDetailParterRegister() {
       const data = await getDetailPartnerRegister(id, type)

@@ -19,12 +19,12 @@ function ManageAccounts() {
   console.log('re-render manage accounts')
   const dispatch = useDispatch()
   const accountList = useSelector((state) => state.accounts.dataAccounts)
+  const isLoading = useSelector((state) => state.accounts.isLoading)
   const [type, setType] = useState('accounts')
   const [searchInput, setSearchInput] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
   const searchDebounce = useDebounce(searchInput.trim(), 500)
   // Pagination
-  const { pageSize, pages} = accountList?.meta || {}
+  const { pageSize, total } = accountList?.meta || {}
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
@@ -37,20 +37,16 @@ function ManageAccounts() {
   useEffect(() => {
     async function searchByEmail() {
       try {
-        setIsLoading(true)
         if (!searchDebounce) {
           if (dispatch(checkLoginSession())) {
             dispatch(fetchAllAccounts({ active: type === 'accounts', page: currentPage }))
           }
-          setIsLoading(false)
           return
         }
         if (dispatch(checkLoginSession())) {
           dispatch(fetchAllAccounts({ email: searchDebounce, active: type === 'accounts'}))
         }
-        setIsLoading(false)
       } catch (message) {
-        setIsLoading(false)
         console.log(message)
       }
     }
@@ -116,8 +112,8 @@ function ManageAccounts() {
           className="mt-5"
           align="center"
           current={currentPage}
-          pageSize={1}
-          total={pageSize * pages}
+          pageSize={pageSize}
+          total={total}
           onChange={(page) => setCurrentPage(page)}
         />
       )}

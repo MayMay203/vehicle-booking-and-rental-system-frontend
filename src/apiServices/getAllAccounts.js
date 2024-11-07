@@ -1,6 +1,6 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
-export const getAllAccounts = async (email, active, page = 1, size = 6) => {
+export const getAllAccounts = async (email, active, page = 1, size = 1) => {
   console.log('GET ALL ACCOUNTS: ', active)
   try {
     const params = {

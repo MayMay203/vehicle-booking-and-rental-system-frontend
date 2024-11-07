@@ -31,7 +31,7 @@ function InputConfirmModal() {
           await lockAccount(accountId, reason)
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
           dispatch(fetchAllAccounts({ active: true }))
-          toast.success('Khoá tài khoản thành công. Đã gửi email thông báo tới tài khoản này.', { autoClose: 800, position: 'top-center' })
+          toast.success('Khoá tài khoản thành công. Đã gửi email thông báo tới tài khoản này.', { autoClose: 1200, position: 'top-center' })
         }
       } catch (message) {
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1200, position: 'top-center' })

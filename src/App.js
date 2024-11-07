@@ -17,7 +17,6 @@ import { ConfirmModal, DetailPartnerModal, InputConfirmModal, TicketModal } from
 // import { useDispatch} from 'react-redux'
 // import { checkLogin } from './redux/slices/userSlice'
 import Spinner from './components/Spinner'
-import { getAccessToken } from './utils/cookieUtils'
 import { checkLogin } from './redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
 import ChangePassword from './Modals/AuthModal/ChangePassword'
@@ -26,7 +25,6 @@ import { config } from './config'
 function App() {
   const dispatch = useDispatch()
   console.log('re-render app.js')
-  console.log(getAccessToken())
 
   useEffect(() => {
     dispatch(checkLogin())
@@ -70,7 +68,7 @@ function App() {
         <Spinner />
         <TicketModal />
         <ChangePassword />
-        <DetailPartnerModal />
+        {/* <DetailPartnerModal /> */}
       </Router>
     </div>
   )
