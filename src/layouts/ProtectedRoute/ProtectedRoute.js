@@ -1,12 +1,12 @@
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 // import { Navigate, parsePath } from 'react-router-dom'
 // import { config } from '~/config'
 
 function ProtectedRoute({ children, route }) {
-  const currentUser = useSelector((state) => state.user.currentUser)
+  // const currentUser = useSelector((state) => state.user.currentUser)
 
-  console.log('Current User:', currentUser) // kiểm tra currentUser
-  console.log('Current Route:', route) // kiểm tra route
+  // console.log('Current User:', currentUser) // kiểm tra currentUser
+  // console.log('Current Route:', route) // kiểm tra route
 
   // let isAdmin = false
   // if (currentUser?.roles) {

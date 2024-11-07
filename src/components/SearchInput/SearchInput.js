@@ -12,7 +12,11 @@ function SearchInput({ className, handleChange, isLoading }) {
   
   return (
     <div className={cx('wrapper', [className])}>
+      <button className={cx('btn-search', { disabled: searchValue === '' })}>
+        <FontAwesomeIcon icon={faSearch} className={cx('icon')} />
+      </button>
       <input
+        spellCheck={false}
         value={searchValue}
         type="text"
         className={cx('input')}
@@ -23,10 +27,7 @@ function SearchInput({ className, handleChange, isLoading }) {
           handleChange(e.target.value)
         }}
       ></input>
-      <button className={cx('btn-search', { disabled: searchValue === '' })}>
-        {isLoading && <span className={cx('spinner-border', 'custom-spinner')}></span>}
-        <FontAwesomeIcon icon={faSearch} className={cx('icon')} />
-      </button>
+      {isLoading && <span className={cx('spinner-border', 'custom-spinner')}></span>}
     </div>
   )
 }

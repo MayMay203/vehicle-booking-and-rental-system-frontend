@@ -12,6 +12,7 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { cancelPartner } from '~/apiServices/cancelPartner'
 import { fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
 import { config } from '~/config'
+import { fetchAllAccounts } from '~/redux/slices/accountSlice'
 
 const cx = classNames.bind(styles)
 function InputConfirmModal() {
@@ -24,17 +25,20 @@ function InputConfirmModal() {
   const handleConfirm = async (e) => {
     e.preventDefault()
     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
     if (showInputConfirm.name === generalModalNames.CANCEL_TICKET) {
       toast.success('Huỷ vé xe thành công.', { autoClose: 1200, position: 'top-center' })
     } else if (showInputConfirm.name === generalModalNames.LOCK_ACCOUNT) {
       const accountId = showInputConfirm.id
       try {
         if (dispatch(checkLoginSession())) {
-          await lockAccount(accountId)
-          toast.success('Khoá tài khoản thành công', { autoClose: 800, position: 'top-center' })
+          await lockAccount(accountId, reason)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllAccounts({ active: true }))
+          toast.success('Khoá tài khoản thành công. Đã gửi email thông báo tới tài khoản này.', { autoClose: 1200, position: 'top-center' })
         }
       } catch (message) {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1200, position: 'top-center' })
       }
     } else if (showInputConfirm.name === generalModalNames.CANCEL_PARTNER) {
       try {
@@ -54,10 +58,12 @@ function InputConfirmModal() {
         toast.error(message, { autoClose: 1000, position: 'top-center' })
       }
     }
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false}))
     handleClose()
   }
 
   const handleClose = () => {
+    setReason('')
     setReason('')
     dispatch(setConfirmModalVisible({ modalType: 'inputConfirm', isOpen: false }))
   }

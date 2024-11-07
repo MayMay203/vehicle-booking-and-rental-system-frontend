@@ -65,7 +65,7 @@ function ManagePartners() {
     <div className={cx('wrapper')}>
       <Breadcrumb>
         <BreadcrumbItem href="#">Trang chủ</BreadcrumbItem>
-        <BreadcrumbItem href={config.routes.managePartners}>Quản lý đối tác</BreadcrumbItem>
+        <BreadcrumbItem href="#">Đối tác</BreadcrumbItem>
         <BreadcrumbItem href={`${config.routes.managePartners}/bus-partners`} active>
           Đối tác nhà xe
         </BreadcrumbItem>

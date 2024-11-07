@@ -13,7 +13,7 @@ function ModalChat({ handleClose }) {
   return (
     <div className={cx('wrapper')}>
       <h2 className={cx('heading', 'mb-4')}>Tin nhắn</h2>
-      <TxtSearch></TxtSearch>
+      <TxtSearch content={'Tìm kiếm người nhắn'}></TxtSearch>
       <div className={cx('d-flex', 'wrap-btn', 'mt-4')}>
         <Button
           rounded

@@ -1,0 +1,66 @@
+@use '../../abstracts' as abstracts;
+.nav-button-page {
+  font-size: 2rem;
+  padding: 1rem;
+  color: #e20d0d;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+.nav-button-page:hover,
+.nav-button-page:active,
+.nav-button-page:focus {
+  background-color: #fcd4c6;
+  color: #e20d0d;
+  outline: none;
+  box-shadow: none;
+}
+.nav-button-page:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  background-color: white;
+}
+
+.wrap-utility {
+  display: flex;
+  flex-direction: column;
+  // margin: 0 3rem;
+  align-items: center;
+  &:hover{
+    cursor: pointer;
+  }
+}
+.icon-utility {
+  display: flex;
+  background-color: #fff6f3;
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  @include abstracts.screen(sm){
+    width: 4rem;
+    height: 4rem;
+  }
+}
+.icon {
+  font-size: 3.2rem;
+  color: rgba($color: #ff672f, $alpha: 0.5);
+  &.active{
+    color: #ff672f;
+  }
+  @include abstracts.screen(sm){
+    font-size: 2.4rem;
+  }
+}
+.name {
+  font-size: 1.5rem;
+  color: rgba($color: #ff672f, $alpha: 0.5);
+  &.active{
+    color: #ff672f;
+  }
+  @include abstracts.screen(sm){
+    font-size: 1.4rem;
+  }
+}

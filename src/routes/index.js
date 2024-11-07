@@ -17,8 +17,17 @@ import BookingOrder from '~/pages/BookingPage/BookingOrder'
 import ResetPassword from '~/pages/ResetPassword'
 import Message from '~/pages/Message'
 import Authenticate from '~/pages/Authenticate'
+import BusTrip from '~/pages/BusPartner/BusTripManage/BusTrip'
+import DetailBusTrip from '~/pages/BusPartner/BusTripManage/DetailBusTrip'
+import AddBusTrip from '~/pages/BusPartner/BusTripManage/AddBusTrip'
+import Utility from '~/pages/BusPartner/Utility'
+import Bus from '~/pages/BusPartner/BusManage/Bus'
+import AddBus from '~/pages/BusPartner/BusManage/AddBus'
 import Error from '~/pages/Error'
 import { ManageAccounts, ManageParners, ManageServices, ManageVouchers, Statistics } from '~/pages/Admin'
+import UpdateBus from '~/pages/BusPartner/BusManage/UpdateBus/index.js'
+import PolicyManage from '~/pages/BusPartner/PolicyManage'
+import StatisticsBus from '~/pages/BusPartner/StatisticsBus'
 
 const publicRoutes = [
   {
@@ -115,6 +124,42 @@ const publicRoutes = [
     layout: HeaderOnly,
   },
   {
+    path: config.routes.busTrip,
+    component: BusTrip,
+  },
+  {
+    path: config.routes.detailBusTrip,
+    component: DetailBusTrip,
+  },
+  {
+    path: config.routes.addBusTrip,
+    component: AddBusTrip,
+  },
+  {
+    path: config.routes.bus,
+    component: Bus,
+  },
+  {
+    path: config.routes.addBus,
+    component: AddBus,
+  },
+  {
+    path: config.routes.updateBus,
+    component: UpdateBus,
+  },
+  {
+    path: config.routes.policyManage,
+    component: PolicyManage,
+  },
+  {
+    path: config.routes.statisticsBus,
+    component: StatisticsBus,
+  },
+  {
+    path: config.routes.utility,
+    component: Utility,
+  },
+  {
     path: config.routes.message,
     component: Message,
     layout: HeaderOnly,
@@ -122,7 +167,7 @@ const publicRoutes = [
   {
     path: config.routes.error,
     component: Error,
-    layout: null
+    layout: null,
   },
 ]
 
