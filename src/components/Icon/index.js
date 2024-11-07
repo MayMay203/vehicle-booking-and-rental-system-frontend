@@ -30,5 +30,6 @@ export {
   PolicyIcon,
   LicenceIcon,
   ImageIcon,
-  BankIcon
+  BankIcon,
+  PartnerIcon
 } from './Icon'

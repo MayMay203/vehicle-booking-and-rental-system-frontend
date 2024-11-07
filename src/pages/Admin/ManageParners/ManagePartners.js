@@ -10,6 +10,7 @@ import { createSearchParams, useLocation } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function ManagePartners() {
@@ -28,7 +29,9 @@ function ManagePartners() {
 
   // Partner type change call API method
   useEffect(() => {
-    dispatch(fetchAllRegisterPartners({ partnerType, type }))
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllRegisterPartners({ partnerType, status: type }))
+   }
   },[partnerType, type, dispatch])
 
   const tabList = [
@@ -78,7 +81,7 @@ function ManagePartners() {
         handleClickTab={handleClickTab}
         className={cx('custom-margin', 'custom-fontsize')}
       ></Tabs>
-      <SearchInput handleChange={handleChange} className={cx('custom-margin')}/>
+      {partnerList.length > 0 && <SearchInput handleChange={handleChange} className={cx('custom-margin')} />}
 
       {partnerList && <PartnersList dataList={partnerList} />}
     </div>

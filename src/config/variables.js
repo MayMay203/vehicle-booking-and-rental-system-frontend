@@ -7,5 +7,5 @@ export const variables = {
   driverPartner: 'DRIVER_PARTNER',
   current: 'APPROVED',
   notConfirmed: 'PENDING_APPROVAL',
-  cancelled: 'CANCELLED',
+  cancelled: 'CANCEL',
 }

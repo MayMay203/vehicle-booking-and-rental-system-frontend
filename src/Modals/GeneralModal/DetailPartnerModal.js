@@ -19,6 +19,7 @@ import {
   ImageIcon,
   LicenceIcon,
   LocationIcon,
+  PartnerIcon,
   PolicyIcon,
 } from '~/components/Icon'
 import { getDetailPartnerRegister } from '~/apiServices/getDetailPartnerRegister'
@@ -26,6 +27,7 @@ import { BankIcon } from '~/components/Icon'
 import { verifyRegisterParter } from '~/apiServices/verifyRegisterPartner'
 import { fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
 import { config } from '~/config'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function DetailPartner() {
@@ -52,18 +54,7 @@ function DetailPartner() {
 
   const handleConfirm = async () => {
     let data
-    if (status === config.variables.notConfirmed) {
-      data = await verifyRegisterParter(id, type)
-      if (data) {
-        toast.success('Xác nhận đăng ký thành công!')
-        dispatch(fetchAllRegisterPartners({ type, status }))
-        handleClose()
-      } else {
-        toast.error('Xác nhận đăng ký thất bại!')
-        handleClose()
-      }
-    }
-    else if (status === config.variables.current) {
+    if (status === config.variables.current) {
       dispatch(
         setConfirmModalVisible({
           name: generalModalNames.CANCEL_PARTNER,
@@ -76,6 +67,29 @@ function DetailPartner() {
           type: detailData.businessInfo.partnerType,
         }),
       )
+    } else {
+      if (dispatch(checkLoginSession())) {
+        data = await verifyRegisterParter(id, type)
+        if (data) {
+          toast.success(
+            status === config.variables.notConfirmed
+              ? 'Xác nhận đăng ký thành công!'
+              : 'Khôi phục chế độ đối tác thành công!',
+            { autoClose: 1200, position: 'top-center' },
+          )
+          dispatch(
+            fetchAllRegisterPartners({
+              partnerType: type,
+              status:
+                status === config.variables.notConfirmed ? config.variables.notConfirmed : config.variables.cancelled,
+            }),
+          )
+          handleClose()
+        } else {
+          toast.error('Xác nhận đăng ký thất bại!')
+          handleClose()
+        }
+      }
     }
   }
 
@@ -102,23 +116,27 @@ function DetailPartner() {
             </span>
 
             <div className="d-flex row-gap-2" style={{ fontSize: '1.6rem', fontWeight: 500 }}>
-              <span>Người đại diện: </span>
-              <span>{detailData?.businessInfo.nameOfRepresentative}</span>
+              <span>Người đại diện</span>
+              <span className="ms-1">- {detailData?.businessInfo.nameOfRepresentative}</span>
             </div>
             <div className="p-3">
               <LinkItem
-                title={detailData?.businessInfo.emailOfRepresentative}
+                title={detailData?.businessInfo.emailOfRepresentative || ''}
                 Icon={<EmailIcon />}
                 className={cx('custom')}
               />
               <LinkItem
-                title={detailData?.businessInfo.phoneOfRepresentative}
+                title={detailData?.businessInfo.phoneOfRepresentative || ''}
                 Icon={<CallIcon />}
                 className={cx('custom')}
               />
-              <LinkItem title={detailData?.busPartnerInfo.urlFanpage} Icon={<FanPage />} className={cx('custom')} />
               <LinkItem
-                title={detailData?.businessInfo.address}
+                title={detailData?.busPartnerInfo.urlFanpage || ''}
+                Icon={<FanPage />}
+                className={cx('custom')}
+              />
+              <LinkItem
+                title={detailData?.businessInfo.address || ''}
                 Icon={<LocationIcon />}
                 className={cx('custom', 'mt-2')}
               />
@@ -167,10 +185,43 @@ function DetailPartner() {
                 </span>
               </div>
             </div>
+            {detailData?.businessInfo.approvalStatus !== config.variables.notConfirmed && (
+              <div className="d-flex-column row-gap-3 mt-4">
+                <LinkItem title="Thông tin chi tiết đối tác" Icon={<PartnerIcon />} className={cx('custom')} />
+                <div className="d-flex flex-column row-gap-2">
+                  <div className="mt-3 fs-4 ps-5 fst-italic">
+                    Thời gian trở thành đối tác -
+                    <span style={{ color: '#5DAE70', fontWeight: '600', marginLeft: '8px' }}>
+                      {detailData?.timeCancel}
+                    </span>
+                  </div>
+                  {detailData?.businessInfo.approvalStatus === config.variables.cancelled && (
+                    <div className="mt-3 fs-4 ps-5 fst-italic d-flex column-gap-5">
+                      <div>
+                        Thời gian huỷ đối tác -
+                        <span style={{ color: 'red', fontWeight: '600', marginLeft: '8px' }}>
+                          {detailData?.timeCancel}
+                        </span>
+                      </div>
+                      <div>
+                        Lý do huỷ -
+                        <span style={{ color: 'red', fontWeight: '600', marginLeft: '8px' }}>
+                          {detailData?.cancelReason}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="d-flex justify-content-center gap-5" style={{ marginTop: '40px' }} onClick={handleClose}>
               <Button outline>Thoát</Button>
               <Button primary onClick={handleConfirm}>
-                {status === config.variables.current ? 'Huỷ đối tác' : 'Xác nhận'}
+                {status === config.variables.current
+                  ? 'Huỷ đối tác'
+                  : status === config.variables.notConfirmed
+                  ? 'Xác nhận'
+                  : 'Khôi phục đối tác'}
               </Button>
             </div>
           </div>

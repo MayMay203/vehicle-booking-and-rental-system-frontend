@@ -48,7 +48,7 @@ function InputConfirmModal() {
           const data = await cancelPartner(id, type, reason)
           if (data) {
             toast.success('Huỷ đăng ký đối tác thành công!', { autoClose: 800, position: 'top-center' })
-            dispatch(fetchAllRegisterPartners({ type, status: config.variables.notConfirmed }))
+            dispatch(fetchAllRegisterPartners({ partnerType: type, status: config.variables.current }))
             handleClose()
           }
         }

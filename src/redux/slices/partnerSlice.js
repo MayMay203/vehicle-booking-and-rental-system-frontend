@@ -6,8 +6,8 @@ const initialState = {
   partnerList: [],
 }
 
-export const fetchAllRegisterPartners = createAsyncThunk('partners/fetchAllRegisterPartners', async ({ partnerType, type }) => {
-  const data = await getAllPartners(partnerType, type)
+export const fetchAllRegisterPartners = createAsyncThunk('partners/fetchAllRegisterPartners', async ({ partnerType, status }) => {
+  const data = await getAllPartners(partnerType, status)
   return data.result || []
 })
 
