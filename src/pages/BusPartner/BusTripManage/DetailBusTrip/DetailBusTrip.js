@@ -281,7 +281,7 @@ function DetailBusTrip(){
                 onChange={handleInputChange}
               >
                 {statuses.map((status, index) => (
-                  <option key={index} value={status.label}>
+                  <option key={index} value={status.value}>
                     {status.label}
                   </option>
                 ))}

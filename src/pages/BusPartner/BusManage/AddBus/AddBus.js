@@ -27,17 +27,10 @@ function AddBus(){
     ]
     const [activeAdd, setActiveAdd] = useState(false)
     const [formData, setFormData] = useState({
-      departure: '',
-      date: '',
       licensePlateNumber: '',
-      // typeVehicle: '',
-      price: '',
-      reduce: '',
-      destination: '',
-      time: '',
-      extendTime: '',
-      status: '',
-      // numberSeat: '',
+      typeVehicle: '',
+      typeSeat: '',
+      numberSeat: '',
     })
     useEffect(() => {
       const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
@@ -55,17 +48,10 @@ function AddBus(){
     }
     const handleCancel = () => {
       setFormData({
-        departure: '',
-        date: '',
         licensePlateNumber: '',
-        // typeVehicle: '',
-        price: '',
-        reduce: '',
-        destination: '',
-        time: '',
-        extendTime: '',
-        status: '',
-        // numberSeat: '',
+        typeVehicle: '',
+        typeSeat: '',
+        numberSeat: '',
       })
     }
     const handleAdd = () => {}
@@ -176,7 +162,7 @@ function AddBus(){
         <Row className={cx('infor-img', 'mt-3 ms-5 me-5', 'justify-content-center')}>
           <Row className={cx('list-img')}>
             {[...Array(6)].map((_, index) => (
-              <Col xs={4} key={index} className="d-flex justify-content-center">
+              <Col xs={12} sm={6} md={4} key={index} className="d-flex justify-content-center">
                 <div onClick={() => handleImageClick(index)}>
                   <Image src={selectedFiles[index] || images.no_picture} thumbnail className={cx('img-vehicle')} />
                   <input

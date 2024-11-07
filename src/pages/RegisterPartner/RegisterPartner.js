@@ -15,9 +15,9 @@ function RegisterPartner() {
   const location = useLocation()
   const searchParam = createSearchParams(location.search)
   const typePartner = searchParam.get('type')
-  const driver = 'driver'
-  const carRental = 'carRental'
-  const bus = 'bus'
+  const driver = 'DRIVER_PARTNER'
+  const carRental = 'CAR_RENTAL_PARTNER'
+  const bus = 'BUS_PARTNER'
   const feedbackForDriver = [
     {
       id: 1,

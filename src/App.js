@@ -68,7 +68,7 @@ function App() {
         <Spinner />
         <TicketModal />
         <ChangePassword />
-        {/* <DetailPartnerModal /> */}
+        <DetailPartnerModal />
       </Router>
     </div>
   )
