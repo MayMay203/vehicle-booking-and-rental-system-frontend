@@ -78,10 +78,7 @@ function ManagePartners() {
         handleClickTab={handleClickTab}
         className={cx('custom-margin', 'custom-fontsize')}
       ></Tabs>
-
-      <div className={cx('d-flex', 'justify-content-end', 'custom-margin')}>
-        <SearchInput handleChange={handleChange}/>
-      </div>
+      <SearchInput handleChange={handleChange} className={cx('custom-margin')}/>
 
       {partnerList && <PartnersList dataList={partnerList} />}
     </div>
