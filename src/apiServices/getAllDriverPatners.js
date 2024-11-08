@@ -1,16 +1,15 @@
 import { config } from '~/config'
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
-export const getAllPartners = async (partnerType, status, emailOfRepresentative, page = 1) => {
+export const getAllDriverPartners = async (status, email, page = 1) => {
+  console.log(status)
   try {
     const params = {
       size: config.variables.pagesize,
       page: page,
-      filter: `partnerType:'${partnerType}' and approvalStatus:'${status}'${
-        emailOfRepresentative ? ` and emailOfRepresentative~'${emailOfRepresentative}'` : ''
-      }`,
+      filter: `approvalStatus:'${status}'`,
     }
-    const response = await httpRequest.get('/v1/business-partners', {
+    const response = await httpRequest.get('/v1/drivers', {
       params,
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,

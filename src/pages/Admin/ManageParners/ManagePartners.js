@@ -9,17 +9,23 @@ import PartnersList from '~/components/PartnersList/PartnersList'
 import { createSearchParams, useLocation } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
+import { fetchAllDriverPartners, fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import { Pagination } from 'antd'
 
 const cx = classNames.bind(styles)
 function ManagePartners() {
   console.log('re-render managePartners')
   const partnerList = useSelector((state) => state.partners.partnerList)
-  const [type, setType] = useState(config.variables.current)
+  const [type, setType] = useState(config.variables.notConfirmed)
   const [partnerType, setPartnerType] = useState('')
   const location = useLocation()
   const dispatch = useDispatch()
+  // Search
+  const [searchDebounce, setSearchDebounce] = useState('')
+  // Pagination
+  const { total } = partnerList?.meta || {}
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     const searchParam = createSearchParams(location.search)
@@ -29,19 +35,26 @@ function ManagePartners() {
 
   // Partner type change call API method
   useEffect(() => {
-    if (dispatch(checkLoginSession())) {
-      dispatch(fetchAllRegisterPartners({ partnerType, status: type }))
-   }
-  },[partnerType, type, dispatch])
+    if (partnerType === config.variables.busPartner || partnerType === config.variables.carRentalPartner) {
+      if (dispatch(checkLoginSession())) {
+        dispatch(fetchAllRegisterPartners({ partnerType, status: type, page: currentPage }))
+      }
+    } else if (partnerType === config.variables.driverPartner) {
+      console.log('VO DRIVER')
+      if (dispatch(checkLoginSession())) {
+        dispatch(fetchAllDriverPartners({ status: type, page: currentPage }))
+      }
+    }
+  }, [partnerType, type, dispatch, currentPage])
 
   const tabList = [
     {
-      label: 'Hiện tại',
-      value: config.variables.current,
-    },
-    {
       label: 'Chờ xác nhận',
       value: config.variables.notConfirmed,
+    },
+    {
+      label: 'Hiện tại',
+      value: config.variables.current,
     },
     {
       label: 'Đã huỷ',
@@ -60,17 +73,37 @@ function ManagePartners() {
     setType(type)
   }
 
-  const handleChange = useCallback(() => {
-    
-  },[])
+  useEffect(() => {
+    if (partnerType === config.variables.busPartner || partnerType === config.variables.carRentalPartner) {
+      dispatch(
+        fetchAllRegisterPartners({
+          partnerType,
+          status: type,
+          emailOfRepresentative: searchDebounce,
+          // page: currentPage,
+        }),
+      )
+    } else if (partnerType === config.variables.driverPartner) {
+      dispatch(fetchAllDriverPartners({ status: type, email: searchDebounce }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchDebounce])
+
+  const handleChange = useCallback((value) => {
+    setSearchDebounce(value)
+  }, [])
 
   return (
     <div className={cx('wrapper')}>
       <Breadcrumb>
         <BreadcrumbItem href="#">Trang chủ</BreadcrumbItem>
         <BreadcrumbItem href="#">Đối tác</BreadcrumbItem>
-        <BreadcrumbItem href={`${config.routes.managePartners}/bus-partners`} active>
-          Đối tác nhà xe
+        <BreadcrumbItem active>
+          {partnerType === config.variables.busPartner
+            ? 'Đối tác nhà xe'
+            : partnerType === config.variables.carRentalPartner
+            ? 'Đối tác cho thuê xe'
+            : 'Đối tác tài xế'}
         </BreadcrumbItem>
       </Breadcrumb>
 
@@ -81,9 +114,19 @@ function ManagePartners() {
         handleClickTab={handleClickTab}
         className={cx('custom-margin', 'custom-fontsize')}
       ></Tabs>
-      {partnerList.length > 0 && <SearchInput handleChange={handleChange} className={cx('custom-margin')} />}
+      <SearchInput handleChange={handleChange} className={cx('custom-margin')} />
 
-      {partnerList && <PartnersList dataList={partnerList} />}
+      {partnerList.result && <PartnersList dataList={partnerList.result} />}
+      {partnerList.result?.length > 0 && (
+        <Pagination
+          className="mt-5"
+          align="center"
+          current={currentPage}
+          pageSize={config.variables.pagesize}
+          total={total}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </div>
   )
 }

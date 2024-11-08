@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import DetailDriverPartner from '~/Modals/GeneralModal/DetailDriverPartnerModal'
 
 export const generalModalNames = {
   LOGOUT: 'logout',
@@ -10,6 +11,8 @@ export const generalModalNames = {
   LOADING: 'loading',
   BUY_TICKET: 'buyTicket',
   DETAIL_PARTNER: 'detailPartner',
+  DETAIL_DRIVER_PARTNER: 'detailDriverPartner',
+  CANCEL_DRIVER_PARTNER: 'cancelDriverPartner',
 }
 
 const initialState = {
@@ -26,7 +29,7 @@ const initialState = {
     description: '',
     name: '',
     id: '',
-    type: ''
+    type: '',
   },
   buyTicket: {
     isOpen: false,
@@ -34,6 +37,11 @@ const initialState = {
   },
   loading: false,
   detailPartner: {
+    isOpen: false,
+    id: '',
+    status: '',
+  },
+  DetailDriverPartner: {
     isOpen: false,
     id: '',
     type: '',
@@ -63,16 +71,29 @@ const generalModalSlice = createSlice({
       state[action.payload.name] = action.payload.isOpen
     },
     setDetailModalVisible: (state, action) => {
-      const {isOpen, ...modalProps } = action.payload
+      const { isOpen, ...modalProps } = action.payload
       state.detailPartner = {
         ...state.detailPartner,
         isOpen,
-        ...modalProps
+        ...modalProps,
+      }
+    },
+    setDetailDriverModalVisible: (state, action) => {
+      const { isOpen, ...modalProps } = action.payload
+      state.DetailDriverPartner = {
+        ...state.DetailDriverPartner,
+        isOpen,
+        ...modalProps,
       }
     },
   },
 })
 
-export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible, setDetailModalVisible } =
-  generalModalSlice.actions
+export const {
+  setConfirmModalVisible,
+  setTicketModalVisible,
+  setLoadingModalVisible,
+  setDetailModalVisible,
+  setDetailDriverModalVisible,
+} = generalModalSlice.actions
 export default generalModalSlice.reducer

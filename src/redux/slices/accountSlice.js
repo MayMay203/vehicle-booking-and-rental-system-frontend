@@ -9,8 +9,8 @@ const initialState = {
 }
 
 export const fetchAllAccounts = createAsyncThunk('account/getAllAccounts', async (params) => {
-  const { email, active, page, size } = params
-  const data = await getAllAccounts(email, active, page, size)
+  const { email, active, page} = params
+  const data = await getAllAccounts(email, active, page)
   return data
 })
 

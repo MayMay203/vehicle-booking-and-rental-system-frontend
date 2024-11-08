@@ -10,9 +10,10 @@ import { generalModalNames, setConfirmModalVisible, setLoadingModalVisible } fro
 import { lockAccount } from '~/apiServices/lockAccount'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { cancelPartner } from '~/apiServices/cancelPartner'
-import { fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
+import { fetchAllDriverPartners, fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
 import { config } from '~/config'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
+import { cancelDriverPartner } from '~/apiServices/cancelDriverPartner'
 
 const cx = classNames.bind(styles)
 function InputConfirmModal() {
@@ -35,7 +36,10 @@ function InputConfirmModal() {
           await lockAccount(accountId, reason)
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
           dispatch(fetchAllAccounts({ active: true }))
-          toast.success('Khoá tài khoản thành công. Đã gửi email thông báo tới tài khoản này.', { autoClose: 1200, position: 'top-center' })
+          toast.success('Khoá tài khoản thành công. Đã gửi email thông báo tới tài khoản này.', {
+            autoClose: 1200,
+            position: 'top-center',
+          })
         }
       } catch (message) {
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1200, position: 'top-center' })
@@ -57,8 +61,24 @@ function InputConfirmModal() {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
         toast.error(message, { autoClose: 1000, position: 'top-center' })
       }
+    } else if (showInputConfirm.name === generalModalNames.CANCEL_DRIVER_PARTNER) {
+      try {
+        if (dispatch(checkLoginSession())) {
+          const { id } = showInputConfirm
+          const data = await cancelDriverPartner(id, reason)
+          if (data) {
+            toast.success('Huỷ đăng ký đối tác thành công!', { autoClose: 800, position: 'top-center' })
+            dispatch(fetchAllDriverPartners({ status: config.variables.current }))
+            handleClose()
+          }
+        }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      } catch (message) {
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        toast.error(message, { autoClose: 1000, position: 'top-center' })
+      }
     }
-    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false}))
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
     handleClose()
   }
 

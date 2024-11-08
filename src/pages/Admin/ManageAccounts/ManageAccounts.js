@@ -10,21 +10,23 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import useDebounce from '~/hook'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
 import { Pagination } from 'antd'
+import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function ManageAccounts() {
   console.log('re-render manage accounts')
   const dispatch = useDispatch()
   const accountList = useSelector((state) => state.accounts.dataAccounts)
+  console.log(accountList)
   const isLoading = useSelector((state) => state.accounts.isLoading)
   const [type, setType] = useState('accounts')
-  const [searchInput, setSearchInput] = useState('')
-  const searchDebounce = useDebounce(searchInput.trim(), 500)
+  // Search
+  const [searchDebounce, setSearchDebounce] = useState('')
   // Pagination
-  const { pageSize, total } = accountList?.meta || {}
+  const { total } = accountList?.meta || {}
+  console.log(total)
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
@@ -44,7 +46,7 @@ function ManageAccounts() {
           return
         }
         if (dispatch(checkLoginSession())) {
-          dispatch(fetchAllAccounts({ email: searchDebounce, active: type === 'accounts'}))
+          dispatch(fetchAllAccounts({ email: searchDebounce, active: type === 'accounts' }))
         }
       } catch (message) {
         console.log(message)
@@ -80,14 +82,14 @@ function ManageAccounts() {
 
   const handleClickTab = useCallback((type) => {
     setType(type)
-  },[])
+  }, [])
 
   const handleAddAccount = () => {
     dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER_ADMIN, isVisible: true }))
   }
 
   const handleChange = useCallback((value) => {
-    setSearchInput(value)
+    setSearchDebounce(value)
   }, [])
 
   return (
@@ -112,7 +114,7 @@ function ManageAccounts() {
           className="mt-5"
           align="center"
           current={currentPage}
-          pageSize={pageSize}
+          pageSize={config.variables.pagesize}
           total={total}
           onChange={(page) => setCurrentPage(page)}
         />

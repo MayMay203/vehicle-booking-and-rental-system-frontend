@@ -7,14 +7,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCheck, faChevronRight, faClose } from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
 import { useDispatch } from 'react-redux'
-import { setDetailModalVisible } from '~/redux/slices/generalModalSlice'
+import { setDetailDriverModalVisible, setDetailModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function PartnerItem({ data }) {
   const dispatch = useDispatch()
-  const  businessData  = data.businessInfo
+  const partnerData = data.businessInfo || data.generalDriverInfo
   const showDetailPartner = () => {
-    dispatch(setDetailModalVisible({ type: businessData.partnerType, id: businessData.id, isOpen: true, status: businessData.approvalStatus }))
+    if (data.businessInfo) {
+      dispatch(
+        setDetailModalVisible({
+          type: partnerData.partnerType,
+          id: partnerData.id,
+          isOpen: true,
+          status: partnerData.approvalStatus,
+        }),
+      )
+    } else {
+      dispatch(
+        setDetailDriverModalVisible({
+          type: partnerData.partnerType,
+          id: partnerData.formRegisterId,
+          isOpen: true,
+          status: partnerData.approvalStatus,
+        }),
+      )
+    }
   }
 
   return (
@@ -23,23 +41,42 @@ function PartnerItem({ data }) {
         <div className="row align-items-center row-gap-5">
           <div className="col-12 col-md-6 col-lg-5">
             <div className={cx('avatar-wrapper')}>
-              <img src={images.noImage} alt="repre-iamge" className={cx('avatar')} />
+              <img src={partnerData.avatar || images.noImage} alt="repre-iamge" className={cx('avatar')} />
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-7">
             <div className="d-flex flex-column row-gap-2 align-items-center align-items-md-baseline">
-              <span className={cx('name')}>{businessData.businessName}</span>
-              <span className={cx('represent')}>Người đại diện: {`${businessData.nameOfRepresentative}`}</span>
-              <LinkItem title={businessData.phoneOfRepresentative} Icon={<CallIcon />} className={cx('custom')} />
-              <LinkItem title={businessData.emailOfRepresentative} Icon={<EmailIcon />} className={cx('custom')} />
-              <LinkItem title={businessData.address} Icon={<LocationIcon />} className={cx('custom')} />
+              <span className={cx('name')}>{partnerData.businessName || partnerData.name}</span>
+              {partnerData.nameOfRepresentative && (
+                <span className={cx('represent')}>Người đại diện: {`${partnerData.nameOfRepresentative}`}</span>
+              )}
+              {partnerData.location && (
+                <div className={cx('represent')}>
+                  Khu vực hoạt động : <span style={{ fontStyle: 'italic' }}>{partnerData.location}</span>
+                </div>
+              )}
+              <LinkItem
+                title={partnerData.phoneOfRepresentative || partnerData.phoneNumber}
+                Icon={<CallIcon />}
+                className={cx('custom')}
+              />
+              <LinkItem
+                title={partnerData.emailOfRepresentative || partnerData.email}
+                Icon={<EmailIcon />}
+                className={cx('custom')}
+              />
+              <LinkItem
+                title={partnerData.address || partnerData.permanentAddress}
+                Icon={<LocationIcon />}
+                className={cx('custom')}
+              />
             </div>
           </div>
         </div>
       </div>
       <div className="col-12 col-md-4 col-lg-3 align-content-end">
         <div className="d-flex flex-column column-gap-3">
-          {businessData.approvalStatus === 'APPROVED' && (
+          {partnerData.approvalStatus === 'APPROVED' && data.timeCancel && (
             <div className={cx('checked')}>
               <div className="d-flex column-gap-2 mb-2">
                 <FontAwesomeIcon icon={faCheck} />
@@ -48,7 +85,7 @@ function PartnerItem({ data }) {
               <span>{data.timeCancel}</span>
             </div>
           )}
-          {businessData.approvalStatus === 'CANCEL' && (
+          {partnerData.approvalStatus === 'CANCEL' && (
             <div className={cx('checked', 'reason')}>
               <div className="d-flex column-gap-2 mb-2 justify-content-center">
                 <FontAwesomeIcon icon={faClose} />
@@ -72,13 +109,13 @@ function PartnerItem({ data }) {
               Huỷ đối tác
             </Button>
           )} */}
-          {!businessData.approvalStatus === 'CANCEL' && (
+          {!partnerData.approvalStatus === 'CANCEL' && (
             <div className={cx('reason')}>
               <div className="d-flex column-gap-2 mb-3 justify-content-center">
                 <FontAwesomeIcon icon={faClose} />
-                <span>{businessData.date}</span>
+                <span>{partnerData.date}</span>
               </div>
-              <span>{businessData.reason}</span>
+              <span>{partnerData.reason}</span>
             </div>
           )}
         </div>

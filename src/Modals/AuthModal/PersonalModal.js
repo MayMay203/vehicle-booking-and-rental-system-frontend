@@ -18,7 +18,7 @@ const cx = classNames.bind(styles)
 function PersonalModal() {
   console.log('re-render personal modal')
   const showInfoModal = useSelector((state) => state.authModal.info)
-  const email = useSelector((state) => state.authModal.email)
+  const email = useSelector((state) => state.user.email)
   const dispatch = useDispatch()
 
   const [isValid, setIsValid] = useState(false)
@@ -46,6 +46,7 @@ function PersonalModal() {
         birthDay: birthday.toLocaleDateString('en-GB').replace(/\//g, '-'),
         phoneNumber: phone,
       }
+      console.log(accountInfo)
       const formData = new FormData()
       formData.append('account_info', new Blob([JSON.stringify(accountInfo)], { type: 'application/json' }))
       await registerInfo(formData)
@@ -55,7 +56,7 @@ function PersonalModal() {
       reset()
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
     } catch (message) {
-      toast.error('Đã có lỗi xảy ra. Vui lòng thử lại hoặc bỏ qua bước này', { autoClose: 2000 })
+      toast.error('Số điện thoại này đã được đăng ký làm thông tin cá nhân cho tài khoản khác!', { autoClose: 2000 })
     }
   }
 
