@@ -60,6 +60,7 @@ function RegisterModal() {
   }
 
   const handleShowLogin = () => {
+    reset()
     dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
     dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
   }
@@ -69,6 +70,7 @@ function RegisterModal() {
   }, [])
 
   const handleShowOTPModal = async () => {
+    reset()
     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
     setIsShow(false)
     await resendOTP(email)

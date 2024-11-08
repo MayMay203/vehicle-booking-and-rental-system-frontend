@@ -36,12 +36,14 @@ function LoginModal() {
   }, [])
 
   const handleShowRegister = () => {
+    reset()
     dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
     dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: true }))
   }
 
   const handleShowForget = (e) => {
     e.preventDefault()
+    reset()
     dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
     dispatch(setAuthModalVisible({ modalName: modalNames.FORGOT, isVisible: true }))
   }
@@ -56,6 +58,7 @@ function LoginModal() {
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      reset()
       // toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
