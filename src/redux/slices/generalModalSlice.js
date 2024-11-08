@@ -46,6 +46,7 @@ const initialState = {
     type: '',
     status: '',
   },
+  addUtility: false,
   addVoucher: false,
 }
 
@@ -76,6 +77,7 @@ const generalModalSlice = createSlice({
         ...state.detailPartner,
         isOpen,
         ...modalProps,
+        ...modalProps,
       }
     },
     setDetailDriverModalVisible: (state, action) => {
@@ -89,6 +91,9 @@ const generalModalSlice = createSlice({
     setAddVoucherVisible: (state, action) => {
       state.addVoucher = action.payload
     },
+    setAddUtilityModalVisible: (state, action) => {
+      state.addUtility = action.payload
+    },
   },
 })
 
@@ -99,5 +104,7 @@ export const {
   setDetailModalVisible,
   setDetailDriverModalVisible,
   setAddVoucherVisible,
+  setAddUtilityModalVisible
 } = generalModalSlice.actions
+
 export default generalModalSlice.reducer
