@@ -30,28 +30,28 @@ function SlideUtility({ listUtilities }) {
   const [activeUtilities, setActiveUtilities] = useState(Array(listUtilities.length).fill(false))
   const [currentPage, setCurrentPage] = useState(0)
 
-  const resetUtilitiesStates = () => {
-    setActiveUtilities(Array(listUtilities.length).fill(false))
-  }
+  // const resetUtilitiesStates = () => {
+  //   setActiveUtilities(Array(listUtilities.length).fill(false))
+  // }
 
   const displayedUtilities = listUtilities.slice(currentIndex, currentIndex + utilitiesPerPage)
 
   const handleNext = () => {
     if (currentIndex + utilitiesPerPage < listUtilities.length) {
-      resetUtilitiesStates()
+      // resetUtilitiesStates()
       setCurrentIndex(currentIndex + utilitiesPerPage)
       setCurrentPage(currentPage + 1)
     }
   }
   const handlePrevious = () => {
     if (currentIndex - utilitiesPerPage >= 0) {
-      resetUtilitiesStates()
+      // resetUtilitiesStates()
       setCurrentIndex(currentIndex - utilitiesPerPage)
       setCurrentPage(currentPage - 1)
     }
   }
 
-  const toggleUtilities = (index) => {
+  const handleChooseUtility = (index) => {
     const updatedUtilities = [...activeUtilities]
     updatedUtilities[index] = !updatedUtilities[index]
     setActiveUtilities(updatedUtilities)
@@ -64,7 +64,7 @@ function SlideUtility({ listUtilities }) {
         </Button>
       </Col>
       <Col xs="10">
-        <div className="d-flex">
+        <div className="d-flex justify-content-start">
           {displayedUtilities.map((item, index) => (
             <Utility
               className=""
@@ -72,7 +72,7 @@ function SlideUtility({ listUtilities }) {
               name={item.name}
               icon={item.icon}
               active={activeUtilities[currentIndex + index]} // Trạng thái active được truyền vào
-              toggleUtilities={() => toggleUtilities(currentIndex + index)}
+              handleChooseUtility={() => handleChooseUtility(currentIndex + index)}
             ></Utility>
           ))}
         </div>

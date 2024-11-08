@@ -9,7 +9,9 @@ export const generalModalNames = {
   CANCEL_TICKET: 'cancelTicket',
   LOADING: 'loading',
   BUY_TICKET: 'buyTicket',
-  DETAIL_PARTNER: 'detailPartner'
+  DETAIL_PARTNER: 'detailPartner',
+  DETAIL_DRIVER_PARTNER: 'detailDriverPartner',
+  CANCEL_DRIVER_PARTNER: 'cancelDriverPartner',
 }
 
 const initialState = {
@@ -34,6 +36,11 @@ const initialState = {
   },
   loading: false,
   detailPartner: {
+    isOpen: false,
+    id: '',
+    status: '',
+  },
+  DetailDriverPartner: {
     isOpen: false,
     id: '',
     type: '',
@@ -64,11 +71,19 @@ const generalModalSlice = createSlice({
       state[action.payload.name] = action.payload.isOpen
     },
     setDetailModalVisible: (state, action) => {
-      const {isOpen, ...modalProps } = action.payload
+      const { isOpen, ...modalProps } = action.payload
       state.detailPartner = {
         ...state.detailPartner,
         isOpen,
-        ...modalProps
+        ...modalProps,
+      }
+    },
+    setDetailDriverModalVisible: (state, action) => {
+      const { isOpen, ...modalProps } = action.payload
+      state.DetailDriverPartner = {
+        ...state.DetailDriverPartner,
+        isOpen,
+        ...modalProps,
       }
     },
     setAddVoucherVisible: (state, action) => {
@@ -77,6 +92,12 @@ const generalModalSlice = createSlice({
   },
 })
 
-export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible, setDetailModalVisible, setAddVoucherVisible} =
-  generalModalSlice.actions
+export const {
+  setConfirmModalVisible,
+  setTicketModalVisible,
+  setLoadingModalVisible,
+  setDetailModalVisible,
+  setDetailDriverModalVisible,
+  setAddVoucherVisible,
+} = generalModalSlice.actions
 export default generalModalSlice.reducer

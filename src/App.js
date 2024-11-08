@@ -20,9 +20,11 @@ import { useDispatch } from 'react-redux'
 import ChangePassword from './Modals/AuthModal/ChangePassword'
 import { config } from './config'
 import VoucherModal from './Modals/GeneralModal/VoucherModal'
+import DetailDriverPartner from './Modals/GeneralModal/DetailDriverPartnerModal'
 
 function App() {
   const dispatch = useDispatch()
+  console.log('re-render app.js')
 
   useEffect(() => {
     dispatch(checkLogin())
@@ -68,6 +70,7 @@ function App() {
         <ChangePassword />
         <DetailPartnerModal />
         <VoucherModal/>
+        <DetailDriverPartner />
       </Router>
     </div>
   )
