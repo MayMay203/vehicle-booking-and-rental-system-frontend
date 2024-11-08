@@ -91,10 +91,11 @@ function Bus() {
       title: 'Xem',
       dataIndex: 'view',
       align: 'center',
-      render: () => (
+      render: (text, record) => (
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
           style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
+          onClick={() => handleViewBus(record.key)}
         />
       ),
     },
@@ -103,13 +104,19 @@ function Bus() {
       dataIndex: 'update',
       align: 'center',
 
-      render: () => <FontAwesomeIcon icon={faEdit} style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }} />,
+      render: (text, record) => (
+        <FontAwesomeIcon
+          icon={faEdit}
+          style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
+          onClick={() => handleEditBus(record.key)}
+        />
+      ),
     },
     {
       title: 'Xóa',
       dataIndex: 'delete',
       align: 'center',
-      render: () => (
+      render: (record) => (
         <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
       ),
     },
@@ -152,6 +159,12 @@ function Bus() {
   const navigate = useNavigate()
   const handleAddBus = () => {
     navigate('add-bus')
+  }
+  const handleViewBus = (id) => {
+    navigate('update-bus', {state: {enableEdit: false, busID: id}})
+  }
+  const handleEditBus = (id) => {
+    navigate('update-bus', { state: { enableEdit: true, busID: id } })
   }
   return (
     <div className="container mt-4 mb-5">

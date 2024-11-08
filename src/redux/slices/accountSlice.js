@@ -5,11 +5,12 @@ import { unlockAccount } from '~/apiServices/unlockAccount'
 
 const initialState = {
   dataAccounts: {},
+  isLoading: false,
 }
 
 export const fetchAllAccounts = createAsyncThunk('account/getAllAccounts', async (params) => {
-  const { email, active, page, size } = params
-  const data = await getAllAccounts(email, active, page, size)
+  const { email, active, page} = params
+  const data = await getAllAccounts(email, active, page)
   return data
 })
 
@@ -37,7 +38,11 @@ const accountSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchAllAccounts.pending, (state) => {
+        state.isLoading = true
+      })
       .addCase(fetchAllAccounts.fulfilled, (state, action) => {
+        state.isLoading = false
         state.dataAccounts = action.payload
       })
       .addCase(fetchLockAccount.fulfilled, () => {})

@@ -33,13 +33,15 @@ function UserMenu() {
         <Image src={currentUser?.avatar} className={cx('avatar', 'ml-0')}></Image>
         <span className="fw-medium">{currentUser?.name}</span>
       </div>
-      <span className={cx('menu')}>Cài đặt chế độ</span>
+      {!currentUser.roles.includes('ADMIN') && <span className={cx('menu')}>Cài đặt chế độ</span>}
       <Link to={config.routes.accountSetting} className={cx('menu')}>
         Thông tin tài khoản
       </Link>
-      <Link to={config.routes.order} className={cx('menu')}>
-        Quản lý đơn hàng
-      </Link>
+      {!currentUser.roles?.includes('ADMIN') && (
+        <Link to={config.routes.manageAccounts} className={cx('menu')}>
+          Quản lý tài khoản
+        </Link>
+      )}
       <Button outline className={cx('btn')} onClick={handleLogout}>
         Đăng xuất
       </Button>

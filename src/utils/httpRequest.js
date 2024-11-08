@@ -6,7 +6,6 @@ const httpRequest = axios.create({
 })
 
 export const get = async (url, options = {}) => {
-  console.log(url)
   const response = await httpRequest.get(url, options)
   return response.data
 }
@@ -21,8 +20,11 @@ export const put = async (url, body = {}, options = {}) => {
   return response.data
 }
 
-export const DELETE = async (path, options = {}) => {
-  const response = await httpRequest.delete(path, options)
+export const DELETE = async (path, options = {}, body = {}) => {
+  const response = await httpRequest.delete(path, {
+    ...options,
+    data: body,
+  })
   return response.data
 }
 

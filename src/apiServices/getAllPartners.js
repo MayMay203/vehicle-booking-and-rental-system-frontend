@@ -1,21 +1,23 @@
+import { config } from '~/config'
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
-
-export const getAllPartners = async (partnerType, status) => {
-    console.log(partnerType, status)
+export const getAllPartners = async (partnerType, status, emailOfRepresentative, page = 1) => {
   try {
-    let url = `/v1/business-partners?filter=partnerType:'${partnerType}'`
-    if (status) {
-      url += ` and approvalStatus:'${status}'`
+    const params = {
+      size: config.variables.pagesize,
+      page: page,
+      filter: `partnerType:'${partnerType}' and approvalStatus:'${status}'${
+        emailOfRepresentative ? ` and emailOfRepresentative~'${emailOfRepresentative}'` : ''
+      }`,
     }
-    console.log(url)
-    const response = await httpRequest.get(url, {
+    const response = await httpRequest.get('/v1/business-partners', {
+      params,
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     })
     return response.data
   } catch (error) {
-    console.error(error)
+    console.error('Error data:', error)
   }
 }

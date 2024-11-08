@@ -1,0 +1,34 @@
+@use '../../abstracts' as abstracts;
+.txt {
+  font-size: 1.7rem;
+  // padding: 0 2rem;
+  font-weight: 500;
+  color: black;
+  
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.wrap-filter{
+  border-radius: 5px;
+  border: 1px solid #FFF6F3;;
+  padding: 2rem;
+  background-color: #FFF6F3;
+  margin-bottom: 2rem;
+}
+.selectbox {
+  width: 100%;
+}
+.txt-warn {
+  color: #d34714;
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 1rem 0 0 0;
+}
+.btn-statistics{
+  margin-top: 17px;
+}

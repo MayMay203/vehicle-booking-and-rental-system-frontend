@@ -7,7 +7,7 @@ function PartnersList({dataList}) {
     return (
       <div className={cx('wrapper')}>
         {dataList.map((partner) => (
-          <PartnerItem key={partner.businessInfo.id} data={partner.businessInfo} />
+          <PartnerItem key={partner.businessInfo?.id || partner.generalDriverInfo.id} data={partner} />
         ))}
       </div>
     )
