@@ -15,7 +15,7 @@ function HeaderOnly({ children }) {
     if (currentUser.roles?.includes('ADMIN')) {
       dispatch(setMenu('adminMenu'))
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

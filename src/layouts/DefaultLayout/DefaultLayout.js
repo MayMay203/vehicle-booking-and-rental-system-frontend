@@ -18,6 +18,7 @@ function DefaultLayout({ children }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   return (
     <div className={cx('wrapper')}>
       <Header menus={menu} />
