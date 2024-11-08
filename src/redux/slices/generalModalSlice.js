@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import DetailDriverPartner from '~/Modals/GeneralModal/DetailDriverPartnerModal'
 
 export const generalModalNames = {
   LOGOUT: 'logout',
