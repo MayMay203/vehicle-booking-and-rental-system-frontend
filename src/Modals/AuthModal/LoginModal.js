@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { setCurrentUser } from '~/redux/slices/userSlice'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { setMenu } from '~/redux/slices/menuSlice'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
@@ -53,7 +54,7 @@ function LoginModal() {
     try {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await login(email, password)
-      console.log(data.accountLogin)
+      if (data.accountLogin.roles.includes('ADMIN')) dispatch(setMenu('adminMenu'))
       dispatch(setCurrentUser({ currentUser: data.accountLogin }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()

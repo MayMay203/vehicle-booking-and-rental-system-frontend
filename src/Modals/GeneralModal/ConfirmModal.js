@@ -11,6 +11,7 @@ import { checkLoginSession, logout } from '~/redux/slices/userSlice'
 import { toast } from 'react-toastify'
 import { unlockAccount } from '~/apiServices/unlockAccount'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
+import { setMenu } from '~/redux/slices/menuSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -28,6 +29,7 @@ function ConfirmModal() {
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
           await logoutService()
           dispatch(logout())
+          dispatch(setMenu('userMenu'))
           navigate('/')
         }
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
@@ -44,7 +46,7 @@ function ConfirmModal() {
         if (dispatch(checkLoginSession())) {
           await unlockAccount(accountId)
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
-          dispatch(fetchAllAccounts({active: false}))
+          dispatch(fetchAllAccounts({ active: false }))
           toast.success('Mở tài khoản thành công', { autoClose: 800, position: 'top-center' })
         }
       } catch (message) {

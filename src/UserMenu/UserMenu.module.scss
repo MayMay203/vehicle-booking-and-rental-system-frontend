@@ -35,5 +35,30 @@
     &:hover{
         opacity: 0.8;
     }
+}
 
+.mode-item{
+    width: 100%;
+    padding: 0 24px;
+    color: var(--dark-red-color)!important;
+    font-size: 1.4rem!important;
+    font-weight: 400;
+    justify-content: initial!important;
+    &:hover{
+        background-color: var(--primary-bg);
+    }
+
+    & ~ .mode-item{
+        margin-left: 0!important
+    }
+}
+
+.rotate-up {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease; 
+}
+
+.rotate-down {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
 }

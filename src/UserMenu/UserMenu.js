@@ -7,11 +7,20 @@ import Button from '~/components/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
+import { setMenu } from '~/redux/slices/menuSlice'
 
 const cx = classNames.bind(styles)
 function UserMenu() {
   const dispatch = useDispatch()
+  const [showMode, setShowMode] = useState(false)
   const currentUser = useSelector((state) => state.user.currentUser)
+
+  const handleModeSetting = () => {
+    setShowMode((prev) => !prev)
+  }
 
   const handleLogout = async () => {
     if (dispatch(checkLoginSession())) {
@@ -33,7 +42,30 @@ function UserMenu() {
         <Image src={currentUser?.avatar} className={cx('avatar', 'ml-0')}></Image>
         <span className="fw-medium">{currentUser?.name}</span>
       </div>
-      {!currentUser.roles.includes('ADMIN') && <span className={cx('menu')}>Cài đặt chế độ</span>}
+      <div className={cx('menu')} onClick={handleModeSetting}>
+        Cài đặt chế độ{' '}
+        <FontAwesomeIcon
+          className={cx('ms-1', { 'rotate-up': showMode, 'rotate-down': !showMode })}
+          icon={faCaretDown}
+        />
+      </div>
+      {showMode && (
+        <div className="d-flex flex-column row-gap-2">
+          <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('userMenu'))}>
+            Chế độ người dùng
+          </Button>
+          {currentUser.roles.includes(config.variables.busPartner) && (
+            <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('busPartnerMenu'))}>
+              Đối tác nhà xe
+            </Button>
+          )}
+          {currentUser.roles.includes(config.variables.carRentalPartner) && (
+            <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('busPartnerMenu'))}>
+              Đối tác cho thuê xe
+            </Button>
+          )}
+        </div>
+      )}
       <Link to={config.routes.accountSetting} className={cx('menu')}>
         Thông tin tài khoản
       </Link>
