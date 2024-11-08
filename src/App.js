@@ -14,13 +14,12 @@ import {
   RegisterModal,
 } from './Modals/AuthModal'
 import { ConfirmModal, DetailPartnerModal, InputConfirmModal, TicketModal } from './Modals/GeneralModal'
-// import { useDispatch} from 'react-redux'
-// import { checkLogin } from './redux/slices/userSlice'
 import Spinner from './components/Spinner'
 import { checkLogin } from './redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
 import ChangePassword from './Modals/AuthModal/ChangePassword'
 import { config } from './config'
+import VoucherModal from './Modals/GeneralModal/VoucherModal'
 import DetailDriverPartner from './Modals/GeneralModal/DetailDriverPartnerModal'
 
 function App() {
@@ -70,6 +69,7 @@ function App() {
         <TicketModal />
         <ChangePassword />
         <DetailPartnerModal />
+        <VoucherModal/>
         <DetailDriverPartner />
       </Router>
     </div>

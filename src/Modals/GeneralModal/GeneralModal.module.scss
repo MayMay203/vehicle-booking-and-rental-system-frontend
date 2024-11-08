@@ -120,3 +120,35 @@
 .line-height-1-4{
     line-height: 1.4;
 }
+
+.active{
+    background-color: var(--orange-color)!important;
+    color: #fff!important;
+}
+
+.note{
+    display: inline-block;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    font-style: italic;
+    text-align: center;
+    margin-top: 14px;
+}
+
+.date-wrapper{
+    margin: 8px 0;
+    row-gap: 12px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    &~.date-wrapper{
+        margin: 16px 0;
+    }
+}
+
+.custom-date-picker{
+    height: 44px;
+    padding: 8px;
+    width: 100%;
+}
