@@ -5,12 +5,9 @@ import { Form } from 'react-bootstrap'
 import TakePhotoRegister from '../TakePhotoRegister'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquarePlus, faSquareMinus } from '@fortawesome/free-solid-svg-icons'
-
 const cx = classNames.bind(styles)
-
 function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }) {
   const [formData, setFormData] = useState(formDocs)
-  console.log('formData:', formData)
   // const [policies, setPolicies] = useState([{ value: '', id: 0 }])
   const [policies, setPolicies] = useState(formDocs.policy.map((value, index) => ({ value, id: index })))
   const [policyCounter, setPolicyCounter] = useState(0)
@@ -23,7 +20,7 @@ function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }
       formData.imgLicense !== '' &&
       formData.businessImages.filter((imgBusiness) => imgBusiness !== null).length >= 2
 
-    console.log('alll..', allFieldsFilled)
+    console.log('allFieldsFilled..', allFieldsFilled)
     setActiveNextFormDocs(allFieldsFilled)
     handleFormDocsChange(formData)
   }, [formData, policies, setActiveNextFormDocs, handleFormDocsChange])

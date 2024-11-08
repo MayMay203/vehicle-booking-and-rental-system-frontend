@@ -70,9 +70,7 @@ function FormInformation({ setActiveNextFormInfor, formInfor, handleFormInforCha
     { value: 'Vĩnh Phúc', label: 'Vĩnh Phúc' },
     { value: 'Yên Bái', label: 'Yên Bái' },
   ]
-  const [formData, setFormData] = useState(
-    formInfor
-  )
+  const [formData, setFormData] = useState(formInfor)
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
     setActiveNextFormInfor(allFieldsFilled)
@@ -94,7 +92,7 @@ function FormInformation({ setActiveNextFormInfor, formInfor, handleFormInforCha
         </Form.Label>
         <Form.Control
           type="text"
-          placeholder="Nhà xe Phương Nam"
+          placeholder="Nhập tên nhà xe"
           name="nameBusiness"
           aria-label="name-business"
           className={cx('txt')}

@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './FormRegisterBus.module.scss'
-import { Col, ProgressBar } from 'react-bootstrap'
+import { Col, ProgressBar, Spinner } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAnglesRight, faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react'
@@ -21,14 +21,12 @@ function FormRegisterBus() {
   const [activeNextFormInfor, setActiveNextFormInfor] = useState(false)
   const [activeNextFormDocs, setActiveNextFormDocs] = useState(false)
   const [activeNextFormBank, setActiveNextFormBank] = useState(false)
+  const [loading, setLoading] = useState(false)
   const handleShowPreviousForm = () => {
     setShowForm(showForm - 1)
     setNow(now - 100 / 3)
   }
   const handleShowNextForm = () => {
-    if (showForm === 0) {
-      console.log('Lưu form infor')
-    }
     setShowForm(showForm + 1)
     setNow(now + 100 / 3)
   }
@@ -36,6 +34,7 @@ function FormRegisterBus() {
   const handleRegister = async (e) => {
     e.preventDefault()
     if (dispatch(checkLoginSession())) {
+      setLoading(true)
       try {
         const businessPartnerInfo = {
           businessName: formInfor.nameBusiness,
@@ -67,7 +66,7 @@ function FormRegisterBus() {
           const byteCharactersBusiness = atob(base64DataBusiness) // Giải mã base64 thành chuỗi ký tự
           const byteNumbersBusiness = new Array(byteCharactersBusiness.length)
             .fill(0)
-            .map((_, i) => byteCharactersBusiness.charCodeAt(i))// Chuyển mỗi ký tự thành mã số byte
+            .map((_, i) => byteCharactersBusiness.charCodeAt(i)) // Chuyển mỗi ký tự thành mã số byte
           const byteArrayBusiness = new Uint8Array(byteNumbersBusiness) // Tạo mảng Uint8Array từ mã byte
           const imageBlobBusiness = new Blob([byteArrayBusiness], { type: 'image/png' }) // Tạo Blob từ mảng byte
 
@@ -104,8 +103,10 @@ function FormRegisterBus() {
         console.log('Đăng ký thất bại:')
         console.log(message)
         // if (message === 'You have already registered this business partner') {
-          toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
         // }
+      } finally {
+        setLoading(false) // Ẩn Spinner sau khi xử lý xong
       }
     }
   }
@@ -165,6 +166,7 @@ function FormRegisterBus() {
     <div className={cx('wrap-form')}>
       <span className={cx('title-form')}>Đăng ký làm đối tác nhà xe</span>
       <ProgressBar now={now} label={`${now}%`} visuallyHidden className={cx('progress')} />
+      {loading && <Spinner animation="border" variant="primary" />}
       {showForm === 0 && (
         <FormInformation
           setActiveNextFormInfor={setActiveNextFormInfor}
