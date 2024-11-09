@@ -99,25 +99,6 @@ function PartnerItem({ data }) {
             Chi tiết đối tác
             <FontAwesomeIcon icon={faChevronRight} className="ms-2" />
           </Button>
-          {/* {businessData.approvalStatus === 'APPROVED' && (
-            <Button
-              leftIcon={<FontAwesomeIcon icon={faCancel} />}
-              primary
-              className="mb-3 m-auto"
-              onClick={handleCancelPartner}
-            >
-              Huỷ đối tác
-            </Button>
-          )} */}
-          {!partnerData.approvalStatus === 'CANCEL' && (
-            <div className={cx('reason')}>
-              <div className="d-flex column-gap-2 mb-3 justify-content-center">
-                <FontAwesomeIcon icon={faClose} />
-                <span>{partnerData.date}</span>
-              </div>
-              <span>{partnerData.reason}</span>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -16,19 +16,29 @@ import {
 import { ConfirmModal, DetailPartnerModal, InputConfirmModal, TicketModal } from './Modals/GeneralModal'
 import Spinner from './components/Spinner'
 import { checkLogin } from './redux/slices/userSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ChangePassword from './Modals/AuthModal/ChangePassword'
 import { config } from './config'
 import AddUtility from './Modals/GeneralModal/AddUtilityModal'
 import VoucherModal from './Modals/GeneralModal/VoucherModal'
 import DetailDriverPartner from './Modals/GeneralModal/DetailDriverPartnerModal'
+import { setMenu } from './redux/slices/menuSlice'
 
 function App() {
   const dispatch = useDispatch()
+  const currentUser = useSelector((state) => state.user.currentUser)
   console.log('re-render app.js')
 
   useEffect(() => {
     dispatch(checkLogin())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    console.log(currentUser)
+    if (currentUser.roles?.includes('ADMIN')) {
+      dispatch(setMenu('adminMenu'))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -70,8 +80,8 @@ function App() {
         <TicketModal />
         <ChangePassword />
         <DetailPartnerModal />
-        <AddUtility/>
-        <VoucherModal/>
+        <AddUtility />
+        <VoucherModal />
         <DetailDriverPartner />
       </Router>
     </div>

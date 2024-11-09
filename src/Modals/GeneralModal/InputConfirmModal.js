@@ -65,6 +65,8 @@ function InputConfirmModal() {
       try {
         if (dispatch(checkLoginSession())) {
           const { id } = showInputConfirm
+          console.log(id)
+          console.log('VO DAY DRIVER NE')
           const data = await cancelDriverPartner(id, reason)
           if (data) {
             toast.success('Huỷ đăng ký đối tác thành công!', { autoClose: 800, position: 'top-center' })
@@ -74,8 +76,9 @@ function InputConfirmModal() {
         }
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       } catch (message) {
+        console.log(message)
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-        toast.error(message, { autoClose: 1000, position: 'top-center' })
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại sau!', { autoClose: 1000, position: 'top-center' })
       }
     }
     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))

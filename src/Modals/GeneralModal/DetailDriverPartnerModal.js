@@ -19,6 +19,7 @@ import {
   InsuranceIcon,
   LicenceIcon,
   LocationIcon,
+  PartnerIcon,
   PolicyIcon,
 } from '~/components/Icon'
 import { BankIcon } from '~/components/Icon'
@@ -32,8 +33,9 @@ const cx = classNames.bind(styles)
 function DetailDriverPartner() {
   console.log('re-render detail driver modal')
   const showDetailDriverPartnerModal = useSelector((state) => state.generalModal.DetailDriverPartner)
-  const { id, status, isOpen } = showDetailDriverPartnerModal
+  const { id, isOpen } = showDetailDriverPartnerModal
   const [detailData, setDetailData] = useState({})
+
   const dispatch = useDispatch()
   useEffect(() => {
     async function fetchDetailDriverPartner() {
@@ -45,7 +47,7 @@ function DetailDriverPartner() {
     if (dispatch(checkLoginSession())) {
       fetchDetailDriverPartner()
     }
-  }, [id, dispatch])
+  }, [id, dispatch, detailData.approvalStatus])
 
   const handleClose = () => {
     dispatch(setDetailDriverModalVisible({ isOpen: false }))
@@ -70,7 +72,7 @@ function DetailDriverPartner() {
         data = await verifyDriverPartner(id)
         if (data) {
           toast.success(
-            status === config.variables.notConfirmed
+            detailData.approvalStatus === config.variables.notConfirmed
               ? 'Xác nhận đăng ký thành công!'
               : 'Khôi phục chế độ đối tác thành công!',
             { autoClose: 1200, position: 'top-center' },
@@ -231,14 +233,36 @@ function DetailDriverPartner() {
                 ))}
               </div>
             </div>
+            {detailData.approvalStatus === config.variables.cancelled && (
+              <div className="d-flex-column row-gap-3 mt-4">
+                <LinkItem title="Thông tin chi tiết đối tác" Icon={<PartnerIcon />} className={cx('custom')} />
+                <div className="d-flex flex-column row-gap-2">
+                  {/* <div className="mt-3 fs-4 ps-5 fst-italic">
+                    Thời gian trở thành đối tác -
+                    <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeCancel}</span>
+                  </div> */}
+                  {detailData.approvalStatus === config.variables.cancelled && (
+                    <div className="mt-3 fs-4 ps-5 fst-italic d-flex flex-column row-gap-4">
+                      <div>
+                        Thời gian huỷ đối tác -
+                        <span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.timeCancel}</span>
+                      </div>
+                      <div>
+                        Lý do huỷ -<span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.cancelReason}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="d-flex justify-content-center gap-5" style={{ marginTop: '40px' }} onClick={handleClose}>
               <Button outline>Thoát</Button>
               <Button primary onClick={handleConfirm}>
                 {detailData.approvalStatus === config.variables.current
                   ? 'Huỷ đối tác'
-                   :(detailData.approvalStatus === config.variables.notConfirmed
+                  : detailData.approvalStatus === config.variables.notConfirmed
                   ? 'Xác nhận'
-                  : 'Khôi phục đối tác')}
+                  : 'Khôi phục đối tác'}
               </Button>
             </div>
           </div>

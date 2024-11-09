@@ -1,7 +1,7 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const cancelPartner = async (partnerId, partnerType, reasonCancel) => {
+export const cancelPartner = async (partnerId, partnerType, reason) => {
   try {
     const response = await httpRequest.DELETE(
       '/v1/business-partner/cancel-partnership',
@@ -13,7 +13,7 @@ export const cancelPartner = async (partnerId, partnerType, reasonCancel) => {
       {
         formRegisterId: partnerId,
         partnerType,
-        reasonCancel,
+        reason,
       },
     )
     return response.data
