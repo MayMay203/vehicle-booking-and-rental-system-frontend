@@ -3,7 +3,7 @@ import styles from './FormRegisterCarRental.module.scss'
 import { Form } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
-function FormInformation({ setActiveNextFormInfor }) {
+function FormInformation({ setActiveNextFormInfor, formInfor, handleFormInforChange }) {
   const provinces = [
     { value: '', label: 'Chọn tỉnh/thành phố' },
     { value: 'An Giang', label: 'An Giang' },
@@ -70,16 +70,12 @@ function FormInformation({ setActiveNextFormInfor }) {
     { value: 'Vĩnh Phúc', label: 'Vĩnh Phúc' },
     { value: 'Yên Bái', label: 'Yên Bái' },
   ]
-  const [formData, setFormData] = useState({
-    name: '',
-    phonenumber: '',
-    gmail: '',
-    location: '',
-  })
+  const [formData, setFormData] = useState(formInfor)
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
     setActiveNextFormInfor(allFieldsFilled)
-  }, [formData, setActiveNextFormInfor])
+    handleFormInforChange(formData)
+  }, [formData, setActiveNextFormInfor, handleFormInforChange])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -92,15 +88,16 @@ function FormInformation({ setActiveNextFormInfor }) {
     <Form className={cx('form-infor')}>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput0">
         <Form.Label>
-          Tên đại lý cho thuê xe
+          Tên đại lý cho thuê xe<span className="text-danger">*</span>
         </Form.Label>
         <Form.Control
           type="text"
-          placeholder="Đại lý xe Phương Nam"
+          placeholder="Nhập tên đại lý xe"
           name="nameBusiness"
           aria-label="name-business"
           className={cx('txt')}
           onChange={handleInputChange}
+          value={formData.nameBusiness}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput1">
@@ -114,6 +111,7 @@ function FormInformation({ setActiveNextFormInfor }) {
           aria-label="name"
           className={cx('txt')}
           onChange={handleInputChange}
+          value={formData.name}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput2">
@@ -133,6 +131,7 @@ function FormInformation({ setActiveNextFormInfor }) {
             }
           }}
           onChange={handleInputChange}
+          value={formData.phonenumber}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput3">
@@ -146,6 +145,7 @@ function FormInformation({ setActiveNextFormInfor }) {
           aria-label="gmail"
           className={cx('txt')}
           onChange={handleInputChange}
+          value={formData.gmail}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput4">
@@ -157,6 +157,7 @@ function FormInformation({ setActiveNextFormInfor }) {
           aria-label="location"
           className={cx('txt', 'selectbox')}
           onChange={handleInputChange}
+          value={formData.location}
         >
           {provinces.map((province, index) => (
             <option key={index} value={province.value}>
@@ -167,7 +168,7 @@ function FormInformation({ setActiveNextFormInfor }) {
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput5">
         <Form.Label>
-          Url fanpage
+          Url fanpage<span className="text-danger">*</span>
         </Form.Label>
         <Form.Control
           type="link"
@@ -176,6 +177,7 @@ function FormInformation({ setActiveNextFormInfor }) {
           aria-label="urlFanpage"
           className={cx('txt')}
           onChange={handleInputChange}
+          value={formData.urlFanpage}
         />
       </Form.Group>
     </Form>

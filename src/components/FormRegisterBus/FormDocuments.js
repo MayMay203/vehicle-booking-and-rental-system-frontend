@@ -5,23 +5,25 @@ import { Form } from 'react-bootstrap'
 import TakePhotoRegister from '../TakePhotoRegister'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquarePlus, faSquareMinus } from '@fortawesome/free-solid-svg-icons'
-
 const cx = classNames.bind(styles)
-
-function FormDocuments({ setActiveNextFormDocs }) {
-  const [formData, setFormData] = useState({
-    description: '',
-  })
-  const [policies, setPolicies] = useState([{ value: '', id: 0 }])
-  const [savePhoto, setSavePhoto] = useState(false)
+function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }) {
+  const [formData, setFormData] = useState(formDocs)
+  // const [policies, setPolicies] = useState([{ value: '', id: 0 }])
+  const [policies, setPolicies] = useState(formDocs.policy.map((value, index) => ({ value, id: index })))
   const [policyCounter, setPolicyCounter] = useState(0)
 
   useEffect(() => {
     const allFieldsFilled =
-      Object.values(formData).every((value) => value.trim() !== '') &&
-      policies.every((policy) => policy.value.trim() !== '')
-    setActiveNextFormDocs(allFieldsFilled && savePhoto)
-  }, [formData, savePhoto, policies, setActiveNextFormDocs])
+      policies.every((policy) => typeof policy.value === 'string' && policy.value.trim() !== '') &&
+      formData.description !== '' &&
+      formData.imgAvatar !== '' &&
+      formData.imgLicense !== '' &&
+      formData.businessImages.filter((imgBusiness) => imgBusiness !== null).length >= 2
+
+    console.log('allFieldsFilled..', allFieldsFilled)
+    setActiveNextFormDocs(allFieldsFilled)
+    handleFormDocsChange(formData)
+  }, [formData, policies, setActiveNextFormDocs, handleFormDocsChange])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -31,28 +33,77 @@ function FormDocuments({ setActiveNextFormDocs }) {
     }))
   }
 
-  const handleSavePhoto = () => {
-    setSavePhoto(true)
+  const handleSavePhoto = (selectedFiles) => {
+    // setSavePhoto(true)
+    setFormData((prevState) => ({
+      ...prevState,
+      imgAvatar: selectedFiles[0],
+      imgLicense: selectedFiles[1],
+    }))
+  }
+  const handleSaveBusinessImages = (selectedFiles) => {
+    // setSavePhoto(true)
+    setFormData((prevState) => ({
+      ...prevState,
+      businessImages: selectedFiles,
+    }))
   }
 
+  console.log('ảnh nhà xe:', formData.businessImages)
   const handleAddPolicy = () => {
-    setPolicies((prevState) => [...prevState, { value: '', id: policyCounter + 1 }])
-    setPolicyCounter(policyCounter + 1)
+    setPolicies((prevState) => {
+      const updatedPolicies = [...prevState, { value: '', id: policyCounter + 1 }]
+      setPolicyCounter(policyCounter + 1)
+      setFormData((formDataPrev) => ({
+        ...formDataPrev,
+        policy: updatedPolicies.map((policy) => policy.value),
+      }))
+      return updatedPolicies
+    })
   }
-
   const handleRemovePolicy = (id) => {
-    setPolicies((prevState) => prevState.filter((policy) => policy.id !== id))
-  }
+    setPolicies((prevState) => {
+      const updatedPolicies = prevState.filter((policy) => policy.id !== id)
+      setFormData((formDataPrev) => ({
+        ...formDataPrev,
+        policy: updatedPolicies.map((policy) => policy.value),
+      }))
 
+      // Trả về updatedPolicies để cập nhật lại policies state
+      return updatedPolicies
+    })
+  }
   const handlePolicyChange = (e, id) => {
     const { value } = e.target
-    setPolicies((prevState) => prevState.map((policy) => (policy.id === id ? { ...policy, value } : policy)))
+    setPolicies((prevState) => {
+      const updatedPolicies = prevState.map((policy) => (policy.id === id ? { ...policy, value } : policy))
+      setFormData((formDataPrev) => ({
+        ...formDataPrev,
+        policy: updatedPolicies.map((policy) => policy.value),
+      }))
+
+      return updatedPolicies
+    })
   }
 
   return (
     <Form className={cx('form-more-infor')}>
       <Form.Group className={cx('txt', 'mb-3', 'pt-2')} controlId="formMoreInfor.ControlInput1">
-        <TakePhotoRegister number_photo={2} name_photos={['Ảnh đại diện nhà xe', 'Ảnh giấy phép kinh doanh']} obligatory={true} handleSave={handleSavePhoto} />
+        <TakePhotoRegister
+          initialNumberPhoto={2}
+          name_photos={['Ảnh đại diện nhà xe', 'Ảnh giấy phép kinh doanh']}
+          obligatory={true}
+          handleSave={handleSavePhoto}
+          urlImages={[formData.imgAvatar, formData.imgLicense]}
+        />
+        <TakePhotoRegister
+          initialNumberPhoto={2}
+          name_photos={['Ảnh nhà xe', 'Ảnh nhà xe']}
+          obligatory={true}
+          handleSave={handleSaveBusinessImages}
+          urlImages={[formData.businessImages[0], formData.businessImages[1]]}
+          enableAddImage={true}
+        />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formMoreInfor.ControlInput2">
         <Form.Label>
@@ -67,23 +118,27 @@ function FormDocuments({ setActiveNextFormDocs }) {
               onChange={(e) => handlePolicyChange(e, policy.id)}
               className={cx('txt')}
             />
-            {index === policies.length - 1 ? (
-              <FontAwesomeIcon icon={faSquarePlus} className={cx('add-policy')} onClick={handleAddPolicy} />
-            ) : (
-              <FontAwesomeIcon
-                icon={faSquareMinus}
-                className={cx('add-policy', 'ms-2')}
-                onClick={() => handleRemovePolicy(policy.id)}
-              />
-            )}
+            <FontAwesomeIcon
+              icon={faSquareMinus}
+              className={cx('add-policy', 'ms-2')}
+              onClick={() => handleRemovePolicy(policy.id)}
+            />
           </div>
         ))}
+        <FontAwesomeIcon icon={faSquarePlus} className={cx('add-policy')} onClick={handleAddPolicy} />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formMoreInfor.ControlTextarea3">
         <Form.Label>
           Mô tả<span className="text-danger">*</span>
         </Form.Label>
-        <Form.Control name="description" as="textarea" rows={3} className={cx('txt')} onChange={handleInputChange} />
+        <Form.Control
+          name="description"
+          as="textarea"
+          rows={3}
+          className={cx('txt')}
+          onChange={handleInputChange}
+          value={formData.description}
+        />
       </Form.Group>
     </Form>
   )

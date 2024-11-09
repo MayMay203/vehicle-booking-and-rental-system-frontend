@@ -26,7 +26,7 @@
 }
 .txt{
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.8rem;
     font-weight: 500;
     color: black;
     &:focus {
@@ -92,9 +92,12 @@
 .margin-bottom{
     margin-bottom: 2rem;
 }
+.margin-top{
+    margin-top: 2rem;
+}
 .txt-confirm{
     text-align: justify;
-    line-height: 2.3rem;
+    line-height: 2.5rem;
 }
 .btn{
     min-width: 10rem !important;
@@ -111,7 +114,7 @@
     font-size: 2.5rem;
     margin-left: 0.5rem;
     text-align: center;
-    margin-top: 0.35rem;
+    margin-bottom: 0.35rem;
     color: #7eb0f7;
     &:hover{
         cursor: pointer;

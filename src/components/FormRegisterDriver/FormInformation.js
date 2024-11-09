@@ -3,7 +3,7 @@ import styles from './FormRegisterDriver.module.scss'
 import { Form } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
-function FormInformation({ setActiveNextFormInfor }) {
+function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
   const provinces = [
     { value: '', label: 'Chọn tỉnh/thành phố' },
     { value: 'An Giang', label: 'An Giang' },
@@ -101,12 +101,15 @@ function FormInformation({ setActiveNextFormInfor }) {
         return
       }
     }
-    
+
     setIsCorrectDate(true)
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }))
+
+    updateFormDataInfor(formData) // Gửi dữ liệu lên cha
+    return updateFormDataInfor
   }
   return (
     <Form className={cx('form-infor')}>

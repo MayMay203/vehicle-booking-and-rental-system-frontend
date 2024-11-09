@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import FormInformation from './FormInformation'
 import FormDocuments from './FormDocuments'
 import FormConfirmRegister from './FormConfirmRegister'
+import { toast } from 'react-toastify'
 const cx = classNames.bind(styles)
 function FormRegisterDriver() {
   const [now, setNow] = useState(0)
@@ -19,14 +20,62 @@ function FormRegisterDriver() {
     setNow(now - 50)
   }
   const handleShowNextForm = () => {
-    if (showForm === 0){
-      console.log("Lưu form infor")
+    if (showForm === 0) {
+      console.log('Lưu form infor')
     }
     setShowForm(showForm + 1)
     setNow(now + 50)
   }
   const [isRegister, setIsRegister] = useState(false)
-  const handleRegister = () => {
+  const [formDataInfor, setFormDataInfor] = useState({})
+
+  const updateFormDataInfor = (data) => {
+    setFormDataInfor(data)
+  }
+  const handleRegister = async (e) => {
+    try {
+      const driverInfo = {
+        citizen: {
+          citizenId: '0456789011',
+          dateOfIssue: '01-04-2020',
+          placeOfIssue: 'Đà Nẵng',
+          expiryDate: '10-10-2028',
+          permanentAddress: '13 Trưng Nữ Vương, Hải Châu, Đà Nẵng',
+          location: formDataInfor.location,
+        },
+        driverLicense: {
+          driverLicenseNumber: '48123019281',
+          licenseType: 'A1',
+          issueDateLicense: '10-08-2022',
+        },
+        vehicle: {
+          licensePlateNumber: '43F-96999',
+          vehicleType: 'Xe máy',
+        },
+        relative: {
+          nameOfRelative: 'Nguyễn Hữu Khang',
+          phoneOfRelative: '0906172811',
+          relationship: 'Cha con',
+        },
+        bankAccount: {
+          accountNumber: '123456789',
+          accountHolderName: 'Nguyễn Hữu Thọ',
+          bankName: 'Ngân hàng ABC',
+        },
+      }
+      // const formData = new FormData()
+      // formData.append('driverInfo', new Blob([JSON.stringify(accountInfo)], { type: 'application/json' }))
+      console.log(driverInfo)
+      // await registerInfo(formData)
+
+      // toast.success('Đăng ký thông tin thành công', { autoClose: 1500 })
+      // dispatch(setAuthModalVisible({ modalName: modalNames.INFO, isVisible: false }))
+      // reset()
+      // dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+    } catch (message) {
+      toast.error('Đã có lỗi xảy ra. Vui lòng thử lại hoặc bỏ qua bước này', { autoClose: 2000 })
+    }
+
     setIsRegister(true)
   }
   useEffect(() => {
@@ -40,7 +89,12 @@ function FormRegisterDriver() {
     <div className={cx('wrap-form')}>
       <span className={cx('title-form')}>Đăng ký làm đối tác tài xế</span>
       <ProgressBar now={now} label={`${now}%`} visuallyHidden className={cx('progress')} />
-      {showForm === 0 && <FormInformation setActiveNextFormInfor={setActiveNextFormInfor}></FormInformation>}
+      {showForm === 0 && (
+        <FormInformation
+          setActiveNextFormInfor={setActiveNextFormInfor}
+          updateFormDataInfor={updateFormDataInfor}
+        ></FormInformation>
+      )}
       {showForm === 1 && <FormDocuments setActiveNextFormDocs={setActiveNextFormDocs}></FormDocuments>}
       {showForm === 2 && (
         <FormConfirmRegister isRegister={isRegister} handleRegister={handleRegister}></FormConfirmRegister>

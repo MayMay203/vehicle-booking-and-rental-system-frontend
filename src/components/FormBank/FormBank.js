@@ -4,7 +4,7 @@ import { Form } from "react-bootstrap"
 import Button from "../Button"
 import { useEffect, useState } from "react"
 const  cx = classNames.bind(styles)
-function FormBank({ handleSaveFormBank }) {
+function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankChange, handleSaveFormBank }) {
   const banks = [
     { value: '', label: 'Chọn ngân hàng' },
     { value: 'vietcombank', label: 'Ngân hàng TMCP Ngoại Thương Việt Nam (Vietcombank)' },
@@ -27,12 +27,13 @@ function FormBank({ handleSaveFormBank }) {
     { value: 'pvcombank', label: 'Ngân hàng TMCP Đại Chúng Việt Nam (PVcomBank)' },
   ]
   const sortedBanks = banks.sort((a, b) => a.label.localeCompare(b.label))
-  const [formData, setFormData] = useState({
-    name: '',
-    numberBank: '',
-    nameBank: '',
-    commit: false
-  })
+  // const [formData, setFormData] = useState({
+  //   name: '',
+  //   numberBank: '',
+  //   nameBank: '',
+  //   commit: false,
+  // })
+  const [formData, setFormData] = useState(formBank)
   const [activeSave, setActiveSave] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
   useEffect(() => {
@@ -43,7 +44,9 @@ function FormBank({ handleSaveFormBank }) {
       return value.trim() !== ''
     })
     setActiveSave(allFieldsFilled)
-  }, [formData])
+    setActiveNextFormBank(allFieldsFilled)
+    handleFormBankChange(formData)
+  }, [formData, setActiveNextFormBank, handleFormBankChange])
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData((prevState) => ({
@@ -52,11 +55,10 @@ function FormBank({ handleSaveFormBank }) {
     }))
     setIsSaved(false)
   }
-  const handleCancel = (e) =>{
-  }
+  const handleCancel = (e) => {}
   return (
     <Form className={cx('form-bank')}>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formBank.ControlInput1">
+      <Form.Group className={cx({'txt':!noButton}, {'txt-noButton': noButton}, 'mb-3')} controlId="formBank.ControlInput1">
         <Form.Label>
           Tên chủ tài khoản <span className="text-danger">*</span>
         </Form.Label>
@@ -66,10 +68,11 @@ function FormBank({ handleSaveFormBank }) {
           placeholder="Nguyễn Văn A"
           aria-label="name"
           onChange={handleInputChange}
-          className={cx('txt')}
+          className={cx({'txt':!noButton}, {'txt-noButton': noButton})}
+          value={formData.name}
         />
       </Form.Group>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formBank.ControlInput2">
+      <Form.Group className={cx({'txt':!noButton}, {'txt-noButton': noButton}, 'mb-3')} controlId="formBank.ControlInput2">
         <Form.Label>
           Số tài khoản <span className="text-danger">*</span>
         </Form.Label>
@@ -78,22 +81,24 @@ function FormBank({ handleSaveFormBank }) {
           placeholder="10042003555"
           name="numberBank"
           aria-label="number-bank"
-          className={cx('txt')}
+          className={cx({'txt':!noButton}, {'txt-noButton': noButton})}
           onChange={handleInputChange}
+          value={formData.numberBank}
           onInput={(e) => {
             e.target.value = e.target.value.replace(/[^0-9]/g, '') // Loại bỏ ký tự không phải là số
           }}
         />
       </Form.Group>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formBank.ControlInput3">
+      <Form.Group className={cx({'txt':!noButton}, {'txt-noButton': noButton}, 'mb-3')} controlId="formBank.ControlInput3">
         <Form.Label>
           Tên ngân hàng <span className="text-danger">*</span>
         </Form.Label>
         <Form.Select
           name="nameBank"
           aria-label="name-bank"
-          className={cx('txt', 'selectbox')}
+          className={cx({'txt':!noButton}, {'txt-noButton': noButton}, 'selectbox')}
           onChange={handleInputChange}
+          value={formData.nameBank}
         >
           {sortedBanks.map((bank, index) => (
             <option key={index} value={bank.value}>
@@ -108,27 +113,30 @@ function FormBank({ handleSaveFormBank }) {
             label="Tôi cam kết cung cấp thông tin tài khoản ngân hàng chính chủ của tôi"
             className="lh-base fs-4"
             onChange={handleInputChange}
+            checked={formData.commit}
           />
         </Form.Group>
       </Form.Group>
-      <div className="d-flex justify-content-center">
-        <Button outline className={cx('btn', 'btn-cancel')} onClick={() => handleCancel()}>
-          Hủy
-        </Button>
-        <Button
-          primary
-          className={cx('btn', 'btn-save')}
-          disabled={!activeSave}
-          onClick={(event) => {
-            event.preventDefault() // Ngăn chặn việc tải lại trang
-            setIsSaved(true)
-            setActiveSave(false)
-            handleSaveFormBank()
-          }}
-        >
-          {!isSaved ? 'Lưu' : 'Đã lưu'}
-        </Button>
-      </div>
+      {!noButton && (
+        <div className="d-flex justify-content-center">
+          <Button outline className={cx('btn', 'btn-cancel')} onClick={() => handleCancel()}>
+            Hủy
+          </Button>
+          <Button
+            primary
+            className={cx('btn', 'btn-save')}
+            disabled={!activeSave}
+            onClick={(event) => {
+              event.preventDefault()
+              setIsSaved(true)
+              setActiveSave(false)
+              handleSaveFormBank()
+            }}
+          >
+            {!isSaved ? 'Lưu' : 'Đã lưu'}
+          </Button>
+        </div>
+      )}
     </Form>
   )
 }
