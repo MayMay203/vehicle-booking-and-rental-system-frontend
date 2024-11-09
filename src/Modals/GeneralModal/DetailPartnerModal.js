@@ -48,7 +48,7 @@ function DetailPartner() {
     if (dispatch(checkLoginSession())) {
       fetchDetailParterRegister()
     }
-  }, [id, type, dispatch])
+  }, [id, type, dispatch, status])
 
   const handleClose = () => {
     dispatch(setDetailModalVisible({ isOpen: false }))
@@ -204,14 +204,14 @@ function DetailPartner() {
                 </span>
               </div>
             </div>
-            {detailData?.businessInfo.approvalStatus !== config.variables.notConfirmed && detailData?.timeCancel && (
+            {detailData.businessInfo.approvalStatus === config.variables.cancelled && (
               <div className="d-flex-column row-gap-3 mt-4">
                 <LinkItem title="Thông tin chi tiết đối tác" Icon={<PartnerIcon />} className={cx('custom')} />
                 <div className="d-flex flex-column row-gap-2">
-                  <div className="mt-3 fs-4 ps-5 fst-italic">
+                  {/* <div className="mt-3 fs-4 ps-5 fst-italic">
                     Thời gian trở thành đối tác -
                     <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeCancel}</span>
-                  </div>
+                  </div> */}
                   {detailData?.businessInfo.approvalStatus === config.variables.cancelled && (
                     <div className="mt-3 fs-4 ps-5 fst-italic d-flex flex-column row-gap-4">
                       <div>
