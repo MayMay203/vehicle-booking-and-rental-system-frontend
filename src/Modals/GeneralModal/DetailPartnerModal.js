@@ -204,7 +204,7 @@ function DetailPartner() {
                 </span>
               </div>
             </div>
-            {detailData.businessInfo.approvalStatus === config.variables.cancelled && (
+            {detailData?.businessInfo.approvalStatus === config.variables.cancelled && (
               <div className="d-flex-column row-gap-3 mt-4">
                 <LinkItem title="Thông tin chi tiết đối tác" Icon={<PartnerIcon />} className={cx('custom')} />
                 <div className="d-flex flex-column row-gap-2">
