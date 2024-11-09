@@ -1,31 +1,23 @@
+import { config } from '~/config'
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
-export const getAllAccounts = async (page, size=6, email) => {
-    try {
-        let url = `/v1/accounts`
-        let params = []
-        if (page !== undefined) {
-            params.push(`page=${page}`)
-        }
-        if (size!== undefined) {
-            params.push(`size=${size}`)
-        }
-        if (email !== undefined && email !== '') {
-            params.push(`email=${email}`)
-        } 
-
-        if (params.length > 0) {
-            url += `?${params.join('&')}`   
-        }
-
-        const response = await httpRequest.get(url, {
-            headers: {
-                Authorization: `Bearer ${getAccessToken()}`,
-            }
-        })
-        return response.data
+export const getAllAccounts = async (email, active, page = 1) => {
+  try {
+    const params = {
+      size: config.variables.pagesize,
+      page: page,
+      filter: `active:${active}${email ? ` and email~'${email}'` : ''} and accountRole.role.name~'USER'`, // Kết hợp filter
     }
-    catch (error) {
-        console.error(error)
-    }
+
+    const response = await httpRequest.get('/v1/accounts', {
+      params,
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    })
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
 }

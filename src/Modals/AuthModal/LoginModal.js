@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { setCurrentUser } from '~/redux/slices/userSlice'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { setMenu } from '~/redux/slices/menuSlice'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
@@ -36,12 +37,14 @@ function LoginModal() {
   }, [])
 
   const handleShowRegister = () => {
+    reset()
     dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
     dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: true }))
   }
 
   const handleShowForget = (e) => {
     e.preventDefault()
+    reset()
     dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
     dispatch(setAuthModalVisible({ modalName: modalNames.FORGOT, isVisible: true }))
   }
@@ -51,12 +54,13 @@ function LoginModal() {
     try {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await login(email, password)
-      console.log(data.accountLogin)
+      if (data.accountLogin.roles.includes('ADMIN')) dispatch(setMenu('adminMenu'))
       dispatch(setCurrentUser({ currentUser: data.accountLogin }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-      toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
+      reset()
+      // toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })
     } catch (message) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       if (String(message).includes('Tài khoản')) {
