@@ -12,6 +12,8 @@ import { toast } from 'react-toastify'
 import { unlockAccount } from '~/apiServices/unlockAccount'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
 import { setMenu } from '~/redux/slices/menuSlice'
+import { deleteUtility } from '~/apiServices/manageUtilities/deleteUtility'
+import { fetchAllUtilities } from '~/redux/slices/generalAdminSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -50,6 +52,21 @@ function ConfirmModal() {
           toast.success('Mở tài khoản thành công', { autoClose: 800, position: 'top-center' })
         }
       } catch (message) {
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+      }
+    } else if (showConfirmModal.name === generalModalNames.UTILITY_MODAL) {
+      const utilityId = showConfirmModal.id
+      try {
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+        if (dispatch(checkLoginSession())) {
+          await deleteUtility(utilityId)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllUtilities())
+          toast.success('Xoá tiện ích thành công!', { autoClose: 800, position: 'top-center' })
+        }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+      } catch (message) {
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
       }
     }

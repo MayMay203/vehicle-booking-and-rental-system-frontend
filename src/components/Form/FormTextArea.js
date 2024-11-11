@@ -34,6 +34,7 @@ function FormTextArea({ id, title, rows = 3, show = false, className, customWidt
         }}
         onBlur={handleCheckValidity}
         ref={areaRef}
+        spellCheck={false}
       ></textarea>
       {showError && <p className={cx('form-error')}>{error}</p>}
     </div>

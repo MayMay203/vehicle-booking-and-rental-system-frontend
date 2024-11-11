@@ -167,7 +167,13 @@ function AccountSetting() {
           <div className="col-12 col-lg-5">
             <div className="d-flex flex-column row-gap-5 align-items-center">
               <div className={cx('avatar-wrapper')}>
-                <input type="file" className={cx('input-file')} onChange={handleChooseImage} ref={inputFile} />
+                <input
+                  type="file"
+                  className={cx('input-file')}
+                  accept="image/*"
+                  onChange={handleChooseImage}
+                  ref={inputFile}
+                />
                 <img src={selectedImage ? selectedImage : images.addAvatar} alt="avatar" className={cx('avatar')}></img>
               </div>
               <div className="d-flex column-gap-3 mt-3">

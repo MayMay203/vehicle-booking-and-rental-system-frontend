@@ -5,6 +5,7 @@ import userSlice from './slices/userSlice'
 import accountSlice from './slices/accountSlice'
 import partnerSlice from './slices/partnerSlice'
 import menuSlice from './slices/menuSlice'
+import generalAdminSlice from './slices/generalAdminSlice'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     user: userSlice,
     accounts: accountSlice,
     partners: partnerSlice,
-    menu: menuSlice
+    menu: menuSlice,
+    generalAdmin: generalAdminSlice,
   },
 })

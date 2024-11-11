@@ -2,18 +2,24 @@ import { Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import styles from './GeneralModal.module.scss'
 import classNames from 'classnames/bind'
-import { setAddUtilityModalVisible } from '~/redux/slices/generalModalSlice'
+import { generalModalNames, setLoadingModalVisible, setUtilityModal } from '~/redux/slices/generalModalSlice'
 import FormInput from '~/components/Form/FormInput'
 import { useEffect, useRef, useState } from 'react'
 import Button from '~/components/Button'
 import FormTextArea from '~/components/Form/FormTextArea'
 import { images } from '~/assets/images'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { addUtility } from '~/apiServices/manageUtilities/addUtility'
+import { fetchAllUtilities } from '~/redux/slices/generalAdminSlice'
+import { toast } from 'react-toastify'
+import { updateUtility } from '~/apiServices/manageUtilities/updateUtility'
 
 const cx = classNames.bind(styles)
-function AddUtility() {
+function UtilityModal() {
   console.log('re-render addUtility modal')
   const dispatch = useDispatch()
-  const showUtilityModal = useSelector((state) => state.generalModal.addUtility)
+  const showUtilityModal = useSelector((state) => state.generalModal.utilityModal)
+  const { id, isOpen } = showUtilityModal
   const formRef = useRef(null)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -24,7 +30,20 @@ function AddUtility() {
     if (formRef.current) {
       setIsValid(formRef.current.checkValidity())
     }
+    if (!selectedImage) {
+      setIsValid(false)
+    }
   }, [name, description, selectedImage])
+
+  useEffect(() => {
+    if (id) {
+      //fetch api get 1 utility
+      let data = {}
+      setName(data.name)
+      setDescription(data.description)
+      setSelectedImage(data.image)
+    }
+  }, [id])
 
   const handleClose = (e) => {
     if (e) {
@@ -34,7 +53,7 @@ function AddUtility() {
     setDescription('')
     setSelectedImage(null)
     setIsValid(false)
-    dispatch(setAddUtilityModalVisible(false))
+    dispatch(setUtilityModal({ isOpen: false }))
   }
 
   const handleChooseImage = (e) => {
@@ -49,13 +68,41 @@ function AddUtility() {
     }
   }
 
-  const hanldeAddUtility = () => {}
+  const handleConfirm = async (e) => {
+    e.preventDefault()
+    const formData = new FormData()
+    const utilityInfo = {
+      name,
+      description,
+    }
+    if (id) {
+      utilityInfo.id = id
+    }
+    formData.append('utilityInfo', new Blob([JSON.stringify(utilityInfo)], { type: 'application/json' }))
+    const base64Data = selectedImage.split(',')[1]
+    const byteCharacters = atob(base64Data)
+    const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i))
+    const byteArray = new Uint8Array(byteNumbers)
+    const imageBlob = new Blob([byteArray], { type: 'image/png' })
+    formData.append('utilityImage', imageBlob, `${utilityInfo.name}.png`)
+    if (dispatch(checkLoginSession())) {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+      const data = !id ? await addUtility(formData) : await updateUtility(formData)
+      if (data) {
+        handleClose()
+        dispatch(fetchAllUtilities())
+      } else {
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
+      }
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+    }
+  }
 
   return (
-    <Modal show={showUtilityModal} onHide={handleClose} centered>
+    <Modal show={isOpen} onHide={handleClose} centered>
       <Modal.Header closeButton>
         <div className={cx('header')}>
-          <Modal.Title className={cx('title-header')}>Thêm tiện ích</Modal.Title>
+          <Modal.Title className={cx('title-header')}>{id ? 'Cập nhật tiện ích' : 'Thêm tiện ích'}</Modal.Title>
         </div>
       </Modal.Header>
       <Modal.Body>
@@ -74,7 +121,7 @@ function AddUtility() {
           <div className="d-flex flex-column row-gap-4">
             <span>Hình ảnh</span>
             <div className={cx('choose-wrapper')}>
-              <input type="file" className={cx('input-file')} onChange={handleChooseImage}></input>
+              <input type="file" accept="image/*" className={cx('input-file')} onChange={handleChooseImage}></input>
               <img
                 alt="addUtility"
                 src={selectedImage ? selectedImage : images.addImage}
@@ -97,8 +144,8 @@ function AddUtility() {
             <Button outline onClick={handleClose}>
               Huỷ
             </Button>
-            <Button className={cx('btn-submit')} onClick={hanldeAddUtility} disabled={!isValid} type="submit" primary>
-              Thêm
+            <Button className={cx('btn-submit')} onClick={handleConfirm} disabled={!isValid} type="submit" primary>
+              {id ? 'Cập nhật' : 'Thêm'}
             </Button>
           </div>
         </form>
@@ -107,4 +154,4 @@ function AddUtility() {
   )
 }
 
-export default AddUtility
+export default UtilityModal
