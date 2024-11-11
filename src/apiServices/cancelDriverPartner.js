@@ -8,7 +8,6 @@ export const cancelDriverPartner = async (partnerId, reason) => {
       '/v1/drivers/cancel-partnership',
       {
         formRegisterId: partnerId,
-        partnerType: 'DRIVER',
         reason,
       },
       {
@@ -19,6 +18,7 @@ export const cancelDriverPartner = async (partnerId, reason) => {
     )
     return response.data
   } catch (error) {
+    console.log(error)
     throw httpRequest.getMessage(error)
   }
 }

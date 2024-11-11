@@ -9,6 +9,7 @@ import {
   generalModalNames,
   setConfirmModalVisible,
   setDetailDriverModalVisible,
+  setLoadingModalVisible,
 } from '~/redux/slices/generalModalSlice'
 import LinkItem from '~/components/LinkItem'
 import {
@@ -23,7 +24,7 @@ import {
   PolicyIcon,
 } from '~/components/Icon'
 import { BankIcon } from '~/components/Icon'
-import { fetchAllDriverPartners} from '~/redux/slices/partnerSlice'
+import { fetchAllDriverPartners } from '~/redux/slices/partnerSlice'
 import { config } from '~/config'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getDetailDriverPartner } from '~/apiServices/getDetailDriverPartner'
@@ -33,9 +34,8 @@ const cx = classNames.bind(styles)
 function DetailDriverPartner() {
   console.log('re-render detail driver modal')
   const showDetailDriverPartnerModal = useSelector((state) => state.generalModal.DetailDriverPartner)
-  const { id, isOpen } = showDetailDriverPartnerModal
+  const { id, isOpen, status} = showDetailDriverPartnerModal
   const [detailData, setDetailData] = useState({})
-
   const dispatch = useDispatch()
   useEffect(() => {
     async function fetchDetailDriverPartner() {
@@ -47,7 +47,7 @@ function DetailDriverPartner() {
     if (dispatch(checkLoginSession())) {
       fetchDetailDriverPartner()
     }
-  }, [id, dispatch, detailData.approvalStatus])
+  }, [id, dispatch, status])
 
   const handleClose = () => {
     dispatch(setDetailDriverModalVisible({ isOpen: false }))
@@ -67,7 +67,9 @@ function DetailDriverPartner() {
           id,
         }),
       )
+      handleClose()
     } else {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       if (dispatch(checkLoginSession())) {
         data = await verifyDriverPartner(id)
         if (data) {
@@ -85,13 +87,29 @@ function DetailDriverPartner() {
                   : config.variables.cancelled,
             }),
           )
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
           handleClose()
         } else {
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
           toast.error('Xác nhận đăng ký thất bại!', { autoClose: 1200, position: 'top-center' })
           handleClose()
         }
       }
     }
+  }
+
+  const handleRefusePartner = () => {
+    dispatch(
+      setConfirmModalVisible({
+        name: generalModalNames.REFUSE_DRIVER_PARTNER,
+        title: 'Từ chối quan hệ đối tác',
+        description: `Việc xác nhận từ chối đồng nghĩa với việc bạn không muốn thiết lập bất kỳ quan hệ nào với đối tác này. Vui lòng nhập lý do bên dưới:`,
+        isOpen: true,
+        modalType: 'inputConfirm',
+        id,
+      }),
+    )
+    handleClose()
   }
 
   return (
@@ -233,19 +251,25 @@ function DetailDriverPartner() {
                 ))}
               </div>
             </div>
-            {detailData.approvalStatus === config.variables.cancelled && (
+            {detailData?.approvalStatus !== config.variables.notConfirmed && (
               <div className="d-flex-column row-gap-3 mt-4">
                 <LinkItem title="Thông tin chi tiết đối tác" Icon={<PartnerIcon />} className={cx('custom')} />
                 <div className="d-flex flex-column row-gap-2">
-                  {/* <div className="mt-3 fs-4 ps-5 fst-italic">
+                  <div className="mt-3 fs-4 ps-5 fst-italic">
                     Thời gian trở thành đối tác -
-                    <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeCancel}</span>
-                  </div> */}
-                  {detailData.approvalStatus === config.variables.cancelled && (
+                    <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeBecomePartner}</span>
+                  </div>
+                  {detailData?.approvalStatus === config.variables.current && detailData?.timeUpdate && (
+                    <div className="mt-3 fs-4 ps-5 fst-italic">
+                      Thời gian khôi phục đối tác -
+                      <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeUpdate}</span>
+                    </div>
+                  )}
+                  {detailData?.approvalStatus === config.variables.cancelled && (
                     <div className="mt-3 fs-4 ps-5 fst-italic d-flex flex-column row-gap-4">
                       <div>
                         Thời gian huỷ đối tác -
-                        <span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.timeCancel}</span>
+                        <span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.timeUpdate}</span>
                       </div>
                       <div>
                         Lý do huỷ -<span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.cancelReason}</span>
@@ -255,8 +279,16 @@ function DetailDriverPartner() {
                 </div>
               </div>
             )}
-            <div className="d-flex justify-content-center gap-5" style={{ marginTop: '40px' }} onClick={handleClose}>
-              <Button outline>Thoát</Button>
+            <div className="d-flex justify-content-center gap-5" style={{ marginTop: '40px' }}>
+              {detailData.approvalStatus === config.variables.notConfirmed ? (
+                <Button outline onClick={handleRefusePartner}>
+                  Từ chối
+                </Button>
+              ) : (
+                <Button outline onClick={handleClose}>
+                  Thoát
+                </Button>
+              )}
               <Button primary onClick={handleConfirm}>
                 {detailData.approvalStatus === config.variables.current
                   ? 'Huỷ đối tác'

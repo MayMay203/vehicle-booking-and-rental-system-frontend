@@ -12,6 +12,8 @@ export const generalModalNames = {
   DETAIL_PARTNER: 'detailPartner',
   DETAIL_DRIVER_PARTNER: 'detailDriverPartner',
   CANCEL_DRIVER_PARTNER: 'cancelDriverPartner',
+  REFUSE_PARTNER: 'refusePartner',
+  REFUSE_DRIVER_PARTNER: 'refuseDriverPartner',
 }
 
 const initialState = {
