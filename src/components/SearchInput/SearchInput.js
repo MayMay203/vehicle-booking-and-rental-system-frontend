@@ -6,9 +6,8 @@ import { memo, useEffect, useState } from 'react'
 import useDebounce from '~/hook'
 
 const cx = classNames.bind(styles)
-function SearchInput({ className, handleChange, isLoading }) {
+function SearchInput({ className, handleChange, isLoading, placeholder='Tìm kiếm theo email' }) {
   console.log('re-render search input')
-  console.log(isLoading)
   const [searchValue, setSearchValue] = useState('')
   const searchDebounce = useDebounce(searchValue.trim(), 500)
   useEffect(() => {
@@ -25,7 +24,7 @@ function SearchInput({ className, handleChange, isLoading }) {
         value={searchValue}
         type="text"
         className={cx('input')}
-        placeholder="Nhập email hoặc số điện thoại"
+        placeholder={placeholder}
         onChange={(e) => {
           e.target.value = e.target.value.trimStart()
           setSearchValue(e.target.value)

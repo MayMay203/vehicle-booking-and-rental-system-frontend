@@ -14,6 +14,7 @@ export const generalModalNames = {
   CANCEL_DRIVER_PARTNER: 'cancelDriverPartner',
   REFUSE_PARTNER: 'refusePartner',
   REFUSE_DRIVER_PARTNER: 'refuseDriverPartner',
+  UTILITY_MODAL: 'utilityModal',
 }
 
 const initialState = {
@@ -48,7 +49,10 @@ const initialState = {
     type: '',
     status: '',
   },
-  addUtility: false,
+  utilityModal: {
+    isOpen: false,
+    id: '',
+  },
   addVoucher: false,
 }
 
@@ -93,8 +97,13 @@ const generalModalSlice = createSlice({
     setAddVoucherVisible: (state, action) => {
       state.addVoucher = action.payload
     },
-    setAddUtilityModalVisible: (state, action) => {
-      state.addUtility = action.payload
+    setUtilityModal: (state, action) => {
+      const { isOpen, id } = action.payload
+      state.utilityModal = {
+        ...state.utilityModal,
+        isOpen,
+        id,
+      }
     },
   },
 })
@@ -106,7 +115,7 @@ export const {
   setDetailModalVisible,
   setDetailDriverModalVisible,
   setAddVoucherVisible,
-  setAddUtilityModalVisible
+  setUtilityModal,
 } = generalModalSlice.actions
 
 export default generalModalSlice.reducer
