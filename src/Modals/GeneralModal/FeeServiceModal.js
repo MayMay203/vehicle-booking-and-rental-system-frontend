@@ -6,18 +6,14 @@ import {
   generalModalNames,
   setFeeServiceModal,
   setLoadingModalVisible,
-  setUtilityModal,
 } from '~/redux/slices/generalModalSlice'
 import FormInput from '~/components/Form/FormInput'
 import { useEffect, useRef, useState } from 'react'
 import Button from '~/components/Button'
 import FormTextArea from '~/components/Form/FormTextArea'
-import { images } from '~/assets/images'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { addUtility } from '~/apiServices/manageUtilities/addUtility'
-import { fetchAllFeeServices, fetchAllUtilities } from '~/redux/slices/generalAdminSlice'
+import { fetchAllFeeServices } from '~/redux/slices/generalAdminSlice'
 import { toast } from 'react-toastify'
-import { updateUtility } from '~/apiServices/manageUtilities/updateUtility'
 import { getFeeService } from '~/apiServices/manageFeeService/getFeeService'
 import { createFeeService } from '~/apiServices/manageFeeService/createFeeService'
 import { updateFeeService } from '~/apiServices/manageFeeService/updateFeeService'
