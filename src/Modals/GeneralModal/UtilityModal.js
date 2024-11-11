@@ -117,9 +117,10 @@ function UtilityModal() {
             onChange={(e) => setName(e.target.value)}
             isValid={isValid}
             required
+            star
           ></FormInput>
           <div className="d-flex flex-column row-gap-4">
-            <span>Hình ảnh</span>
+            <div><span>Hình ảnh</span><span style={{color: 'red', marginLeft: '2px'}}>*</span></div>
             <div className={cx('choose-wrapper')}>
               <input type="file" accept="image/*" className={cx('input-file')} onChange={handleChooseImage}></input>
               <img
@@ -139,6 +140,7 @@ function UtilityModal() {
             }}
             rows={4}
             error="Vui lòng nhập mô tả"
+            star
           />
           <div className="mt-5 d-flex column-gap-5 justify-content-center">
             <Button outline onClick={handleClose}>
