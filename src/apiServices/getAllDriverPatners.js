@@ -7,7 +7,9 @@ export const getAllDriverPartners = async (status, email, page = 1) => {
     const params = {
       size: config.variables.pagesize,
       page: page,
-      filter: `approvalStatus:'${status}'`,
+      filter: `approvalStatus:'${status}'${
+        email ? ` and account.email~'${email}'` : ''
+      }`,
     }
     const response = await httpRequest.get('/v1/drivers', {
       params,

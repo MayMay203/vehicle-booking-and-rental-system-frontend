@@ -6,7 +6,11 @@ import FormTextArea from '~/components/Form/FormTextArea'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
-import { generalModalNames, setConfirmModalVisible, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import {
+  generalModalNames,
+  setConfirmModalVisible,
+  setLoadingModalVisible,
+} from '~/redux/slices/generalModalSlice'
 import { lockAccount } from '~/apiServices/lockAccount'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { cancelPartner } from '~/apiServices/cancelPartner'
@@ -14,6 +18,8 @@ import { fetchAllDriverPartners, fetchAllRegisterPartners } from '~/redux/slices
 import { config } from '~/config'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
 import { cancelDriverPartner } from '~/apiServices/cancelDriverPartner'
+import { refusePartner } from '~/apiServices/refusePartner'
+import { refuseDriverPartner } from '~/apiServices/refuseDriverPartner'
 
 const cx = classNames.bind(styles)
 function InputConfirmModal() {
@@ -48,10 +54,9 @@ function InputConfirmModal() {
       try {
         if (dispatch(checkLoginSession())) {
           const { id, type } = showInputConfirm
-          console.log(id, type)
-          const data = await cancelPartner(id, type, reason)
+          const data = await cancelPartner(id, reason)
           if (data) {
-            toast.success('Huỷ đăng ký đối tác thành công!', { autoClose: 800, position: 'top-center' })
+            toast.success('Huỷ quan hệ đối tác thành công!', { autoClose: 800, position: 'top-center' })
             dispatch(fetchAllRegisterPartners({ partnerType: type, status: config.variables.current }))
             handleClose()
           }
@@ -65,11 +70,46 @@ function InputConfirmModal() {
       try {
         if (dispatch(checkLoginSession())) {
           const { id } = showInputConfirm
-          console.log(id)
-          console.log('VO DAY DRIVER NE')
           const data = await cancelDriverPartner(id, reason)
           if (data) {
-            toast.success('Huỷ đăng ký đối tác thành công!', { autoClose: 800, position: 'top-center' })
+            toast.success('Huỷ quan hệ đối tác tài xế thành công!', { autoClose: 800, position: 'top-center' })
+            dispatch(fetchAllDriverPartners({ status: config.variables.current }))
+            handleClose()
+          }
+        }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      } catch (message) {
+        console.log(message)
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại sau!', { autoClose: 1000, position: 'top-center' })
+      }
+    } else if (showInputConfirm.name === generalModalNames.REFUSE_PARTNER) {
+      try {
+        if (dispatch(checkLoginSession())) {
+          const { id, type } = showInputConfirm
+          const data = await refusePartner(id, reason)
+          if (data) {
+            toast.success('Từ chối đăng ký đối tác thành công!', { autoClose: 800, position: 'top-center' })
+            dispatch(fetchAllRegisterPartners({ partnerType: type, status: config.variables.notConfirmed }))
+            handleClose()
+          }
+        }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      } catch (message) {
+        console.log(message)
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại sau!', { autoClose: 1000, position: 'top-center' })
+      }
+    } else if (showInputConfirm.name === generalModalNames.REFUSE_DRIVER_PARTNER) {
+      try {
+        if (dispatch(checkLoginSession())) {
+          const { id } = showInputConfirm
+          const data = await refuseDriverPartner(id, reason)
+          if (data) {
+            toast.success('Từ chối đăng ký đối tác tài xế thành công!', {
+              autoClose: 800,
+              position: 'top-center',
+            })
             dispatch(fetchAllDriverPartners({ status: config.variables.current }))
             handleClose()
           }

@@ -8,6 +8,7 @@ import {faCheck, faChevronRight, faClose } from '@fortawesome/free-solid-svg-ico
 import Button from '../Button'
 import { useDispatch } from 'react-redux'
 import { setDetailDriverModalVisible, setDetailModalVisible } from '~/redux/slices/generalModalSlice'
+import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function PartnerItem({ data }) {
@@ -26,7 +27,6 @@ function PartnerItem({ data }) {
     } else {
       dispatch(
         setDetailDriverModalVisible({
-          type: partnerData.partnerType,
           id: partnerData.formRegisterId,
           isOpen: true,
           status: partnerData.approvalStatus,
@@ -76,13 +76,13 @@ function PartnerItem({ data }) {
       </div>
       <div className="col-12 col-md-4 col-lg-3 align-content-end">
         <div className="d-flex flex-column column-gap-3">
-          {partnerData.approvalStatus === 'APPROVED' && data.timeCancel && (
+          {partnerData.approvalStatus === config.variables.current && (data.timeBecomePartner || partnerData.timeBecomePartner) && (
             <div className={cx('checked')}>
               <div className="d-flex column-gap-2 mb-2">
                 <FontAwesomeIcon icon={faCheck} />
                 <span>Xác nhận lúc </span>
               </div>
-              <span>{data.timeCancel}</span>
+              <span>{data.timeBecomePartner || partnerData.timeBecomePartner}</span>
             </div>
           )}
           {partnerData.approvalStatus === 'CANCEL' && (
@@ -91,8 +91,8 @@ function PartnerItem({ data }) {
                 <FontAwesomeIcon icon={faClose} />
                 <span>Đã huỷ lúc: </span>
               </div>
-              <span>{data.timeCancel}</span>
-              <span className="mt-2">Lý do: {data.cancelReason}</span>
+              <span>{data.timeUpdate || partnerData.timeBecomePartner}</span>
+              <span className="mt-2">Lý do: {data.cancelReason || partnerData.timeBecomePartner}</span>
             </div>
           )}
           <Button className={cx('action', 'mb-2', 'mt-4', 'mt-md-0', 'm-auto')} onClick={showDetailPartner}>

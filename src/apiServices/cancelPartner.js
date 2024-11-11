@@ -1,19 +1,18 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const cancelPartner = async (partnerId, partnerType, reason) => {
+export const cancelPartner = async (partnerId, reason) => {
   try {
-    const response = await httpRequest.DELETE(
+    const response = await httpRequest.put(
       '/v1/business-partner/cancel-partnership',
+      {
+        formRegisterId: partnerId,
+        reason,
+      },
       {
         headers: {
           Authorization: 'Bearer ' + getAccessToken(),
         },
-      },
-      {
-        formRegisterId: partnerId,
-        partnerType,
-        reason,
       },
     )
     return response.data
