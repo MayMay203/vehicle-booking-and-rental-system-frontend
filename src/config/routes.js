@@ -24,11 +24,12 @@ export const routes = {
   addBusTrip: '/bus-trip/add-bus-trip',
   bus: '/bus-manage',
   addBus: '/bus-manage/add-bus',
-  manageUtilities: '/utility',
+  manageUtilities: '/manage-utility',
   updateBus: 'bus-manage/update-bus',
   policyManage: 'policy-manage',
   statisticsBus: 'statistics-bus',
   managePartners: '/manage-partners',
   message: '/message',
+  manageFeeService: '/manage-fee-service',
   error: '/error',
 }

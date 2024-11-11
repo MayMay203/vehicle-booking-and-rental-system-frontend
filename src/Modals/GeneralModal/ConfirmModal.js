@@ -13,7 +13,8 @@ import { unlockAccount } from '~/apiServices/unlockAccount'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
 import { setMenu } from '~/redux/slices/menuSlice'
 import { deleteUtility } from '~/apiServices/manageUtilities/deleteUtility'
-import { fetchAllUtilities } from '~/redux/slices/generalAdminSlice'
+import { fetchAllFeeServices, fetchAllUtilities } from '~/redux/slices/generalAdminSlice'
+import { deleteFeeService } from '~/apiServices/manageFeeService/deleteFeeService'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -64,7 +65,22 @@ function ConfirmModal() {
           dispatch(fetchAllUtilities())
           toast.success('Xoá tiện ích thành công!', { autoClose: 800, position: 'top-center' })
         }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      } catch (message) {
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+      }
+    } else if (showConfirmModal.name === generalModalNames.FEE_SERVICE_MODAL) {
+      const feeServiceId = showConfirmModal.id
+      try {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+        if (dispatch(checkLoginSession())) {
+          await deleteFeeService(feeServiceId)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllFeeServices())
+          toast.success('Xoá dịch vụ thành công!', { autoClose: 800, position: 'top-center' })
+        }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       } catch (message) {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
