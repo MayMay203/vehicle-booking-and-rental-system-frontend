@@ -1,9 +1,9 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const updateUtility = (formData) => {
+export const updateUtility = async(formData) => {
   try {
-    const response = httpRequest.put('/v1/utilities', formData, {
+    const response = await httpRequest.put('/v1/utilities', formData, {
       headers: {
         Authorization: 'Bearer ' + getAccessToken(),
       },

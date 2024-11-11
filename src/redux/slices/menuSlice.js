@@ -14,6 +14,7 @@ const menus = {
   adminMenu: [
     { content: 'Tài khoản', to: config.routes.manageAccounts },
     { content: 'Đối tác', to: config.routes.managePartners },
+    { content: 'Phí dịch vụ xe', to: config.routes.manageFeeService },
     { content: 'Tiện ích nhà xe', to: config.routes.manageUtilities },
     { content: 'Khuyến mãi', to: config.routes.vouchers },
     { content: 'Thống kê', to: config.routes.statistics },

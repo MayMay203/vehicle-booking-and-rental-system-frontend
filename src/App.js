@@ -22,6 +22,7 @@ import { config } from './config'
 import VoucherModal from './Modals/GeneralModal/VoucherModal'
 import DetailDriverPartner from './Modals/GeneralModal/DetailDriverPartnerModal'
 import UtilityModal from './Modals/GeneralModal/UtilityModal'
+import FeeServiceModal from './Modals/GeneralModal/FeeServiceModal'
 
 function App() {
   const dispatch = useDispatch()
@@ -71,6 +72,7 @@ function App() {
         <ChangePassword />
         <DetailPartnerModal />
         <UtilityModal />
+        <FeeServiceModal />
         <VoucherModal />
         <DetailDriverPartner />
       </Router>
