@@ -34,7 +34,7 @@ const cx = classNames.bind(styles)
 function DetailDriverPartner() {
   console.log('re-render detail driver modal')
   const showDetailDriverPartnerModal = useSelector((state) => state.generalModal.DetailDriverPartner)
-  const { id, isOpen, status} = showDetailDriverPartnerModal
+  const { id, isOpen, status } = showDetailDriverPartnerModal
   const [detailData, setDetailData] = useState({})
   const dispatch = useDispatch()
   useEffect(() => {
@@ -55,7 +55,7 @@ function DetailDriverPartner() {
 
   const handleConfirm = async () => {
     let data
-    if (detailData.approvalStatus === config.variables.current) {
+    if (status === config.variables.current) {
       dispatch(
         setConfirmModalVisible({
           name: generalModalNames.CANCEL_DRIVER_PARTNER,
@@ -74,7 +74,7 @@ function DetailDriverPartner() {
         data = await verifyDriverPartner(id)
         if (data) {
           toast.success(
-            detailData.approvalStatus === config.variables.notConfirmed
+            status === config.variables.notConfirmed
               ? 'Xác nhận đăng ký thành công!'
               : 'Khôi phục chế độ đối tác thành công!',
             { autoClose: 1200, position: 'top-center' },
@@ -82,7 +82,7 @@ function DetailDriverPartner() {
           dispatch(
             fetchAllDriverPartners({
               status:
-                detailData.approvalStatus === config.variables.notConfirmed
+                status === config.variables.notConfirmed
                   ? config.variables.notConfirmed
                   : config.variables.cancelled,
             }),
@@ -251,28 +251,38 @@ function DetailDriverPartner() {
                 ))}
               </div>
             </div>
-            {detailData?.approvalStatus !== config.variables.notConfirmed && (
+            {status !== config.variables.notConfirmed && (
               <div className="d-flex-column row-gap-3 mt-4">
                 <LinkItem title="Thông tin chi tiết đối tác" Icon={<PartnerIcon />} className={cx('custom')} />
                 <div className="d-flex flex-column row-gap-2">
                   <div className="mt-3 fs-4 ps-5 fst-italic">
                     Thời gian trở thành đối tác -
-                    <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeBecomePartner}</span>
+                    <span style={{ color: '#5DAE70', marginLeft: '8px' }}>
+                      {detailData.generalDriverInfo?.timeBecomePartner}
+                    </span>
                   </div>
-                  {detailData?.approvalStatus === config.variables.current && detailData?.timeUpdate && (
-                    <div className="mt-3 fs-4 ps-5 fst-italic">
-                      Thời gian khôi phục đối tác -
-                      <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeUpdate}</span>
-                    </div>
-                  )}
-                  {detailData?.approvalStatus === config.variables.cancelled && (
+                  {status === config.variables.current &&
+                    detailData.generalDriverInfo?.timeUpdate && (
+                      <div className="mt-3 fs-4 ps-5 fst-italic">
+                        Thời gian khôi phục đối tác -
+                        <span style={{ color: '#5DAE70', marginLeft: '8px' }}>
+                          {detailData.generalDriverInfo?.timeUpdate}
+                        </span>
+                      </div>
+                    )}
+                  {status === config.variables.cancelled && (
                     <div className="mt-3 fs-4 ps-5 fst-italic d-flex flex-column row-gap-4">
                       <div>
                         Thời gian huỷ đối tác -
-                        <span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.timeUpdate}</span>
+                        <span style={{ color: 'red', marginLeft: '8px' }}>
+                          {detailData.generalDriverInfo?.timeUpdate}
+                        </span>
                       </div>
                       <div>
-                        Lý do huỷ -<span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.cancelReason}</span>
+                        Lý do huỷ -
+                        <span style={{ color: 'red', marginLeft: '8px' }}>
+                          {detailData.generalDriverInfo?.cancelReason}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -280,7 +290,7 @@ function DetailDriverPartner() {
               </div>
             )}
             <div className="d-flex justify-content-center gap-5" style={{ marginTop: '40px' }}>
-              {detailData.approvalStatus === config.variables.notConfirmed ? (
+              {status === config.variables.notConfirmed ? (
                 <Button outline onClick={handleRefusePartner}>
                   Từ chối
                 </Button>
@@ -290,9 +300,9 @@ function DetailDriverPartner() {
                 </Button>
               )}
               <Button primary onClick={handleConfirm}>
-                {detailData.approvalStatus === config.variables.current
+                {status === config.variables.current
                   ? 'Huỷ đối tác'
-                  : detailData.approvalStatus === config.variables.notConfirmed
+                  : status === config.variables.notConfirmed
                   ? 'Xác nhận'
                   : 'Khôi phục đối tác'}
               </Button>

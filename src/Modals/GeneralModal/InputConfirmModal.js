@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   generalModalNames,
   setConfirmModalVisible,
-  setDetailDriverModalVisible,
-  setDetailModalVisible,
   setLoadingModalVisible,
 } from '~/redux/slices/generalModalSlice'
 import { lockAccount } from '~/apiServices/lockAccount'
@@ -58,7 +56,7 @@ function InputConfirmModal() {
           const { id, type } = showInputConfirm
           const data = await cancelPartner(id, reason)
           if (data) {
-            toast.success('Huỷ đăng ký đối tác thành công!', { autoClose: 800, position: 'top-center' })
+            toast.success('Huỷ quan hệ đối tác thành công!', { autoClose: 800, position: 'top-center' })
             dispatch(fetchAllRegisterPartners({ partnerType: type, status: config.variables.current }))
             handleClose()
           }
@@ -74,7 +72,7 @@ function InputConfirmModal() {
           const { id } = showInputConfirm
           const data = await cancelDriverPartner(id, reason)
           if (data) {
-            toast.success('Huỷ đăng ký đối tác tài xế thành công!', { autoClose: 800, position: 'top-center' })
+            toast.success('Huỷ quan hệ đối tác tài xế thành công!', { autoClose: 800, position: 'top-center' })
             dispatch(fetchAllDriverPartners({ status: config.variables.current }))
             handleClose()
           }
