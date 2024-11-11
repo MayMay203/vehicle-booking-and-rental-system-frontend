@@ -95,6 +95,7 @@ function FeeServiceModal() {
             onChange={(e) => setName(e.target.value)}
             isValid={isValid}
             required
+            star
           ></FormInput>
           <FormInput
             title="Giá dịch vụ"
@@ -106,6 +107,7 @@ function FeeServiceModal() {
             onChange={(e) => setPrice(e.target.value)}
             isValid={isValid}
             required
+            star
           ></FormInput>
           <FormTextArea
             value={description}
@@ -117,6 +119,7 @@ function FeeServiceModal() {
             }}
             rows={4}
             error="Vui lòng nhập mô tả"
+            star
           />
           <div className="mt-5 d-flex column-gap-5 justify-content-center">
             <Button outline onClick={handleClose}>
