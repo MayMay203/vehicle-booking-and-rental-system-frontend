@@ -4,7 +4,14 @@ import { Form } from "react-bootstrap"
 import Button from "../Button"
 import { useEffect, useState } from "react"
 const  cx = classNames.bind(styles)
-function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankChange, handleSaveFormBank }) {
+function FormBank({
+  updateActive = undefined,
+  noButton,
+  setActiveNextFormBank = undefined,
+  formBank,
+  handleFormBankChange = undefined,
+  handleSaveFormBank,
+}) {
   const banks = [
     { value: '', label: 'Chọn ngân hàng' },
     { value: 'vietcombank', label: 'Ngân hàng TMCP Ngoại Thương Việt Nam (Vietcombank)' },
@@ -34,8 +41,8 @@ function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankCha
   //   commit: false,
   // })
   const [formData, setFormData] = useState(formBank)
-  const [activeSave, setActiveSave] = useState(false)
-  const [isSaved, setIsSaved] = useState(false)
+  const [activeSave, setActiveSave] = useState(updateActive ? updateActive : false)
+  const [isSaved, setIsSaved] = useState(updateActive ? updateActive : false)
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every((value) => {
       if (typeof value === 'boolean') {
@@ -44,8 +51,8 @@ function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankCha
       return value.trim() !== ''
     })
     setActiveSave(allFieldsFilled)
-    setActiveNextFormBank(allFieldsFilled)
-    handleFormBankChange(formData)
+    setActiveNextFormBank?.(allFieldsFilled)
+    handleFormBankChange?.(formData)
   }, [formData, setActiveNextFormBank, handleFormBankChange])
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -58,7 +65,10 @@ function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankCha
   const handleCancel = (e) => {}
   return (
     <Form className={cx('form-bank')}>
-      <Form.Group className={cx({'txt':!noButton}, {'txt-noButton': noButton}, 'mb-3')} controlId="formBank.ControlInput1">
+      <Form.Group
+        className={cx({ txt: !noButton }, { 'txt-noButton': noButton }, 'mb-3')}
+        controlId="formBank.ControlInput1"
+      >
         <Form.Label>
           Tên chủ tài khoản <span className="text-danger">*</span>
         </Form.Label>
@@ -68,11 +78,14 @@ function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankCha
           placeholder="Nguyễn Văn A"
           aria-label="name"
           onChange={handleInputChange}
-          className={cx({'txt':!noButton}, {'txt-noButton': noButton})}
+          className={cx({ txt: !noButton }, { 'txt-noButton': noButton })}
           value={formData.name}
         />
       </Form.Group>
-      <Form.Group className={cx({'txt':!noButton}, {'txt-noButton': noButton}, 'mb-3')} controlId="formBank.ControlInput2">
+      <Form.Group
+        className={cx({ txt: !noButton }, { 'txt-noButton': noButton }, 'mb-3')}
+        controlId="formBank.ControlInput2"
+      >
         <Form.Label>
           Số tài khoản <span className="text-danger">*</span>
         </Form.Label>
@@ -81,7 +94,7 @@ function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankCha
           placeholder="10042003555"
           name="numberBank"
           aria-label="number-bank"
-          className={cx({'txt':!noButton}, {'txt-noButton': noButton})}
+          className={cx({ txt: !noButton }, { 'txt-noButton': noButton })}
           onChange={handleInputChange}
           value={formData.numberBank}
           onInput={(e) => {
@@ -89,14 +102,17 @@ function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankCha
           }}
         />
       </Form.Group>
-      <Form.Group className={cx({'txt':!noButton}, {'txt-noButton': noButton}, 'mb-3')} controlId="formBank.ControlInput3">
+      <Form.Group
+        className={cx({ txt: !noButton }, { 'txt-noButton': noButton }, 'mb-3')}
+        controlId="formBank.ControlInput3"
+      >
         <Form.Label>
           Tên ngân hàng <span className="text-danger">*</span>
         </Form.Label>
         <Form.Select
           name="nameBank"
           aria-label="name-bank"
-          className={cx({'txt':!noButton}, {'txt-noButton': noButton}, 'selectbox')}
+          className={cx({ txt: !noButton }, { 'txt-noButton': noButton }, 'selectbox')}
           onChange={handleInputChange}
           value={formData.nameBank}
         >
@@ -125,12 +141,12 @@ function FormBank({ noButton, setActiveNextFormBank, formBank, handleFormBankCha
           <Button
             primary
             className={cx('btn', 'btn-save')}
-            disabled={!activeSave}
+            disabled={!activeSave || isSaved}
             onClick={(event) => {
               event.preventDefault()
               setIsSaved(true)
               setActiveSave(false)
-              handleSaveFormBank()
+              handleSaveFormBank(formData)
             }}
           >
             {!isSaved ? 'Lưu' : 'Đã lưu'}

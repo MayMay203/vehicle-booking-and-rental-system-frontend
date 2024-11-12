@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind'
 import styles from './FormRegisterDriver.module.scss'
-import { Form } from 'react-bootstrap'
+import { Alert, Form } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
+import { getAllVehicleTypes } from '~/apiServices/user/getAllVehicleTypes'
 const cx = classNames.bind(styles)
-function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
+function FormInformation({ setActiveNextFormInfor, formInfor, handleChangeFormInfor }) {
   const provinces = [
     { value: '', label: 'Chọn tỉnh/thành phố' },
     { value: 'An Giang', label: 'An Giang' },
@@ -70,46 +71,52 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
     { value: 'Vĩnh Phúc', label: 'Vĩnh Phúc' },
     { value: 'Yên Bái', label: 'Yên Bái' },
   ]
-  const type_vehicle = [
-    { value: '', label: 'Chọn loại xe' },
-    { value: 'Xe máy', label: 'Xe máy' },
-    { value: 'Xe điện', label: 'Xe điện' },
-    { value: 'Xe ô tô 4 chỗ', label: 'Xe ô tô 4 chỗ' },
-  ]
-  const [formData, setFormData] = useState({
-    name: '',
-    gender: '',
-    birthday: '',
-    phonenumber: '',
-    gmail: '',
-    location: '',
-    vehicleType: '',
-    licensePlate: '',
-  })
-  const [isCorrectDate, setIsCorrectDate] = useState(false)
+  const [typeVehicle, setTypeVehicle] = useState([])
+  const fetchVehicleTypes = async () => {
+    try {
+      const response = await getAllVehicleTypes()
+      const getVehicleTypes = response?.result
+      const vehicleTypes = [
+        { value: '', label: 'Chọn loại xe' },
+        ...getVehicleTypes.map((vehicleType) => ({
+          value: vehicleType.name,
+          label: vehicleType.name,
+        })),
+      ]
+      setTypeVehicle(vehicleTypes)
+    } catch (error) {
+      console.error('Failed to fetch vehicle types:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchVehicleTypes()
+  }, [])
+
+  const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
+  const [formData, setFormData] = useState(formInfor)
+  const [isCorrectDate, setIsCorrectDate] = useState(regex.test(formData.birthday))
+  const [warningMessage, setWarningMessage] = useState('')
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
     setActiveNextFormInfor(allFieldsFilled)
-  }, [formData, setActiveNextFormInfor])
+    handleChangeFormInfor(formData)
+  }, [formData, setActiveNextFormInfor, handleChangeFormInfor])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     if (name === 'birthday') {
-      const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
-      if (!regex.test(value)) {
-        setIsCorrectDate(false)
-        return
-      }
+      setIsCorrectDate(regex.test(value))
     }
-
-    setIsCorrectDate(true)
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }))
-
-    updateFormDataInfor(formData) // Gửi dữ liệu lên cha
-    return updateFormDataInfor
+    if (name === 'phonenumber' && value.length !== 10) {
+      setWarningMessage('Số điện thoại phải có đủ 10 chữ số')
+    } else {
+      setWarningMessage('')
+    }
   }
   return (
     <Form className={cx('form-infor')}>
@@ -124,6 +131,7 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
           aria-label="name"
           className={cx('txt')}
           onChange={handleInputChange}
+          value={formData.name}
         />
       </Form.Group>
       <div className="row">
@@ -136,11 +144,12 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
             aria-label="gender"
             className={cx('txt', 'selectbox')}
             onChange={handleInputChange}
+            value={formData.gender}
           >
             <option>Chọn giới tính</option>
-            <option value="nam">Nam</option>
-            <option value="nữ">Nữ</option>
-            <option value="khác">Khác</option>
+            <option value="MALE">Nam</option>
+            <option value="FEMALE">Nữ</option>
+            <option value="ORTHER">Khác</option>
           </Form.Select>
         </Form.Group>
         <Form.Group className={cx('txt', 'mb-1', 'col-6')} controlId="formInfor.ControlInput2">
@@ -149,11 +158,12 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
           </Form.Label>
           <Form.Control
             type="text"
-            placeholder="12-01-2003"
+            placeholder="dd-mm-yyyy"
             name="birthday"
             aria-label="birthday"
             className={cx('txt', 'm-0')}
             onChange={handleInputChange}
+            value={formData.birthday}
           />
           {!isCorrectDate && <p className={cx('txt-warn')}>Vui lòng nhập theo dạng: dd-mm-yyyy</p>}
         </Form.Group>
@@ -167,7 +177,7 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
           placeholder="0842059055"
           name="phonenumber"
           aria-label="phonenumber"
-          className={cx('txt')}
+          className={cx('txt', 'mb-0')}
           onInput={(e) => {
             e.target.value = e.target.value.replace(/[^0-9]/g, '') // Loại bỏ ký tự không phải là số
             if (e.target.value.length > 10) {
@@ -175,7 +185,13 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
             }
           }}
           onChange={handleInputChange}
+          value={formData.phonenumber}
         />
+        {warningMessage && (
+          <Alert variant="danger" className={cx('warn')}>
+            {warningMessage}
+          </Alert>
+        )}
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput4">
         <Form.Label>
@@ -188,6 +204,7 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
           aria-label="gmail"
           className={cx('txt')}
           onChange={handleInputChange}
+          value={formData.gmail}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInfor.ControlInput5">
@@ -200,6 +217,7 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
           className={cx('txt', 'selectbox')}
           size={5}
           onChange={handleInputChange}
+          value={formData.location}
         >
           {provinces.map((province, index) => (
             <option key={index} value={province.value}>
@@ -218,8 +236,9 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
             aria-label="type-vehicle"
             className={cx('txt', 'selectbox')}
             onChange={handleInputChange}
+            value={formData.vehicleType}
           >
-            {type_vehicle.map((type, index) => (
+            {typeVehicle.map((type, index) => (
               <option key={index} value={type.value}>
                 {type.label}
               </option>
@@ -237,6 +256,7 @@ function FormInformation({ setActiveNextFormInfor, updateFormDataInfor }) {
             aria-label="license-plate"
             className={cx('txt')}
             onChange={handleInputChange}
+            value={formData.licensePlate}
           />
         </Form.Group>
       </div>

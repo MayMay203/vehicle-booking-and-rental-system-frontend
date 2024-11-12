@@ -167,43 +167,43 @@ function Header({ menus }) {
                     {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
                     <FontAwesomeIcon icon={faCaretDown} />
                   </button>
-                  <div className={cx('d-flex', 'flex-column', { hidden: !isShowDetailPartner })}>
-                    <div className={cx('wrap-link')}>
-                      <NavLink
-                        className={cx('link')}
-                        to={`${
-                          currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-                        }?type=${config.variables.busPartner}`}
-                        onClick={() => setShowDetailPartner(false)}
-                      >
-                        Đối tác nhà xe
-                      </NavLink>
+                  {isLogin && (
+                    <div className={cx('d-flex', 'flex-column', { hidden: !isShowDetailPartner })}>
+                      <div className={cx('wrap-link')}>
+                        <NavLink
+                          className={cx('link')}
+                          to={`${
+                            currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+                          }?type=${config.variables.busPartner}`}
+                          onClick={() => setShowDetailPartner(false)}
+                        >
+                          Đối tác nhà xe
+                        </NavLink>
+                      </div>
+                      <div className={cx('wrap-link')}>
+                        <NavLink
+                          className={cx('link')}
+                          to={`${
+                            currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+                          }?type=${config.variables.carRentalPartner}`}
+                          onClick={() => setShowDetailPartner(false)}
+                        >
+                          Đối tác cho thuê xe
+                        </NavLink>
+                      </div>
+                      <div className={cx('wrap-link')}>
+                        <NavLink
+                          className={cx('link')}
+                          to={`${
+                            currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+                          }?type=${config.variables.driverPartner}`}
+                          onClick={() => setShowDetailPartner(false)}
+                        >
+                          Đối tác tài xế
+                        </NavLink>
+                      </div>
                     </div>
-                    <div className={cx('wrap-link')}>
-                      <NavLink
-                        className={cx('link')}
-                        to={`${
-                          currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-                        }?type=${config.variables.carRentalPartner}`}
-                        onClick={() => setShowDetailPartner(false)}
-                      >
-                        Đối tác cho thuê xe
-                      </NavLink>
-                    </div>
-                    <div className={cx('wrap-link')}>
-                      <NavLink
-                        className={cx('link')}
-                        to={`${
-                          currentUser.roles?.includes('ADMIN')
-                            ? config.routes.managePartners
-                            : config.routes.partner
-                        }?type=${config.variables.driverPartner}`}
-                        onClick={() => setShowDetailPartner(false)}
-                      >
-                        Đối tác tài xế
-                      </NavLink>
-                    </div>
-                  </div>
+                  )}
                 </>
               ) : (
                 <MenuItem key={index} menu={menu}></MenuItem>
@@ -342,7 +342,7 @@ function Header({ menus }) {
             <div>
               <Tippy
                 offset={[-1, 0]}
-                visible={isShowDetailPartner}
+                visible={isShowDetailPartner && isLogin}
                 interactive
                 placement="bottom"
                 render={(attrs) => (
@@ -394,7 +394,9 @@ function Header({ menus }) {
                 )}
                 onClickOutside={() => setShowDetailPartner(false)}
               >
-                <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
+                <button className={cx('drop-down')} onClick={() => {isLogin
+                  ? setShowDetailPartner((prev) => !prev)
+                  : dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))}}>
                   {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
                   <FontAwesomeIcon icon={faCaretDown} />
                 </button>

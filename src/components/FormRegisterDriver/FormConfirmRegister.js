@@ -5,17 +5,13 @@ import Button from '../Button'
 import Notice from '../Notice'
 import { useState, useEffect } from 'react'
 const cx = classNames.bind(styles)
-function FormConfirmRegister({ isRegister, handleRegister }) {
-  const [formConfirm, setFormConfirm] = useState({
-    regulation: false,
-    security: false,
-    term: false,
-    punishment: false,
-  })
+function FormConfirmRegister({ formData, isRegister, handleFormConfirmChange, handleRegister }) {
+  const [formConfirm, setFormConfirm] = useState(formData)
   useEffect(() => {
     const allSelected = Object.values(formConfirm).every((value) => value === true)
     setActiveConfirm(allSelected)
-  }, [formConfirm])
+    handleFormConfirmChange(formConfirm)
+  }, [formConfirm, handleFormConfirmChange])
   const [activeConfirm, setActiveConfirm] = useState(false)
   const handleChangeSelect = (e) => {
     const { name, checked } = e.target
@@ -23,6 +19,15 @@ function FormConfirmRegister({ isRegister, handleRegister }) {
       ...prevState,
       [name]: checked,
     }))
+  }
+  const handleCancel = (e) => {
+    e.preventDefault()
+    setFormConfirm({
+      regulation: false,
+      security: false,
+      term: false,
+      punishment: false,
+    })
   }
   return (
     <>
@@ -41,6 +46,7 @@ function FormConfirmRegister({ isRegister, handleRegister }) {
               label="Quy định làm đối tác."
               onChange={handleChangeSelect}
               className="lh-base fs-4"
+              checked={formConfirm.regulation}
             />
           </Form.Group>
           <Form.Group className="mb-3" id="formGridCheckbox">
@@ -50,6 +56,7 @@ function FormConfirmRegister({ isRegister, handleRegister }) {
               label="Chính sách Bảo mật."
               onChange={handleChangeSelect}
               className="lh-base fs-4"
+              checked={formConfirm.security}
             />
           </Form.Group>
           <Form.Group className="mb-3" id="formGridCheckbox">
@@ -59,6 +66,7 @@ function FormConfirmRegister({ isRegister, handleRegister }) {
               label="Điều Khoản Sử Dụng dành cho Vận tải, Giao nhận, Thương mại."
               onChange={handleChangeSelect}
               className="lh-base fs-4"
+              checked={formConfirm.term}
             />
           </Form.Group>
           <Form.Group className="mb-3" id="formGridCheckbox">
@@ -68,17 +76,18 @@ function FormConfirmRegister({ isRegister, handleRegister }) {
               label="Trường hợp vi phạm, tôi hiểu và đồng ý rằng Grab có quyền xử lý vi phạm của tôi theo các chế tài được quy định và công bố."
               onChange={handleChangeSelect}
               className="lh-base fs-4"
+              checked={formConfirm.punishment}
             />
           </Form.Group>
           <div className="d-flex justify-content-center">
-            <Button outline className={cx('btn', 'btn-cancel')}>
+            <Button outline className={cx('btn', 'btn-cancel')} onClick={handleCancel}>
               Hủy
             </Button>
             <Button
               primary
               className={cx('btn', 'btn-save')}
               disabled={!activeConfirm}
-              onClick={() => handleRegister()}
+              onClick={handleRegister}
             >
               Xác nhận
             </Button>
@@ -90,7 +99,8 @@ function FormConfirmRegister({ isRegister, handleRegister }) {
           type={'success'}
           subtitle={'Đăng ký thành công!'}
           content={
-            'Chúc mừng bạn đã trở thành đối tác tài xế!\nCảm ơn vì đã tin tưởng và đồng hành cùng chúng tôi. Safety Travel chúc bạn sẽ có nhiều hành trình tuyệt vời và an toàn nhé!'
+            // 'Chúc mừng bạn đã trở thành đối tác tài xế!\nCảm ơn vì đã tin tưởng và đồng hành cùng chúng tôi. Safety Travel chúc bạn sẽ có nhiều hành trình tuyệt vời và an toàn nhé!'
+            'Chúc mừng bạn đã đăng ký trở thành đối tác tài xế của Safety Travel!\nCảm ơn vì đã tin tưởng đồng hành cùng chúng tôi.\nQuá trình xét duyệt sẽ mất một ít thời gian, nếu gặp vấn đề hay thắc mắc gì xin hãy liên hệ với chúng tôi qua số điện thoại: 0842059000.\n Safety Travel mong đợi hợp tác cùng bạn.'
           }
         ></Notice>
       )}
