@@ -68,7 +68,11 @@ function ConfirmModal() {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       } catch (message) {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+        if (message.includes('Cannot delete this utility')) {
+          toast.error('Tiện ích đã được sử dụng. Không thể xoá!', { autoClose: 1000, position: 'top-center' })
+          return
+        }
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
       }
     } else if (showConfirmModal.name === generalModalNames.FEE_SERVICE_MODAL) {
       const feeServiceId = showConfirmModal.id
