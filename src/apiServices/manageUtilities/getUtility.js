@@ -1,16 +1,15 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const deleteUtility = async (idUtility) => {
-  console.log(idUtility)
+export const getUtility = async (id) => {
   try {
-    const response = await httpRequest.DELETE(`/v1/utilities?idUtility=${idUtility}`, {
+    const response = await httpRequest.get(`/v1/utilities?utilityId=${id}`, {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     })
     return response.data
-  } catch (error) {
-    throw error.response.data.message
+  } catch (err) {
+    console.log('Failed to get a utility: ', err)
   }
 }

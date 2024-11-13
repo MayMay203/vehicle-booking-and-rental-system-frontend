@@ -71,11 +71,11 @@ function UserMenu() {
       <Link to={config.routes.accountSetting} className={cx('menu')}>
         Thông tin tài khoản
       </Link>
-      {!currentUser.roles?.includes('ADMIN') && (
+      {/* {!currentUser.roles?.includes('ADMIN') && (
         <Link to={config.routes.manageAccounts} className={cx('menu')}>
           Quản lý tài khoản
         </Link>
-      )}
+      )} */}
       <Button outline className={cx('btn')} onClick={handleLogout}>
         Đăng xuất
       </Button>

@@ -13,6 +13,7 @@ import { addUtility } from '~/apiServices/manageUtilities/addUtility'
 import { fetchAllUtilities } from '~/redux/slices/generalAdminSlice'
 import { toast } from 'react-toastify'
 import { updateUtility } from '~/apiServices/manageUtilities/updateUtility'
+import { getUtility } from '~/apiServices/manageUtilities/getUtility'
 
 const cx = classNames.bind(styles)
 function UtilityModal() {
@@ -25,6 +26,9 @@ function UtilityModal() {
   const [description, setDescription] = useState('')
   const [selectedImage, setSelectedImage] = useState('')
   const [isValid, setIsValid] = useState(false)
+  const initialImage = useRef(null)
+  const nameRef = useRef(null)
+  const descriptionRef = useRef(null)
 
   useEffect(() => {
     if (formRef.current) {
@@ -33,16 +37,28 @@ function UtilityModal() {
     if (!selectedImage) {
       setIsValid(false)
     }
+    if (
+      nameRef.current === name.trim() &&
+      descriptionRef.current === description.trim() &&
+      initialImage.current === selectedImage
+    ) {
+      setIsValid(false)
+    }
   }, [name, description, selectedImage])
 
   useEffect(() => {
-    if (id) {
-      //fetch api get 1 utility
-      let data = {}
-      setName(data.name)
-      setDescription(data.description)
-      setSelectedImage(data.image)
+    async function fetchUtility() {
+      if (id) {
+        const data = await getUtility(id)
+        setName(data.name)
+        setDescription(data.description)
+        setSelectedImage(data.image)
+        initialImage.current = data.image
+        nameRef.current = data.name
+        descriptionRef.current = data.description
+      }
     }
+    fetchUtility()
   }, [id])
 
   const handleClose = (e) => {
@@ -79,12 +95,14 @@ function UtilityModal() {
       utilityInfo.id = id
     }
     formData.append('utilityInfo', new Blob([JSON.stringify(utilityInfo)], { type: 'application/json' }))
-    const base64Data = selectedImage.split(',')[1]
-    const byteCharacters = atob(base64Data)
-    const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i))
-    const byteArray = new Uint8Array(byteNumbers)
-    const imageBlob = new Blob([byteArray], { type: 'image/png' })
-    formData.append('utilityImage', imageBlob, `${utilityInfo.name}.png`)
+    if (initialImage.current !== selectedImage) {
+      const base64Data = selectedImage.split(',')[1]
+      const byteCharacters = atob(base64Data)
+      const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i))
+      const byteArray = new Uint8Array(byteNumbers)
+      const imageBlob = new Blob([byteArray], { type: 'image/png' })
+      formData.append('utilityImage', imageBlob, `${utilityInfo.name}.png`)
+    }
     if (dispatch(checkLoginSession())) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = !id ? await addUtility(formData) : await updateUtility(formData)
@@ -120,7 +138,10 @@ function UtilityModal() {
             star
           ></FormInput>
           <div className="d-flex flex-column row-gap-4">
-            <div><span>Hình ảnh</span><span style={{color: 'red', marginLeft: '2px'}}>*</span></div>
+            <div>
+              <span>Hình ảnh</span>
+              <span style={{ color: 'red', marginLeft: '2px' }}>*</span>
+            </div>
             <div className={cx('choose-wrapper')}>
               <input type="file" accept="image/*" className={cx('input-file')} onChange={handleChooseImage}></input>
               <img
