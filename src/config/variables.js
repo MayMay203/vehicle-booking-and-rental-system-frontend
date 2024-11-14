@@ -8,5 +8,5 @@ export const variables = {
   current: 'APPROVED',
   notConfirmed: 'PENDING_APPROVAL',
   cancelled: 'CANCEL',
-  pagesize: 2
+  pagesize: 5
 }
