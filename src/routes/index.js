@@ -23,10 +23,18 @@ import AddBusTrip from '~/pages/BusPartner/BusTripManage/AddBusTrip'
 import Bus from '~/pages/BusPartner/BusManage/Bus'
 import AddBus from '~/pages/BusPartner/BusManage/AddBus'
 import Error from '~/pages/Error'
-import { ManageAccounts, ManageParners, ManageUtilities, ManageVouchers, Statistics } from '~/pages/Admin'
+import {
+  ManageAccounts,
+  ManageParners,
+  ManageUtilities,
+  ManageVouchers,
+  Statistics,
+  ManageFeeService,
+} from '~/pages/Admin'
 import UpdateBus from '~/pages/BusPartner/BusManage/UpdateBus/index.js'
 import PolicyManage from '~/pages/BusPartner/PolicyManage'
 import StatisticsBus from '~/pages/BusPartner/StatisticsBus'
+import BusTicket from '~/pages/BusPartner/BusTicketManage/BusTicket'
 
 const publicRoutes = [
   {
@@ -147,6 +155,10 @@ const publicRoutes = [
     component: UpdateBus,
   },
   {
+    path: config.routes.busTicket,
+    component: BusTicket,
+  },
+  {
     path: config.routes.policyManage,
     component: PolicyManage,
   },
@@ -163,6 +175,11 @@ const publicRoutes = [
     path: config.routes.error,
     component: Error,
     layout: null,
+  },
+  {
+    path: config.routes.manageFeeService,
+    component: ManageFeeService,
+    layout: HeaderOnly,
   },
 ]
 

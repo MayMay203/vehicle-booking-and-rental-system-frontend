@@ -9,6 +9,7 @@ import {
   generalModalNames,
   setConfirmModalVisible,
   setDetailModalVisible,
+  setLoadingModalVisible,
 } from '~/redux/slices/generalModalSlice'
 import LinkItem from '~/components/LinkItem'
 import {
@@ -34,13 +35,12 @@ function DetailPartner() {
   console.log('re-render detail business modal')
   const showDetailPartnerModal = useSelector((state) => state.generalModal.detailPartner)
   const { id, type, status, isOpen } = showDetailPartnerModal
-  console.log(type)
   const [detailData, setDetailData] = useState()
   const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetchDetailParterRegister() {
-      const data = await getDetailPartnerRegister(id, type)
+      const data = await getDetailPartnerRegister(id)
       if (data) {
         setDetailData(data)
       }
@@ -48,7 +48,7 @@ function DetailPartner() {
     if (dispatch(checkLoginSession())) {
       fetchDetailParterRegister()
     }
-  }, [id, type, dispatch])
+  }, [id, dispatch, status])
 
   const handleClose = () => {
     dispatch(setDetailModalVisible({ isOpen: false }))
@@ -69,7 +69,9 @@ function DetailPartner() {
           type: detailData.businessInfo.partnerType,
         }),
       )
+      handleClose()
     } else {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       if (dispatch(checkLoginSession())) {
         data = await verifyRegisterPartner(id, type)
         if (data) {
@@ -86,13 +88,30 @@ function DetailPartner() {
                 status === config.variables.notConfirmed ? config.variables.notConfirmed : config.variables.cancelled,
             }),
           )
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
           handleClose()
         } else {
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
           toast.error('Xác nhận đăng ký thất bại!', { autoClose: 1200, position: 'top-center' })
           handleClose()
         }
       }
     }
+  }
+
+  const handleRefuse = () => {
+    dispatch(
+      setConfirmModalVisible({
+        name: generalModalNames.REFUSE_PARTNER,
+        title: 'Từ chối đề nghị thành đối tác',
+        description: `Việc xác nhận từ chối đồng nghĩa với việc bạn không muốn thiết lập bất kỳ quan hệ nào với đối tác này. Vui lòng nhập lý do bên dưới:`,
+        isOpen: true,
+        modalType: 'inputConfirm',
+        id,
+        type: detailData.businessInfo.partnerType,
+      }),
+    )
+    handleClose()
   }
 
   return (
@@ -204,19 +223,25 @@ function DetailPartner() {
                 </span>
               </div>
             </div>
-            {detailData?.businessInfo.approvalStatus !== config.variables.notConfirmed && detailData?.timeCancel && (
+            {detailData?.businessInfo.approvalStatus !== config.variables.notConfirmed && (
               <div className="d-flex-column row-gap-3 mt-4">
                 <LinkItem title="Thông tin chi tiết đối tác" Icon={<PartnerIcon />} className={cx('custom')} />
                 <div className="d-flex flex-column row-gap-2">
                   <div className="mt-3 fs-4 ps-5 fst-italic">
                     Thời gian trở thành đối tác -
-                    <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeCancel}</span>
+                    <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeBecomePartner}</span>
                   </div>
+                  {detailData?.businessInfo.approvalStatus === config.variables.current && detailData?.timeUpdate && (
+                    <div className="mt-3 fs-4 ps-5 fst-italic">
+                      Thời gian khôi phục đối tác -
+                      <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeUpdate}</span>
+                    </div>
+                  )}
                   {detailData?.businessInfo.approvalStatus === config.variables.cancelled && (
                     <div className="mt-3 fs-4 ps-5 fst-italic d-flex flex-column row-gap-4">
                       <div>
                         Thời gian huỷ đối tác -
-                        <span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.timeCancel}</span>
+                        <span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.timeUpdate}</span>
                       </div>
                       <div>
                         Lý do huỷ -<span style={{ color: 'red', marginLeft: '8px' }}>{detailData?.cancelReason}</span>
@@ -226,8 +251,16 @@ function DetailPartner() {
                 </div>
               </div>
             )}
-            <div className="d-flex justify-content-center gap-5" style={{ marginTop: '40px' }} onClick={handleClose}>
-              <Button outline>Thoát</Button>
+            <div className="d-flex justify-content-center gap-5" style={{ marginTop: '40px' }}>
+              {status === config.variables.notConfirmed ? (
+                <Button outline onClick={handleRefuse}>
+                  Từ chối
+                </Button>
+              ) : (
+                <Button outline onClick={handleClose}>
+                  Thoát
+                </Button>
+              )}
               <Button primary onClick={handleConfirm}>
                 {status === config.variables.current
                   ? 'Huỷ đối tác'

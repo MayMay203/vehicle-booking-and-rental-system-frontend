@@ -3,7 +3,18 @@ import styles from './Form.module.scss'
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
-function FormTextArea({ id, title, rows = 3, show = false, className, customWidth = false, error, value, ...props }) {
+function FormTextArea({
+  id,
+  title,
+  rows = 3,
+  show = false,
+  className,
+  customWidth = false,
+  star = false,
+  error,
+  value,
+  ...props
+}) {
   const [showError, setShowError] = useState(false)
   const areaRef = useRef(null)
 
@@ -18,6 +29,7 @@ function FormTextArea({ id, title, rows = 3, show = false, className, customWidt
     <div className={cx('form-group', { [className]: className })}>
       <label className={cx('form-label')} htmlFor={id}>
         {title}
+        {star && <span className={cx('star')}>*</span>}
       </label>
       <textarea
         value={value}
@@ -34,6 +46,7 @@ function FormTextArea({ id, title, rows = 3, show = false, className, customWidt
         }}
         onBlur={handleCheckValidity}
         ref={areaRef}
+        spellCheck={false}
       ></textarea>
       {showError && <p className={cx('form-error')}>{error}</p>}
     </div>

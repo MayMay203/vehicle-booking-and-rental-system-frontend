@@ -18,7 +18,6 @@ export const fetchAllRegisterPartners = createAsyncThunk(
 export const fetchAllDriverPartners = createAsyncThunk(
   'partners/fetchAllDriverPartners',
   async ({ status, email, page }) => {
- console.log('CÓ FETCH LÊN ĐÂY??')
     const data = await getAllDriverPartners(status, email, page)
     console.log(data)
     return data || {}

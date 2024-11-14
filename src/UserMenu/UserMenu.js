@@ -42,13 +42,15 @@ function UserMenu() {
         <Image src={currentUser?.avatar} className={cx('avatar', 'ml-0')}></Image>
         <span className="fw-medium">{currentUser?.name}</span>
       </div>
-      <div className={cx('menu')} onClick={handleModeSetting}>
-        Cài đặt chế độ{' '}
-        <FontAwesomeIcon
-          className={cx('ms-1', { 'rotate-up': showMode, 'rotate-down': !showMode })}
-          icon={faCaretDown}
-        />
-      </div>
+      {currentUser?.roles.length > 1 && (
+        <div className={cx('menu')} onClick={handleModeSetting}>
+          Cài đặt chế độ{' '}
+          <FontAwesomeIcon
+            className={cx('ms-1', { 'rotate-up': showMode, 'rotate-down': !showMode })}
+            icon={faCaretDown}
+          />
+        </div>
+      )}
       {showMode && (
         <div className="d-flex flex-column row-gap-2">
           <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('userMenu'))}>
@@ -69,11 +71,11 @@ function UserMenu() {
       <Link to={config.routes.accountSetting} className={cx('menu')}>
         Thông tin tài khoản
       </Link>
-      {!currentUser.roles?.includes('ADMIN') && (
+      {/* {!currentUser.roles?.includes('ADMIN') && (
         <Link to={config.routes.manageAccounts} className={cx('menu')}>
           Quản lý tài khoản
         </Link>
-      )}
+      )} */}
       <Button outline className={cx('btn')} onClick={handleLogout}>
         Đăng xuất
       </Button>

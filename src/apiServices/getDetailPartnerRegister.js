@@ -1,10 +1,10 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const getDetailPartnerRegister = async (id, partnerType) => {
+export const getDetailPartnerRegister = async (id) => {
   try {
     const response = await httpRequest.get(
-      `/v1/business-partner/detail?formRegisterId=${id}&partnerType=${partnerType}`,
+      `/v1/business-partner/detail?formRegisterId=${id}`,
       {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,

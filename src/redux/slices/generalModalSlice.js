@@ -12,6 +12,10 @@ export const generalModalNames = {
   DETAIL_PARTNER: 'detailPartner',
   DETAIL_DRIVER_PARTNER: 'detailDriverPartner',
   CANCEL_DRIVER_PARTNER: 'cancelDriverPartner',
+  REFUSE_PARTNER: 'refusePartner',
+  REFUSE_DRIVER_PARTNER: 'refuseDriverPartner',
+  UTILITY_MODAL: 'utilityModal',
+  FEE_SERVICE_MODAL: 'feeServiceModal',
 }
 
 const initialState = {
@@ -46,7 +50,14 @@ const initialState = {
     type: '',
     status: '',
   },
-  addUtility: false,
+  utilityModal: {
+    isOpen: false,
+    id: '',
+  },
+  feeServiceModal: {
+    isOpen: false,
+    id: '',
+  },
   addVoucher: false,
 }
 
@@ -91,8 +102,21 @@ const generalModalSlice = createSlice({
     setAddVoucherVisible: (state, action) => {
       state.addVoucher = action.payload
     },
-    setAddUtilityModalVisible: (state, action) => {
-      state.addUtility = action.payload
+    setUtilityModal: (state, action) => {
+      const { isOpen, id } = action.payload
+      state.utilityModal = {
+        ...state.utilityModal,
+        isOpen,
+        id,
+      }
+    },
+    setFeeServiceModal: (state, action) => {
+      const { isOpen, id } = action.payload
+      state.feeServiceModal = {
+        ...state.feeServiceModal,
+        isOpen,
+        id,
+      }
     },
   },
 })
@@ -104,7 +128,8 @@ export const {
   setDetailModalVisible,
   setDetailDriverModalVisible,
   setAddVoucherVisible,
-  setAddUtilityModalVisible
+  setUtilityModal,
+  setFeeServiceModal,
 } = generalModalSlice.actions
 
 export default generalModalSlice.reducer

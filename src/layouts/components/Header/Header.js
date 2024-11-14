@@ -21,9 +21,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { NavLink } from 'react-router-dom'
 import { config } from '~/config'
+import { setMenu } from '~/redux/slices/menuSlice'
 
 const cx = classNames.bind(styles)
-function Header({ menus }) {
+function Header() {
   console.log('re-render header')
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
@@ -34,7 +35,15 @@ function Header({ menus }) {
   const [isShowDetailPartner, setShowDetailPartner] = useState(false)
   const [isSmall, setIsSmall] = useState(window.innerWidth < 768)
 
+  // Menu
   const dispatch = useDispatch()
+  const menus = useSelector((state) => state.menu.currentMenu)
+  useEffect(() => {
+    if (currentUser.roles?.includes('ADMIN')) {
+      dispatch(setMenu('adminMenu'))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser])
 
   useEffect(() => {
     const handleResize = () => {

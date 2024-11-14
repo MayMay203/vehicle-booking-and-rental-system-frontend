@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { publicRoutes } from './routes'
 import { DefaultLayout, ProtectedRoute } from './layouts'
 import { ToastContainer } from 'react-toastify'
@@ -16,12 +16,13 @@ import {
 import { ConfirmModal, DetailPartnerModal, InputConfirmModal, TicketModal } from './Modals/GeneralModal'
 import Spinner from './components/Spinner'
 import { checkLogin } from './redux/slices/userSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch} from 'react-redux'
 import ChangePassword from './Modals/AuthModal/ChangePassword'
-import { config } from './config'
-import AddUtility from './Modals/GeneralModal/AddUtilityModal'
+// import { config } from './config'
 import VoucherModal from './Modals/GeneralModal/VoucherModal'
 import DetailDriverPartner from './Modals/GeneralModal/DetailDriverPartnerModal'
+import UtilityModal from './Modals/GeneralModal/UtilityModal'
+import FeeServiceModal from './Modals/GeneralModal/FeeServiceModal'
 
 function App() {
   const dispatch = useDispatch()
@@ -51,7 +52,7 @@ function App() {
               ></Route>
             )
           })}
-          <Route path="*" element={<Navigate to={config.routes.error} />} />
+          {/* <Route path="*" element={<Navigate to={config.routes.error} />} /> */}
         </Routes>
         <ToastContainer
           position="top-right"
@@ -70,8 +71,9 @@ function App() {
         <TicketModal />
         <ChangePassword />
         <DetailPartnerModal />
-        <AddUtility/>
-        <VoucherModal/>
+        <UtilityModal />
+        <FeeServiceModal />
+        <VoucherModal />
         <DetailDriverPartner />
       </Router>
     </div>

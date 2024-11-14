@@ -14,15 +14,17 @@ const menus = {
   adminMenu: [
     { content: 'Tài khoản', to: config.routes.manageAccounts },
     { content: 'Đối tác', to: config.routes.managePartners },
+    { content: 'Phí dịch vụ xe', to: config.routes.manageFeeService },
     { content: 'Tiện ích nhà xe', to: config.routes.manageUtilities },
     { content: 'Khuyến mãi', to: config.routes.vouchers },
     { content: 'Thống kê', to: config.routes.statistics },
   ],
   busPartnerMenu: [
     { content: 'Chuyến xe', to: config.routes.busTrip },
-    { content: 'Đơn đặt', to: config.routes.accounts },
-    { content: 'Loại xe', to: config.routes.statistics },
-    { content: 'Thống kê', to: config.routes.vouchers },
+    { content: 'Vé xe', to: config.routes.busTicket },
+    { content: 'Xe', to: config.routes.bus },
+    { content: 'Chính sách', to: config.routes.policyManage },
+    { content: 'Thống kê', to: config.routes.statisticsBus },
   ],
 }
 
