@@ -11,7 +11,7 @@ import FormEmergencyContact from '../FormEmergencyContact/FormEmergencyContact'
 import FormInforID from '../FormInforID'
 import FormDriverLicense from '../FormDriverLicense'
 const cx = classNames.bind(styles)
-function RequiredFieldIndicator({isActive}) {
+function RequiredFieldIndicator({ isActive }) {
   return (
     <>
       {isActive ? (
@@ -31,7 +31,7 @@ function RequiredFieldIndicator({isActive}) {
     </>
   )
 }
-function FormDocuments({ setActiveNextFormDocs }) {
+function FormDocuments({ setActiveNextFormDocs, formDocs, handleChangeFormDocs }) {
   const [openGuideAvatar, setOpenGuideAvatar] = useState(false)
   const guidesAvatar = [
     {
@@ -203,30 +203,173 @@ function FormDocuments({ setActiveNextFormDocs }) {
   ]
   const photosRegistrationCertificate = ['guide_registration_certificate_1', 'guide_registration_certificate_2']
 
-  const [active, setActive] = useState(Array(8).fill(false))
+  const [active, setActive] = useState(formDocs.activeData)
+
+  const [formData, setFormData] = useState(formDocs)
+  const [formEmergencyContact, setFormEmergencyContact] = useState({
+    nameRepre: formData.nameRepre,
+    relation: formData.relation,
+    phoneRepre: formData.phoneRepre,
+    temporaryAddress: formData.temporaryAddress,
+  })
+  const [formInforID, setFormInforID] = useState({
+    number: formData.number,
+    dateOfIssue: formData.dateOfIssue,
+    place: formData.place,
+    expiryDate: formData.expiryDate,
+    citizenImages: formData.citizenImages,
+  })
+  const [formBank, setFormBank] = useState({
+    name: formData.name,
+    numberBank: formData.numberBank,
+    nameBank: formData.nameBank,
+    commit: formData.commit,
+  })
+  const [formDriverLicense, setFormDriverLicense] = useState({
+    driverLicenseImages: formData.driverLicenseImages,
+    driverLicenseNumber: formData.driverLicenseNumber,
+    issueDateLicense: formData.issueDateLicense,
+    licenseClass: formData.licenseClass,
+  })
   const handleSave = (id, images) => {
     console.log('id', id)
     console.log('images:', images)
-    const updateActive = [...active]
-    updateActive[id] = true
-    setActive(updateActive)
+    if(images.every((image) => image !== 
+  '')){
+      console.log('vào vòng if, images:', images)
+      const updateActive = [...active]
+      updateActive[id] = true
+      setActive(updateActive)
+
+      if (id === 0) {
+        setFormData((formDataPrev) => ({
+          ...formDataPrev,
+          activeData: updateActive,
+          avatarOfDriver: images,
+        }))
+      } else if (id === 4) {
+        setFormData((formDataPrev) => ({
+          ...formDataPrev,
+          activeData: updateActive,
+          vehicleImages: images,
+        }))
+      } else if (id === 6) {
+        setFormData((formDataPrev) => ({
+          ...formDataPrev,
+          activeData: updateActive,
+          vehicleRegistration: images,
+        }))
+      } else if (id === 7) {
+        setFormData((formDataPrev) => ({
+          ...formDataPrev,
+          activeData: updateActive,
+          vehicleInsurance: images,
+        }))
+      }
+      handleChangeFormDocs(formData)
+    }
+    
   }
-  const handleSaveFormBank = () => {
-    const updateActive = [...active]
-    updateActive[3] = true
-    setActive(updateActive)
-  }
-  const handleSaveFormEmergencyContact = () => {
+  const handleSaveFormEmergencyContact = (data) => {
     const updateActive = [...active]
     updateActive[1] = true
     setActive(updateActive)
+    setFormEmergencyContact(data)
+    setFormData((formDataPrev) => ({
+      ...formDataPrev,
+      nameRepre: data.nameRepre,
+      relation: data.relation,
+      phoneRepre: data.phoneRepre,
+      temporaryAddress: data.temporaryAddress,
+    }))
+    handleChangeFormDocs((formDataPrev) => ({
+      ...formDataPrev,
+      activeData: updateActive,
+      nameRepre: data.nameRepre,
+      relation: data.relation,
+      phoneRepre: data.phoneRepre,
+      temporaryAddress: data.temporaryAddress,
+    }))
   }
+  console.log('formEmergencyContact', formEmergencyContact)
+  const handleSaveFormInforID = (data) => {
+    const updateActive = [...active]
+    updateActive[2] = true
+    setActive(updateActive)
+    setFormInforID(data)
+    setFormData((formDataPrev) => ({
+      ...formDataPrev,
+      number: data.number,
+      dateOfIssue: data.dateOfIssue,
+      place: data.place,
+      expiryDate: data.expiryDate,
+      citizenImages: data.citizenImages,
+    }))
+    handleChangeFormDocs((formDataPrev) => ({
+      ...formDataPrev,
+      activeData: updateActive,
+      number: data.number,
+      dateOfIssue: data.dateOfIssue,
+      place: data.place,
+      expiryDate: data.expiryDate,
+      citizenImages: data.citizenImages,
+    }))
+  }
+  const handleSaveFormBank = (data) => {
+    const updateActive = [...active]
+    updateActive[3] = true
+    setActive(updateActive)
+    setFormBank(data)
+    setFormData((formDataPrev) => ({
+      ...formDataPrev,
+      name: data.name,
+      numberBank: data.numberBank,
+      nameBank: data.nameBank,
+      commit: data.commit,
+    }))
+    handleChangeFormDocs((formDataPrev) => ({
+      ...formDataPrev,
+      activeData: updateActive,
+      name: data.name,
+      numberBank: data.numberBank,
+      nameBank: data.nameBank,
+      commit: data.commit,
+    }))
+    console.log('Ben trong - active3', active[3])
+    console.log('Ben trong - active', active)
+  }
+  console.log('formDOCs', formData)
+  console.log('active', active)
+  console.log('active5', active[5])
+  const handleSaveFormDriverLicense = (data) => {
+    const updateActive = [...active]
+    updateActive[5] = true
+    setActive(updateActive)
+    setFormDriverLicense(data)
+    setFormData((formDataPrev) => ({
+      ...formDataPrev,
+      driverLicenseImages: data.driverLicenseImages,
+      driverLicenseNumber: data.driverLicenseNumber,
+      issueDateLicense: data.issueDateLicense,
+      licenseClass: data.licenseClass,
+    }))
+    handleChangeFormDocs((formDataPrev) => ({
+      ...formDataPrev,
+      activeData: updateActive,
+      driverLicenseImages: data.driverLicenseImages,
+      driverLicenseNumber: data.driverLicenseNumber,
+      issueDateLicense: data.issueDateLicense,
+      licenseClass: data.licenseClass,
+    }))
+  }
+
   useEffect(() => {
     const allActive = active.every((item) => item === true)
     if (allActive) {
       setActiveNextFormDocs(true)
     }
   }, [active, setActiveNextFormDocs])
+
   return (
     <div>
       <p className={cx('txt-large')}>Gửi tài liệu</p>
@@ -255,10 +398,12 @@ function FormDocuments({ setActiveNextFormDocs }) {
                   </div>
                 </Collapse>
                 <TakePhotoRegister
-                  number_photo={1}
+                  initialNumberPhoto={1}
                   id={0}
                   name_photos={['Ảnh chân dung']}
                   handleSave={handleSave}
+                  obligatory={true}
+                  urlImages={formData.avatarOfDriver}
                 ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
@@ -269,6 +414,8 @@ function FormDocuments({ setActiveNextFormDocs }) {
               </Accordion.Header>
               <Accordion.Body>
                 <FormEmergencyContact
+                  updateActive={active[1]}
+                  formEmergencyContact={formEmergencyContact}
                   handleSaveFormEmergencyContact={handleSaveFormEmergencyContact}
                 ></FormEmergencyContact>
               </Accordion.Body>
@@ -292,7 +439,11 @@ function FormDocuments({ setActiveNextFormDocs }) {
                     <GuideTakePhoto type_photo={'ID'} notes={guidesID} photos={photosID}></GuideTakePhoto>
                   </div>
                 </Collapse>
-                <FormInforID handleSaveFormInforID={() => handleSave(2)}></FormInforID>
+                <FormInforID
+                  updateActive={active[2]}
+                  formInforID={formInforID}
+                  handleSaveFormInforID={handleSaveFormInforID}
+                ></FormInforID>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="4">
@@ -301,7 +452,12 @@ function FormDocuments({ setActiveNextFormDocs }) {
                 <RequiredFieldIndicator isActive={active[3]}></RequiredFieldIndicator>
               </Accordion.Header>
               <Accordion.Body>
-                <FormBank handleSaveFormBank={handleSaveFormBank}></FormBank>
+                <FormBank
+                  updateActive={active[3]}
+                  noButton={false}
+                  formBank={formBank}
+                  handleSaveFormBank={handleSaveFormBank}
+                ></FormBank>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
@@ -333,9 +489,17 @@ function FormDocuments({ setActiveNextFormDocs }) {
                   </div>
                 </Collapse>
                 <TakePhotoRegister
-                  number_photo={4}
+                  id={4}
+                  initialNumberPhoto={4}
                   name_photos={['Mặt trước', 'Mặt sau', 'Mặt bên phải', 'Mặt bên trái']}
-                  // handleSave={() => handleSave(4)}
+                  handleSave={handleSave}
+                  obligatory={true}
+                  urlImages={[
+                    formData.vehicleImages[0],
+                    formData.vehicleImages[1],
+                    formData.vehicleImages[2],
+                    formData.vehicleImages[3],
+                  ]}
                 ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
@@ -362,12 +526,11 @@ function FormDocuments({ setActiveNextFormDocs }) {
                     ></GuideTakePhoto>
                   </div>
                 </Collapse>
-                {/* <TakePhotoRegister
-                  number_photo={2}
-                  name_photos={['Mặt trước', 'Mặt sau']}
-                  handleSave={() => handleSave(5)}
-                ></TakePhotoRegister> */}
-                <FormDriverLicense handleSaveFormDriverLicense={() => handleSave(5)}></FormDriverLicense>
+                <FormDriverLicense
+                  updateActive={active[5]}
+                  formDriverLicense={formDriverLicense}
+                  handleSaveFormDriverLicense={handleSaveFormDriverLicense}
+                ></FormDriverLicense>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
@@ -394,9 +557,12 @@ function FormDocuments({ setActiveNextFormDocs }) {
                   </div>
                 </Collapse>
                 <TakePhotoRegister
-                  number_photo={2}
+                  id={6}
+                  initialNumberPhoto={2}
                   name_photos={['Mặt trước', 'Mặt sau']}
-                  // handleSave={() => handleSave(6)}
+                  handleSave={handleSave}
+                  obligatory={true}
+                  urlImages={[formData.vehicleRegistration[0], formData.vehicleRegistration[1]]}
                 ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>
@@ -424,9 +590,12 @@ function FormDocuments({ setActiveNextFormDocs }) {
                   </div>
                 </Collapse>
                 <TakePhotoRegister
-                  number_photo={2}
+                  id={7}
+                  initialNumberPhoto={2}
                   name_photos={['Mặt trước', 'Mặt sau']}
-                  // handleSave={() => handleSave(7)}
+                  handleSave={handleSave}
+                  obligatory={true}
+                  urlImages={[formData.vehicleInsurance[0], formData.vehicleInsurance[1]]}
                 ></TakePhotoRegister>
               </Accordion.Body>
             </Accordion.Item>

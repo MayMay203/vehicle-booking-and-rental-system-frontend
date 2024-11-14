@@ -5,27 +5,28 @@ import Button from '../Button'
 import { useEffect, useState } from 'react'
 import TakePhotoRegister from '../TakePhotoRegister'
 const cx = classNames.bind(styles)
-function FormInforID({ handleSaveFormInforID }) {
-  const [formData, setFormData] = useState({
-    number: '',
-    date: '',
-    place: '',
-    expiryDate: '',
-  })
-  const [activeSave, setActiveSave] = useState(false)
-  const [isSaved, setIsSaved] = useState(false)
-  const [isCorrectDate, setIsCorrectDate] = useState(false)
-  const [isCorrectExpiryDate, setIsCorrectExpiryDate] = useState(false)
-  const [allImagesSelected, setAllImagesSelected] = useState(false)
+function FormInforID({ updateActive, formInforID, handleSaveFormInforID }) {
+  const [formData, setFormData] = useState(formInforID)
+  const [activeSave, setActiveSave] = useState(updateActive)
+  const [isSaved, setIsSaved] = useState(updateActive)
+  const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
+  const [isCorrectDate, setIsCorrectDate] = useState(dateRegex.test(formData.dateOfIssue))
+  const [isCorrectExpiryDate, setIsCorrectExpiryDate] = useState(dateRegex.test(formData.expiryDate))
+  // const [allImagesSelected, setAllImagesSelected] = useState(formData.im)
   useEffect(() => {
-    const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
+    // const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
+    // Tạo một bản sao của formData nhưng loại bỏ trường citizenImages
+    const { citizenImages, ...restOfFormData } = formData
+    const allFieldsFilled =
+      Object.values(restOfFormData).every((value) => value && value.trim() !== '') &&
+      formData.citizenImages.every((img) => img !== '')
     const datesAreValid = isCorrectDate && isCorrectExpiryDate
-    setActiveSave(allFieldsFilled && datesAreValid && allImagesSelected)
-  }, [formData, isCorrectDate, isCorrectExpiryDate, allImagesSelected])
+    setActiveSave(allFieldsFilled && datesAreValid)
+  }, [formData, isCorrectDate, isCorrectExpiryDate])
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
-    if (name === 'date') {
+    if (name === 'dateOfIssue') {
       if (!dateRegex.test(value)) {
         setIsCorrectDate(false)
       } else {
@@ -46,17 +47,28 @@ function FormInforID({ handleSaveFormInforID }) {
     }))
     setIsSaved(false)
   }
-  const handleSave = () => {
-    setAllImagesSelected(true)
+  const handleSave = (id, images) => {
+    // setAllImagesSelected(true)
+    setFormData((formDataPrev) => ({
+      ...formDataPrev,
+      citizenImages: images,
+    }))
+    console.log("ảnh ID:", formData)
+    // handleSaveFormInforID((formDataPrev) => ({
+    //   ...formDataPrev,
+    //   citizenImages: images,
+    // }))
   }
   const handleCancel = (e) => {}
   return (
     <Form className={cx('form-infor-ID')}>
       <TakePhotoRegister
-        number_photo={2}
+        id={0}
+        initialNumberPhoto={2}
         name_photos={['Mặt trước', 'Mặt sau']}
-        noButton={true}
         handleSave={handleSave}
+        obligatory={true}
+        urlImages={[formData.citizenImages[0], formData.citizenImages[1]]}
       ></TakePhotoRegister>
       <Form.Group className={cx('txt', 'mb-3', 'mt-5')} controlId="formInforID.ControlInput1">
         <Form.Label>
@@ -69,6 +81,7 @@ function FormInforID({ handleSaveFormInforID }) {
           aria-label="number"
           onChange={handleInputChange}
           className={cx('txt')}
+          value={formData.number}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInforID.ControlInput2">
@@ -77,11 +90,12 @@ function FormInforID({ handleSaveFormInforID }) {
         </Form.Label>
         <Form.Control
           type="text"
-          placeholder="12-01-2003"
-          name="date"
-          aria-label="date"
+          placeholder="dd-mm-yyyy"
+          name="dateOfIssue"
+          aria-label="dateOfIssue"
           className={cx('txt', 'm-0')}
           onChange={handleInputChange}
+          value={formData.dateOfIssue}
         />
         {!isCorrectDate && <p className={cx('txt-warn')}>Vui lòng nhập theo dạng: dd-mm-yyyy</p>}
       </Form.Group>
@@ -96,6 +110,7 @@ function FormInforID({ handleSaveFormInforID }) {
           aria-label="place"
           onChange={handleInputChange}
           className={cx('txt')}
+          value={formData.place}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInforID.ControlInput4">
@@ -104,11 +119,12 @@ function FormInforID({ handleSaveFormInforID }) {
         </Form.Label>
         <Form.Control
           type="text"
-          placeholder="12-01-2003"
+          placeholder="dd-mm-yyyy"
           name="expiryDate"
           aria-label="expiryDate"
           className={cx('txt', 'm-0')}
           onChange={handleInputChange}
+          value={formData.expiryDate}
         />
         {!isCorrectExpiryDate && <p className={cx('txt-warn')}>Vui lòng nhập theo dạng: dd-mm-yyyy</p>}
       </Form.Group>
@@ -119,12 +135,12 @@ function FormInforID({ handleSaveFormInforID }) {
         <Button
           primary
           className={cx('btn', 'btn-save')}
-          disabled={!activeSave}
+          disabled={!activeSave || isSaved}
           onClick={(event) => {
             event.preventDefault()
             setIsSaved(true)
             setActiveSave(false)
-            handleSaveFormInforID()
+            handleSaveFormInforID(formData)
           }}
         >
           {!isSaved ? 'Lưu' : 'Đã lưu'}

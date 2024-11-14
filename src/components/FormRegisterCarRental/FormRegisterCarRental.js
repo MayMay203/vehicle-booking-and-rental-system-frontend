@@ -31,85 +31,85 @@ function FormRegisterCarRental() {
     setNow(now + 100 / 3)
   }
   const [isRegister, setIsRegister] = useState(false)
-  const handleRegister = async (e) => {
-    e.preventDefault()
-    if (dispatch(checkLoginSession())) {
-      setLoading(true);
-      try {
-        const businessPartnerInfo = {
-          businessName: formInfor.nameBusiness,
-          emailOfRepresentative: formInfor.gmail,
-          nameOfRepresentative: formInfor.name,
-          phoneOfRepresentative: formInfor.phonenumber,
-          address: formInfor.location,
-          partnerType: 'CAR_RENTAL_PARTNER',
-          description: formDocs.description,
-          urlFanpage: formInfor.urlFanpage,
-          policies: formDocs.policy,
-          bankAccount: {
-            accountNumber: formBank.numberBank,
-            accountHolderName: formBank.name,
-            bankName: formBank.nameBank,
-            partnerType: 'CAR_RENTAL_PARTNER',
-          },
-        }
-        const formDataRegisterCarRental = new FormData()
-        formDataRegisterCarRental.append(
-          'businessPartnerInfo',
-          new Blob([JSON.stringify(businessPartnerInfo)], { type: 'application/json' }),
-        )
-        for (let [key, value] of formDataRegisterCarRental.entries()) {
-          console.log(`${key}:`, value)
-        }
-        formDocs.businessImages.forEach((imageBase64, index) => {
-          const base64DataBusiness = imageBase64.split(',')[1] // Lấy phần base64 từ chuỗi (loại bỏ phần data:image/png;base64,...)
-          const byteCharactersBusiness = atob(base64DataBusiness) // Giải mã base64 thành chuỗi ký tự
-          const byteNumbersBusiness = new Array(byteCharactersBusiness.length)
-            .fill(0)
-            .map((_, i) => byteCharactersBusiness.charCodeAt(i)) // Chuyển mỗi ký tự thành mã số byte
-          const byteArrayBusiness = new Uint8Array(byteNumbersBusiness) // Tạo mảng Uint8Array từ mã byte
-          const imageBlobBusiness = new Blob([byteArrayBusiness], { type: 'image/png' }) // Tạo Blob từ mảng byte
+ const handleRegister = async (e) => {
+   e.preventDefault()
+   if (dispatch(checkLoginSession())) {
+     setLoading(true)
+     try {
+       const businessPartnerInfo = {
+         businessName: formInfor.nameBusiness,
+         emailOfRepresentative: formInfor.gmail,
+         nameOfRepresentative: formInfor.name,
+         phoneOfRepresentative: formInfor.phonenumber,
+         address: formInfor.location,
+         partnerType: 'CAR_RENTAL_PARTNER',
+         description: formDocs.description,
+         urlFanpage: formInfor.urlFanpage,
+         policies: formDocs.policy,
+         bankAccount: {
+           accountNumber: formBank.numberBank,
+           accountHolderName: formBank.name,
+           bankName: formBank.nameBank,
+           partnerType: 'CAR_RENTAL_PARTNER',
+         },
+       }
+       const formDataRegisterCarRental = new FormData()
+       formDataRegisterCarRental.append(
+         'businessPartnerInfo',
+         new Blob([JSON.stringify(businessPartnerInfo)], { type: 'application/json' }),
+       )
+       for (let [key, value] of formDataRegisterCarRental.entries()) {
+         console.log(`${key}:`, value)
+       }
+       formDocs.businessImages.forEach((imageBase64, index) => {
+         const base64DataBusiness = imageBase64.split(',')[1] // Lấy phần base64 từ chuỗi (loại bỏ phần data:image/png;base64,...)
+         const byteCharactersBusiness = atob(base64DataBusiness) // Giải mã base64 thành chuỗi ký tự
+         const byteNumbersBusiness = new Array(byteCharactersBusiness.length)
+           .fill(0)
+           .map((_, i) => byteCharactersBusiness.charCodeAt(i)) // Chuyển mỗi ký tự thành mã số byte
+         const byteArrayBusiness = new Uint8Array(byteNumbersBusiness) // Tạo mảng Uint8Array từ mã byte
+         const imageBlobBusiness = new Blob([byteArrayBusiness], { type: 'image/png' }) // Tạo Blob từ mảng byte
 
-          formDataRegisterCarRental.append('businessImages', imageBlobBusiness, `businessImages${index + 1}.png`)
-        })
+         formDataRegisterCarRental.append('businessImages', imageBlobBusiness, `businessImages${index + 1}.png`)
+       })
 
-        const base64DataAvatar = formDocs.imgAvatar.split(',')[1]
-        const byteCharactersAvatar = atob(base64DataAvatar)
-        const byteNumbersAvatar = new Array(byteCharactersAvatar.length)
-          .fill(0)
-          .map((_, i) => byteCharactersAvatar.charCodeAt(i))
-        const byteArrayAvatar = new Uint8Array(byteNumbersAvatar)
-        const imageBlobAvatar = new Blob([byteArrayAvatar], { type: 'image/png' })
-        formDataRegisterCarRental.append('avatar', imageBlobAvatar, 'avatarCarRentalPartner.png')
+       const base64DataAvatar = formDocs.imgAvatar.split(',')[1]
+       const byteCharactersAvatar = atob(base64DataAvatar)
+       const byteNumbersAvatar = new Array(byteCharactersAvatar.length)
+         .fill(0)
+         .map((_, i) => byteCharactersAvatar.charCodeAt(i))
+       const byteArrayAvatar = new Uint8Array(byteNumbersAvatar)
+       const imageBlobAvatar = new Blob([byteArrayAvatar], { type: 'image/png' })
+       formDataRegisterCarRental.append('avatar', imageBlobAvatar, 'avatarCarRentalPartner.png')
 
-        const base64DataLicense = formDocs.imgLicense.split(',')[1]
-        const byteCharactersLicense = atob(base64DataLicense)
-        const byteNumbersLicense = new Array(byteCharactersLicense.length)
-          .fill(0)
-          .map((_, i) => byteCharactersLicense.charCodeAt(i))
-        const byteArrayLicense = new Uint8Array(byteNumbersLicense)
-        const imageBlobLicense = new Blob([byteArrayLicense], { type: 'image/png' })
-        formDataRegisterCarRental.append('businessLicense', imageBlobLicense, 'businessLicense.png')
+       const base64DataLicense = formDocs.imgLicense.split(',')[1]
+       const byteCharactersLicense = atob(base64DataLicense)
+       const byteNumbersLicense = new Array(byteCharactersLicense.length)
+         .fill(0)
+         .map((_, i) => byteCharactersLicense.charCodeAt(i))
+       const byteArrayLicense = new Uint8Array(byteNumbersLicense)
+       const imageBlobLicense = new Blob([byteArrayLicense], { type: 'image/png' })
+       formDataRegisterCarRental.append('businessLicense', imageBlobLicense, 'businessLicense.png')
 
-        for (let [key, value] of formDataRegisterCarRental.entries()) {
-          console.log(`${key}:`, value)
-        }
-        const response = await registerCarRentalPartner(formDataRegisterCarRental)
-        if (response) {
-          setIsRegister(true)
-          console.log('Đăng ký đối tác thành công!', response)
-        }
-      } catch (message) {
-        console.log('Đăng ký thất bại:')
-        console.log(message)
-        // if (message === 'You have already registered this business partner') {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
-        // }
-      } finally {
-        setLoading(false);
-      }
-    }
-  }
+       for (let [key, value] of formDataRegisterCarRental.entries()) {
+         console.log(`${key}:`, value)
+       }
+       const response = await registerCarRentalPartner(formDataRegisterCarRental)
+       if (response) {
+         setIsRegister(true)
+         console.log('Đăng ký đối tác thành công!', response)
+       }
+     } catch (message) {
+       console.log('Đăng ký thất bại:')
+       console.log(message)
+       // if (message === 'You have already registered this business partner') {
+       toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
+       // }
+     } finally {
+       setLoading(false)
+     }
+   }
+ }
   useEffect(() => {
     if (showForm === 0) {
       setActiveNext(activeNextFormInfor)

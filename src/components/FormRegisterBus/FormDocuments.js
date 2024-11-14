@@ -33,7 +33,7 @@ function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }
     }))
   }
 
-  const handleSavePhoto = (selectedFiles) => {
+  const handleSavePhoto = (id, selectedFiles) => {
     // setSavePhoto(true)
     setFormData((prevState) => ({
       ...prevState,
@@ -41,7 +41,7 @@ function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }
       imgLicense: selectedFiles[1],
     }))
   }
-  const handleSaveBusinessImages = (selectedFiles) => {
+  const handleSaveBusinessImages = (id, selectedFiles) => {
     // setSavePhoto(true)
     setFormData((prevState) => ({
       ...prevState,
@@ -90,6 +90,7 @@ function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }
     <Form className={cx('form-more-infor')}>
       <Form.Group className={cx('txt', 'mb-3', 'pt-2')} controlId="formMoreInfor.ControlInput1">
         <TakePhotoRegister
+          id={0}
           initialNumberPhoto={2}
           name_photos={['Ảnh đại diện nhà xe', 'Ảnh giấy phép kinh doanh']}
           obligatory={true}
@@ -97,6 +98,7 @@ function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }
           urlImages={[formData.imgAvatar, formData.imgLicense]}
         />
         <TakePhotoRegister
+          id={1}
           initialNumberPhoto={2}
           name_photos={['Ảnh nhà xe', 'Ảnh nhà xe']}
           obligatory={true}

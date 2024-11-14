@@ -5,16 +5,13 @@ import Button from '../Button'
 import { useEffect, useState } from 'react'
 import TakePhotoRegister from '../TakePhotoRegister'
 const cx = classNames.bind(styles)
-function FormDriverLicense({ handleSaveFormDriverLicense }) {
-  const [formData, setFormData] = useState({
-    number: '',
-    date: '',
-    licenseClass: '',
-  })
-  const [activeSave, setActiveSave] = useState(false)
-  const [isSaved, setIsSaved] = useState(false)
-  const [isCorrectDate, setIsCorrectDate] = useState(false)
-  const [allImagesSelected, setAllImagesSelected] = useState(false)
+function FormDriverLicense({ updateActive, formDriverLicense, handleSaveFormDriverLicense }) {
+  const [formData, setFormData] = useState(formDriverLicense)
+  const [activeSave, setActiveSave] = useState(updateActive)
+  const [isSaved, setIsSaved] = useState(updateActive)
+  const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
+  const [isCorrectDate, setIsCorrectDate] = useState(dateRegex.test(formData.issueDateLicense))
+  // const [allImagesSelected, setAllImagesSelected] = useState(false)
   const licenseClasses = [
     { value: '', label: 'Chọn hạng bằng lái' },
     { value: 'A1', label: 'A1' },
@@ -32,14 +29,16 @@ function FormDriverLicense({ handleSaveFormDriverLicense }) {
     { value: 'FE', label: 'FE' },
   ]
   useEffect(() => {
-    const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
+    const { driverLicenseImages, ...restOfFormData } = formData
+    const allFieldsFilled =
+      Object.values(restOfFormData).every((value) => value.trim() !== '') &&
+      formData.driverLicenseImages.every((img) => img !== '')
     const datesAreValid = isCorrectDate
-    setActiveSave(allFieldsFilled && datesAreValid && allImagesSelected)
-  }, [formData, isCorrectDate, allImagesSelected])
+    setActiveSave(allFieldsFilled && datesAreValid)
+  }, [formData, isCorrectDate])
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
-    if (name === 'date') {
+    if (name === 'issueDateLicense') {
       if (!dateRegex.test(value)) {
         setIsCorrectDate(false)
       } else {
@@ -52,29 +51,37 @@ function FormDriverLicense({ handleSaveFormDriverLicense }) {
     }))
     setIsSaved(false)
   }
-  const handleSave = () => {
-    setAllImagesSelected(true)
+  const handleSave = (id, images) => {
+    // setAllImagesSelected(true)
+    setFormData((prevState) => ({
+      ...prevState,
+      driverLicenseImages: images,
+    }))
+    console.log('ảnh driver license:', formData)
   }
   const handleCancel = (e) => {}
   return (
     <Form className={cx('form-infor-ID')}>
       <TakePhotoRegister
-        number_photo={2}
+        id={0}
+        initialNumberPhoto={2}
         name_photos={['Mặt trước', 'Mặt sau']}
-        noButton={true}
         handleSave={handleSave}
+        obligatory={true}
+        urlImages={[formData.driverLicenseImages[0], formData.driverLicenseImages[1]]}
       ></TakePhotoRegister>
       <Form.Group className={cx('txt', 'mb-3', 'mt-5')} controlId="formInforID.ControlInput1">
         <Form.Label>
           Số bằng lái <span className="text-danger">*</span>
         </Form.Label>
         <Form.Control
-          name="number"
+          name="driverLicenseNumber"
           type="text"
           placeholder="049350226688"
-          aria-label="number"
+          aria-label="driverLicenseNumber"
           onChange={handleInputChange}
           className={cx('txt')}
+          value={formData.driverLicenseNumber}
         />
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInforID.ControlInput2">
@@ -84,10 +91,11 @@ function FormDriverLicense({ handleSaveFormDriverLicense }) {
         <Form.Control
           type="text"
           placeholder="dd-mm-yyyy"
-          name="date"
-          aria-label="date"
+          name="issueDateLicense"
+          aria-label="issueDateLicense"
           className={cx('txt', 'm-0')}
           onChange={handleInputChange}
+          value={formData.issueDateLicense}
         />
         {!isCorrectDate && <p className={cx('txt-warn')}>Vui lòng nhập theo dạng: dd-mm-yyyy</p>}
       </Form.Group>
@@ -100,6 +108,7 @@ function FormDriverLicense({ handleSaveFormDriverLicense }) {
           aria-label="licenseClass"
           className={cx('txt', 'selectbox')}
           onChange={handleInputChange}
+          value={formData.licenseClass}
         >
           {licenseClasses.map((licenseClass, index) => (
             <option key={index} value={licenseClass.value}>
@@ -115,12 +124,12 @@ function FormDriverLicense({ handleSaveFormDriverLicense }) {
         <Button
           primary
           className={cx('btn', 'btn-save')}
-          disabled={!activeSave}
+          disabled={!activeSave || isSaved}
           onClick={(event) => {
             event.preventDefault()
             setIsSaved(true)
             setActiveSave(false)
-            handleSaveFormDriverLicense()
+            handleSaveFormDriverLicense(formData)
           }}
         >
           {!isSaved ? 'Lưu' : 'Đã lưu'}

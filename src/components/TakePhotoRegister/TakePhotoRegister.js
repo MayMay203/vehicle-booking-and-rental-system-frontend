@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
 // import Button from '../Button'
 const cx = classNames.bind(styles)
-function TakePhotoRegister({ initialNumberPhoto, name_photos, handleSave, obligatory, urlImages, enableAddImage }) {
+function TakePhotoRegister({ id, initialNumberPhoto, name_photos, handleSave, obligatory, urlImages, enableAddImage }) {
   const [numberPhoto, setNumberPhoto] = useState(initialNumberPhoto)
   const [namePhotos, setNamePhotos] = useState(name_photos)
   const fileInputRefs = useRef(Array(numberPhoto).fill(null))
@@ -34,7 +34,7 @@ function TakePhotoRegister({ initialNumberPhoto, name_photos, handleSave, obliga
 
         // Cập nhật lại urlImages nếu cần thiết
         if (handleSave) {
-          handleSave(newFiles) // Cập nhật lại urlImages trong component cha
+          handleSave(id, newFiles) // Cập nhật lại urlImages trong component cha
         }
       }
     } else if (file && !file.type.startsWith('image/')) {
@@ -50,21 +50,23 @@ function TakePhotoRegister({ initialNumberPhoto, name_photos, handleSave, obliga
 
     // Cập nhật lại urlImages nếu cần thiết
     if (handleSave) {
-      handleSave([...selectedFiles, null]) // Cập nhật lại urlImages trong component cha
+      handleSave(id, [...selectedFiles, null]) // Cập nhật lại urlImages trong component cha
     }
   }
 
   useEffect(() => {
     const allImagesSelected = selectedFiles.every((file) => file !== null)
+    // const allImagesSelected = Array.isArray(selectedFiles) && selectedFiles.every((file) => file !== null)
+
     // Chỉ gọi handleSave khi tất cả ảnh đã chọn và handleSave chưa được gọi
     if (allImagesSelected && !hasSaved) {
-      handleSave(selectedFiles)
+      handleSave(id, selectedFiles)
       console.log('url ảnh:', selectedFiles)
       setHasSaved(true) // Đánh dấu là đã gọi handleSave
     } else if (!allImagesSelected && hasSaved) {
       setHasSaved(false) // Đặt lại cờ khi có thay đổi và chưa đủ ảnh được chọn
     }
-  }, [selectedFiles, handleSave, hasSaved])
+  }, [id, selectedFiles, handleSave, hasSaved])
 
   return (
     <div>
