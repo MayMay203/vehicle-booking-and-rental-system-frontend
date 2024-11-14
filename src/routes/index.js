@@ -34,6 +34,7 @@ import {
 import UpdateBus from '~/pages/BusPartner/BusManage/UpdateBus/index.js'
 import PolicyManage from '~/pages/BusPartner/PolicyManage'
 import StatisticsBus from '~/pages/BusPartner/StatisticsBus'
+import BusTicket from '~/pages/BusPartner/BusTicketManage/BusTicket'
 
 const publicRoutes = [
   {
@@ -152,6 +153,10 @@ const publicRoutes = [
   {
     path: config.routes.updateBus,
     component: UpdateBus,
+  },
+  {
+    path: config.routes.busTicket,
+    component: BusTicket,
   },
   {
     path: config.routes.policyManage,

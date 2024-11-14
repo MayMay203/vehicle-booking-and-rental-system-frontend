@@ -21,9 +21,10 @@ const menus = {
   ],
   busPartnerMenu: [
     { content: 'Chuyến xe', to: config.routes.busTrip },
-    { content: 'Đơn đặt', to: config.routes.accounts },
-    { content: 'Loại xe', to: config.routes.statistics },
-    { content: 'Thống kê', to: config.routes.vouchers },
+    { content: 'Vé xe', to: config.routes.busTicket },
+    { content: 'Xe', to: config.routes.bus },
+    { content: 'Chính sách', to: config.routes.policyManage },
+    { content: 'Thống kê', to: config.routes.statisticsBus },
   ],
 }
 
