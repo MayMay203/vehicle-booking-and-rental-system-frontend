@@ -10,6 +10,8 @@ export const generalModalNames = {
   LOADING: 'loading',
   BUY_TICKET: 'buyTicket',
   DETAIL_PARTNER: 'detailPartner',
+  DETAIL_DRIVER_PARTNER: 'detailDriverPartner',
+  CANCEL_DRIVER_PARTNER: 'cancelDriverPartner',
 }
 
 const initialState = {
@@ -26,7 +28,7 @@ const initialState = {
     description: '',
     name: '',
     id: '',
-    type: ''
+    type: '',
   },
   buyTicket: {
     isOpen: false,
@@ -36,9 +38,16 @@ const initialState = {
   detailPartner: {
     isOpen: false,
     id: '',
+    status: '',
+  },
+  DetailDriverPartner: {
+    isOpen: false,
+    id: '',
     type: '',
     status: '',
   },
+  addUtility: false,
+  addVoucher: false,
 }
 
 const generalModalSlice = createSlice({
@@ -63,16 +72,39 @@ const generalModalSlice = createSlice({
       state[action.payload.name] = action.payload.isOpen
     },
     setDetailModalVisible: (state, action) => {
-      const {isOpen, ...modalProps } = action.payload
+      const { isOpen, ...modalProps } = action.payload
       state.detailPartner = {
         ...state.detailPartner,
         isOpen,
-        ...modalProps
+        ...modalProps,
+        ...modalProps,
       }
+    },
+    setDetailDriverModalVisible: (state, action) => {
+      const { isOpen, ...modalProps } = action.payload
+      state.DetailDriverPartner = {
+        ...state.DetailDriverPartner,
+        isOpen,
+        ...modalProps,
+      }
+    },
+    setAddVoucherVisible: (state, action) => {
+      state.addVoucher = action.payload
+    },
+    setAddUtilityModalVisible: (state, action) => {
+      state.addUtility = action.payload
     },
   },
 })
 
-export const { setConfirmModalVisible, setTicketModalVisible, setLoadingModalVisible, setDetailModalVisible } =
-  generalModalSlice.actions
+export const {
+  setConfirmModalVisible,
+  setTicketModalVisible,
+  setLoadingModalVisible,
+  setDetailModalVisible,
+  setDetailDriverModalVisible,
+  setAddVoucherVisible,
+  setAddUtilityModalVisible
+} = generalModalSlice.actions
+
 export default generalModalSlice.reducer

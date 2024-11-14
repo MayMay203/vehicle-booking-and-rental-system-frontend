@@ -48,4 +48,5 @@ export const images = {
   guide_vehicle_insurance_2: require('./guide-vehicle-insurance-2.png'),
   guide_registration_certificate_1: require('./guide-registration-certificate-1.png'),
   guide_registration_certificate_2: require('./guide-registration-certificate-2.png'),
+  addImage: require('./add-image.png'),
 }

@@ -1,122 +1,177 @@
-.header{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 4px;
-    flex: 1;
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 4px;
+  flex: 1;
 }
 
-.title-header{
-    font-size: 2rem;
-    font-weight: 600;
+.title-header {
+  font-size: 2rem;
+  font-weight: 600;
 }
 
-.custom-modal{
-    font-size: 1.4rem;
+.custom-modal {
+  font-size: 1.4rem;
 }
 
-.title{
-    font-weight: 600;
-    font-size: 1.5rem;
+.title {
+  font-weight: 600;
+  font-size: 1.5rem;
 }
 
-.input-wrapper{
-    display: flex;
-    column-gap: 12px;
-    background-color: var(--primary-bg);
-    padding: 12px;
-    border-radius: 6px;
+.input-wrapper {
+  display: flex;
+  column-gap: 12px;
+  background-color: var(--primary-bg);
+  padding: 12px;
+  border-radius: 6px;
 }
 
-.input-text{
-    padding: 8px;
-    font-size: 1.4rem;
+.input-text {
+  padding: 8px;
+  font-size: 1.4rem;
 }
 
-.info{
-    flex: 1;
+.info {
+  flex: 1;
 }
 
-.icon{
-    font-size: 1.7rem;
-    color: var(--primary-color)
+.icon {
+  font-size: 1.7rem;
+  color: var(--primary-color);
 }
 
-.line{
-    display: block;
-    width: 100%;
-    height: 1px;
-    background-color: var(--primary-color);
+.line {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: var(--primary-color);
 }
 
-.sale-off{
-    color: #E20D0D;
+.sale-off {
+  color: #e20d0d;
 }
 
-.rule{
-    width: 80%;
-    text-align: center;
-    margin: 20px auto 0;
-    line-height: 1.4;
+.rule {
+  width: 80%;
+  text-align: center;
+  margin: 20px auto 0;
+  line-height: 1.4;
 }
 
-.btn-pay{
-    color: var(--primary-color);
-    background-color: var(--primary-bg);
-    border-radius: 6px;
+.btn-pay {
+  color: var(--primary-color);
+  background-color: var(--primary-bg);
+  border-radius: 6px;
 }
 
-.btn-cancel{
-    border-radius: 4px;
-    background-color: #fff;
-    color: var(--primary-color);
-    border-color: var(--primary-color);
+.btn-cancel {
+  border-radius: 4px;
+  background-color: #fff;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
 
-    &:hover{
-        opacity: 0.9;
-    }
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
-.message{
-    line-height: 1.4;
+.message {
+  line-height: 1.4;
 }
 
-.modal-actions{
-    margin-bottom: -18px;
-    justify-content: center!important;
+.modal-actions {
+  margin-bottom: -18px;
+  justify-content: center !important;
 }
 
-.image-partner{
-    object-fit: cover;
-    width: 220px;
-    height: 200px;
-    border-radius: 10px;
+.image-partner {
+  object-fit: cover;
+  width: 220px;
+  height: 200px;
+  border-radius: 10px;
 }
 
-.custom{
-    justify-content: initial;
-    font-size: 1.6rem;
-    column-gap: 14px;
-    padding: 4px 0;
-    font-weight: 400!important;
+.custom {
+  justify-content: initial;
+  font-size: 1.6rem;
+  column-gap: 14px;
+  padding: 4px 0;
+  font-weight: 500 !important;
 
-    &:first-child{
-        background-color: initial;
-        color: initial;
-        font-weight: 500;
-    }
+  &:first-child {
+    background-color: initial;
+    color: initial;
+    font-weight: 500;
+  }
 }
 
-.detail-description{
-    padding: 12px;
-    line-height: 1.4;
+.detail-description {
+  padding: 12px;
+  line-height: 1.4;
 }
 
-.list{
-    list-style-type: disc;
-    padding: 4px 40px;
+.list {
+  list-style-type: disc;
+  padding: 4px 40px;
 }
 
-.line-height-1-4{
-    line-height: 1.4;
+.line-height-1-4 {
+  line-height: 1.4;
+}
+
+.active {
+  background-color: var(--orange-color) !important;
+  color: #fff !important;
+}
+
+.note {
+  display: inline-block;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  font-style: italic;
+  text-align: center;
+  margin-top: 14px;
+}
+
+.date-wrapper {
+  margin: 8px 0;
+  row-gap: 12px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  & ~ .date-wrapper {
+    margin: 16px 0;
+  }
+}
+
+.custom-date-picker {
+  height: 44px;
+  padding: 8px;
+  width: 100%;
+}
+
+.choose-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.choose-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.input-file {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
 }

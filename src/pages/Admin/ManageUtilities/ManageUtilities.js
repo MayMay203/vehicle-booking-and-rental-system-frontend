@@ -1,12 +1,15 @@
-import classNames from "classnames/bind"
-import styles from './Utility.module.scss'
-import Button from "~/components/Button"
-import { Table } from "react-bootstrap"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBottleWater, faEdit, faFan, faHammer, faMattressPillow, faTrash } from "@fortawesome/free-solid-svg-icons"
-import TxtSearch from "~/components/TxtSearch"
+import classNames from 'classnames/bind'
+import styles from './ManageUtilities.module.scss'
+import Button from '~/components/Button'
+import { Table } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBottleWater, faEdit, faFan, faHammer, faMattressPillow, faTrash } from '@fortawesome/free-solid-svg-icons'
+import TxtSearch from '~/components/TxtSearch'
+import { useDispatch } from 'react-redux'
+import { setAddUtilityModalVisible } from '~/redux/slices/generalModalSlice'
 const cx = classNames.bind(styles)
- function Utility(){
+function ManageUtilities() {
+  const dispatch = useDispatch()
   const listUtilities = [
     { id: 1, img: faBottleWater, name: 'Nước uống', description: 'Nhà xe có phục vụ nước uống cho hành khách.' },
     { id: 2, img: faMattressPillow, name: 'Gối nằm', description: 'Trên xe có trang bị gối nằm.' },
@@ -26,6 +29,7 @@ const cx = classNames.bind(styles)
     { id: 11, img: faBottleWater, name: 'Nước uống', description: 'Nhà xe có phục vụ nước uống cho hành khách.' },
     { id: 12, img: faBottleWater, name: 'Nước uống', description: 'Nhà xe có phục vụ nước uống cho hành khách.' },
   ]
+
   return (
     <div className="container">
       <div className={cx('header')}>
@@ -33,7 +37,7 @@ const cx = classNames.bind(styles)
       </div>
       <div className={cx('d-flex', 'mb-4')}>
         <TxtSearch content={'Tìm tên tiện ích'}></TxtSearch>
-        <Button primary className={cx('btn-add')}>
+        <Button primary className={cx('btn-add')} onClick={()=>dispatch(setAddUtilityModalVisible(true))}>
           Thêm tiện ích
         </Button>
       </div>
@@ -81,7 +85,5 @@ const cx = classNames.bind(styles)
       </div>
     </div>
   )
-
-
- }
- export default Utility
+}
+export default ManageUtilities
