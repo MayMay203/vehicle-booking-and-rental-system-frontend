@@ -1,0 +1,87 @@
+@use '../../../../abstracts' as abstracts;
+.header {
+  text-align: center;
+  text-transform: uppercase;
+  margin: 2rem 0;
+  font-size: 3.4rem;
+  font-weight: 500;
+  color: #d5420c;
+}
+.txt-header{
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+.max-description {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  text-align: end;
+}
+.content {
+  padding: 0.5rem 2rem;
+  //   margin-left: 2rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+  text-align: justify;
+  line-height: 5rem;
+  @include abstracts.screen(md) {
+    font-size: 1.5rem;
+    line-height: 2.8rem;
+  }
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+    line-height: 2.5rem;
+  }
+}
+.padding {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+.content-tab {
+  // display: flex;
+  //   width: 80%;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2%;
+  @include abstracts.screen(sm) {
+    width: 100%;
+  }
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.rolling-content-tab {
+  max-height: 100rem;
+  overflow-y: auto;
+}
+.image-vehicle {
+  width: 32rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin: 0 2rem;
+  // height: 20rem;
+}
+.nav-button-page {
+  font-size: 2rem;
+  padding: 1rem;
+  color: #e20d0d;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+.nav-button-page:hover,
+.nav-button-page:active,
+.nav-button-page:focus {
+  background-color: #fcd4c6;
+  color: #e20d0d;
+  outline: none;
+  box-shadow: none;
+}
+.nav-button-page:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  background-color: white;
+}

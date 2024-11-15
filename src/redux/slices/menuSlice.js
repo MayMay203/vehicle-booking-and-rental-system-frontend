@@ -26,6 +26,13 @@ const menus = {
     { content: 'Chính sách', to: config.routes.policyManage },
     { content: 'Thống kê', to: config.routes.statisticsBus },
   ],
+  carRentalPartnerMenu: [
+    { content: 'Dịch vụ', to: config.routes.serviceManage },
+    { content: 'Đơn thuê', to: config.routes.busTicket },
+    // { content: 'Xe', to: config.routes.bus },
+    { content: 'Chính sách', to: config.routes.policyManage },
+    { content: 'Thống kê', to: config.routes.statisticsBus },
+  ],
 }
 
 const initialState = { currentMenu: menus.userMenu }
@@ -42,3 +49,4 @@ const menuSlice = createSlice({
 
 export const { setMenu } = menuSlice.actions
 export default menuSlice.reducer
+

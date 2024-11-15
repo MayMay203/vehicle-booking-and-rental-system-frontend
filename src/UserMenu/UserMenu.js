@@ -62,7 +62,7 @@ function UserMenu() {
             </Button>
           )}
           {currentUser.roles.includes(config.variables.carRentalPartner) && (
-            <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('busPartnerMenu'))}>
+            <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('carRentalPartnerMenu'))}>
               Đối tác cho thuê xe
             </Button>
           )}

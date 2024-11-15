@@ -1,0 +1,86 @@
+@use '../../../abstracts' as abstracts;
+.header{
+    text-align: center;
+    text-transform: uppercase;
+    margin: 2rem 0;
+    font-size: 3rem;
+    font-weight: 500;
+    color: #D5420C;
+}
+.txt-mode{
+    color: #0c381e;
+}
+.txt-green{
+    color: #10ad51;
+}
+.icon-off{
+    font-size: 2.6rem;
+    margin-left: 1rem;
+    color: #0c381e;
+    &:hover{
+        cursor: pointer;
+    }
+}
+.icon-on{
+    font-size: 2.6rem;
+    margin-left: 1rem;
+    color: #10ad51;
+    &:hover{
+        cursor: pointer;
+    }
+}
+.cursor-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.serial-number{
+    display: flex;
+    border-radius: 3px;
+    // background-color: #FCD4C6;
+    border: 1px solid #FCD4C6;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-right: 0.1rem;
+}
+.txt{
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: black;
+    &:focus {
+        border-color: #FF9800;
+        box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); 
+    }
+}
+.add-policy{
+    font-size: 2.5rem;
+    margin-left: 0.5rem;
+    text-align: center;
+    margin-top: 0.35rem;
+    color: #FCD4C6;
+    &:hover{
+        cursor: pointer;
+        color: #FF7F50;
+    }
+}
+.warn {
+  font-size: 1.4rem;
+  background: none;
+  border: none;
+  color: red;
+}
+.btn {
+  min-width: 12rem !important;
+  height: 3.4rem;
+  font-size: 1.7rem;
+  font-weight: 400;
+  margin: 0 2rem;
+  @include abstracts.screen(sm) {
+    min-width: 7rem !important;
+    height: 2.5rem;
+  }
+}

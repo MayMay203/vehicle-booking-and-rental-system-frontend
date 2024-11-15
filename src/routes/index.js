@@ -35,6 +35,10 @@ import UpdateBus from '~/pages/BusPartner/BusManage/UpdateBus/index.js'
 import PolicyManage from '~/pages/BusPartner/PolicyManage'
 import StatisticsBus from '~/pages/BusPartner/StatisticsBus'
 import BusTicket from '~/pages/BusPartner/BusTicketManage/BusTicket'
+import ServiceManage from '~/pages/VehiclePartner/ServiceManage/ServiceManage'
+import DetailServiceRental from '~/pages/VehiclePartner/ServiceManage/DetailServiceRental'
+import AddServiceRental from '~/pages/VehiclePartner/ServiceManage/AddServiceRental'
+import EditServiceRental from '~/pages/VehiclePartner/ServiceManage/EditServiceRental'
 
 const publicRoutes = [
   {
@@ -165,6 +169,22 @@ const publicRoutes = [
   {
     path: config.routes.statisticsBus,
     component: StatisticsBus,
+  },
+  {
+    path: config.routes.serviceManage,
+    component: ServiceManage,
+  },
+  {
+    path: config.routes.detailServiceRental,
+    component: DetailServiceRental,
+  },
+  {
+    path: config.routes.editServiceRental,
+    component: EditServiceRental,
+  },
+  {
+    path: config.routes.addServiceRental,
+    component: AddServiceRental,
   },
   {
     path: config.routes.message,
