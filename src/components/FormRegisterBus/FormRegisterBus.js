@@ -63,7 +63,7 @@ function FormRegisterBus() {
           console.log(`${key}:`, value)
         }
         formDocs.businessImages.forEach((imageBase64, index) => {
-          // if(imageBase64 !== null){
+          if(imageBase64 !== null){
             const base64DataBusiness = imageBase64.split(',')[1] // Lấy phần base64 từ chuỗi (loại bỏ phần data:image/png;base64,...)
             const byteCharactersBusiness = atob(base64DataBusiness) // Giải mã base64 thành chuỗi ký tự
             const byteNumbersBusiness = new Array(byteCharactersBusiness.length)
@@ -73,7 +73,7 @@ function FormRegisterBus() {
             const imageBlobBusiness = new Blob([byteArrayBusiness], { type: 'image/png' }) // Tạo Blob từ mảng byte
 
             formDataRegisterBus.append('businessImages', imageBlobBusiness, `businessImages${index + 1}.png`)
-          // }
+          }
         })
 
         const base64DataAvatar = formDocs.imgAvatar.split(',')[1]
