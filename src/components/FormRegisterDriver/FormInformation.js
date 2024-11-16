@@ -174,7 +174,7 @@ function FormInformation({ setActiveNextFormInfor, formInfor, handleChangeFormIn
         </Form.Label>
         <Form.Control
           type="text"
-          placeholder="0842059055"
+          placeholder="xxxxxxxx55"
           name="phonenumber"
           aria-label="phonenumber"
           className={cx('txt', 'mb-0')}

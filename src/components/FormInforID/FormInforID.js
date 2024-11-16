@@ -13,6 +13,12 @@ function FormInforID({ updateActive, formInforID, handleSaveFormInforID }) {
   const [isCorrectDate, setIsCorrectDate] = useState(dateRegex.test(formData.dateOfIssue))
   const [isCorrectExpiryDate, setIsCorrectExpiryDate] = useState(dateRegex.test(formData.expiryDate))
   // const [allImagesSelected, setAllImagesSelected] = useState(formData.im)
+  const placeOfIssue = [
+    { value: '', label: 'Chọn nơi cấp' },
+    { value: 'Cục Cảnh sát Q.lý HC về TTXH', label: 'Cục Cảnh sát Q.lý HC về TTXH' },
+    { value: 'Cục CS ĐKQL CT và DLQG về DC', label: 'Cục CS ĐKQL CT và DLQG về DC' },
+    { value: 'Bộ công an', label: 'Bộ công an' },
+  ]
   useEffect(() => {
     // const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
     // Tạo một bản sao của formData nhưng loại bỏ trường citizenImages
@@ -103,15 +109,19 @@ function FormInforID({ updateActive, formInforID, handleSaveFormInforID }) {
         <Form.Label>
           Nơi cấp <span className="text-danger">*</span>
         </Form.Label>
-        <Form.Control
+        <Form.Select
           name="place"
-          type="text"
-          placeholder="Công an trật tự an toàn..."
           aria-label="place"
+          className={cx('txt', 'selectbox')}
           onChange={handleInputChange}
-          className={cx('txt')}
           value={formData.place}
-        />
+        >
+          {placeOfIssue.map((place, index) => (
+            <option key={index} value={place.value}>
+              {place.label}
+            </option>
+          ))}
+        </Form.Select>
       </Form.Group>
       <Form.Group className={cx('txt', 'mb-3')} controlId="formInforID.ControlInput4">
         <Form.Label>

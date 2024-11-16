@@ -138,7 +138,9 @@ function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }
           className={cx('txt')}
           onChange={handleInputChange}
           value={formData.description}
+          maxLength={500}
         />
+        <p className={cx('max-description')}>{formData.description.length}/500</p>
       </Form.Group>
     </Form>
   )

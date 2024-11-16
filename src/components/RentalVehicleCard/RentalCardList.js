@@ -5,13 +5,13 @@ import RentalCardItem from './RentalCardItem'
 import PropTypes from 'prop-types'
 
 const cx = classNames.bind(styles)
-function RentalCardList({ maxColumns = 4, typeService }) {
+function RentalCardList({ maxColumns = 4, typeService, role }) {
   const cards = [
-    <RentalCardItem key={1} typeService={typeService} />,
-    <RentalCardItem key={2} typeService={typeService} />,
-    <RentalCardItem key={3} typeService={typeService} />,
-    <RentalCardItem key={4} typeService={typeService} />,
-    <RentalCardItem key={5} typeService={typeService} />,
+    <RentalCardItem key={1} typeService={typeService} role={role} />,
+    <RentalCardItem key={2} typeService={typeService} role={role} />,
+    <RentalCardItem key={3} typeService={typeService} role={role} />,
+    <RentalCardItem key={4} typeService={typeService} role={role} />,
+    <RentalCardItem key={5} typeService={typeService} role={role} />,
   ]
 
   const numGhostColumns = maxColumns - (cards.length % maxColumns || maxColumns)

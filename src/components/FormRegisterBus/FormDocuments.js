@@ -129,7 +129,7 @@ function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }
         ))}
         <FontAwesomeIcon icon={faSquarePlus} className={cx('add-policy')} onClick={handleAddPolicy} />
       </Form.Group>
-      <Form.Group className={cx('txt', 'mb-3')} controlId="formMoreInfor.ControlTextarea3">
+      <Form.Group className={cx('txt')} controlId="formMoreInfor.ControlTextarea3">
         <Form.Label>
           Mô tả<span className="text-danger">*</span>
         </Form.Label>
@@ -140,7 +140,9 @@ function FormDocuments({ setActiveNextFormDocs, formDocs, handleFormDocsChange }
           className={cx('txt')}
           onChange={handleInputChange}
           value={formData.description}
+          maxLength={500}
         />
+        <p className={cx('max-description')}>{formData.description.length}/500</p>
       </Form.Group>
     </Form>
   )

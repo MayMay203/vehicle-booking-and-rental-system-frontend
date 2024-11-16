@@ -20,9 +20,10 @@ function TakePhotoRegister({ id, initialNumberPhoto, name_photos, handleSave, ob
   }
   //   const [isSaved, setIsSaved] = useState(false)
   const [warningMessage, setWarningMessage] = useState('')
+  const maxSizeImage = 3 * 1024 * 1024;
   const handleFileChange = (index, event) => {
     const file = event.target.files[0]
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith('image/') && file.size <= maxSizeImage) {
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = (e) => {
@@ -39,6 +40,8 @@ function TakePhotoRegister({ id, initialNumberPhoto, name_photos, handleSave, ob
       }
     } else if (file && !file.type.startsWith('image/')) {
       setWarningMessage('Vui lòng chọn file ảnh!')
+    } else if (file && file.type.startsWith('image/') && file.size > maxSizeImage) {
+      setWarningMessage('Vui lòng chọn file có kích thước <= 3MB !')
     }
   }
 
