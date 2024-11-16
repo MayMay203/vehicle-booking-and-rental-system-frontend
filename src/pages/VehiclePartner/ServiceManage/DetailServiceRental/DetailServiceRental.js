@@ -90,7 +90,7 @@ function DetailServiceRental() {
   return (
     <div className="container mb-5 mt-5">
       <div className={cx('header', 'd-flex')}>
-        <p className={cx('justify-content-center', 'txt-header')}>Dịch vụ cho thuê xe</p>
+        <p className={cx('justify-content-center', 'txt-header')}>Chi tiết dịch vụ cho thuê xe</p>
       </div>
       <Tabs defaultActiveKey="information" id="tab-detail-vehicle" className={cx('justify-content-center')}>
         <Tab eventKey="information" title="Thông tin xe">

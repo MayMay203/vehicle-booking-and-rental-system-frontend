@@ -164,6 +164,7 @@ function TableListTenant(){
         showSorterTooltip={{
           target: 'sorter-icon',
         }}
+        className={cx('')}
       />
     )
 }

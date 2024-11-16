@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import {
   faChevronLeft,
   faChevronRight,
-  faTrash,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 const cx = classNames.bind(styles)
@@ -89,8 +88,8 @@ function EditServiceRental(){
   return (
     <div className="container mb-5 mt-5">
       <div className={cx('header', 'd-flex')}>
-        <p className={cx('justify-content-center', 'txt-header')}>Dịch vụ cho thuê xe</p>
-        <FontAwesomeIcon icon={faTrash} className={cx('icon', 'icon-edit', 'flex-end')}></FontAwesomeIcon>
+        <p className={cx('justify-content-center', 'txt-header')}>Cập nhật dịch vụ cho thuê xe</p>
+        {/* <FontAwesomeIcon icon={faTrash} className={cx('icon', 'icon-edit', 'flex-end')}></FontAwesomeIcon> */}
       </div>
       <Row className={cx('content-tab')}>
         <FormInforServiceRental formData={formData} handleInputChange={handleInputChange}></FormInforServiceRental>

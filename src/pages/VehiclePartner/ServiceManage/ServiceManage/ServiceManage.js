@@ -64,7 +64,7 @@ function ServiceManage(){
             </Button>
           </Col>
         </Row>
-        <TableListRentalService></TableListRentalService>
+        <TableListRentalService typeService={typeService}></TableListRentalService>
         <div className="mb-5 mt-5"></div>
       </div>
     )
