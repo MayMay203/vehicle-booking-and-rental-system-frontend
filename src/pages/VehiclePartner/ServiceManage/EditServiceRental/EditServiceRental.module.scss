@@ -7,10 +7,10 @@
   font-weight: 500;
   color: #d5420c;
 }
-.txt-header{
-    flex: 1;
-    text-align: center;
-    margin: 0;
+.txt-header {
+  flex: 1;
+  text-align: center;
+  margin: 0;
 }
 
 .content {
@@ -78,21 +78,28 @@
   cursor: not-allowed;
   background-color: white;
 }
-.wrap-icon{
-    padding: 0 2%;
+.wrap-icon {
+  padding: 0 2%;
 }
-.icon{
-    background-color: rgba($color: #D34714, $alpha: 0.5);
-    padding: 1rem;
-    font-size: 2rem;
-    border-radius: 5px;
-    color: white;
-    margin: 0 0.5rem;
-    &:hover{
-        background-color: rgba($color: #D34714, $alpha: 1);
-        cursor: pointer;
-    }
-    &.active{
-        background-color: rgba($color: #D34714, $alpha: 1);
-    }
+.icon {
+  background-color: rgba($color: #d34714, $alpha: 0.5);
+  padding: 1rem;
+  font-size: 2rem;
+  border-radius: 5px;
+  color: white;
+  margin: 0 0.5rem;
+  &:hover {
+    background-color: rgba($color: #d34714, $alpha: 1);
+    cursor: pointer;
+  }
+  &.active {
+    background-color: rgba($color: #d34714, $alpha: 1);
+  }
+}
+.btn{
+  flex: 1;
+  max-width: 10rem;
+  justify-content: center;
+  align-items: center;
+  margin: 5rem 0;
 }

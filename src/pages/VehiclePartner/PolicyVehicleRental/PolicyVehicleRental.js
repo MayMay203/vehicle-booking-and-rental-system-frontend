@@ -1,5 +1,11 @@
 import classNames from "classnames/bind"
 import styles from './PolicyVehicleRental.module.scss'
+import { useState } from 'react'
+import { Alert, Col, Form, Row } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSquarePlus, faSquareMinus, faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons'
+import TxtSearch from '~/components/TxtSearch'
+import Button from '~/components/Button'
 const cx = classNames.bind(styles)
 function PolicyVehicleRental(){
     const initialPolicies = [

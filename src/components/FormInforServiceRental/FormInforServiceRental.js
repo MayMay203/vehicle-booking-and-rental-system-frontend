@@ -93,7 +93,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
     <>
       <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
         <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput1">
-          <Form.Label className="mb-3">Hãng xe</Form.Label>
+          <Form.Label className="mb-3">Hãng xe<span className="text-danger">*</span></Form.Label>
           <InputGroup className={cx('txt', 'infor-item')}>
             <Form.Control
               type="text"
@@ -112,7 +112,8 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
         </Form.Group>
 
         <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput2">
-          <Form.Label className="mb-3">Đời xe</Form.Label>
+          <Form.Label className="mb-3">
+            Đời xe <span className="text-danger">*</span></Form.Label>
           <InputGroup className={cx('txt', 'infor-item')}>
             <Form.Control
               type="text"
@@ -129,7 +130,8 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           </InputGroup>
         </Form.Group>
         <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput3">
-          <Form.Label className="mb-3">Loại dịch vụ</Form.Label>
+          <Form.Label className="mb-3">
+            Loại dịch vụ<span className="text-danger">*</span></Form.Label>
           <Form.Select
             value={formData.type_service}
             aria-label="type_service"
@@ -145,7 +147,8 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           </Form.Select>
         </Form.Group>
         <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput4">
-          <Form.Label className="mb-3">Giá tính theo</Form.Label>
+          <Form.Label className="mb-3">
+            Giá tính theo<span className="text-danger">*</span></Form.Label>
           <Form.Select
             name="price_according"
             aria-label="price_according"
@@ -160,7 +163,8 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           </Form.Select>
         </Form.Group>
         <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput5">
-          <Form.Label className="mb-3">Địa chỉ</Form.Label>
+          <Form.Label className="mb-3">
+            Địa chỉ<span className="text-danger">*</span></Form.Label>
           <Form.Select
             value={formData.location}
             name="location"
@@ -179,7 +183,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
       </Col>
       <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
         <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput11">
-          <Form.Label className="mb-3">Loại xe</Form.Label>
+          <Form.Label className="mb-3">Loại xe<span className="text-danger">*</span></Form.Label>
           <Form.Select
             value={formData.type_vehicle}
             aria-label="type_vehicle"
@@ -195,7 +199,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           </Form.Select>
         </Form.Group>
         <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput6">
-          <Form.Label className="mb-3">Số lượng</Form.Label>
+          <Form.Label className="mb-3">Số lượng<span className="text-danger">*</span></Form.Label>
           <InputGroup className={cx('txt', 'infor-item')}>
             <Form.Control
               type="text"
@@ -215,8 +219,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           {(formData.type_service === 'Thuê xe tự lái' || formData.type_service === 'Cả 2 dịch vụ') && (
             <Form.Group className={cx('txt', 'padding-s', 'mb-5')} controlId="formInfor.ControlInput7">
               <Form.Label className="mb-3">
-                Giá thuê tự lái<span className="text-danger">*</span>
-              </Form.Label>
+                Giá thuê tự lái<span className="text-danger">*</span></Form.Label>
               <InputGroup className={cx('txt', 'infor-item')}>
                 <Form.Control
                   type="text"
@@ -238,8 +241,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           {(formData.type_service === 'Thuê xe có người lái' || formData.type_service === 'Cả 2 dịch vụ') && (
             <Form.Group className={cx('txt', 'padding-s', 'mb-5')} controlId="formInfor.ControlInput8">
               <Form.Label className="mb-3">
-                Giá thuê có người lái<span className="text-danger">*</span>
-              </Form.Label>
+                Giá thuê có người lái<span className="text-danger">*</span></Form.Label>
               <InputGroup className={cx('txt', 'infor-item')}>
                 <Form.Control
                   type="text"
@@ -259,7 +261,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           )}
         </div>
         <Form.Group className={cx('txt', 'mb-5', 'padding')} controlId="formInfor.ControlInput9">
-          <Form.Label className="mb-3">Giảm giá</Form.Label>
+          <Form.Label className="mb-3">Giảm giá<span className="text-danger">*</span></Form.Label>
           <InputGroup className={cx('txt', 'infor-item')}>
             <Form.Control
               type="text"
@@ -277,8 +279,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
         </Form.Group>
         <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput10">
           <Form.Label className="mb-3">
-            Trạng thái<span className="text-danger">*</span>
-          </Form.Label>
+            Trạng thái<span className="text-danger">*</span></Form.Label>
           <Form.Select
             name="status"
             aria-label="status"
@@ -297,7 +298,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
         </Form.Group>
       </Col>
       <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput9">
-        <Form.Label className="mb-3">Mô tả</Form.Label>
+        <Form.Label className="mb-3">Mô tả<span className="text-danger">*</span></Form.Label>
         <Form.Control
           name="description"
           as="textarea"
@@ -312,7 +313,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
         <p className={cx('max-description')}>{formData.description.length}/500</p>
       </Form.Group>
       <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput9">
-        <Form.Label className="mb-3">Tiện ích</Form.Label>
+        <Form.Label className="mb-3">Tiện ích<span className="text-danger">*</span></Form.Label>
         <Form.Control
           name="utility"
           as="textarea"

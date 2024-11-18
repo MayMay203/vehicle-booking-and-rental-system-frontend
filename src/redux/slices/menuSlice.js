@@ -31,7 +31,7 @@ const menus = {
     { content: 'Đơn thuê', to: config.routes.busTicket },
     // { content: 'Xe', to: config.routes.bus },
     { content: 'Chính sách', to: config.routes.policyManage },
-    { content: 'Thống kê', to: config.routes.statisticsBus },
+    { content: 'Thống kê', to: config.routes.statistics },
   ],
 }
 
