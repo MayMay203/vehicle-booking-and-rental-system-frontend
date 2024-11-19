@@ -10,11 +10,14 @@ import CardsFeedbackPartner from '~/components/CardFeedbackPartner'
 import FormRegisterBus from '~/components/FormRegisterBus'
 import FormRegisterCarRental from '~/components/FormRegisterCarRental'
 import { createSearchParams, useLocation } from 'react-router-dom'
+import FormApprovedRegister from '~/components/FormApprovedRegister'
+import FormPendingApproveRegister from '~/components/FormPendingApproveRegister'
 const cx = classNames.bind(styles)
 function RegisterPartner() {
   const location = useLocation()
   const searchParam = createSearchParams(location.search)
   const typePartner = searchParam.get('type')
+  const status = searchParam.get('status')
   const driver = 'DRIVER_PARTNER'
   const carRental = 'CAR_RENTAL_PARTNER'
   const bus = 'BUS_PARTNER'
@@ -200,9 +203,19 @@ function RegisterPartner() {
         <Col xl="6" className={cx('wrap-right')}>
           <div className={cx('wrap-form')}>
             <div className={cx('form')}>
-              {typePartner === driver && <FormRegisterDriver></FormRegisterDriver>}
-              {typePartner === bus && <FormRegisterBus></FormRegisterBus>}
-              {typePartner === carRental && <FormRegisterCarRental></FormRegisterCarRental>}
+              {status === 'Not_registered_yet' ? (
+                <>
+                  {typePartner === driver && <FormRegisterDriver />}
+                  {typePartner === bus && <FormRegisterBus />}
+                  {typePartner === carRental && <FormRegisterCarRental />}
+                </>
+              ) : status === 'approved' ? (
+                <FormApprovedRegister />
+              ) : status === 'pending_approval' ? (
+                <FormPendingApproveRegister />
+              ) : (
+                <></>
+              )}
             </div>
             <div className={cx('bg-form', 'd-none', 'd-sm-block')}></div>
           </div>

@@ -19,9 +19,10 @@ import ModalChat from '~/components/ModalChat'
 import { faCaretDown, faCommentDots } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { config } from '~/config'
 import { setMenu } from '~/redux/slices/menuSlice'
+import { getStatusRegisterPartner } from '~/apiServices/user/getStatusRegisterPartner'
 
 const cx = classNames.bind(styles)
 function Header() {
@@ -70,7 +71,39 @@ function Header() {
   const handleCloseMessage = () => {
     setIsShowMessage(false)
   }
-
+  const [status, setStatus] = useState('')
+  console.log('Status:', status)
+  const navigate = useNavigate()
+  const getStatusParter = async (type) => {
+    try {
+      const response = await getStatusRegisterPartner(type)
+      console.log(response)
+      let statusValue = ''
+      if (response.info === 'PENDING_APPROVAL') {
+        statusValue = 'pending_approval'
+        setStatus(statusValue)
+      } else if (response.info === 'APPROVED') {
+        statusValue = 'approved'
+        setStatus(statusValue)
+      } else if (response.info === 'Not registered yet') {
+        statusValue = 'Not_registered_yet'
+        setStatus(statusValue)
+      }
+      
+      if (type === 'DRIVER') {
+        const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+        navigate(`${route}?type=${config.variables.driverPartner}&status=${statusValue}`)
+      } else if (type === 'BUS_PARTNER') {
+        const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+        navigate(`${route}?type=${config.variables.busPartner}&status=${statusValue}`)
+      } else if (type === 'CAR_RENTAL_PARTNER') {
+        const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+        navigate(`${route}?type=${config.variables.carRentalPartner}&status=${statusValue}`)
+      }
+    } catch (error) {
+      console.error('Lỗi khi gọi API:', error)
+    }
+  }
   return (
     <header className={cx('wrapper')}>
       {/* Mobile header */}
@@ -181,10 +214,10 @@ function Header() {
                       <div className={cx('wrap-link')}>
                         <NavLink
                           className={cx('link')}
-                          to={`${
-                            currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-                          }?type=${config.variables.busPartner}`}
-                          onClick={() => setShowDetailPartner(false)}
+                          onClick={() => {
+                            setShowDetailPartner(false)
+                            getStatusParter('BUS_PARTNER')
+                          }}
                         >
                           Đối tác nhà xe
                         </NavLink>
@@ -192,10 +225,10 @@ function Header() {
                       <div className={cx('wrap-link')}>
                         <NavLink
                           className={cx('link')}
-                          to={`${
-                            currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-                          }?type=${config.variables.carRentalPartner}`}
-                          onClick={() => setShowDetailPartner(false)}
+                          onClick={() => {
+                            setShowDetailPartner(false)
+                            getStatusParter('CAR_RENTAL_PARTNER')
+                          }}
                         >
                           Đối tác cho thuê xe
                         </NavLink>
@@ -203,10 +236,10 @@ function Header() {
                       <div className={cx('wrap-link')}>
                         <NavLink
                           className={cx('link')}
-                          to={`${
-                            currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-                          }?type=${config.variables.driverPartner}`}
-                          onClick={() => setShowDetailPartner(false)}
+                          onClick={() => {
+                            setShowDetailPartner(false)
+                            getStatusParter('DRIVER')
+                          }}
                         >
                           Đối tác tài xế
                         </NavLink>
@@ -361,12 +394,10 @@ function Header() {
                         <div className={cx('wrap-link')}>
                           <NavLink
                             className={cx('link')}
-                            to={`${
-                              currentUser.roles?.includes('ADMIN')
-                                ? config.routes.managePartners
-                                : config.routes.partner
-                            }?type=${config.variables.busPartner}`}
-                            onClick={() => setShowDetailPartner(false)}
+                            onClick={() => {
+                              setShowDetailPartner(false)
+                              getStatusParter('BUS_PARTNER')
+                            }}
                           >
                             Đối tác nhà xe
                           </NavLink>
@@ -374,12 +405,10 @@ function Header() {
                         <div className={cx('wrap-link')}>
                           <NavLink
                             className={cx('link')}
-                            to={`${
-                              currentUser.roles?.includes('ADMIN')
-                                ? config.routes.managePartners
-                                : config.routes.partner
-                            }?type=${config.variables.carRentalPartner}`}
-                            onClick={() => setShowDetailPartner(false)}
+                            onClick={() => {
+                              setShowDetailPartner(false)
+                              getStatusParter('CAR_RENTAL_PARTNER')
+                            }}
                           >
                             Đối tác cho thuê xe
                           </NavLink>
@@ -387,12 +416,10 @@ function Header() {
                         <div className={cx('wrap-link')}>
                           <NavLink
                             className={cx('link')}
-                            to={`${
-                              currentUser.roles?.includes('ADMIN')
-                                ? config.routes.managePartners
-                                : config.routes.partner
-                            }?type=${config.variables.driverPartner}`}
-                            onClick={() => setShowDetailPartner(false)}
+                            onClick={() => {
+                              setShowDetailPartner(false)
+                              getStatusParter('DRIVER')
+                            }}
                           >
                             Đối tác tài xế
                           </NavLink>
@@ -403,9 +430,14 @@ function Header() {
                 )}
                 onClickOutside={() => setShowDetailPartner(false)}
               >
-                <button className={cx('drop-down')} onClick={() => {isLogin
-                  ? setShowDetailPartner((prev) => !prev)
-                  : dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))}}>
+                <button
+                  className={cx('drop-down')}
+                  onClick={() => {
+                    isLogin
+                      ? setShowDetailPartner((prev) => !prev)
+                      : dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+                  }}
+                >
                   {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
                   <FontAwesomeIcon icon={faCaretDown} />
                 </button>
