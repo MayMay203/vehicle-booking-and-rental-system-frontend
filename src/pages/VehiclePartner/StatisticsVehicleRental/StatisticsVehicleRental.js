@@ -2,6 +2,7 @@ import classNames from 'classnames/bind'
 import styles from './StatisticsVehicleRental.module.scss'
 import { Tab, Tabs } from 'react-bootstrap'
 import StatsNumberVehicleRental from '~/components/StatsNumberVehicleRental/StatsNumberVehicleRental'
+import StatsRevenueRental from '~/components/StatsRevenueRental'
 const cx = classNames.bind(styles)
 function StatisticsVehicleRental() {
   return (
@@ -11,7 +12,7 @@ function StatisticsVehicleRental() {
           <StatsNumberVehicleRental></StatsNumberVehicleRental>
         </Tab>
         <Tab eventKey="Doanh thu" title="Doanh thu" className={cx('title-tab')}>
-          Doanh thu
+          <StatsRevenueRental></StatsRevenueRental>
         </Tab>
       </Tabs>
     </div>

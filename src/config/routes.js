@@ -35,6 +35,7 @@ export const routes = {
   addServiceRental: '/service-manage/add-service-rental',
   policyVehicleRental: '/policy-vehicle-rental',
   statisticsVehicleRental: '/statistics-vehicle-rental',
+  orderManage: '/order-manage',
   managePartners: '/manage-partners',
   message: '/message',
   manageFeeService: '/manage-fee-service',
