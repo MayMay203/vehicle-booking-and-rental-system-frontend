@@ -1,12 +1,13 @@
 import classNames from 'classnames/bind'
 import styles from './OrderManage.module.scss'
 import { Table } from 'antd'
-import { useNavigate } from 'react-router-dom'
 import { Row } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faMessage } from '@fortawesome/free-solid-svg-icons'
 import { faSquare } from '@fortawesome/free-regular-svg-icons'
 import TxtSearch from '~/components/TxtSearch'
+import ModalDetailOrderRental from '~/components/ModalDetailOrderRental'
+import { useState } from 'react'
 const cx = classNames.bind(styles)
 function OrderManage() {
   const columns = [
@@ -81,7 +82,7 @@ function OrderManage() {
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
           style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-          onClick={() => handleViewBus(record.key)}
+          onClick={() => handleViewDetail(record.key)}
         />
       ),
     },
@@ -94,7 +95,7 @@ function OrderManage() {
         <FontAwesomeIcon
           icon={faSquare}
           style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
-        //   onClick={() => handleEditBus(record.key)}
+          //   onClick={() => handleEditBus(record.key)}
         />
       ),
     },
@@ -155,9 +156,9 @@ function OrderManage() {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-  const navigate = useNavigate()
-  const handleViewBus = (id) => {
-    navigate('detail-service-rental', { state: { enableEdit: false, busID: id } })
+  const [modalDetailShow, setModalDetailShow] = useState(false)
+  const handleViewDetail = (id) => {
+    setModalDetailShow(true)
   }
   return (
     <div className="container">
@@ -185,6 +186,7 @@ function OrderManage() {
         className={cx('')}
       />
       <div className="mb-5 mt-5"></div>
+      <ModalDetailOrderRental show={modalDetailShow} onHide={() => setModalDetailShow(false)} />
     </div>
   )
 }
