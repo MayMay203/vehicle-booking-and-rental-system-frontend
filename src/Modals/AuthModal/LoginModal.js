@@ -55,6 +55,7 @@ function LoginModal() {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await login(email, password)
       if (data.accountLogin.roles.includes('ADMIN')) dispatch(setMenu('adminMenu'))
+      else dispatch(setMenu('userMenu'))
       dispatch(setCurrentUser({ currentUser: data.accountLogin }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()
