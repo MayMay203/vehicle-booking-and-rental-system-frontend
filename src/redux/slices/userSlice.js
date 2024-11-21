@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getMyAccount } from '~/apiServices/getMyAccount'
 import { refreshToken } from '~/apiServices/refreshToken'
 import { checkExistCookie } from '~/utils/cookieUtils'
-import { generalModalNames, setConfirmModalVisible } from './generalModalSlice'
+// import { generalModalNames, setConfirmModalVisible } from './generalModalSlice'
 
 const initialState = {
   currentUser: {},
@@ -48,15 +48,15 @@ export const checkLoginSession = createAsyncThunk('user/checkLoginSession', asyn
   if (checkExistCookie('access_token')) return true
   const response = await refreshToken()
   if (!response) {
-    dispatch(
-      setConfirmModalVisible({
-        modalType: 'confirm',
-        isOpen: true,
-        title: 'Thông báo',
-        description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
-        name: generalModalNames.EXPIRED_SESSION,
-      }),
-    )
+    // dispatch(
+    //   setConfirmModalVisible({
+    //     modalType: 'confirm',
+    //     isOpen: true,
+    //     title: 'Thông báo',
+    //     description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
+    //     name: generalModalNames.EXPIRED_SESSION,
+    //   }),
+    // )
     dispatch(toggleLogin(false))
     return false
   }
