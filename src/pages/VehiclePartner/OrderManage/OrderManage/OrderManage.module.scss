@@ -1,0 +1,14 @@
+@use '../../../../abstracts' as abstracts;
+.header {
+  text-align: center;
+  text-transform: uppercase;
+  margin: 2rem 0;
+  font-size: 3rem;
+  font-weight: 500;
+  color: #d5420c;
+}
+.txt-header {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+}

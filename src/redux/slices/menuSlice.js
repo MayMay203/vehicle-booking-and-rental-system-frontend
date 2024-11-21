@@ -27,11 +27,11 @@ const menus = {
     { content: 'Thống kê', to: config.routes.statisticsBus },
   ],
   carRentalPartnerMenu: [
-    { content: 'Dịch vụ', to: config.routes.serviceManage },
-    { content: 'Đơn thuê', to: config.routes.busTicket },
+    { content: 'Dịch vụ cho thuê', to: config.routes.serviceManage },
+    { content: 'Đơn thuê xe', to: config.routes.orderManage },
     // { content: 'Xe', to: config.routes.bus },
     { content: 'Chính sách', to: config.routes.policyManage },
-    { content: 'Thống kê', to: config.routes.statisticsBus },
+    { content: 'Thống kê', to: config.routes.statisticsVehicleRental },
   ],
 }
 

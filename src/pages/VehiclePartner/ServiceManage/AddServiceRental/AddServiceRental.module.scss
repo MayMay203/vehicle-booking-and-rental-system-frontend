@@ -85,3 +85,10 @@
   cursor: not-allowed;
   background-color: white;
 }
+.btn{
+  flex: 1;
+  max-width: 10rem;
+  justify-content: center;
+  align-items: center;
+  margin: 5rem 0;
+}

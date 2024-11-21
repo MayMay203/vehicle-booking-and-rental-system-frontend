@@ -1,0 +1,191 @@
+@use '../../abstracts' as abstracts;
+.order {
+  border-radius: 0.3rem;
+  border: 1px solid #ff7f50;
+  align-items: center;
+  padding: 2rem;
+  line-height: 2.5rem;
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.time-payment, .time-rental {
+  color: rgba($color: #000000, $alpha: 65%);
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin: 0.5rem 0;
+  padding: 0;
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.txt {
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #ff7f50;
+}
+.txt-title {
+  color: #a33a3a;
+  font-weight: 600;
+  font-size: 1.6rem;
+  margin: 1rem 0 0rem 0;
+  padding: 0;
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.wrap-renter {
+  padding: 0;
+}
+.box-renter {
+  background-color: #fff6f3;
+  padding: 0.3rem 2rem;
+  // min-width: 60% !important;
+  margin: 1rem 1rem;
+  border-radius: 5px;
+  width: 100%;
+  @include abstracts.screen(sm) {
+    padding: 0.1rem 2.3rem;
+    // margin: 0.5rem 0;
+  }
+}
+.icon {
+  font-size: 2rem;
+  margin-right: 2rem;
+  color: #ff7f50;
+
+  @include abstracts.screen(sm) {
+    font-size: 1.7rem;
+    margin-right: 1.5rem;
+  }
+}
+.name,
+.phone {
+  color: rgba($color: #000000, $alpha: 65%);
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin: 0.5rem 0;
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.input-name,
+.input-phone {
+  color: rgba($color: #000000, $alpha: 1);
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin: 0.5rem 0;
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.txt-content {
+  margin-left: 1rem;
+  color: black;
+  font-weight: 500;
+  font-size: 1.6rem;
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.wrap-time-rental {
+  margin: 1rem 0;
+  padding: 0 1.5rem;
+}
+.wrap-infor {
+  border-bottom: 2px solid #ffebe4;
+  color: #a33a3a;
+  font-size: 1.6rem;
+  font-weight: 600;
+  width: 100%;
+  justify-content: space-between;
+
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  padding: 1rem 0;
+
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.line {
+  border-bottom: 2px solid #ff7f50;
+}
+.no-line {
+  border: none;
+}
+.align-right {
+  margin-left: auto;
+  color: #27ae60;
+  font-size: 1.6rem;
+  font-weight: 500;
+
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}
+.txt-black {
+  color: black;
+}
+.txt-red {
+  color: #e20d0d;
+}
+.txt-bold {
+  font-weight: 600;
+}
+.wrap-note {
+  padding: 0;
+}
+.note {
+  color: red;
+  margin-left: 0;
+  font-weight: 600;
+  min-width: 5rem;
+  line-height: 2.5rem;
+}
+.note-content {
+  line-height: 2.5rem;
+  text-align: justify;
+  color: #000000;
+  margin-left: 1rem;
+}
+.btn-order {
+  width: 10rem;
+  margin: 1.5rem;
+}
+.txt-center {
+  text-align: center;
+}
+.link-policy {
+  color: #2474e5;
+  text-decoration: underline;
+  margin: 0 0.3rem;
+  text-align: center;
+}
+.txt-question{
+    font-size: 2rem;
+    color: #27ae60;
+    font-weight: 500;
+}
+.btn-confirm{
+    font-size: 1.6rem;
+    font-weight: 400;
+    background-color: rgba($color: #27ae60, $alpha: 65%);
+    color: white;
+    border: none;
+    &:hover{
+        background-color: #27ae60;
+        color: white;
+    }
+    &:active{
+        background-color: #27ae60;
+        color: white;
+    }
+    &:focus{
+        background-color: #27ae60;
+        color: white;
+    }
+}

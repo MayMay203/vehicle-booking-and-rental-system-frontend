@@ -39,6 +39,9 @@ import ServiceManage from '~/pages/VehiclePartner/ServiceManage/ServiceManage'
 import DetailServiceRental from '~/pages/VehiclePartner/ServiceManage/DetailServiceRental'
 import AddServiceRental from '~/pages/VehiclePartner/ServiceManage/AddServiceRental'
 import EditServiceRental from '~/pages/VehiclePartner/ServiceManage/EditServiceRental'
+import PolicyVehicleRental from '~/pages/VehiclePartner/PolicyVehicleRental'
+import StatisticsVehicleRental from '~/pages/VehiclePartner/StatisticsVehicleRental'
+import OrderManage from '~/pages/VehiclePartner/OrderManage/OrderManage'
 
 const publicRoutes = [
   {
@@ -185,6 +188,18 @@ const publicRoutes = [
   {
     path: config.routes.addServiceRental,
     component: AddServiceRental,
+  },
+  {
+    path: config.routes.orderManage,
+    component: OrderManage,
+  },
+  {
+    path: config.routes.policyVehicleRental,
+    component: PolicyVehicleRental,
+  },
+  {
+    path: config.routes.statisticsVehicleRental,
+    component: StatisticsVehicleRental,
   },
   {
     path: config.routes.message,
