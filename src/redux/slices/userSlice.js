@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getMyAccount } from '~/apiServices/getMyAccount'
 import { refreshToken } from '~/apiServices/refreshToken'
 import { checkExistCookie } from '~/utils/cookieUtils'
-import { generalModalNames, setConfirmModalVisible } from './generalModalSlice'
+// import { generalModalNames, setConfirmModalVisible } from './generalModalSlice'
 
 const initialState = {
   currentUser: {},
