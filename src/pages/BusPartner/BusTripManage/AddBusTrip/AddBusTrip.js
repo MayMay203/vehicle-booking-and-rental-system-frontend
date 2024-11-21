@@ -88,6 +88,7 @@ function AddBusTrip(props) {
                 onChange={handleInputChange}
                 className={cx('txt', 'selectbox', 'add-item')}
                 readOnly
+                disabled
               >
                 {/* {provinces.map((province, index) => (
                   <option key={index} value={province.value}>
