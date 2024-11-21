@@ -4,12 +4,14 @@ import styles from './Search.module.scss'
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
-function Search({noSelectBus}) {
+function Search({ noSelectBus, noSelectDate = false }) {
   return (
     <div className={cx('wrapper')}>
       <div
         className={
-          noSelectBus
+          noSelectBus && noSelectDate
+            ? 'row row-cols-1 gy-4 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3'
+            : noSelectBus
             ? 'row row-cols-1 gy-4 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4'
             : 'row row-cols-1 gy-4 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 row-cols-xl-5'
         }
@@ -55,12 +57,14 @@ function Search({noSelectBus}) {
             </div>
           </div>
         </div>
-        <div className="col col-md-6">
-          <div className={cx('item')}>
-            <p className={cx('title')}>Ngày đi</p>
-            <input type="date" className="w-100"></input>
+        {!noSelectDate && (
+          <div className="col col-md-6">
+            <div className={cx('item')}>
+              <p className={cx('title')}>Ngày đi</p>
+              <input type="date" className="w-100"></input>
+            </div>
           </div>
-        </div>
+        )}
         <div className="col-sm-12 col-md-5 m-lg-auto">
           <Button primary className="mt-3 m-auto w-75 mt-md-5">
             Tìm kiếm
