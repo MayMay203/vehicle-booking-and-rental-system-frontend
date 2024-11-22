@@ -1,17 +1,32 @@
 import classNames from "classnames/bind";
 import styles from './BuyTicket.module.scss'
-import { Breadcrumb } from 'react-bootstrap'
+import { Breadcrumb, Pagination } from 'react-bootstrap'
 import { config } from '~/config'
 import Search from '~/components/Search'
 import { FilterIcon } from '~/components/Icon'
 import TicketList from '~/components/TicketList/TicketList'
-import Button from '~/components/Button'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import PopperItem from '~/components/PopperWrapper/PopperItem'
+import { useEffect, useState } from 'react'
+import { getAllTickets } from "~/apiServices/ticket/getAllTicket";
 
 const cx = classNames.bind(styles)
 function BuyTicket() {
+  const [ticketList, setTicketList] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    async function fetchAllTicketList() {
+      const data = await getAllTickets(currentPage)
+      if (data) {
+        setTicketList(data.result)
+        setTotal(data.meta.total)
+      }
+    }
+    fetchAllTicketList()
+  }, [currentPage])
   return (
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb className="mb-5">
@@ -50,11 +65,19 @@ function BuyTicket() {
           </button>
         </Tippy>
       </div>
-      <TicketList />
+      <TicketList dataList={ ticketList} />
 
-      <Button roundHalf className={cx('btn-more')}>
-        Xem thêm
-      </Button>
+      {ticketList.length > 0 && (
+        <Pagination
+          className="mt-5"
+          align="center"
+          current={currentPage}
+          pagesize={1}
+          // pageSize={config.variables.pagesize}
+          total={total}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </div>
   )
 }

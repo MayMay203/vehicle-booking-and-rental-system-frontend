@@ -1,0 +1,24 @@
+import { getAccessToken } from '~/utils/cookieUtils'
+import * as httpRequest from '~/utils/httpRequest'
+
+export const orderTicket = async (busTripScheduleId, numberOfTicket, departureDate) => {
+  try {
+    const response = await httpRequest.post(
+      '/v1/orderBusTrips',
+      {
+        busTripScheduleId,
+        numberOfTicket: Number(numberOfTicket),
+        departureDate,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+      },
+    )
+    return response.data
+  } catch (error) {
+    console.error('Failed to order ticket: ', error)
+    throw httpRequest.getMessage(error)
+  }
+}

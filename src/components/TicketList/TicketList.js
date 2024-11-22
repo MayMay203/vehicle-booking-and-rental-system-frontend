@@ -1,13 +1,18 @@
 import TicketItem from "./TicketItem";
-function TicketList({status}) {
-    return (
-      <div>
-        <TicketItem status={status} />
-        <TicketItem status={status} />
-        <TicketItem status={status} />
-        <TicketItem status={status} />
-      </div>
-    )
+import PropTypes from 'prop-types'
+function TicketList({ status, dataList }) {
+  return (
+    <div>
+      {dataList.map((ticket) => (
+        <TicketItem key={ticket.idBusTripSchedule} status={status} data={ticket} />
+      ))}
+    </div>
+  )
+}
+
+TicketList.propTypes = {
+  status: PropTypes.string,
+  dataList: PropTypes.array.isRequired,
 }
 
 export default TicketList;

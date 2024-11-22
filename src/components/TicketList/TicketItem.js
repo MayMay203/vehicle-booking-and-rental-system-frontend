@@ -14,14 +14,16 @@ import Tabs from '../Tabs'
 import { faReadme } from '@fortawesome/free-brands-svg-icons'
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
 import Comment from '../Comment'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible, setTicketModalVisible } from '~/redux/slices/generalModalSlice'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
-function TicketItem({ status }) {
+function TicketItem({ status, data }) {
   const dispatch = useDispatch()
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
+  const { isLogin } = useSelector((state) => state.user)
 
   const settings = useMemo(
     () => ({
@@ -85,7 +87,18 @@ function TicketItem({ status }) {
   }
 
   const handleChooseTicket = () => {
-    dispatch(setTicketModalVisible({ name: generalModalNames.BUY_TICKET, type: '', isOpen: true }))
+    if (isLogin) {
+      dispatch(
+        setTicketModalVisible({
+          name: generalModalNames.BUY_TICKET,
+          type: '',
+          id: data.idBusTripSchedule,
+          isOpen: true,
+        }),
+      )
+    } else {
+      dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+    }
   }
 
   const handleShowDetailOrder = () => {
@@ -117,11 +130,11 @@ function TicketItem({ status }) {
         </div>
         <div className="col d-flex flex-column gap-2 gap-lg-4">
           <div className="d-flex gap-4 align-items-center">
-            <span className={cx('name')}>Nhà xe Tú Lạc</span>
+            <span className={cx('name')}>{data.businessName}</span>
             {status && <span className={cx('amount')}>2 x 150.000đ</span>}
           </div>
           <div className="d-flex flex-wrap align-items-center gap-3">
-            <span className={cx('type')}>Limousine 34 giường nằm </span>
+            <span className={cx('type')}>{data.busTypeName}</span>
             <div className={cx('rating')}>
               <StarIcon className={cx('icon')} width="2.6rem" />
               <span>4.5(5)</span>
@@ -131,7 +144,7 @@ function TicketItem({ status }) {
             <img className={cx('location-img')} alt="location" src={images.location} />
             <div className={cx('location-time', 'd-flex', 'flex-column', 'gap-4', 'justify-content-center')}>
               <div className="d-flex gap-4">
-                <span>9:00 Hà Nội</span>
+                <span>{`${data.departureTime} ${data.departureLocation}`}</span>
                 {status && (
                   <p className={cx('date')}>
                     <FontAwesomeIcon icon={faCalendar} />
@@ -141,16 +154,16 @@ function TicketItem({ status }) {
               </div>
 
               <span className={cx('duration')}>1h30m</span>
-              <span>10:30 Hải Phòng</span>
+              <span>{`${data.arrivalTime} ${data.arrivalLocation}`}</span>
             </div>
           </div>
         </div>
         <div className=" col col-md-12 d-flex flex-column justify-content-between align-items-start align-items-lg-end justify-content-md-end justify-content-lg-between">
           <div className="d-flex justify-content-md-end w-100 flex-lg-column gap-5 mb-4 mb-lg-0 gap-lg-4 align-items-center align-items-lg-end">
-            <span className={cx('price')}>300.000đ</span>
-            <span className={cx('sale-off')}>-50%</span>
+            <span className={cx('price')}>{`${Math.round(data.priceTicket).toLocaleString()} VNĐ`}</span>
+            <span className={cx('sale-off')}>{`-${Math.round(data.discountPercentage)}%`}</span>
           </div>
-          {!status && <span className={cx('status', 'w-100')}>Còn 19 chỗ trống</span>}
+          {!status && <span className={cx('status', 'w-100')}>{`Còn ${data.availableSeats} chỗ trống`}</span>}
           {status && (
             <button
               className={cx('d-flex', 'align-items-center', 'gap-2', 'fs-4', 'detail-btn')}

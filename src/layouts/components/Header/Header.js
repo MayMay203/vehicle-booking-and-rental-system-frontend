@@ -204,7 +204,7 @@ function Header() {
           <Menu>
             {menus.map((menu, index) =>
               menu.content.toLowerCase().includes('đối tác') ? (
-                <>
+                <div key={index}>
                   <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
                     {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
                     <FontAwesomeIcon icon={faCaretDown} />
@@ -246,7 +246,7 @@ function Header() {
                       </div>
                     </div>
                   )}
-                </>
+                </div>
               ) : (
                 <MenuItem key={index} menu={menu}></MenuItem>
               ),
@@ -381,7 +381,7 @@ function Header() {
       <Menu className="d-none d-lg-flex">
         {menus.map((menu, index) =>
           menu.content.toLowerCase().includes('đối tác') ? (
-            <div>
+            <div key={index}>
               <Tippy
                 offset={[-1, 0]}
                 visible={isShowDetailPartner && isLogin}
