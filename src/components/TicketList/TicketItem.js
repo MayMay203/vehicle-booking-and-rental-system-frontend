@@ -19,7 +19,7 @@ import { generalModalNames, setConfirmModalVisible, setTicketModalVisible } from
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
-function TicketItem({ status, data }) {
+function TicketItem({ status, data = {} }) {
   const dispatch = useDispatch()
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
@@ -56,6 +56,10 @@ function TicketItem({ status, data }) {
       {
         label: 'Giảm giá',
         value: 'discount',
+      },
+      {
+        label: 'Đón/trả',
+        value: 'pickReturn',
       },
       {
         label: 'Đánh giá',
@@ -153,7 +157,9 @@ function TicketItem({ status, data }) {
                 )}
               </div>
 
-              <span className={cx('duration')}>1h30m</span>
+              <span className={cx('duration')}>
+                {`${data.durationJourney?.split(':')[0]}h${data.durationJourney?.split(':')[1]}m`}
+              </span>
               <span>{`${data.arrivalTime} ${data.arrivalLocation}`}</span>
             </div>
           </div>
@@ -215,6 +221,29 @@ function TicketItem({ status, data }) {
                 <Voucher className="m-auto" />
               </div>
             </div>
+          )}
+          {type === 'pickReturn' && (
+            <div className='mt-5'>
+              <span className='text-center mb-5 d-block fst-italic' style={{lineHeight: '1.3'}}>Khách hàng vui lòng liên hệ với chủ nhà xe để được đón tại những nơi dưới đây</span>
+              <div className="d-flex flex-column flex-lg-row justify-content-center gap-5">
+                <div>
+                  <p className={cx('title')}>Điểm đón</p>
+                  <div className={cx('policies')}>
+                    <span className={cx('policy')}>Vp Nguyễn Cư Trinh, Q1</span>
+                    <span className={cx('policy')}>Nhà chờ Phương Trang (Đường Mai Chí Thọ)</span>
+                    <span className={cx('policy')}>Ngã 4 Tây Hoà (RMK).</span>
+                  </div>
+                </div>
+                <div>
+                  <p className={cx('title')}>Điểm trả</p>
+                  <div className={cx('policies')}>
+                    <span className={cx('policy')}>Bưu điện Cam Lâm.</span>
+                    <span className={cx('policy')}>Ngã tư Đà Lạt.</span>
+                    <span className={cx('policy')}>Trạm y tế Diên Khánh.</span>
+                  </div>
+                </div>
+              </div>
+           </div>
           )}
           {type === 'feedback' && (
             <div className="position-relative">

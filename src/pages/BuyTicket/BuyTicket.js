@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import styles from './BuyTicket.module.scss'
-import { Breadcrumb, Pagination } from 'react-bootstrap'
+import { Breadcrumb } from 'react-bootstrap'
 import { config } from '~/config'
 import Search from '~/components/Search'
 import { FilterIcon } from '~/components/Icon'
@@ -9,13 +9,15 @@ import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import PopperItem from '~/components/PopperWrapper/PopperItem'
 import { useEffect, useState } from 'react'
-import { getAllTickets } from "~/apiServices/ticket/getAllTicket";
+import { getAllTickets } from '~/apiServices/ticket/getAllTicket'
+import { Pagination } from 'antd'
 
 const cx = classNames.bind(styles)
 function BuyTicket() {
   const [ticketList, setTicketList] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(0)
+  console.log(total)
 
   useEffect(() => {
     async function fetchAllTicketList() {
@@ -41,7 +43,7 @@ function BuyTicket() {
       <div className="mt-5 fw-medium fs-1 d-flex justify-content-between">
         <div>
           <span> Kết quả: </span>
-          <span> 30 chuyến</span>
+          <span>{`${total} chuyến`}</span>
         </div>
         <Tippy
           interactive
@@ -65,15 +67,14 @@ function BuyTicket() {
           </button>
         </Tippy>
       </div>
-      <TicketList dataList={ ticketList} />
+      <TicketList dataList={ticketList} />
 
       {ticketList.length > 0 && (
         <Pagination
           className="mt-5"
           align="center"
           current={currentPage}
-          pagesize={1}
-          // pageSize={config.variables.pagesize}
+          pageSize={config.variables.pagesize}
           total={total}
           onChange={(page) => setCurrentPage(page)}
         />
