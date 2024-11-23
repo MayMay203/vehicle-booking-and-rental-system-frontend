@@ -17,7 +17,6 @@ function BuyTicket() {
   const [ticketList, setTicketList] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(0)
-  console.log(total)
 
   useEffect(() => {
     async function fetchAllTicketList() {
