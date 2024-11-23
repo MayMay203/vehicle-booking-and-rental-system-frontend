@@ -19,7 +19,6 @@ import Message from '~/pages/Message'
 import Authenticate from '~/pages/Authenticate'
 import BusTrip from '~/pages/BusPartner/BusTripManage/BusTrip'
 import DetailBusTrip from '~/pages/BusPartner/BusTripManage/DetailBusTrip'
-import AddBusTrip from '~/pages/BusPartner/BusTripManage/AddBusTrip'
 import Bus from '~/pages/BusPartner/BusManage/Bus'
 import AddBus from '~/pages/BusPartner/BusManage/AddBus'
 import Error from '~/pages/Error'
@@ -146,10 +145,6 @@ const publicRoutes = [
   {
     path: config.routes.detailBusTrip,
     component: DetailBusTrip,
-  },
-  {
-    path: config.routes.addBusTrip,
-    component: AddBusTrip,
   },
   {
     path: config.routes.bus,
