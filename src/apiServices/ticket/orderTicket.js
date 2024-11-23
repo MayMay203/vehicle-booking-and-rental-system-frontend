@@ -1,11 +1,19 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const orderTicket = async (busTripScheduleId, numberOfTicket, departureDate) => {
+export const orderTicket = async (
+  customerName,
+  customerPhoneNumber,
+  busTripScheduleId,
+  numberOfTicket,
+  departureDate,
+) => {
   try {
     const response = await httpRequest.post(
       '/v1/orderBusTrips',
       {
+        customerName,
+        customerPhoneNumber,
         busTripScheduleId,
         numberOfTicket: Number(numberOfTicket),
         departureDate,

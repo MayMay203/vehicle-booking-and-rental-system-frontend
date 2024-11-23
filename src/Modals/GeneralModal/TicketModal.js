@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Modal } from 'react-bootstrap'
 import styles from './GeneralModal.module.scss'
 import classNames from 'classnames/bind'
@@ -5,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faLocationCrosshairs, faLocationDot, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
 import Button from '~/components/Button'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setTicketModalVisible } from '~/redux/slices/generalModalSlice'
@@ -17,15 +18,23 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 const cx = classNames.bind(styles)
 function TicketModal() {
   console.log('re-render ticket modal')
+  const { currentUser } = useSelector((state) => state.user)
   const showTicketModal = useSelector((state) => state.generalModal.buyTicket)
   const { id, type } = showTicketModal
   const [ticketDetail, setTicketDetail] = useState({})
   const dispatch = useDispatch()
-
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
   const [isValid, setIsValid] = useState(false)
   const [quantity, setQuantity] = useState(1)
+  const inputRef = useRef(null)
+
+  console.log(currentUser)
+
+  useEffect(() => {
+    setFullName(currentUser.name || '')
+    setPhone(currentUser.phoneNumber || '')
+  }, [id, currentUser])
 
   useEffect(() => {
     async function fetchDetailTicket() {
@@ -38,8 +47,9 @@ function TicketModal() {
     }
     if (id) {
       fetchDetailTicket()
+      inputRef.current?.focus()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   useEffect(() => {
@@ -50,7 +60,7 @@ function TicketModal() {
   const handlePayment = async () => {
     try {
       if (dispatch(checkLoginSession())) {
-        const order = await orderTicket(id, quantity, '24-11-2024')
+        const order = await orderTicket(fullName, phone, id, quantity, '24-11-2024')
         if (order) {
           const key = order.key
           const paymentUrl = await createPayment(key)
@@ -97,6 +107,7 @@ function TicketModal() {
                       <span>Lê Thị Hồng Nhung</span>
                     ) : (
                       <input
+                        ref={inputRef}
                         value={fullName}
                         className={cx('input-text', 'w-100')}
                         type="text"
