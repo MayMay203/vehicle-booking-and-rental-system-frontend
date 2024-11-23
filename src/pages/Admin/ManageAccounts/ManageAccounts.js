@@ -26,7 +26,6 @@ function ManageAccounts() {
   const [searchDebounce, setSearchDebounce] = useState('')
   // Pagination
   const { total } = accountList?.meta || {}
-  console.log(total)
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {

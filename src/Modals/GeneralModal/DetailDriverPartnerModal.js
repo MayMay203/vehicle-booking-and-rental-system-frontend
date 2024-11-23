@@ -44,7 +44,7 @@ function DetailDriverPartner() {
         setDetailData(data)
       }
     }
-    if (dispatch(checkLoginSession())) {
+    if (dispatch(checkLoginSession()) && id) {
       fetchDetailDriverPartner()
     }
   }, [id, dispatch, status])

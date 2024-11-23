@@ -45,7 +45,7 @@ function DetailPartner() {
         setDetailData(data)
       }
     }
-    if (dispatch(checkLoginSession())) {
+    if (dispatch(checkLoginSession()) && id) {
       fetchDetailParterRegister()
     }
   }, [id, dispatch, status])
