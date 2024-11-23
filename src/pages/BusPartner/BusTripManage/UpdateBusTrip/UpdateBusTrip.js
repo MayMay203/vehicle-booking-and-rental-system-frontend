@@ -30,7 +30,7 @@ function UpdateBusTrip(props) {
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter" className={cx('title-modal', 'w-100', 'text-center')}>
-          Thêm chuyến xe
+          Cập nhật chuyến xe
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

@@ -102,11 +102,11 @@ import { Table } from 'antd'
 import { useState } from 'react'
 import AddBusTrip from '../AddBusTrip'
 import UpdateBusTrip from '../UpdateBusTrip'
+import { useNavigate } from 'react-router-dom'
 const cx = classNames.bind(styles)
 function BusTrip() {
   const [showModalAdd, setShowModalAdd] = useState(false)
   const [showModalUpdate, setShowModalUpdate] = useState(false)
-  const handelAddBusTrip = () => {}
   const columns = [
     {
       title: 'STT',
@@ -226,10 +226,15 @@ function BusTrip() {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-  const handleViewBus = (id) => {
+
+  const handelAddBusTrip = () => {
     setShowModalAdd(true)
   }
-  const handleEditBus = (id) => {
+  const navigate = useNavigate()
+  const handleViewBus = (id) => {
+    navigate('/bus-trip/detail-bus-trip', { state: id  })
+  }
+  const handleEditBus = () => {
     setShowModalUpdate(true)
   }
   return (
