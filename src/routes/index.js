@@ -42,6 +42,8 @@ import EditServiceRental from '~/pages/VehiclePartner/ServiceManage/EditServiceR
 import PolicyVehicleRental from '~/pages/VehiclePartner/PolicyVehicleRental'
 import StatisticsVehicleRental from '~/pages/VehiclePartner/StatisticsVehicleRental'
 import OrderManage from '~/pages/VehiclePartner/OrderManage/OrderManage'
+import PaymentSuccess from '~/pages/Payment/PaymentSuccess'
+import PaymentFailure from '~/pages/Payment/PaymentFairlure'
 
 const publicRoutes = [
   {
@@ -215,6 +217,16 @@ const publicRoutes = [
     path: config.routes.manageFeeService,
     component: ManageFeeService,
     layout: HeaderOnly,
+  },
+  {
+    path: config.routes.paymentSuccess,
+    component: PaymentSuccess,
+    layout: null,
+  },
+  {
+    path: config.routes.paymentFailure,
+    component: PaymentFailure,
+    layout: null,
   },
 ]
 

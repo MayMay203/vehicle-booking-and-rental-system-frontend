@@ -4,7 +4,7 @@ function TicketList({ status, dataList }) {
   return (
     <div>
       {dataList.map((ticket) => (
-        <TicketItem key={ticket.idBusTripSchedule} status={status} data={ticket} />
+        <TicketItem key={ticket.busTripScheduleId} status={status} data={ticket} />
       ))}
     </div>
   )

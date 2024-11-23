@@ -40,4 +40,6 @@ export const routes = {
   message: '/message',
   manageFeeService: '/manage-fee-service',
   error: '/error',
+  paymentSuccess: '/payment-success',
+  paymentFailure: '/payment-failure',
 }

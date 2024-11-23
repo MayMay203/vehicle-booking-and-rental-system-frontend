@@ -488,3 +488,7 @@ html *::-webkit-scrollbar-track {
 :where(.css-dev-only-do-not-override-apn68).ant-table-wrapper .ant-table-thead >tr>th, :where(.css-dev-only-do-not-override-apn68).ant-table-wrapper .ant-table-thead >tr>td {
   background-color: #FFEBE4;
 }
+
+/* .slick-prev:before, .slick-next:before {
+  color: #ccc;
+} */

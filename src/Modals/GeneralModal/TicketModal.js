@@ -12,6 +12,7 @@ import { generalModalNames, setTicketModalVisible } from '~/redux/slices/general
 import { getDetailTicket } from '~/apiServices/ticket/getDetailTicket'
 import { orderTicket } from '~/apiServices/ticket/orderTicket'
 import { createPayment } from '~/apiServices/ticket/createPayment'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function TicketModal() {
@@ -28,14 +29,17 @@ function TicketModal() {
 
   useEffect(() => {
     async function fetchDetailTicket() {
-      const data = await getDetailTicket(id)
-      if (data) {
-        setTicketDetail(data)
+      if (dispatch(checkLoginSession())) {
+        const data = await getDetailTicket(id)
+        if (data) {
+          setTicketDetail(data)
+        }
       }
     }
     if (id) {
       fetchDetailTicket()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   useEffect(() => {
@@ -45,12 +49,14 @@ function TicketModal() {
 
   const handlePayment = async () => {
     try {
-      const order = await orderTicket(id, quantity, '24-11-2024')
-      if (order) {
-        const key = order.key
-        const paymentUrl = await createPayment(key)
-        if (paymentUrl) {
-          window.location.href = paymentUrl
+      if (dispatch(checkLoginSession())) {
+        const order = await orderTicket(id, quantity, '24-11-2024')
+        if (order) {
+          const key = order.key
+          const paymentUrl = await createPayment(key)
+          if (paymentUrl) {
+            window.location.href = paymentUrl
+          }
         }
       }
     } catch (error) {
@@ -76,7 +82,7 @@ function TicketModal() {
       <Modal.Body>
         <div className="d-flex flex-column row-gap-4">
           <div className="d-flex flex-column row-gap-3">
-            <p className={cx('title')}>Người đặt</p>
+            <p className={cx('title')}>Người đi</p>
             <div className="row row-cols-1 row-gap-3">
               <div className="col">
                 <div className={cx('input-wrapper')}>
@@ -84,7 +90,9 @@ function TicketModal() {
                     <FontAwesomeIcon className={cx('icon')} icon={faUser} />
                   </span>
                   <div className={cx('info')}>
-                    <label className={cx('label', 'mb-3', 'w-100')}>Họ và tên</label>
+                    <label className={cx('label', 'mb-3', 'w-100')}>
+                      Họ và tên <span style={{ color: 'red' }}>*</span>
+                    </label>
                     {type === 'detailOrder' ? (
                       <span>Lê Thị Hồng Nhung</span>
                     ) : (
@@ -108,7 +116,7 @@ function TicketModal() {
                   </span>
                   <div className={cx('info')}>
                     <label htmlFor="phone" className={cx('label', 'mb-3', 'w-100')}>
-                      Số điện thoại
+                      Số điện thoại <span style={{ color: 'red' }}>*</span>
                     </label>
                     {type === 'detailOrder' ? (
                       <span>0986564453</span>
@@ -167,14 +175,16 @@ function TicketModal() {
 
           <div className="d-flex flex-column row-gap-3 mt-2">
             <p className={cx('title', 'mb-2')}>
-              Hành trình: <span className="fw-light">{`Từ ${ticketDetail.startOperationDay}`}</span>{' '}
+              Hành trình: <span className="fw-light">{`Từ ${ticketDetail.startOperationDay || 'Đang cập nhật'}`}</span>{' '}
             </p>
             <div className="d-flex column-gap-5 align-items-center justify-content-center ps-3">
               <div className="d-flex flex-column align-items-center row-gap-4">
                 <span>
                   <FontAwesomeIcon className={cx('icon')} icon={faLocationCrosshairs} />
                 </span>
-                <span>{`${ticketDetail.departureTime} - ${ticketDetail.busTripInfo?.departureLocation}`}</span>
+                <span>{`${ticketDetail.departureTime || 'Đang cập nhật'} - ${
+                  ticketDetail.busTripInfo?.departureLocation || 'Đang cập nhật'
+                }`}</span>
               </div>
               <span>
                 <FontAwesomeIcon className={cx('icon')} icon={faArrowRight} />
@@ -211,7 +221,7 @@ function TicketModal() {
             <div className="p-4">
               <div className="d-flex justify-content-between mb-4">
                 <span>Tiền vé xe:</span>
-                <span>{Math.round(ticketDetail.priceTicket || 0).toLocaleString()}</span>
+                <span>{ticketDetail.priceTicket}</span>
               </div>
               <div className="d-flex justify-content-between mb-4">
                 <span>Số lượng:</span>
@@ -229,7 +239,7 @@ function TicketModal() {
                   {type ? 'Tổng tiền đã thanh toán' : 'Tổng tiền cần thanh toán'}
                 </span>
                 <span className="fw-bold">{`${(
-                  ticketDetail.priceTicket *
+                  Number(ticketDetail.priceTicket?.replace(/\./g, '').replace(' VND', '')) *
                   quantity *
                   (1 - (ticketDetail.discountPercentage * 1.0) / 100)
                 ).toLocaleString()} VNĐ`}</span>

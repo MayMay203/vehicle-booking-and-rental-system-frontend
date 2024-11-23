@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
 import Voucher from '../Voucher'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import UtilitiesList from '../UtilitiesList'
 import ImageList from '../ImageList'
 import FeedbackSlider from '../FeedbackSlider'
@@ -17,21 +17,34 @@ import Comment from '../Comment'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible, setTicketModalVisible } from '~/redux/slices/generalModalSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { getBusUtilities } from '~/apiServices/ticket/getBusUtilities'
+import { getPoliciesTicket } from '~/apiServices/ticket/getPoliciesTicket'
+import { getBusImage } from '~/apiServices/ticket/getBusImage'
+import { getPickReturnLocations } from '~/apiServices/ticket/getPickReturnLocations'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status, data = {} }) {
   const dispatch = useDispatch()
+  const { busTripScheduleId } = data
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
+  const [detailInfor, setDetaiInfor] = useState({})
   const { isLogin } = useSelector((state) => state.user)
 
   const settings = useMemo(
     () => ({
-      slidesToShow: 5,
+      slidesToShow: 6,
       infinite: false,
       swipe: false,
       draggable: false,
       responsive: [
+        {
+          breakpoint: 992,
+          settings: {
+            slidesToShow: 4,
+            slidesToScroll: 1,
+          },
+        },
         {
           breakpoint: 768,
           settings: {
@@ -82,6 +95,49 @@ function TicketItem({ status, data = {} }) {
     return tabs
   }, [])
 
+  useEffect(() => {
+    async function getDetail() {
+      console.log('Vo get detail')
+      const actions = {
+        utility: async () => {
+          const utilitiesList = await getBusUtilities(data.busInfo.busId)
+          setDetaiInfor((prev) => ({ ...prev, [type]: utilitiesList }))
+        },
+        policy: async () => {
+          const policiesList = await getPoliciesTicket(data.busTripScheduleId)
+          console.log(policiesList)
+          setDetaiInfor((prev) => ({ ...prev, [type]: policiesList }))
+        },
+        image: async () => {
+          const imagesList = await getBusImage(data.busInfo.busId)
+          setDetaiInfor((prev) => ({ ...prev, [type]: imagesList }))
+        },
+        feedback: async () => {
+          // Implement feedback logic here
+        },
+        discount: async () => {
+          // Implement discount logic here
+        },
+        pickReturn: async () => {
+          const locations = await getPickReturnLocations(data.busTripInfo.id)
+          setDetaiInfor((prev) => ({ ...prev, [type]: locations }))
+        },
+      }
+
+      const action = actions[type]
+      if (action) {
+        await action()
+      } else {
+        console.log('No tab found')
+      }
+    }
+
+    if (isDetail && !detailInfor[type]) {
+      getDetail()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDetail, type, busTripScheduleId])
+
   const handleShowDetail = () => {
     setIsDetail((prev) => !prev)
   }
@@ -96,7 +152,7 @@ function TicketItem({ status, data = {} }) {
         setTicketModalVisible({
           name: generalModalNames.BUY_TICKET,
           type: '',
-          id: data.idBusTripSchedule,
+          id: busTripScheduleId,
           isOpen: true,
         }),
       )
@@ -126,7 +182,7 @@ function TicketItem({ status, data = {} }) {
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
         <div className="col">
           <div className={cx('image-wrapper')}>
-            <img src={images.trip} alt="car" className={cx('image')}></img>
+            <img src={data.busInfo.imageRepresentative} alt="car" className={cx('image')}></img>
             <button className={cx('btn-msg')}>
               <MessageIcon />
             </button>
@@ -134,11 +190,11 @@ function TicketItem({ status, data = {} }) {
         </div>
         <div className="col d-flex flex-column gap-2 gap-lg-4">
           <div className="d-flex gap-4 align-items-center">
-            <span className={cx('name')}>{data.businessName}</span>
+            <span className={cx('name')}>{data.businessPartnerInfo.name}</span>
             {status && <span className={cx('amount')}>2 x 150.000đ</span>}
           </div>
           <div className="d-flex flex-wrap align-items-center gap-3">
-            <span className={cx('type')}>{data.busTypeName}</span>
+            <span className={cx('type')}>{data.busInfo.nameVehicleType}</span>
             <div className={cx('rating')}>
               <StarIcon className={cx('icon')} width="2.6rem" />
               <span>4.5(5)</span>
@@ -148,7 +204,7 @@ function TicketItem({ status, data = {} }) {
             <img className={cx('location-img')} alt="location" src={images.location} />
             <div className={cx('location-time', 'd-flex', 'flex-column', 'gap-4', 'justify-content-center')}>
               <div className="d-flex gap-4">
-                <span>{`${data.departureTime} ${data.departureLocation}`}</span>
+                <span>{`${data.departureTime} ${data.busTripInfo.departureLocation}`}</span>
                 {status && (
                   <p className={cx('date')}>
                     <FontAwesomeIcon icon={faCalendar} />
@@ -157,16 +213,14 @@ function TicketItem({ status, data = {} }) {
                 )}
               </div>
 
-              <span className={cx('duration')}>
-                {`${data.durationJourney?.split(':')[0]}h${data.durationJourney?.split(':')[1]}m`}
-              </span>
-              <span>{`${data.arrivalTime} ${data.arrivalLocation}`}</span>
+              <span className={cx('duration')}>{data.busTripInfo.durationJourney}</span>
+              <span>{`${data.arrivalTime} ${data.busTripInfo.arrivalLocation}`}</span>
             </div>
           </div>
         </div>
         <div className=" col col-md-12 d-flex flex-column justify-content-between align-items-start align-items-lg-end justify-content-md-end justify-content-lg-between">
           <div className="d-flex justify-content-md-end w-100 flex-lg-column gap-5 mb-4 mb-lg-0 gap-lg-4 align-items-center align-items-lg-end">
-            <span className={cx('price')}>{`${Math.round(data.priceTicket).toLocaleString()} VNĐ`}</span>
+            <span className={cx('price')}>{data.priceTicket}</span>
             <span className={cx('sale-off')}>{`-${Math.round(data.discountPercentage)}%`}</span>
           </div>
           {!status && <span className={cx('status', 'w-100')}>{`Còn ${data.availableSeats} chỗ trống`}</span>}
@@ -222,28 +276,34 @@ function TicketItem({ status, data = {} }) {
               </div>
             </div>
           )}
-          {type === 'pickReturn' && (
-            <div className='mt-5'>
-              <span className='text-center mb-5 d-block fst-italic' style={{lineHeight: '1.3'}}>Khách hàng vui lòng liên hệ với chủ nhà xe để được đón tại những nơi dưới đây</span>
-              <div className="d-flex flex-column flex-lg-row justify-content-center gap-5">
+          {type === 'pickReturn' && detailInfor['pickReturn'] && (
+            <div className="py-5 mt-4" style={{ backgroundColor: 'var(--primary-bg)', borderRadius: 8 }}>
+              <span className="text-center mb-5 d-block" style={{ lineHeight: '1.3' }}>
+                Khách hàng vui lòng liên hệ với chủ nhà xe để được đón/trả tại những địa điểm dưới đây:
+              </span>
+              <div className="d-flex flex-column flex-lg-row justify-content-center gap-5 mt-2">
                 <div>
-                  <p className={cx('title')}>Điểm đón</p>
+                  <p className={cx('title', 'fst-italic')}>Điểm đón</p>
                   <div className={cx('policies')}>
-                    <span className={cx('policy')}>Vp Nguyễn Cư Trinh, Q1</span>
-                    <span className={cx('policy')}>Nhà chờ Phương Trang (Đường Mai Chí Thọ)</span>
-                    <span className={cx('policy')}>Ngã 4 Tây Hoà (RMK).</span>
+                    {detailInfor['pickReturn'].pickupLocations.map((pickup) => (
+                      <span className={cx('policy', 'fst-italic')} style={{ fontSize: '1.5rem' }}>
+                        {pickup}
+                      </span>
+                    ))}
                   </div>
                 </div>
                 <div>
-                  <p className={cx('title')}>Điểm trả</p>
+                  <p className={cx('title', 'fst-italic')}>Điểm trả</p>
                   <div className={cx('policies')}>
-                    <span className={cx('policy')}>Bưu điện Cam Lâm.</span>
-                    <span className={cx('policy')}>Ngã tư Đà Lạt.</span>
-                    <span className={cx('policy')}>Trạm y tế Diên Khánh.</span>
+                    {detailInfor['pickReturn'].dropOffLocations.map((dropOff) => (
+                      <span className={cx('policy', 'fst-italic')} style={{ fontSize: '1.5rem' }}>
+                        {dropOff}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
-           </div>
+            </div>
           )}
           {type === 'feedback' && (
             <div className="position-relative">
@@ -260,18 +320,28 @@ function TicketItem({ status, data = {} }) {
               {status === 'completed' && <Comment />}
             </div>
           )}
-          {type === 'policy' && (
+          {type === 'policy' && detailInfor['policy'] && (
             <div className={cx('policy-wrapper', 'mt-5')}>
               <p className={cx('title')}>Chính sách nhà xe</p>
               <div className={cx('policies')}>
-                <span className={cx('policy')}>Không hút thuốc, uống rượu trên xe.</span>
-                <span className={cx('policy')}>Không vứt rác trên xe.</span>
-                <span className={cx('policy')}>Tổng trọng lượng hành lý không vượt quá 7kg.</span>
+                {detailInfor['policy'].map((policy, index) => (
+                  <span key={index} className={cx('policy')}>
+                    {policy}
+                  </span>
+                ))}
               </div>
             </div>
           )}
-          {type === 'utility' && <UtilitiesList />}
-          {type === 'image' && <ImageList />}
+          {type === 'utility' && detailInfor['utility'] && <UtilitiesList dataList={detailInfor['utility']} />}
+          {type === 'image' && detailInfor['image'] && (
+            <div className="mt-5">
+              <span
+                className="d-block text-center fst-italic"
+                style={{ fontWeight: 500 }}
+              >{`Biển kiểm số: ${data.busInfo.licensePlate}`}</span>
+              <ImageList dataList={detailInfor['image']} />
+            </div>
+          )}
         </div>
       )}
     </div>
