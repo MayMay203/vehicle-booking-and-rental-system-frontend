@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getMyAccount } from '~/apiServices/getMyAccount'
 import { refreshToken } from '~/apiServices/refreshToken'
 import { checkExistCookie } from '~/utils/cookieUtils'
+import { setMenu } from './menuSlice'
+import { generalModalNames, setConfirmModalVisible } from './generalModalSlice'
 // import { generalModalNames, setConfirmModalVisible } from './generalModalSlice'
 
 const initialState = {
@@ -17,7 +19,7 @@ export const getCurrentUser = createAsyncThunk('user/getCurrentUser', async () =
 })
 
 export const checkLogin = createAsyncThunk('user/checkLogin', async (_, { dispatch }) => {
-  if (checkExistCookie('access_token')) {
+  if (checkExistCookie()) {
     const userData = await getMyAccount()
     if (userData) {
       dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
@@ -28,35 +30,38 @@ export const checkLogin = createAsyncThunk('user/checkLogin', async (_, { dispat
       const userData = await getMyAccount()
       if (userData) {
         dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
+        // localStorage.removeItem('accessToken')
+        // localStorage.addItem('accessToken', userData.access_token)
+        if (userData.accountInfo.roles.includes('ADMIN')) dispatch(setMenu('adminMenu'))
       }
     } else {
-        // dispatch(
-        //   setConfirmModalVisible({
-        //     modalType: 'confirm',
-        //     isOpen: true,
-        //     title: 'Thông báo',
-        //     description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
-        //     name: generalModalNames.EXPIRED_SESSION,
-        //   }),
-        // )
+      // dispatch(
+      //   setConfirmModalVisible({
+      //     modalType: 'confirm',
+      //     isOpen: true,
+      //     title: 'Thông báo',
+      //     description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
+      //     name: generalModalNames.EXPIRED_SESSION,
+      //   }),
+      // )
       dispatch(toggleLogin(false))
     }
   }
 })
 
 export const checkLoginSession = createAsyncThunk('user/checkLoginSession', async (_, { dispatch }) => {
-  if (checkExistCookie('access_token')) return true
+  if (checkExistCookie()) return true
   const response = await refreshToken()
   if (!response) {
-    // dispatch(
-    //   setConfirmModalVisible({
-    //     modalType: 'confirm',
-    //     isOpen: true,
-    //     title: 'Thông báo',
-    //     description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
-    //     name: generalModalNames.EXPIRED_SESSION,
-    //   }),
-    // )
+    dispatch(
+      setConfirmModalVisible({
+        modalType: 'confirm',
+        isOpen: true,
+        title: 'Thông báo',
+        description: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại!',
+        name: generalModalNames.EXPIRED_SESSION,
+      }),
+    )
     dispatch(toggleLogin(false))
     return false
   }

@@ -29,8 +29,6 @@ function TicketModal() {
   const [quantity, setQuantity] = useState(1)
   const inputRef = useRef(null)
 
-  console.log(currentUser)
-
   useEffect(() => {
     setFullName(currentUser.name || '')
     setPhone(currentUser.phoneNumber || '')

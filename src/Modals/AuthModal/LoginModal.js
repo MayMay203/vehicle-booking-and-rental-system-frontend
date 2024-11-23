@@ -56,6 +56,8 @@ function LoginModal() {
       const data = await login(email, password)
       if (data.accountLogin.roles.includes('ADMIN')) dispatch(setMenu('adminMenu'))
       else dispatch(setMenu('userMenu'))
+      // add localstorage
+      localStorage.setItem('accessToken', data.access_token)
       dispatch(setCurrentUser({ currentUser: data.accountLogin }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       reset()

@@ -33,6 +33,8 @@ function ConfirmModal() {
           await logoutService()
           dispatch(logout())
           dispatch(setMenu('userMenu'))
+          // add localstorage
+          localStorage.removeItem('accessToken')
           navigate('/')
         }
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
