@@ -90,6 +90,10 @@ function DetailBusTrip() {
   const handleAddSchedule = () => {
     setModalAddScheduleShow(true)
   }
+  const [modalUpdateScheduleShow, setModalUpdateScheduleShow] = useState(false)
+  const handleUpdateSchedule = () => {
+    setModalUpdateScheduleShow(true)
+  }
   return (
     <div className="container">
       <div className="mt-4 mb-4">
@@ -183,10 +187,21 @@ function DetailBusTrip() {
           </Button>
           <SlideDayOfMonth></SlideDayOfMonth>
           <div className="mt-3 mb-3"></div>
-          <TableVehiclesOfBusTrip></TableVehiclesOfBusTrip>
+          <TableVehiclesOfBusTrip handleUpdateSchedule={handleUpdateSchedule}></TableVehiclesOfBusTrip>
         </div>
       </div>
-      <ModalManageBusSchedule enableEdit={true} functionModal={'add'} show={modalAddScheduleShow} onHide={()=>setModalAddScheduleShow(false)}></ModalManageBusSchedule>
+      <ModalManageBusSchedule
+        enableEdit={true}
+        functionModal={'add'}
+        show={modalAddScheduleShow}
+        onHide={() => setModalAddScheduleShow(false)}
+      ></ModalManageBusSchedule>
+      <ModalManageBusSchedule
+        enableEdit={true}
+        functionModal={'update'}
+        show={modalUpdateScheduleShow}
+        onHide={() => setModalUpdateScheduleShow(false)}
+      ></ModalManageBusSchedule>
     </div>
   )
 }

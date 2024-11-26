@@ -2,12 +2,11 @@ import classNames from 'classnames'
 import styles from './TableVehiclesOfBusTrip.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router-dom'
 import { Table } from 'antd'
 import { useState } from 'react'
 import ModalBusInfor from '~/pages/BusPartner/BusManage/ModalBusInfor'
 const cx = classNames.bind(styles)
-function TableVehiclesOfBusTrip() {
+function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
   const [isHovered, setIsHovered] = useState(null)
   const [modalBusInforShow, setModalBusInforShow] = useState(false)
   const columns = [
@@ -170,7 +169,7 @@ function TableVehiclesOfBusTrip() {
         <FontAwesomeIcon
           icon={faEdit}
           style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
-          onClick={() => handleEditBus(record.key)}
+          onClick={handleUpdateSchedule}
         />
       ),
     },
@@ -240,13 +239,13 @@ function TableVehiclesOfBusTrip() {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   // const handleViewBus = (id) => {
   //   navigate('detail-service-rental', { state: { enableEdit: false, busID: id } })
   // }
-  const handleEditBus = (id) => {
-    navigate('edit-service-rental', { state: { enableEdit: true, busID: id } })
-  }
+  // const handleEditBus = (id) => {
+  //   navigate('edit-service-rental', { state: { enableEdit: true, busID: id } })
+  // }
   return (
     <>
       <Table

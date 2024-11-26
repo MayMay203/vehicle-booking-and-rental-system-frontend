@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import Button from '~/components/Button'
 import AddManyTickets from '~/components/AddManyTickets'
 const cx = classNames.bind(styles)
-function ModalManageBusSchedule(props, { enableEdit, functionModal }) {
+function ModalManageBusSchedule(props, { enableEdit = true, functionModal }) {
   const [formData, setFormData] = useState({
     departure: 'Đà Nẵng',
     typeVehicle: 'Limousine34GiuongNam',
@@ -64,7 +64,7 @@ function ModalManageBusSchedule(props, { enableEdit, functionModal }) {
                   aria-label="departure"
                   className={cx('txt', 'selectbox', 'infor-item')}
                   readOnly
-                  disabled
+                  disabled={!enableEdit}
                 >
                   <option value="Đà Nẵng">Đà Nẵng</option>
                 </Form.Select>
@@ -96,7 +96,7 @@ function ModalManageBusSchedule(props, { enableEdit, functionModal }) {
                     aria-label="licensePlateNumber"
                     className={cx('txt')}
                     readOnly
-                    disabled
+                    disabled={!enableEdit}
                   />
                   <InputGroup.Text className={cx('txt')}>
                     <FontAwesomeIcon icon={faTicket} />
