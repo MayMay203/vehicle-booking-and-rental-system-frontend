@@ -5,6 +5,8 @@ import { Table } from 'antd'
 import Button from '~/components/Button'
 import SlideDayOfMonth from '~/components/SlideDayOfMonth'
 import TableVehiclesOfBusTrip from '~/components/TableVehiclesOfBusTrip'
+import ModalManageBusSchedule from '../../BusSchedule/ModalManageBusSchedule'
+import { useState } from 'react'
 const cx = classNames.bind(styles)
 function DetailBusTrip() {
   const handleInputChange = (e) => {
@@ -84,7 +86,10 @@ function DetailBusTrip() {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-
+  const [modalAddScheduleShow, setModalAddScheduleShow] = useState(false)
+  const handleAddSchedule = () => {
+    setModalAddScheduleShow(true)
+  }
   return (
     <div className="container">
       <div className="mt-4 mb-4">
@@ -173,12 +178,15 @@ function DetailBusTrip() {
       <div className="mt-4 mb-4">
         <p className={cx('title')}>Lịch khởi hành</p>
         <div className={cx('wrap-infor')}>
-          <Button primary>Thêm lịch khởi hành</Button>
+          <Button primary onClick={handleAddSchedule}>
+            Thêm lịch khởi hành
+          </Button>
           <SlideDayOfMonth></SlideDayOfMonth>
-          <div className='mt-3 mb-3'></div>
+          <div className="mt-3 mb-3"></div>
           <TableVehiclesOfBusTrip></TableVehiclesOfBusTrip>
         </div>
       </div>
+      <ModalManageBusSchedule enableEdit={true} functionModal={'add'} show={modalAddScheduleShow} onHide={()=>setModalAddScheduleShow(false)}></ModalManageBusSchedule>
     </div>
   )
 }
