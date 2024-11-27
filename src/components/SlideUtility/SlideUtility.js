@@ -7,26 +7,38 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import Utility from './Utility'
 
 const cx = classNames.bind(styles)
-function SlideUtility({ listUtilities }) {
+function SlideUtility({ listUtilities, isModal = false, enableEdit = true }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [utilitiesPerPage, setUtilitiesPerPage] = useState(8);
+  const [utilitiesPerPage, setUtilitiesPerPage] = useState(8)
 
   useEffect(() => {
     const updateUtilitiesPerPage = () => {
-      if (window.innerWidth >= 992) {
-        setUtilitiesPerPage(7) // Large screens (lg)
-      } else if (window.innerWidth >= 768) {
-        setUtilitiesPerPage(5) // Medium screens (md)
-      } else if (window.innerWidth >= 500) {
-        setUtilitiesPerPage(3) // Small screens (sm)
+      if (isModal) {
+        if (window.innerWidth >= 992) {
+          setUtilitiesPerPage(5) // Large screens (lg)
+        } else if (window.innerWidth >= 768) {
+          setUtilitiesPerPage(4) // Medium screens (md)
+        } else if (window.innerWidth >= 500) {
+          setUtilitiesPerPage(3) // Small screens (sm)
+        } else {
+          setUtilitiesPerPage(2) // Extra small screens (xs)
+        }
       } else {
-        setUtilitiesPerPage(2) // Extra small screens (xs)
+        if (window.innerWidth >= 992) {
+          setUtilitiesPerPage(7) // Large screens (lg)
+        } else if (window.innerWidth >= 768) {
+          setUtilitiesPerPage(5) // Medium screens (md)
+        } else if (window.innerWidth >= 500) {
+          setUtilitiesPerPage(3) // Small screens (sm)
+        } else {
+          setUtilitiesPerPage(2) // Extra small screens (xs)
+        }
       }
     }
     updateUtilitiesPerPage()
     window.addEventListener('resize', updateUtilitiesPerPage)
     return () => window.removeEventListener('resize', updateUtilitiesPerPage)
-  }, [])
+  }, [isModal])
   const [activeUtilities, setActiveUtilities] = useState(Array(listUtilities.length).fill(false))
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -72,7 +84,7 @@ function SlideUtility({ listUtilities }) {
               name={item.name}
               icon={item.icon}
               active={activeUtilities[currentIndex + index]} // Trạng thái active được truyền vào
-              handleChooseUtility={() => handleChooseUtility(currentIndex + index)}
+              handleChooseUtility={enableEdit ? () => handleChooseUtility(currentIndex + index) : undefined}
             ></Utility>
           ))}
         </div>

@@ -1,11 +1,14 @@
 import classNames from 'classnames'
 import styles from './TableVehiclesOfBusTrip.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router-dom'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'antd'
+import { useState } from 'react'
+import ModalBusInfor from '~/pages/BusPartner/BusManage/ModalBusInfor'
 const cx = classNames.bind(styles)
-function TableVehiclesOfBusTrip() {
+function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
+  const [isHovered, setIsHovered] = useState(null)
+  const [modalBusInforShow, setModalBusInforShow] = useState(false)
   const columns = [
     {
       title: 'STT',
@@ -15,8 +18,36 @@ function TableVehiclesOfBusTrip() {
       render: (text, record, index) => index + 1,
     },
     {
-      title: 'Xe',
-      dataIndex: 'vehicle',
+      title: 'Biển số xe',
+      dataIndex: 'licensePlateNumber',
+      align: 'center',
+      defaultSortOrder: 'descend',
+      width: 120,
+      render: (licensePlateNumber, record) => (
+        <div>
+          <div>{licensePlateNumber}</div>
+          <p
+            style={{
+              color: isHovered === record.key ? '#2474E5' : 'rgba(36, 116, 229, 0.5)',
+              cursor: 'pointer',
+              margin: 0,
+              fontStyle: 'italic',
+              textDecoration: isHovered === record.key ? 'underline' : '',
+            }}
+            onMouseEnter={() => setIsHovered(record.key)}
+            onMouseLeave={() => setIsHovered(null)}
+            onClick={() => setModalBusInforShow(true)}
+          >
+            Chi tiết
+          </p>
+        </div>
+      ),
+      // sorter: (a, b) => a.age - b.age,
+    },
+
+    {
+      title: 'Loại xe',
+      dataIndex: 'vehicleType',
       align: 'center',
       width: 150,
       showSorterTooltip: {
@@ -73,7 +104,16 @@ function TableVehiclesOfBusTrip() {
       dataIndex: 'status',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 150,
+      width: 120,
+      render: (status) => (
+        <span
+          style={{
+            color: status === 'Đang hoạt động' ? '#008000' : '#E20D0D',
+          }}
+        >
+          {status}
+        </span>
+      ),
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -97,7 +137,7 @@ function TableVehiclesOfBusTrip() {
       dataIndex: 'discount',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 110,
+      width: 90,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -108,18 +148,18 @@ function TableVehiclesOfBusTrip() {
       width: 110,
       // sorter: (a, b) => a.age - b.age,
     },
-    {
-      title: 'Xem',
-      dataIndex: 'view',
-      align: 'center',
-      render: (text, record) => (
-        <FontAwesomeIcon
-          icon={faArrowUpRightFromSquare}
-          style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-          onClick={() => handleViewBus(record.key)}
-        />
-      ),
-    },
+    // {
+    //   title: 'Xem',
+    //   dataIndex: 'view',
+    //   align: 'center',
+    //   render: (text, record) => (
+    //     <FontAwesomeIcon
+    //       icon={faArrowUpRightFromSquare}
+    //       style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
+    //       onClick={() => handleViewBus(record.key)}
+    //     />
+    //   ),
+    // },
     {
       title: 'Sửa',
       dataIndex: 'update',
@@ -129,7 +169,7 @@ function TableVehiclesOfBusTrip() {
         <FontAwesomeIcon
           icon={faEdit}
           style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
-          onClick={() => handleEditBus(record.key)}
+          onClick={handleUpdateSchedule}
         />
       ),
     },
@@ -145,10 +185,11 @@ function TableVehiclesOfBusTrip() {
   const data = [
     {
       key: '1',
+      licensePlateNumber: '92H-12356',
       nameCompany: 'Honda',
-      vehicle: 'Xe máy',
+      vehicleType: 'Xe máy',
       status: 'Đang hoạt động',
-      timeDeparture: '5:00',
+      timeDeparture: '5:00; 10:00; 15:00',
       price: '100.000đ',
       discount: '10%',
       available: '12/37',
@@ -157,8 +198,9 @@ function TableVehiclesOfBusTrip() {
     },
     {
       key: '2',
+      licensePlateNumber: '72H-12356',
       nameCompany: 'Honda',
-      vehicle: 'Xe máy',
+      vehicleType: 'Xe máy',
       status: 'Đang hoạt động',
       timeDeparture: '5:00',
       price: '100.000đ',
@@ -169,8 +211,9 @@ function TableVehiclesOfBusTrip() {
     },
     {
       key: '3',
+      licensePlateNumber: '30H-12356',
       nameCompany: 'Honda',
-      vehicle: 'Xe máy',
+      vehicleType: 'Xe máy',
       status: 'Đang hoạt động',
       timeDeparture: '5:00',
       price: '100.000đ',
@@ -181,8 +224,9 @@ function TableVehiclesOfBusTrip() {
     },
     {
       key: '5',
+      licensePlateNumber: '42H-12356',
       nameCompany: 'Honda',
-      vehicle: 'Xe máy',
+      vehicleType: 'Xe máy',
       status: 'Đang hoạt động',
       timeDeparture: '5:00',
       price: '100.000đ',
@@ -195,28 +239,31 @@ function TableVehiclesOfBusTrip() {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-  const navigate = useNavigate()
-  const handleViewBus = (id) => {
-    navigate('detail-service-rental', { state: { enableEdit: false, busID: id } })
-  }
-  const handleEditBus = (id) => {
-    navigate('edit-service-rental', { state: { enableEdit: true, busID: id } })
-  }
+  // const navigate = useNavigate()
+  // const handleViewBus = (id) => {
+  //   navigate('detail-service-rental', { state: { enableEdit: false, busID: id } })
+  // }
+  // const handleEditBus = (id) => {
+  //   navigate('edit-service-rental', { state: { enableEdit: true, busID: id } })
+  // }
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      onChange={onChange}
-      bordered
-      pagination={false}
-      scroll={{ x: 'auto', y: 500 }}
-      // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-      rowClassName="table-row-center" // Thêm class để căn giữa dọc
-      showSorterTooltip={{
-        target: 'sorter-icon',
-      }}
-      className={cx('')}
-    />
+    <>
+      <Table
+        columns={columns}
+        dataSource={data}
+        onChange={onChange}
+        bordered
+        pagination={false}
+        scroll={{ x: 'auto', y: 500 }}
+        // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+        rowClassName="table-row-center" // Thêm class để căn giữa dọc
+        showSorterTooltip={{
+          target: 'sorter-icon',
+        }}
+        className={cx('')}
+      />
+      <ModalBusInfor enableEdit={false} show={modalBusInforShow} onHide={() => setModalBusInforShow(false)} />
+    </>
   )
 }
 export default TableVehiclesOfBusTrip

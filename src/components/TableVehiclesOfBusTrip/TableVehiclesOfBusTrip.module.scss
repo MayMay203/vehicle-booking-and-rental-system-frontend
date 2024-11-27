@@ -1,0 +1,9 @@
+.txt-detail{
+    color: rgba($color: #2474E5, $alpha: 0.5);
+    font-style: italic;
+    text-decoration: underline;
+    &:hover{
+        cursor: pointer;
+        color: #2474E5;
+    }
+}

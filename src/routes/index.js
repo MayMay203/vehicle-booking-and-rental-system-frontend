@@ -43,6 +43,7 @@ import StatisticsVehicleRental from '~/pages/VehiclePartner/StatisticsVehicleRen
 import OrderManage from '~/pages/VehiclePartner/OrderManage/OrderManage'
 import PaymentSuccess from '~/pages/Payment/PaymentSuccess'
 import PaymentFailure from '~/pages/Payment/PaymentFairlure'
+import BusTypeManage from '~/pages/BusPartner/BusType/BusTypeManage'
 
 const publicRoutes = [
   {
@@ -153,6 +154,10 @@ const publicRoutes = [
   {
     path: config.routes.addBus,
     component: AddBus,
+  },
+  {
+    path: config.routes.busType,
+    component: BusTypeManage,
   },
   {
     path: config.routes.updateBus,

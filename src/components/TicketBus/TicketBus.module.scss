@@ -1,0 +1,29 @@
+@use '../../abstracts' as abstracts;
+.wrap-ticket{
+  border: 1px solid #ff9800;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.3);
+}
+.id-ticket{
+  background-color: #FFF6F3;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.txt {
+  font-size: 1.5rem;
+  // margin-bottom: 1rem;
+  font-weight: 500;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+  @include abstracts.screen(sm) {
+    font-size: 1.4rem;
+  }
+}

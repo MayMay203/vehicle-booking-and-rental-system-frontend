@@ -1,14 +1,14 @@
 import classNames from 'classnames/bind'
-import styles from './Bus.module.scss'
+import styles from './BusTypeManage.module.scss'
 import { Table } from 'antd'
 import TxtSearch from '~/components/TxtSearch'
 import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { Image } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import ModalManageBusType from '../ModalManageBusType'
+import { useState } from 'react'
 const cx = classNames.bind(styles)
-function Bus() {
+function BusTypeManage() {
   const columns = [
     {
       title: 'STT',
@@ -18,9 +18,10 @@ function Bus() {
       render: (text, record, index) => index + 1,
     },
     {
-      title: 'Biển số xe',
-      dataIndex: 'licensePlateNumber',
+      title: 'Loại xe',
+      dataIndex: 'typeVehicle',
       align: 'center',
+      width: 300,
       showSorterTooltip: {
         target: 'full-header',
       },
@@ -55,26 +56,18 @@ function Bus() {
       sortDirections: ['descend'],
     },
     {
-      title: 'Mô tả loại xe',
-      dataIndex: 'typeVehicle',
+      title: 'Loại ghế',
+      dataIndex: 'typeSeat',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 400,
+      width: 200,
       // sorter: (a, b) => a.age - b.age,
     },
     {
-      title: 'Hình ảnh',
-      dataIndex: 'image',
+      title: 'Số chỗ',
+      dataIndex: 'numberSeat',
       align: 'center',
       width: 200,
-      render: (text, record) => (
-        <Image
-          rounded
-          src={record.image}
-          alt="Ảnh"
-          style={{ width: '16rem', height: '10rem', objectFit: 'cover', border: '1px solid #D9D9D9' }}
-        />
-      ),
       filters: [
         {
           text: 'London',
@@ -88,18 +81,6 @@ function Bus() {
       onFilter: (value, record) => record.address.indexOf(value) === 0,
     },
     {
-      title: 'Xem',
-      dataIndex: 'view',
-      align: 'center',
-      render: (text, record) => (
-        <FontAwesomeIcon
-          icon={faArrowUpRightFromSquare}
-          style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-          onClick={() => handleViewBus(record.key)}
-        />
-      ),
-    },
-    {
       title: 'Sửa',
       dataIndex: 'update',
       align: 'center',
@@ -108,7 +89,7 @@ function Bus() {
         <FontAwesomeIcon
           icon={faEdit}
           style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
-          onClick={() => handleEditBus(record.key)}
+          onClick={() => handleEditBusType(record.key)}
         />
       ),
     },
@@ -121,59 +102,51 @@ function Bus() {
       ),
     },
   ]
-  
+
   const data = [
     {
       key: '1',
-      licensePlateNumber: '30G-49344',
-      typeVehicle: 'Limounsine 34 chỗ giường nằm',
-      image: 'https://limody.vn/wp-content/uploads/2020/05/xe-di-bac-kan-5.png',
-      view: '',
+      typeSeat: 'Giường nằm',
+      typeVehicle: 'Limounsine',
+      numberSeat: '16 chỗ',
     },
     {
       key: '2',
-      licensePlateNumber: '40G-49344',
-      typeVehicle: 'Limounsine 34 chỗ giường nằm',
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs9Bjixv9pTmcH-o0hi6OIpTEXB2T1VbhvwhfRcD_r9E3OD-MiAtMQYxC7QXDOYnSWC7A&usqp=CAU',
-      view: '',
+      typeSeat: 'Giường nằm',
+      typeVehicle: 'Limounsine',
+      numberSeat: '16 chỗ',
     },
     {
       key: '3',
-      licensePlateNumber: '50G-49344',
-      typeVehicle: 'Limounsine 34 chỗ giường nằm',
-      image: 'https://limosine.vn/wp-content/uploads/2021/11/xe-quyen-quang-ha-noi-2.jpg',
-      view: '',
+      typeSeat: 'Giường nằm',
+      typeVehicle: 'Limounsine',
+      numberSeat: '16 chỗ',
     },
     {
       key: '5',
-      licensePlateNumber: '60G-49344',
-      typeVehicle: 'Limounsine 34 chỗ giường nằm',
-      image: 'https://datvere24h.com/partner/nha-xe-phu-loc/1724401439nh%C3%A0%20xe%20ph%C3%BA%20l%E1%BB%99c.jpg',
-      view: '',
+      typeSeat: 'Giường nằm',
+      typeVehicle: 'Limounsine',
+      numberSeat: '16 chỗ',
     },
   ]
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-  const navigate = useNavigate()
-  const handleAddBus = () => {
-    navigate('add-bus')
-  }
-  const handleViewBus = (id) => {
-    navigate('update-bus', {state: {enableEdit: false, busID: id}})
-  }
-  const handleEditBus = (id) => {
-    navigate('update-bus', { state: { enableEdit: true, busID: id } })
-  }
+  
+  const [showModalAdd, setShowModalAdd] = useState(false)
+  const [showModalUpdate, setShowModalUpdate] = useState(false)
+   const handelAddBusType = () => {
+     setShowModalAdd(true)
+   }
+   const handleEditBusType = () => {
+     setShowModalUpdate(true)
+   }
   return (
     <div className="container mt-4 mb-5">
-      <div className={cx('header')}>
-        <p>Danh sách xe khách</p>
-      </div>
+      <div className={cx('header')}>{/* <p>Danh sách loại xe khách</p> */}</div>
       <div className={cx('d-flex', 'mb-4')}>
         <TxtSearch content={'Tìm xe khách'}></TxtSearch>
-        <Button primary className={cx('btn-add')} onClick={handleAddBus}>
+        <Button primary className={cx('btn-add')} onClick={handelAddBusType}>
           Thêm xe
         </Button>
       </div>
@@ -183,14 +156,26 @@ function Bus() {
         onChange={onChange}
         bordered
         pagination={false}
-        scroll={{y: 500 }}
+        scroll={{ y: 500 }}
         // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{
           target: 'sorter-icon',
         }}
       />
+      <ModalManageBusType
+        functionModal={'add'}
+        enableEdit={true}
+        show={showModalAdd}
+        onHide={() => setShowModalAdd(false)}
+      />
+      <ModalManageBusType
+        functionModal={'update'}
+        enableEdit={true}
+        show={showModalUpdate}
+        onHide={() => setShowModalUpdate(false)}
+      />
     </div>
   )
 }
-export default Bus
+export default BusTypeManage
