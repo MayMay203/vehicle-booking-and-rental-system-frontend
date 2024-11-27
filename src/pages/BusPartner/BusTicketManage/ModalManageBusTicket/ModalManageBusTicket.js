@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind'
-import styles from './ModalManageBusSchedule.module.scss'
+import styles from './ModalManageBusTicket.module.scss'
 import Modal from 'react-bootstrap/Modal'
 import { Col, InputGroup, Row, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import Button from '~/components/Button'
 import AddManyTickets from '~/components/AddManyTickets'
 const cx = classNames.bind(styles)
-function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) {
+function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
   const [formData, setFormData] = useState({
     departure: 'Đà Nẵng',
     typeVehicle: 'Limousine34GiuongNam',
@@ -49,7 +49,7 @@ function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) 
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter" className={cx('txt-title')}>
-          {functionModal === 'add' ? 'THÊM LỊCH KHỞI HÀNH' : 'CẬP NHẬT LỊCH KHỞI HÀNH'}
+          {functionModal === 'add' ? 'THÊM VÉ XE' : 'CẬP NHẬT VÉ XE'}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -184,4 +184,4 @@ function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) 
     </Modal>
   )
 }
-export default ModalManageBusSchedule
+export default ModalManageBusTicket
