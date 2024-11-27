@@ -221,12 +221,12 @@ const publicRoutes = [
   {
     path: config.routes.paymentSuccess,
     component: PaymentSuccess,
-    layout: null,
+    layout: HeaderOnly,
   },
   {
     path: config.routes.paymentFailure,
     component: PaymentFailure,
-    layout: null,
+    layout: HeaderOnly,
   },
 ]
 

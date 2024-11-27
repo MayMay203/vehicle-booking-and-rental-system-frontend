@@ -34,4 +34,5 @@ export {
   PartnerIcon,
   CitizenIcon,
   InsuranceIcon,
+  SuccessIcon
 } from './Icon'
