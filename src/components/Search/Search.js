@@ -1,10 +1,33 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import Button from '../Button'
 import styles from './Search.module.scss'
 import classNames from 'classnames/bind'
+import { getLocations } from '~/apiServices/getLocations'
+import { Select } from 'antd'
 
 const cx = classNames.bind(styles)
 function Search({ noSelectBus, noSelectDate = false }) {
+  const [busName, setBusName] = useState('Xuân Thảo')
+  const [departureLocation, setDepartureLocation] = useState('Đà Nẵng')
+  const [arrivalLocation, setArrivalLocation] = useState('Nam Định')
+  const [provincesList, setProvincesList] = useState([])
+
+  useEffect(() => {
+    async function fetchApi() {
+      const provices = await getLocations(1)
+      if (provices) {
+        const cleanedProvinces = provices.map((province) => {
+          return {
+            ...province,
+            name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
+          }
+        })
+        setProvincesList(cleanedProvinces)
+      }
+    }
+    fetchApi()
+  }, [])
+
   return (
     <div className={cx('wrapper')}>
       <div
@@ -20,14 +43,33 @@ function Search({ noSelectBus, noSelectDate = false }) {
           <div className="col">
             <div className={cx('item')}>
               <p className={cx('title')}>Chọn nhà xe</p>
-              <div className={cx('custom-select')}>
-                <select className="w-100">
-                  <option>Chọn nhà xe</option>
-                  <option value="Xuân Thảo">Xuân Thảo</option>
-                  <option value="Xuân Thảo">Minh Phương</option>
-                  <option value="Xuân Thảo">Minh Tiến</option>
-                </select>
-              </div>
+              <Select
+                showSearch
+                style={{
+                  width: '100%',
+                  fontSize: '1.6rem',
+                }}
+                defaultValue={busName}
+                optionFilterProp="label"
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                }
+                onChange={(value) => setBusName(value)}
+                options={[
+                  {
+                    value: 'Xuân Thảo',
+                    label: 'Xuân Thảo',
+                  },
+                  {
+                    value: 'Minh Phương',
+                    label: 'Minh Phương',
+                  },
+                  {
+                    value: 'Đông Hưng',
+                    label: 'Đông Hưng',
+                  },
+                ]}
+              />
             </div>
           </div>
         )}
@@ -35,12 +77,19 @@ function Search({ noSelectBus, noSelectDate = false }) {
           <div className={cx('item')}>
             <p className={cx('title')}>Nơi xuất phát</p>
             <div className={cx('custom-select')}>
-              <select className="w-100">
-                <option>Nơi xuất phát</option>
-                <option value="Xuân Thảo">Hà Nội</option>
-                <option value="Xuân Thảo">Hải Phòng</option>
-                <option value="Xuân Thảo">Thanh Hoá</option>
-              </select>
+              <Select
+                showSearch
+                defaultValue={departureLocation}
+                style={{
+                  width: '100%',
+                }}
+                optionFilterProp="label"
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                }
+                options={provincesList.map((province) => ({ value: province.name, label: province.name }))}
+                onChange={(value) => setDepartureLocation(value)}
+              />
             </div>
           </div>
         </div>
@@ -48,12 +97,20 @@ function Search({ noSelectBus, noSelectDate = false }) {
           <div className={cx('item')}>
             <p className={cx('title')}>Nơi đến</p>
             <div className={cx('custom-select')}>
-              <select className="w-100">
-                <option>Nơi đến</option>
-                <option value="Xuân Thảo">Nghệ An</option>
-                <option value="Xuân Thảo">Hà Tĩnh</option>
-                <option value="Xuân Thảo">Quảng Bình</option>
-              </select>
+              <Select
+                showSearch
+                style={{
+                  width: '100%',
+                  fontSize: '1.6rem',
+                }}
+                defaultValue={arrivalLocation}
+                optionFilterProp="label"
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                }
+                onChange={(value) => setArrivalLocation(value)}
+                options={provincesList.map((province) => ({ value: province.name, label: province.name }))}
+              />
             </div>
           </div>
         </div>
@@ -61,7 +118,12 @@ function Search({ noSelectBus, noSelectDate = false }) {
           <div className="col col-md-6">
             <div className={cx('item')}>
               <p className={cx('title')}>Ngày đi</p>
-              <input type="date" className="w-100"></input>
+              <input
+                type="date"
+                className="w-100"
+                defaultValue={new Date().toISOString().split('T')[0]} 
+                min={new Date().toISOString().split('T')[0]} 
+              />
             </div>
           </div>
         )}

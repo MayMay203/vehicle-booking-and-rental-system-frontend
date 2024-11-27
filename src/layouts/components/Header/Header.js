@@ -443,6 +443,50 @@ function Header() {
                 </button>
               </Tippy>
             </div>
+          ) : menu.content === 'Xe' ? (
+            <div>
+              <Tippy
+                offset={[-1, 0]}
+                visible={isShowDetailPartner && isLogin}
+                interactive
+                placement="bottom"
+                render={(attrs) => (
+                  <div {...attrs}>
+                    <PopperWrapper className={cx('custom-border')}>
+                      <div className="d-flex flex-column">
+                        <div className={cx('wrap-link')}>
+                          <NavLink className={cx('link')} to={config.routes.manageTypeCar}>
+                            Quản lý loại xe
+                          </NavLink>
+                        </div>
+                        <div className={cx('wrap-link')}>
+                          <NavLink to={config.routes.manageCar} className={cx('link')}>
+                            Quản lý xe
+                          </NavLink>
+                        </div>
+                      </div>
+                    </PopperWrapper>
+                  </div>
+                )}
+                onClickOutside={() => setShowDetailPartner(false)}
+              >
+                <button
+                  className={cx('drop-down')}
+                  onClick={() => {
+                    isLogin
+                      ? setShowDetailPartner((prev) => !prev)
+                      : dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+                  }}
+                >
+                  {currentUser.roles?.includes('ADMIN')
+                    ? 'Đối tác'
+                    : menus.includes('Trở thành đối tác')
+                    ? 'Trở thành đối tác'
+                    : 'Xe'}
+                  <FontAwesomeIcon icon={faCaretDown} />
+                </button>
+              </Tippy>
+            </div>
           ) : (
             <MenuItem key={index} menu={menu}></MenuItem>
           ),

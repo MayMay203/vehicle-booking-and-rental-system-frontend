@@ -60,7 +60,7 @@ function TicketModal() {
       if (dispatch(checkLoginSession())) {
         const order = await orderTicket(fullName, phone, id, quantity, '24-11-2024')
         if (order) {
-          const key = order.key
+          const key = order.keyOrder
           const paymentUrl = await createPayment(key)
           if (paymentUrl) {
             window.location.href = paymentUrl
@@ -183,26 +183,33 @@ function TicketModal() {
           </div>
 
           <div className="d-flex flex-column row-gap-3 mt-2">
-            <p className={cx('title', 'mb-2')}>
-              Hành trình: <span className="fw-light">{`Từ ${ticketDetail.startOperationDay || 'Đang cập nhật'}`}</span>{' '}
-            </p>
-            <div className="d-flex column-gap-5 align-items-center justify-content-center ps-3">
-              <div className="d-flex flex-column align-items-center row-gap-4">
-                <span>
-                  <FontAwesomeIcon className={cx('icon')} icon={faLocationCrosshairs} />
-                </span>
-                <span>{`${ticketDetail.departureTime || 'Đang cập nhật'} - ${
-                  ticketDetail.busTripInfo?.departureLocation || 'Đang cập nhật'
-                }`}</span>
+            <p className={cx('title')}>Hành trình:</p>
+            <div className="px-4 pt-2 pb-0">
+              <div className="d-flex justify-content-between">
+                <span>Thời gian bắt đầu:</span>
+                <span className="ms-2">{`${ticketDetail.departureTime} - 01/12/2024`}</span>
               </div>
-              <span>
-                <FontAwesomeIcon className={cx('icon')} icon={faArrowRight} />
-              </span>
-              <div className="d-flex flex-column  align-items-center row-gap-3">
-                <span>
-                  <FontAwesomeIcon className={cx('icon')} icon={faLocationDot} />
-                </span>
-                <span>{`${ticketDetail.arrivalTime} - ${ticketDetail.busTripInfo?.arrivalLocation}`}</span>
+              <div className="mt-4 d-flex flex-column gap-5 justify-content-between">
+                <span>Tuyến đường:</span>
+                <div className="d-flex column-gap-5 align-items-center justify-content-center ps-3">
+                  <div className="d-flex flex-column align-items-center row-gap-4">
+                    <span>
+                      <FontAwesomeIcon className={cx('icon')} icon={faLocationCrosshairs} />
+                    </span>
+                    <span>{`${ticketDetail.departureTime || 'Đang cập nhật'} - ${
+                      ticketDetail.busTripInfo?.departureLocation || 'Đang cập nhật'
+                    }`}</span>
+                  </div>
+                  <span>
+                    <FontAwesomeIcon className={cx('icon')} icon={faArrowRight} />
+                  </span>
+                  <div className="d-flex flex-column  align-items-center row-gap-3">
+                    <span>
+                      <FontAwesomeIcon className={cx('icon')} icon={faLocationDot} />
+                    </span>
+                    <span>{`${ticketDetail.arrivalTime} - ${ticketDetail.busTripInfo?.arrivalLocation}`}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -211,8 +218,16 @@ function TicketModal() {
             <span className={cx('title')}>Thông tin xe</span>
             <div className="px-4 pt-2 pb-0">
               <div className="mt-3 d-flex justify-content-between">
+                <span>Nhà xe:</span>
+                <span className="ms-2">{ticketDetail.businessPartnerInfo?.name}</span>
+              </div>
+              <div className="mt-3 d-flex justify-content-between">
+                <span>Biển số xe:</span>
+                <span className="ms-2">{ticketDetail.busInfo?.licensePlate}</span>
+              </div>
+              <div className="mt-3 d-flex justify-content-between">
                 <span>Loại xe đặt:</span>
-                <span className="ms-2">{ticketDetail.busInfo?.busType?.name}</span>
+                <span className="ms-2">{ticketDetail.busInfo?.nameBusType}</span>
               </div>
               <div className="mt-3 d-flex justify-content-between">
                 <span>Số lượng ghế:</span>
