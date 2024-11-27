@@ -130,38 +130,42 @@ function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) 
                 </Form.Select>
               </Form.Group>
 
-              <div className="d-flex">
-                <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput14">
-                  <Form.Label className="mb-3">Số ghế</Form.Label>
-                  <InputGroup className={cx('txt', 'infor-item')}>
-                    <Form.Control
-                      type="text"
-                      value={formData.numberSeat}
-                      name="numberSeat"
-                      aria-label="numberSeat"
-                      className={cx('txt')}
+              <Row className="d-flex">
+                <Col>
+                  <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput14">
+                    <Form.Label className="mb-3">Số ghế</Form.Label>
+                    <InputGroup className={cx('txt', 'infor-item')}>
+                      <Form.Control
+                        type="text"
+                        value={formData.numberSeat}
+                        name="numberSeat"
+                        aria-label="numberSeat"
+                        className={cx('txt')}
+                        readOnly
+                        disabled
+                      />
+                      <InputGroup.Text className={cx('txt')}>
+                        <FontAwesomeIcon icon={faCouch} />
+                      </InputGroup.Text>
+                    </InputGroup>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput15">
+                    <Form.Label className="mb-3">Loại ghế</Form.Label>
+                    <Form.Select
+                      name="typeSeat"
+                      aria-label="typeSeat"
+                      className={cx('txt', 'selectbox', 'infor-item')}
+                      value={formData.typeSeat}
                       readOnly
                       disabled
-                    />
-                    <InputGroup.Text className={cx('txt')}>
-                      <FontAwesomeIcon icon={faCouch} />
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-                <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput15">
-                  <Form.Label className="mb-3">Loại ghế</Form.Label>
-                  <Form.Select
-                    name="typeSeat"
-                    aria-label="typeSeat"
-                    className={cx('txt', 'selectbox', 'infor-item')}
-                    value={formData.typeSeat}
-                    readOnly
-                    disabled
-                  >
-                    <option value={formData.typeSeat}>{formData.typeSeat}</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
+                    >
+                      <option value={formData.typeSeat}>{formData.typeSeat}</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
             </Col>
           </Row>
           <AddManyTickets initialItems={[1]}></AddManyTickets>

@@ -12,6 +12,7 @@ import { faSort } from '@fortawesome/free-solid-svg-icons'
 import TicketBusTrip from '~/components/TicketBusTrip'
 import { useNavigate } from 'react-router-dom'
 import ModalManageBusTicket from '../ModalManageBusTicket'
+import ModalDetailBusTicket from '../ModalDetailBusTicket'
 const cx = classNames.bind(styles)
 function BusTicket() {
   const [activeTypeFilter, setActiveTypeFilter] = useState('all')
@@ -20,11 +21,19 @@ function BusTicket() {
   }
   const navigate = useNavigate()
   const handleShowDetail = (id) => {
-    navigate('detail-bus-trip', { state: { id: id } })
+    setModalDetailTicketShow(true)
   }
   const [modalAddTicketShow, setModalAddTicketShow] = useState(false)
   const handleAddTicket = () => {
     setModalAddTicketShow(true)
+  }
+  const [modalDetailTicketShow, setModalDetailTicketShow] = useState(false)
+  const handleDetailTicket = () => {
+    setModalDetailTicketShow(true)
+  }
+  const [modalUpdateTicketShow, setModalUpdateTicketShow] = useState(false)
+  const handleUpdateTicket = () => {
+    setModalUpdateTicketShow(true)
   }
   return (
     <div className={cx('container')}>
@@ -95,6 +104,12 @@ function BusTicket() {
         show={modalAddTicketShow}
         onHide={() => setModalAddTicketShow(false)}
       ></ModalManageBusTicket>
+      <ModalDetailBusTicket
+        enableEdit={false}
+        functionModal={'view'}
+        show={modalDetailTicketShow}
+        onHide={() => setModalDetailTicketShow(false)}
+      ></ModalDetailBusTicket>
     </div>
   )
 }
