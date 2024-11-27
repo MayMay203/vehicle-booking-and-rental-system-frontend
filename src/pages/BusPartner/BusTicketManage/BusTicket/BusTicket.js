@@ -10,7 +10,6 @@ import PopperItem from '~/components/PopperWrapper/PopperItem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort } from '@fortawesome/free-solid-svg-icons'
 import TicketBusTrip from '~/components/TicketBusTrip'
-import { useNavigate } from 'react-router-dom'
 import ModalManageBusTicket from '../ModalManageBusTicket'
 import ModalDetailBusTicket from '../ModalDetailBusTicket'
 const cx = classNames.bind(styles)
@@ -19,7 +18,6 @@ function BusTicket() {
   const handleTypeFilterClick = (btnType) => {
     setActiveTypeFilter(btnType)
   }
-  const navigate = useNavigate()
   const handleShowDetail = (id) => {
     setModalDetailTicketShow(true)
   }
@@ -28,13 +26,13 @@ function BusTicket() {
     setModalAddTicketShow(true)
   }
   const [modalDetailTicketShow, setModalDetailTicketShow] = useState(false)
-  const handleDetailTicket = () => {
-    setModalDetailTicketShow(true)
-  }
-  const [modalUpdateTicketShow, setModalUpdateTicketShow] = useState(false)
-  const handleUpdateTicket = () => {
-    setModalUpdateTicketShow(true)
-  }
+  // const handleDetailTicket = () => {
+  //   setModalDetailTicketShow(true)
+  // }
+  // const [modalUpdateTicketShow, setModalUpdateTicketShow] = useState(false)
+  // const handleUpdateTicket = () => {
+  //   setModalUpdateTicketShow(true)
+  // }
   return (
     <div className={cx('container')}>
       <div className="mb-5"></div>
