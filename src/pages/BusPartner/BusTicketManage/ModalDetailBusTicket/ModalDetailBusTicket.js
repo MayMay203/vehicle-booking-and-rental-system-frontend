@@ -3,15 +3,14 @@ import styles from './ModalDetailBusTicket.module.scss'
 import Modal from 'react-bootstrap/Modal'
 import { Col, InputGroup, Row, Form, Tab, Tabs } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendar, faClockRotateLeft, faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
-
+import { faClockRotateLeft, faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react'
-import Button from '~/components/Button'
 import AddManyTickets from '~/components/AddManyTickets'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
 import TableListBuyTicket from '~/components/TableListBuyTicket'
 import RatingContentList from '~/components/RatingContent'
+import Button from '~/components/Button'
 const cx = classNames.bind(styles)
 function ModalDetailBusTicket({ enableEdit = true, functionModal, ...props }) {
   const [formData, setFormData] = useState({
@@ -297,18 +296,20 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, ...props }) {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        {/* <Row className="justify-content-center mt-4">
-          <Col></Col>
-          <Col className="d-flex justify-content-center">
-            <Button outline className="ms-5 me-5" onClick={handleCancel}>
-              Hủy
-            </Button>
-            <Button primary className="ms-5 me-5" disabled={!activeUpdate}>
-              {functionModal === 'add' ? 'Thêm' : 'Cập nhật'}
-            </Button>
-          </Col>
-          <Col></Col>
-        </Row> */}
+        {enableEdit && (
+          <Row className="justify-content-center mt-4">
+            <Col></Col>
+            <Col className="d-flex justify-content-center">
+              <Button outline className="ms-5 me-5" onClick={handleCancel}>
+                Hủy
+              </Button>
+              <Button primary className="ms-5 me-5" disabled={!activeUpdate}>
+                {functionModal === 'add' ? 'Thêm' : 'Cập nhật'}
+              </Button>
+            </Col>
+            <Col></Col>
+          </Row>
+        )}
       </Modal.Footer>
     </Modal>
   )

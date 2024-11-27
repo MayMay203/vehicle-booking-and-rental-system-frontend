@@ -1,0 +1,17 @@
+.txt-title {
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #ff7f50;
+}
+.txt {
+  font-size: 1.5rem;
+  // margin-bottom: 1rem;
+  font-weight: 500;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+}

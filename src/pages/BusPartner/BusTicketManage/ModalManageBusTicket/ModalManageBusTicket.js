@@ -54,7 +54,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
       </Modal.Header>
       <Modal.Body>
         <div className={cx('container', 'wrap-container')}>
-          <Row className={cx('form-infor-bus-trip', 'justify-content-center')}>
+          <Row className={cx('form-infor-bus-ticket', 'justify-content-center')}>
             <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
               <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput1">
                 <Form.Label className="mb-3">Địa điểm xuất phát</Form.Label>
