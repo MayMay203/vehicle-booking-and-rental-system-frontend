@@ -53,12 +53,12 @@
   color: #e20d0d;
 }
 
-.rule {
-  width: 80%;
-  text-align: center;
-  margin: 20px auto 0;
-  line-height: 1.4;
-}
+// .rule {
+//   width: 80%;
+//   text-align: center;
+//   margin: 0 auto 0;
+//   line-height: 1.4;
+// }
 
 .btn-pay {
   color: var(--primary-color);
@@ -174,4 +174,15 @@
   inset: 0;
   opacity: 0;
   cursor: pointer;
+}
+
+.warning {
+  display: flex;
+  background-color: #fff5f5; 
+  border-left: 4px solid #ff4d4f; 
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #ff4d4f;
 }
