@@ -1,4 +1,3 @@
-
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import PopperItem from '~/components/PopperWrapper/PopperItem'
@@ -8,12 +7,13 @@ import styles from './RentalService.module.scss'
 import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationDot, faSort, faCar, faCodeBranch, faCalendarDays, faClock } from '@fortawesome/free-solid-svg-icons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { config } from '~/config'
 import { useLocation } from 'react-router-dom'
 import RentalVehicleCard from '~/components/RentalVehicleCard'
+import { getVehicleRental } from '~/apiServices/user/getVehicleRental'
 
 const cx = classNames.bind(styles)
 function RentalService() {
@@ -24,14 +24,24 @@ function RentalService() {
 
   const [activeTypeFilter, setActiveTypeFilter] = useState('all')
   const handleTypeFilterClick = (btnType) => {
-    setActiveTypeFilter(btnType)    
+    setActiveTypeFilter(btnType)
   }
   const [startTime, setStartTime] = useState(new Date())
   const [endTime, setEndTime] = useState(new Date())
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
 
- 
+  const [listVehicleRentals, setListVehicleRentals] = useState([])
+  useEffect(() => {
+    async function fetchAllVehicleRental() {
+      const data = await getVehicleRental(typeService === 'manned' ? '1' : '0', 'available', '-1')
+      if (data) {
+        setListVehicleRentals(data)
+      }
+    }
+    fetchAllVehicleRental()
+  }, [typeService])
+
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
@@ -80,27 +90,27 @@ function RentalService() {
           </div>
         </Col>
         <Col xs="2" className="d-flex justify-content-end p-2">
-            <Tippy
-              interactive
-              delay={[50, 400]}
-              placement="bottom-end"
-              render={(attrs) => (
-                <div className={cx('filter')} tabIndex="-1" {...attrs}>
-                  <PopperWrapper>
-                    <PopperItem id="1" title="Mặc định" />
-                    <PopperItem id="2" title="Giá tăng dần" />
-                    <PopperItem id="3" title="Giá giảm dần" />
-                  </PopperWrapper>
-                </div>
-              )}
-            >
-              <button>
-                <Button rounded className={cx('btn-sort')}>
-                  <FontAwesomeIcon icon={faSort} className={cx('icon-sort')} />
-                  <span className={cx('d-none d-lg-inline')}>Sắp xếp</span>
-                </Button>
-              </button>
-            </Tippy>
+          <Tippy
+            interactive
+            delay={[50, 400]}
+            placement="bottom-end"
+            render={(attrs) => (
+              <div className={cx('filter')} tabIndex="-1" {...attrs}>
+                <PopperWrapper>
+                  <PopperItem id="1" title="Mặc định" />
+                  <PopperItem id="2" title="Giá tăng dần" />
+                  <PopperItem id="3" title="Giá giảm dần" />
+                </PopperWrapper>
+              </div>
+            )}
+          >
+            <button>
+              <Button rounded className={cx('btn-sort')}>
+                <FontAwesomeIcon icon={faSort} className={cx('icon-sort')} />
+                <span className={cx('d-none d-lg-inline')}>Sắp xếp</span>
+              </Button>
+            </button>
+          </Tippy>
         </Col>
       </Row>
       <Row className={cx('datetime-rental')}>
@@ -182,7 +192,7 @@ function RentalService() {
           </Button>
         </Col>
       </Row>
-      <RentalVehicleCard typeService={typeService} role={'user'}></RentalVehicleCard>
+      <RentalVehicleCard typeService={typeService} listVehicleRentals={listVehicleRentals} role={'user'}></RentalVehicleCard>
     </div>
   )
 }
