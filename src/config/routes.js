@@ -42,6 +42,4 @@ export const routes = {
   error: '/error',
   paymentSuccess: '/payment-success',
   paymentFailure: '/payment-failure',
-  manageCar: '/manage-car',
-  manageTypeCar: '/manage-type-car',
 }

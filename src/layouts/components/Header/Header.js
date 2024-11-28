@@ -443,7 +443,7 @@ function Header() {
                 </button>
               </Tippy>
             </div>
-          ) : menu.content === 'Xe' ? (
+          ) : menu.content === 'Xe, loại xe' ? (
             <div>
               <Tippy
                 offset={[-1, 0]}
@@ -455,12 +455,12 @@ function Header() {
                     <PopperWrapper className={cx('custom-border')}>
                       <div className="d-flex flex-column">
                         <div className={cx('wrap-link')}>
-                          <NavLink className={cx('link')} to={config.routes.manageTypeCar}>
+                          <NavLink className={cx('link')} to={config.routes.busType}>
                             Quản lý loại xe
                           </NavLink>
                         </div>
                         <div className={cx('wrap-link')}>
-                          <NavLink to={config.routes.manageCar} className={cx('link')}>
+                          <NavLink to={config.routes.bus} className={cx('link')}>
                             Quản lý xe
                           </NavLink>
                         </div>
@@ -482,7 +482,7 @@ function Header() {
                     ? 'Đối tác'
                     : menus.includes('Trở thành đối tác')
                     ? 'Trở thành đối tác'
-                    : 'Xe'}
+                    : 'Xe, loại xe'}
                   <FontAwesomeIcon icon={faCaretDown} />
                 </button>
               </Tippy>
