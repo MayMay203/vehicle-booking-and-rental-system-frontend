@@ -6,6 +6,7 @@ import accountSlice from './slices/accountSlice'
 import partnerSlice from './slices/partnerSlice'
 import menuSlice from './slices/menuSlice'
 import generalAdminSlice from './slices/generalAdminSlice'
+import searchSlice from './slices/searchSlice'
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     partners: partnerSlice,
     menu: menuSlice,
     generalAdmin: generalAdminSlice,
+    search: searchSlice,
   },
 })
