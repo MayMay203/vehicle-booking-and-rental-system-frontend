@@ -23,6 +23,7 @@ export const routes = {
   detailBusTrip: '/bus-trip/detail-bus-trip',
   bus: '/bus-manage',
   addBus: '/bus-manage/add-bus',
+  busType: '/bus-type-manage',
   manageUtilities: '/manage-utility',
   updateBus: '/bus-manage/update-bus',
   busTicket: '/bus-ticket',
