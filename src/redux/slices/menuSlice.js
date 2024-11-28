@@ -22,7 +22,7 @@ const menus = {
   busPartnerMenu: [
     { content: 'Chuyến xe', to: config.routes.busTrip },
     { content: 'Vé xe', to: config.routes.busTicket },
-    { content: 'Xe', to: config.routes.bus },
+    { content: 'Xe, loại xe', to: config.routes.bus },
     { content: 'Chính sách', to: config.routes.policyManage },
     { content: 'Thống kê', to: config.routes.statisticsBus },
   ],
