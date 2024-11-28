@@ -7,18 +7,26 @@ import { Select } from 'antd'
 import DatePicker from 'react-datepicker'
 import { config } from '~/config'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setSearchTicket } from '~/redux/slices/searchSlice'
 
 const cx = classNames.bind(styles)
 function Search({ noSelectBus, noSelectDate = false }) {
-  const [busName, setBusName] = useState(config.variables.busName)
-  const [departureLocation, setDepartureLocation] = useState(config.variables.departureLocation)
-  const [arrivalLocation, setArrivalLocation] = useState(config.variables.arrivalLocation)
+  const searchValues = useSelector((state) => state.search.searchTicket)
+  const [busName, setBusName] = useState(searchValues.busName)
+  const [departureLocation, setDepartureLocation] = useState(searchValues.departureLocation)
+  const [arrivalLocation, setArrivalLocation] = useState(searchValues.arrivalLocation)
   const [provincesList, setProvincesList] = useState([])
-  const [departureDate, setdepartureDate] = useState(config.variables.departureDate)
+  const [departureDate, setDepartureDate] = useState(searchValues.departureDate)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setBusName(searchValues.busName)
+    setDepartureLocation(searchValues.departureLocation)
+    setArrivalLocation(searchValues.arrivalLocation)
+    setDepartureDate(searchValues.departureDate)
+  }, [searchValues])
 
   useEffect(() => {
     async function fetchApi() {
@@ -37,9 +45,9 @@ function Search({ noSelectBus, noSelectDate = false }) {
   }, [])
 
   const handleSearch = () => {
-     const date = new Date(departureDate)
-     const formattedDate = date.toISOString().split('T')[0]
-     dispatch(setSearchTicket({ busName, departureDate:formattedDate, departureLocation, arrivalLocation }))
+    const date = new Date(departureDate)
+    const formattedDate = date.toISOString().split('T')[0]
+    dispatch(setSearchTicket({ busName, departureDate: formattedDate, departureLocation, arrivalLocation }))
     if (window.location.origin === 'http://localhost:3000' && window.location.pathname === '/') {
       navigate(config.routes.ticket)
     }
@@ -148,7 +156,7 @@ function Search({ noSelectBus, noSelectDate = false }) {
                   minDate={new Date()}
                   maxDate={new Date('2025-12-31')}
                   onKeyDown={(e) => e.preventDefault()}
-                  onChange={(date) => setdepartureDate(date)}
+                  onChange={(date) => setDepartureDate(date)}
                 />
               </div>
             </div>
