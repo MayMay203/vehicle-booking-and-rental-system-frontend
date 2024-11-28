@@ -11,23 +11,28 @@ import PopperItem from '~/components/PopperWrapper/PopperItem'
 import { useEffect, useState } from 'react'
 import { getAllTickets } from '~/apiServices/ticket/getAllTicket'
 import { Pagination } from 'antd'
+import { useSelector } from 'react-redux'
 
 const cx = classNames.bind(styles)
 function BuyTicket() {
   const [ticketList, setTicketList] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const { busName, departureLocation, arrivalLocation, departureDate } = useSelector(
+    (state) => state.search.searchTicket,
+  )
 
   useEffect(() => {
     async function fetchAllTicketList() {
-      const data = await getAllTickets(currentPage)
+      const data = await getAllTickets(currentPage, departureLocation, arrivalLocation, busName, departureDate)
       if (data) {
         setTicketList(data.result)
         setTotal(data.meta.total)
       }
     }
     fetchAllTicketList()
-  }, [currentPage])
+  }, [currentPage, busName, departureLocation, arrivalLocation, departureDate])
+
   return (
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb className="mb-5">

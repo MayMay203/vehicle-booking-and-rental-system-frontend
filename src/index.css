@@ -518,3 +518,9 @@ html *::-webkit-scrollbar-track {
   box-shadow: none!important; 
   transition: all 0.3s ease;
 } */
+
+.custom-picker .react-datepicker__input-container input{
+  width: 100%!important;
+  height: 34px;
+}
+
