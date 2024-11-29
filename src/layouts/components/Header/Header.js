@@ -455,12 +455,20 @@ function Header() {
                     <PopperWrapper className={cx('custom-border')}>
                       <div className="d-flex flex-column">
                         <div className={cx('wrap-link')}>
-                          <NavLink className={cx('link')} to={config.routes.busType}>
+                          <NavLink
+                            className={cx('link')}
+                            to={config.routes.busType}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
                             Quản lý loại xe
                           </NavLink>
                         </div>
                         <div className={cx('wrap-link')}>
-                          <NavLink to={config.routes.bus} className={cx('link')}>
+                          <NavLink
+                            to={config.routes.bus}
+                            className={cx('link')}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
                             Quản lý xe
                           </NavLink>
                         </div>

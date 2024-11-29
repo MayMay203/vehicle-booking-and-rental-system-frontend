@@ -101,7 +101,7 @@ function TicketItem({ status, data = {} }) {
     async function getDetail() {
       const actions = {
         utility: async () => {
-          const utilitiesList = await getBusUtilities(data.busInfo.busId)
+          const utilitiesList = await getBusUtilities(data.busInfo.busType.id)
           setDetaiInfor((prev) => ({ ...prev, [type]: utilitiesList }))
         },
         policy: async () => {
@@ -110,7 +110,7 @@ function TicketItem({ status, data = {} }) {
           setDetaiInfor((prev) => ({ ...prev, [type]: policiesList }))
         },
         image: async () => {
-          const imagesList = await getBusImage(data.busInfo.busId)
+          const imagesList = await getBusImage(data.busInfo.busType.id)
           setDetaiInfor((prev) => ({ ...prev, [type]: imagesList }))
         },
         feedback: async () => {
@@ -194,6 +194,8 @@ function TicketItem({ status, data = {} }) {
     // Navigate message detail page get all message
     navigate(config.routes.message)
   }
+
+  console.log(detailInfor)
 
   return (
     <div className={cx('wrapper')}>
