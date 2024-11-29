@@ -8,7 +8,7 @@ export const variables = {
   current: 'APPROVED',
   notConfirmed: 'PENDING_APPROVAL',
   cancelled: 'CANCEL',
-  pagesize: 3,
+  pagesize: 4,
   busName: 'all',
   departureLocation: 'Đà Nẵng',
   arrivalLocation: 'Nam Định',

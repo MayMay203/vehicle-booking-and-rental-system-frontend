@@ -3,14 +3,14 @@ import classNames from 'classnames/bind'
 import { useLocation } from 'react-router-dom'
 import TxtSearch from '~/components/TxtSearch'
 import { Row, Col } from 'react-bootstrap'
-import { useState, useEffect } from 'react'
+import { useState} from 'react'
 import Button from '~/components/Button'
 import CardMessageRight from '~/components/CardMessageRight'
 import { images } from '~/assets/images'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import DetailMessage from '~/components/DetailMessage'
-// import { over } from 'stompjs'
+import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
@@ -21,7 +21,7 @@ function Message() {
   let conversation_id = 11
   let ownerId = null
   let ownerType = null
-  let selectedUser = null
+  // let selectedUser = null
   let stompClient = null
   let access_token = getAccessToken()
 
@@ -35,7 +35,7 @@ function Message() {
     if (ownerId && ownerType) {
       console.log(access_token)
       const socket = new SockJS(`http://localhost:8080/ws`)
-      // stompClient = over(socket)
+      stompClient = over(socket)
 
       const headers = {
         Authorization: 'Bearer ' + access_token, // Include Bearer token for authentication
@@ -62,7 +62,7 @@ function Message() {
           }
 
           // Gửi tin nhắn đến server thông qua STOMP client
-          // stompClient.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
+          stompClient.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
         },
         (error) => {
           console.error('Connection error:', error)
@@ -76,7 +76,7 @@ function Message() {
     stompClient.subscribe(`/user/${ownerId}/${ownerType}/notification`, (message) => {
       console.log('Notification: ', message)
     })
-    // findAndDisplayConnectedUser()
+    findAndDisplayConnectedUser()
   }
   function onNotificationRecieved(payload) {
     const notification = JSON.parse(payload.body)
@@ -105,7 +105,7 @@ function Message() {
     }
   }
 
-  function onError() {}
+  // function onError() {}
   //
   const [buttonSelect, setButtonSelect] = useState('All')
   const handleClickButton = (name) => {

@@ -4,7 +4,7 @@ import { publicRoutes } from './routes'
 import { DefaultLayout, ProtectedRoute } from './layouts'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Fragment, useEffect } from 'react'
+import { Fragment, useLayoutEffect } from 'react'
 import {
   AuthCodeModal,
   ForgetPasswordModal,
@@ -28,7 +28,7 @@ function App() {
   const dispatch = useDispatch()
   console.log('re-render app.js')
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(checkLogin())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

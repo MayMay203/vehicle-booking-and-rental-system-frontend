@@ -18,20 +18,23 @@ function BuyTicket() {
   const [ticketList, setTicketList] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const [sortType, setSortType] = useState('default')
+  const [isVisible, setIsVisible] = useState(false)
+
   const { busName, departureLocation, arrivalLocation, departureDate } = useSelector(
     (state) => state.search.searchTicket,
   )
 
   useEffect(() => {
     async function fetchAllTicketList() {
-      const data = await getAllTickets(currentPage, departureLocation, arrivalLocation, busName, departureDate)
+      const data = await getAllTickets(currentPage, departureLocation, arrivalLocation, busName, departureDate, sortType)
       if (data) {
         setTicketList(data.result)
         setTotal(data.meta.total)
       }
     }
     fetchAllTicketList()
-  }, [currentPage, busName, departureLocation, arrivalLocation, departureDate])
+  }, [currentPage, busName, departureLocation, arrivalLocation, departureDate, sortType])
 
   return (
     <div className={cx('container', 'wrapper')}>
@@ -50,23 +53,25 @@ function BuyTicket() {
           <span>{`${total} chuyến`}</span>
         </div>
         <Tippy
+          visible={isVisible}
           interactive
           delay={[100, 700]}
           placement="bottom-end"
+          onClickOutside={() => setIsVisible(false)}
           render={(attrs) => (
             <div className={cx('filter')} tabIndex="-1" {...attrs}>
               <PopperWrapper>
-                <PopperItem id="1" title="Mặc định" />
-                <PopperItem id="2" title="Giờ đi sớm nhất" />
-                <PopperItem id="3" title="Giờ đi muộn nhất" />
-                <PopperItem id="4" title="Lượt đánh giá cao nhất" />
-                <PopperItem id="5" title="Giá tăng dần" />
-                <PopperItem id="6" title="Giá giảm dần" />
+                <PopperItem id="1" title="Mặc định" onClick={() => setSortType('default')} />
+                <PopperItem id="2" title="Giờ đi sớm nhất" onClick={() => setSortType('departureTime,asc')} />
+                <PopperItem id="3" title="Giờ đi muộn nhất" onClick={() => setSortType('departureTime,desc')} />
+                <PopperItem id="4" title="Lượt đánh giá cao nhất"/>
+                <PopperItem id="5" title="Giá tăng dần" onClick={() => setSortType('priceTicket,asc')} />
+                <PopperItem id="6" title="Giá giảm dần" onClick={() => setSortType('priceTicket,desc')} />
               </PopperWrapper>
             </div>
           )}
         >
-          <button>
+          <button onClick={() => setIsVisible((prev) => !prev)}>
             <FilterIcon />
           </button>
         </Tippy>
