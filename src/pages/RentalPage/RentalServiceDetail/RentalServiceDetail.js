@@ -29,8 +29,11 @@ const cx = classNames.bind(styles)
 function RentalServiceDetail() {
   const location = useLocation()
   const typeService = location.state?.typeService
+  const typeVehicle = location.state?.typeVehicle
+  const inforVehicle = location.state?.infor
   const manned = 'manned'
   const self_driving = 'self_driving'
+  const newPrice = inforVehicle.amount - inforVehicle.amount * (inforVehicle.discount_percentage / 100)
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
@@ -97,12 +100,12 @@ function RentalServiceDetail() {
         <Col xl="8" lg="7" md="6">
           <Row className="mb-5">
             <div className={cx('d-flex', 'name-location-vehicle')}>
-              <span className={cx('name-vehicle')}>Toyota Vios 2023 </span>
+              <span className={cx('name-vehicle')}>{inforVehicle.manufacturer} 2023 </span>
               <Rating></Rating>
             </div>
             <div className={cx('icon-txt')}>
               <FontAwesomeIcon icon={faLocationDot} className={cx('icon', 'icon-location')} />
-              <span className={cx('txt')}>98 Liên Hòa 2, Hòa Vang, Đà Nẵng</span>
+              <span className={cx('txt')}>{inforVehicle.location}</span>
             </div>
           </Row>
           <Row className="mb-5">
@@ -132,7 +135,7 @@ function RentalServiceDetail() {
                         <FontAwesomeIcon icon={faCar} className={cx('icon', 'icon-type')} />
                         <div>
                           <p className={cx('txt', 'name-feature')}>Loại xe</p>
-                          <p className={cx('txt', 'content-feature')}>Ô tô 4 chỗ</p>
+                          <p className={cx('txt', 'content-feature')}>{typeVehicle.name}</p>
                         </div>
                       </div>
                     </Col>
@@ -150,7 +153,7 @@ function RentalServiceDetail() {
                         <FontAwesomeIcon icon={faBoxArchive} className={cx('icon', 'icon-amount')} />
                         <div>
                           <p className={cx('txt', 'name-feature')}>Số lượng</p>
-                          <p className={cx('txt', 'content-feature')}>4 chiếc</p>
+                          <p className={cx('txt', 'content-feature')}>{inforVehicle.quantity} chiếc</p>
                         </div>
                       </div>
                     </Col>
@@ -158,18 +161,11 @@ function RentalServiceDetail() {
                 </Row>
                 <Row>
                   <span className={cx('title')}>Mô tả</span>
-                  <span className={cx('content')}>
-                    Toyota Vios G là sự kết hợp hoàn hảo giữa tiết kiệm nhiên liệu và hiệu suất vận hành. - Với động cơ
-                    1.5L sản sinh công suất cực đại 107 mã lực cùng với hộp số vô cấp CVT mang đến sự trải nghiệm mượt
-                    mà và tiết kiệm nhiên liệu. - Nội thất rộng rãi và tính năng tiện nghi như hệ thống giải trí đa
-                    phương tiện, Vios G là một sự lựa chọn đáng tin cậy cho cuộc sống hàng ngày.
-                  </span>
+                  <span className={cx('content')}>{inforVehicle.description}</span>
                 </Row>
                 <Row>
                   <span className={cx('title')}>Các tiện ích</span>
-                  <span className={cx('content')}>
-                    Có bản đồ, camera hành trình, camera lùi, điều hòa, định vị GPS, wifi,..
-                  </span>
+                  <span className={cx('content')}>{inforVehicle.ulties}</span>
                 </Row>
               </Tab>
               <Tab eventKey="policy" title="Điều khoản">
@@ -245,8 +241,8 @@ function RentalServiceDetail() {
               <FontAwesomeIcon icon={faThumbTack} className={cx('icon', 'm-0')} />
               <span className={cx('txt', 'txt-price-list')}>Bảng giá:</span>
             </div>
-            <span className={cx('txt', 'charge-old')}>200.000đ/1 giờ</span>
-            <span className={cx('txt', 'charge-new')}>200.000đ / 2 giờ</span>
+            <span className={cx('txt', 'charge-old')}>{inforVehicle.amount.toLocaleString('vi-VN')}đ/ngày</span>
+            <span className={cx('txt', 'charge-new')}>{newPrice.toLocaleString('vi-VN')}đ/ngày</span>
           </Row>
           <Row className={cx('order')}>
             <InforRental typeService={typeService}></InforRental>

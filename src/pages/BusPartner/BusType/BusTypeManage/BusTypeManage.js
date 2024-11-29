@@ -6,9 +6,13 @@ import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ModalManageBusType from '../ModalManageBusType'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { getAllBusTypes } from '~/apiServices/busPartner/getAllBusTypes'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { useDispatch } from 'react-redux'
 const cx = classNames.bind(styles)
 function BusTypeManage() {
+  const dispatch = useDispatch()
   const columns = [
     {
       title: 'STT',
@@ -21,7 +25,7 @@ function BusTypeManage() {
       title: 'Loại xe',
       dataIndex: 'typeVehicle',
       align: 'center',
-      width: 300,
+      width: 400,
       showSorterTooltip: {
         target: 'full-header',
       },
@@ -60,7 +64,7 @@ function BusTypeManage() {
       dataIndex: 'typeSeat',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 200,
+      width: 250,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -102,52 +106,59 @@ function BusTypeManage() {
       ),
     },
   ]
-
-  const data = [
-    {
-      key: '1',
-      typeSeat: 'Giường nằm',
-      typeVehicle: 'Limounsine',
-      numberSeat: '16 chỗ',
-    },
-    {
-      key: '2',
-      typeSeat: 'Giường nằm',
-      typeVehicle: 'Limounsine',
-      numberSeat: '16 chỗ',
-    },
-    {
-      key: '3',
-      typeSeat: 'Giường nằm',
-      typeVehicle: 'Limounsine',
-      numberSeat: '16 chỗ',
-    },
-    {
-      key: '5',
-      typeSeat: 'Giường nằm',
-      typeVehicle: 'Limounsine',
-      numberSeat: '16 chỗ',
-    },
-  ]
+  const [data, setData] = useState([])
+  // Dùng useCallback để ghi nhớ hàm handleGetAllBusTypes
+  const handleGetAllBusTypes = useCallback(async () => {
+    if (dispatch(checkLoginSession())) {
+      try {
+        const allBusTypes = await getAllBusTypes()
+        console.log('allBusTypes:', allBusTypes)
+        const newData = allBusTypes?.result.map((item) => ({
+          key: item.id,
+          typeSeat: item.chairType,
+          typeVehicle: item.name,
+          numberSeat: `${item.numberOfSeat} chỗ`,
+        }))
+        setData(newData)
+        console.log('newData:',newData)
+      } catch (message) {
+        console.log(message)
+      }
+    }
+  }, [dispatch]) // Giới hạn dependency cho dispatch nếu cần thiết
+  
+  const closeModalAdd = () => {
+    setShowModalAdd(false)
+  }
+  const closeModalUpdate = () => {
+    setShowModalUpdate(false)
+  }
+  console.log('data:', data)
+  
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-  
+
   const [showModalAdd, setShowModalAdd] = useState(false)
   const [showModalUpdate, setShowModalUpdate] = useState(false)
-   const handelAddBusType = () => {
-     setShowModalAdd(true)
-   }
-   const handleEditBusType = () => {
-     setShowModalUpdate(true)
-   }
+  const [idSlectedBusType, setIDSlectedBusType] = useState(null)
+  const handelAddBusType = () => {
+    setShowModalAdd(true)
+  }
+  const handleEditBusType = (id) => {
+    setShowModalUpdate(true)
+    setIDSlectedBusType(id)
+  }
+  useEffect(() => {
+    handleGetAllBusTypes()
+  }, [handleGetAllBusTypes, showModalAdd, showModalUpdate])
   return (
     <div className="container mt-4 mb-5">
       <div className={cx('header')}>{/* <p>Danh sách loại xe khách</p> */}</div>
       <div className={cx('d-flex', 'mb-4')}>
         <TxtSearch content={'Tìm xe khách'}></TxtSearch>
         <Button primary className={cx('btn-add')} onClick={handelAddBusType}>
-          Thêm xe
+          Thêm loại xe
         </Button>
       </div>
       <Table
@@ -167,12 +178,15 @@ function BusTypeManage() {
         functionModal={'add'}
         enableEdit={true}
         show={showModalAdd}
+        closeModal={closeModalAdd}
         onHide={() => setShowModalAdd(false)}
       />
       <ModalManageBusType
         functionModal={'update'}
         enableEdit={true}
         show={showModalUpdate}
+        idBusType={idSlectedBusType}
+        closeModal={closeModalUpdate}
         onHide={() => setShowModalUpdate(false)}
       />
     </div>
