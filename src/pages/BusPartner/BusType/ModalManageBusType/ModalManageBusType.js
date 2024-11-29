@@ -3,19 +3,44 @@ import styles from './ModalManageBusType.module.scss'
 import Modal from 'react-bootstrap/Modal'
 import { Col, Row, Form } from 'react-bootstrap'
 import { toast } from 'react-toastify'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Button from '~/components/Button'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { addBusType } from '~/apiServices/busPartner/addBusType'
 import { useDispatch } from 'react-redux'
+import { fetchBusTypeByID } from '~/apiServices/busPartner/fetchBusTypeByID'
+import { updateBusType } from '~/apiServices/busPartner/updateBusType'
 const cx = classNames.bind(styles)
 function ModalManageBusType({ enableEdit = true, idBusType = null, functionModal, closeModal, ...props }) {
   const dispatch = useDispatch()
-  const [formData, setFormData] = useState({
+  const [formDataDefault, setFormDataDefault] = useState({
     typeVehicle: '',
     numberSeat: '',
     typeSeat: '',
   })
+  const [formData, setFormData] = useState(formDataDefault)
+  const getInforBusType = useCallback(async () => {
+    if (idBusType != null) {
+      try {
+        const data = await fetchBusTypeByID(idBusType)
+        setFormData({
+          typeVehicle: data.name,
+          numberSeat: data.numberOfSeat.toString(),
+          typeSeat: data.chairType,
+        })
+        setFormDataDefault({
+          typeVehicle: data.name,
+          numberSeat: data.numberOfSeat.toString(),
+          typeSeat: data.chairType,
+        })
+      } catch (error) {
+        console.log('Lỗi khi lấy thông tin xe:', error)
+      }
+    }
+  }, [idBusType])
+  useEffect(() => {
+    getInforBusType()
+  }, [getInforBusType])
   const listSeats = Array.from({ length: 60 - 16 + 1 }, (_, i) => 16 + i)
 
   const listTypeSeat = [
@@ -40,11 +65,7 @@ function ModalManageBusType({ enableEdit = true, idBusType = null, functionModal
     setActiveUpdate(allFieldsFilled)
   }, [formData])
   const handleCancel = () => {
-    setFormData({
-      typeVehicle: 'Limousine34GiuongNam',
-      numberSeat: '34',
-      typeSeat: 'Giường nằm',
-    })
+    setFormData(formDataDefault)
   }
   const handleAddBusType = async (e) => {
     e.preventDefault()
@@ -62,6 +83,17 @@ function ModalManageBusType({ enableEdit = true, idBusType = null, functionModal
   }
   const handleUpdateBusType = async (e) => {
     e.preventDefault()
+    if (dispatch(checkLoginSession())) {
+      try {
+        const response = await updateBusType(idBusType, formData.typeVehicle, formData.numberSeat, formData.typeSeat)
+        if (response) {
+          closeModal()
+          toast.success('Cập nhật loại xe thành công!', { autoClose: 2000 })
+        }
+      } catch (message) {
+        toast.error(message, { autoClose: 2000 })
+      }
+    }
   }
   return (
     <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered>

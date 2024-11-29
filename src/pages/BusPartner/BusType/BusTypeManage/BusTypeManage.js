@@ -127,8 +127,11 @@ function BusTypeManage() {
     }
   }, [dispatch]) // Giới hạn dependency cho dispatch nếu cần thiết
   
-  const closeModal = () => {
+  const closeModalAdd = () => {
     setShowModalAdd(false)
+  }
+  const closeModalUpdate = () => {
+    setShowModalUpdate(false)
   }
   console.log('data:', data)
   
@@ -148,7 +151,7 @@ function BusTypeManage() {
   }
   useEffect(() => {
     handleGetAllBusTypes()
-  }, [handleGetAllBusTypes, showModalAdd])
+  }, [handleGetAllBusTypes, showModalAdd, showModalUpdate])
   return (
     <div className="container mt-4 mb-5">
       <div className={cx('header')}>{/* <p>Danh sách loại xe khách</p> */}</div>
@@ -175,7 +178,7 @@ function BusTypeManage() {
         functionModal={'add'}
         enableEdit={true}
         show={showModalAdd}
-        closeModal={closeModal}
+        closeModal={closeModalAdd}
         onHide={() => setShowModalAdd(false)}
       />
       <ModalManageBusType
@@ -183,6 +186,7 @@ function BusTypeManage() {
         enableEdit={true}
         show={showModalUpdate}
         idBusType={idSlectedBusType}
+        closeModal={closeModalUpdate}
         onHide={() => setShowModalUpdate(false)}
       />
     </div>
