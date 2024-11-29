@@ -35,7 +35,7 @@ function PaymentSuccess() {
           style={{ fontSize: '1.4rem' }}
         >
           <div
-            className="mt-4 d-flex flex-column row-gap-4"
+            className={cx('mt-4', 'd-flex', 'flex-column', 'row-gap-4', 'responsive')}
             style={{
               width: '500px',
               border: '1px solid var(--primary-color)',
