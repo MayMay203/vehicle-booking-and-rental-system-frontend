@@ -8,19 +8,32 @@ import FormInput from '~/components/Form/FormInput'
 import DatePicker from 'react-datepicker'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FormGender from '~/components/Form/FormGender'
-import { faCalendar, faCancel, faClose, faSave, faUpload, faUserLock } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCalendar,
+  faCancel,
+  faClose,
+  faSave,
+  faUpload,
+  faUserLock,
+} from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
-import { registerInfo } from '~/apiServices/registerInfo'
-import { useGlobalModal } from '~/Context/GlobalModalProvider'
-import { forgetPassword } from '~/apiServices/forgetPassword'
+import { updateAccount } from '~/apiServices/updateAccount'
+import { useDispatch, useSelector } from 'react-redux'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {
+  console.log('re-render account settings')
+  const { currentUser, isLoading } = useSelector((state) => {
+    console.log(state.user)
+    return state.user
+  })
+  const dispatch = useDispatch()
   const formRef = useRef(null)
   const inputFile = useRef(null)
-  const { currentUser, setCurrentUser, checkLoginSession } = useUserContext()
   const [fullName, setFullName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -28,22 +41,27 @@ function AccountSetting() {
   const [gender, setGender] = useState('')
   const [selectedImage, setSelectedImage] = useState(null)
   const [isModified, setIsModified] = useState(false)
-  const { openGlobalModal, closeGlobalModal } = useGlobalModal()
+
+  useEffect(() => {
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: isLoading }))
+  }, [isLoading, dispatch])
 
   useEffect(() => {
     if (formRef.current) {
       setIsValid(formRef.current.checkValidity())
     }
-  }, [fullName, birthday, phoneNumber])
+  }, [fullName, birthday, phoneNumber, gender])
 
   useEffect(() => {
     async function getInfo() {
-      if ((await checkLoginSession()) && currentUser) {
-        setFullName(currentUser.name)
-        const [day, month, year] = currentUser.birthDay.split('-')
-        setBirthday(new Date(`${year}-${month}-${day}`))
-        setGender(currentUser.gender)
-        setPhoneNumber(currentUser.phoneNumber)
+      if (dispatch(checkLoginSession) && currentUser) {
+        setFullName(currentUser.name || '')
+        if (currentUser.birthDay) {
+          const [day, month, year] = currentUser.birthDay.split('-')
+          setBirthday(new Date(`${year}-${month}-${day}`))
+        }
+        setGender(currentUser.gender || '')
+        setPhoneNumber(currentUser.phoneNumber || '')
         setSelectedImage(currentUser.avatar)
       }
     }
@@ -70,6 +88,7 @@ function AccountSetting() {
     setGender(currentUser.gender)
     setIsModified(false)
     setSelectedImage(currentUser.avatar)
+    setIsValid(true)
   }
 
   const handleChooseImage = (e) => {
@@ -94,7 +113,7 @@ function AccountSetting() {
     e.preventDefault()
     try {
       const accountInfo = {
-        username: currentUser.email,
+        id: currentUser.id,
         name: fullName,
         gender,
         birthDay: birthday.toLocaleDateString('en-GB').replace(/\//g, '-'),
@@ -102,7 +121,7 @@ function AccountSetting() {
       }
       const formData = new FormData()
       formData.append('account_info', new Blob([JSON.stringify(accountInfo)], { type: 'application/json' }))
-      if (selectedImage) {
+      if (selectedImage !== currentUser.avatar) {
         const base64Data = selectedImage.split(',')[1]
         const byteCharacters = atob(base64Data)
         const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i))
@@ -110,26 +129,28 @@ function AccountSetting() {
         const imageBlob = new Blob([byteArray], { type: 'image/png' })
         formData.append('fileAvatar', imageBlob, 'avatar.png')
       }
-      const userData = await registerInfo(formData)
-      toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
-      setIsModified(false)
-      setCurrentUser(userData.accountInfo)
-    } catch {
+      if (dispatch(checkLoginSession())) {
+        if (selectedImage !== currentUser.avatar) {
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+        }
+        const userData = await updateAccount(formData)
+        dispatch(setCurrentUser({ currentUser: userData.accountInfo }))
+        setIsModified(false)
+        toast.success('Cập nhật thông tin thành công!', { autoClose: 1000, position: 'top-center' })
+        if (selectedImage !== currentUser.avatar) {
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+        }
+      }
+    } catch (error) {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      console.log(error)
       toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
     }
   }
 
   const handleChangePassword = async (e) => {
     e.preventDefault()
-    try {
-      openGlobalModal('loading')
-      const data = await forgetPassword(currentUser.email)
-      closeGlobalModal('loading')
-      toast.success(data.info, { autoClose: 1500, position: 'top-center' })
-    } catch (message) {
-      closeGlobalModal('loading')
-      toast.error(message, { autoClose: 1500, position: 'top-center' })
-    }
+    dispatch(setAuthModalVisible({ modalName: modalNames.CHANGE_PASSWORD, isVisible: true }))
   }
 
   return (
@@ -146,7 +167,13 @@ function AccountSetting() {
           <div className="col-12 col-lg-5">
             <div className="d-flex flex-column row-gap-5 align-items-center">
               <div className={cx('avatar-wrapper')}>
-                <input type="file" className={cx('input-file')} onChange={handleChooseImage} ref={inputFile} />
+                <input
+                  type="file"
+                  className={cx('input-file')}
+                  accept="image/*"
+                  onChange={handleChooseImage}
+                  ref={inputFile}
+                />
                 <img src={selectedImage ? selectedImage : images.addAvatar} alt="avatar" className={cx('avatar')}></img>
               </div>
               <div className="d-flex column-gap-3 mt-3">
@@ -173,26 +200,21 @@ function AccountSetting() {
           <div className="col-12 col-lg-7">
             <div className={cx('item')}>
               <form ref={formRef}>
-                <FormInput
-                  title="Email"
-                  id="email"
-                  type="email"
-                  value={currentUser ? currentUser.email : ''}
-                  disabled
-                ></FormInput>
+                <FormInput title="Email" id="email" type="email" star value={currentUser.email} disabled></FormInput>
                 <FormInput
                   id="fullname"
-                  value={fullName}
+                  value={fullName ? fullName : ''}
                   type="fullname"
                   title="Họ và tên"
                   error="Vui lòng nhập họ và tên"
                   required
                   isValid={isValid}
                   onChange={(e) => handleChange(e.target.value, setFullName)}
+                  star
                 />
                 <FormInput
                   id="phone"
-                  value={phoneNumber}
+                  value={phoneNumber ? phoneNumber : ''}
                   type="phone"
                   title="Số điện thoại"
                   error={phoneNumber ? 'Số điện thoại không đúng định dạng' : 'Vui lòng nhập số điện thoại'}
@@ -200,9 +222,11 @@ function AccountSetting() {
                   pattern="[0-9]{10}"
                   isValid={isValid}
                   onChange={(e) => handleChange(e.target.value, setPhoneNumber)}
+                  star
                 />
                 <div className="mb-3">
                   <label className="mb-4">Ngày sinh</label>
+                  <span className={cx('star')}>*</span>
                   <div className={cx('date-wrapper', 'd-flex', 'align-items-center')}>
                     <DatePicker
                       className={cx('date-input')} // Sử dụng class để áp dụng style cho input
@@ -211,17 +235,18 @@ function AccountSetting() {
                       dateFormat="dd-MM-yyyy"
                       maxDate={new Date()}
                       placeholderText="Chọn ngày sinh"
+                      required
                     />
                     <FontAwesomeIcon icon={faCalendar} className={cx('calendar-icon')} />
                   </div>
                 </div>
-                <FormGender handleGender={handleGender} gender={gender} />
+                <FormGender handleGender={handleGender} gender={gender} star />
                 <div className="d-flex column-gap-5 justify-content-center mt-5">
                   <Button
+                    type="button"
                     className={cx('btn-cancel')}
                     outline
                     onClick={handleCancel}
-                    type="button"
                     disabled={!isModified}
                     leftIcon={<FontAwesomeIcon icon={faCancel} />}
                   >
@@ -253,5 +278,6 @@ function AccountSetting() {
     </div>
   )
 }
+
 
 export default AccountSetting

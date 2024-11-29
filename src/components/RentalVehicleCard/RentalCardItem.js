@@ -8,10 +8,15 @@ import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import Rating from '../Rating'
 const cx = classNames.bind(styles)
-function RentalCardItem({typeService}) {
+function RentalCardItem({typeService, role}) {
   const navigate = useNavigate() 
   const handleClickVehicle = (type) => {
-    navigate('/rent-vehicle/rental-service/rental-service-detail', { state: { typeService: type } }) 
+    if(role==='user'){
+      navigate('/rent-vehicle/rental-service/rental-service-detail', { state: { typeService: type } }) 
+    }
+    else if(role==='partner'){
+      navigate('/service-manage/detail-service-rental', { state: { typeService: type } }) 
+    }
   }
   return (
     <Button className={cx('rental-card', 'col-12', 'col-md-9', 'col-lg-4', 'col-xl-4')} variant="none" onClick={() => handleClickVehicle(typeService)}>

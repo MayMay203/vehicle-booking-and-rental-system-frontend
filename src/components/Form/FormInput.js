@@ -6,7 +6,20 @@ import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
 
 const cx = classNames.bind(styles)
 
-function FormInput({ id, type, title, error, isValid, value, autoComplete, className, password, disabled, ...props }) {
+function FormInput({
+  id,
+  type,
+  title,
+  error,
+  isValid,
+  value,
+  autoComplete,
+  className,
+  password,
+  disabled,
+  star,
+  ...props
+}) {
   const [showError, setShowError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const inputRef = useRef(null)
@@ -28,6 +41,7 @@ function FormInput({ id, type, title, error, isValid, value, autoComplete, class
     <div className={cx('form-group', { [className]: className })}>
       <label className={cx('form-label')} htmlFor={id}>
         {title}
+        {star && <span className={cx('star')}>*</span>}
       </label>
       <div className="position-relative">
         <input

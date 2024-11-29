@@ -1,0 +1,16 @@
+@use '../../../abstracts' as abstracts;
+
+.wrapper{
+    padding-bottom: 60px;
+}
+
+.custom-margin{
+    margin-top: 50px!important;
+}
+
+.btn-add{
+    min-width: 30px;
+    @include abstracts.screen(md){
+        min-width: 20px;
+    }
+}

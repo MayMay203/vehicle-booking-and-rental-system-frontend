@@ -1,0 +1,36 @@
+.form-infor-ID{
+    margin-top: 1rem;
+}
+.txt{
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    color: black;
+    &:focus {
+        border-color: #FF9800;
+        box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); 
+    }
+}
+.btn{
+    min-width: 5rem !important;
+    height: 3rem;
+    border: #2474E5;
+    font-weight: 400;
+    margin: 0 2rem;
+}
+.btn-cancel{
+    color: #2474E5;
+    background-color: #f8fbff;
+}
+.btn-save{
+    background-color: #2474E5;
+}
+.selectbox {
+  width: 100%;
+}
+.txt-warn{
+    color: #D34714;
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 1rem 0;
+}

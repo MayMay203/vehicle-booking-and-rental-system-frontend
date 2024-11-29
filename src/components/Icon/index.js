@@ -19,5 +19,20 @@ export {
   TicketFeatIcon,
   PaymentIcon,
   FilterIcon,
-  MessageIcon
+  MessageIcon,
+  BirdayIcon,
+  CallIcon,
+  GenderIcon,
+  EmailIcon,
+  LocationIcon,
+  FanPage,
+  DescriptionIcon,
+  PolicyIcon,
+  LicenceIcon,
+  ImageIcon,
+  BankIcon,
+  PartnerIcon,
+  CitizenIcon,
+  InsuranceIcon,
+  SuccessIcon
 } from './Icon'

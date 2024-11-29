@@ -1,37 +1,33 @@
-import { images } from '~/assets/images';
 import styles from './ImageList.module.scss'
-import classNames from 'classnames/bind';
+import classNames from 'classnames/bind'
 import 'matchmedia-polyfill'
 import 'matchmedia-polyfill/matchMedia.addListener'
 import Slider from 'react-slick'
+import PropTypes from 'prop-types'
 
 const cx = classNames.bind(styles)
-function ImageList() {
-    var settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-    }
-    return (
-        <div className='mt-5 p-5 pt-2'>
-        <Slider {...settings}>
-          <div className={cx('item')}>
-            <img className={cx('img')} src={images.trip} alt="car"></img>
+function ImageList({ dataList }) {
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  }
+  return (
+    <div className="mt-5 p-5 pt-2">
+      <Slider {...settings}>
+        {dataList.map((image, index) => (
+          <div key={index} className={cx('item')}>
+            <img className={cx('img')} src={image} alt="car"></img>
           </div>
-          <div className={cx('item')}>
-            <img className={cx('img')} src={images.trip} alt="car"></img>
-          </div>
-          <div className={cx('item')}>
-            <img className={cx('img')} src={images.renting} alt="car"></img>
-          </div>
-          <div className={cx('item')}>
-            <img className={cx('img')} src={images.renting2} alt="car"></img>
-          </div>
-        </Slider>
-      </div>
-    )
+        ))}
+      </Slider>
+    </div>
+  )
 }
 
-export default ImageList;
+ImageList.propTypes = {
+  dataList: PropTypes.array.isRequired,
+}
+export default ImageList

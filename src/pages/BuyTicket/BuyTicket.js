@@ -5,13 +5,34 @@ import { config } from '~/config'
 import Search from '~/components/Search'
 import { FilterIcon } from '~/components/Icon'
 import TicketList from '~/components/TicketList/TicketList'
-import Button from '~/components/Button'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import PopperItem from '~/components/PopperWrapper/PopperItem'
+import { useEffect, useState } from 'react'
+import { getAllTickets } from '~/apiServices/ticket/getAllTicket'
+import { Pagination } from 'antd'
+import { useSelector } from 'react-redux'
 
 const cx = classNames.bind(styles)
 function BuyTicket() {
+  const [ticketList, setTicketList] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [total, setTotal] = useState(0)
+  const { busName, departureLocation, arrivalLocation, departureDate } = useSelector(
+    (state) => state.search.searchTicket,
+  )
+
+  useEffect(() => {
+    async function fetchAllTicketList() {
+      const data = await getAllTickets(currentPage, departureLocation, arrivalLocation, busName, departureDate)
+      if (data) {
+        setTicketList(data.result)
+        setTotal(data.meta.total)
+      }
+    }
+    fetchAllTicketList()
+  }, [currentPage, busName, departureLocation, arrivalLocation, departureDate])
+
   return (
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb className="mb-5">
@@ -26,7 +47,7 @@ function BuyTicket() {
       <div className="mt-5 fw-medium fs-1 d-flex justify-content-between">
         <div>
           <span> Kết quả: </span>
-          <span> 30 chuyến</span>
+          <span>{`${total} chuyến`}</span>
         </div>
         <Tippy
           interactive
@@ -50,12 +71,18 @@ function BuyTicket() {
           </button>
         </Tippy>
       </div>
+      <TicketList dataList={ticketList} />
 
-      <TicketList />
-
-      <Button roundHalf className={cx('btn-more')}>
-        Xem thêm
-      </Button>
+      {ticketList.length > 0 && (
+        <Pagination
+          className="mt-5"
+          align="center"
+          current={currentPage}
+          pageSize={config.variables.pagesize}
+          total={total}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </div>
   )
 }

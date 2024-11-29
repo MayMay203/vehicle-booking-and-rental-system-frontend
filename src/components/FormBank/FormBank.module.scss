@@ -1,0 +1,42 @@
+.form-bank {
+  margin-top: 2rem;
+//   height: 32rem;
+  overflow-y: auto;
+}
+.txt {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+}
+.txt-noButton{
+    font-size: 1.5rem;
+    margin-bottom: 1.8rem;
+    font-weight: 500;
+    color: black;
+    &:focus {
+        border-color: #FF9800;
+        box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); 
+    }
+}
+.selectbox {
+  width: 100%;
+}
+.btn {
+  min-width: 5rem !important;
+  height: 3rem;
+  border: #2474e5;
+  font-weight: 400;
+  margin: 0 2rem;
+}
+.btn-cancel {
+  color: #2474e5;
+  background-color: #f8fbff;
+}
+.btn-save {
+  background-color: #2474e5;
+}

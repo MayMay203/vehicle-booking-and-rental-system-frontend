@@ -1,0 +1,26 @@
+@use '../../abstracts' as abstracts;
+.wrap-step{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: center;
+    line-height: 2rem;
+    align-items: top;
+    margin-top: 2rem;
+}
+.image{
+    width: 70px;
+    @include abstracts.screen(sm){
+        width: 50px;
+    }
+}
+
+.line-dashed{
+    border: 1px dashed #FF7F50;
+}
+
+.content-step{
+    margin: 2rem 0;
+    font-weight: 500;
+    text-align: center;
+    color: #A33A3A;
+}

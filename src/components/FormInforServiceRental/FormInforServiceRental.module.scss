@@ -1,0 +1,29 @@
+.txt {
+  font-size: 1.5rem;
+  // margin-bottom: 1rem;
+  font-weight: 500;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+}
+.selectbox {
+  width: 100%;
+}
+.infor-item {
+  //   width: 80%;
+}
+.max-description {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  text-align: end;
+}
+.padding {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+.padding-s {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}

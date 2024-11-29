@@ -1,0 +1,56 @@
+@use '../../abstracts' as abstracts;
+
+.wrapper{
+    display: flex;
+    align-items: center;
+    padding: 8px 0 8px 12px;
+    width: 45%;
+    height: 44px;
+    background-color: #ece9e9;
+    border-radius: 999px;
+
+    @include abstracts.screen(lg){
+        width: 60%;
+    }
+
+    @include abstracts.screen(md){
+        width: 85%;
+    }
+}
+
+.input{
+    flex: 1;
+    border: none;
+    font-size: 1.6rem;
+
+    @include abstracts.screen(md){
+        font-size: 1.5rem;
+    }
+}
+
+.icon{
+    font-size: 2rem;
+    color: #6f6e71;
+    transition: color 0.2s ease;
+}
+
+.btn-search{
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding: 8px 8px 8px 2px;
+}
+
+.disabled{
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.custom-spinner{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+    animation-duration: 0.2s;
+    margin-right: 16px;
+}

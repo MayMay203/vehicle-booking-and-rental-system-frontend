@@ -1,28 +1,30 @@
 import { Modal } from 'react-bootstrap'
 import styles from './AuthModal.module.scss'
 import classNames from 'classnames/bind'
-import { useAuthModal } from '~/Context/AuthModalProvider'
 import FormInput from '~/components/Form/FormInput'
 import Button from '~/components/Button'
 import { images } from '~/assets/images'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { register } from '~/apiServices/register'
-import {useUserContext } from '~/Context/UserProvider'
 import { toast } from 'react-toastify'
 import { config } from '~/config'
 import { resendOTP } from '~/apiServices/resendOTP'
-import { useGlobalModal } from '~/Context/GlobalModalProvider'
+import { useDispatch, useSelector } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { saveEmail } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
-  const { isOpenAuthModal, openAuthModal, closeAuthModal } = useAuthModal()
-  const { openGlobalModal, closeGlobalModal } = useGlobalModal()
+  console.log('re-render register modal')
+  const showRegister = useSelector((state) => state.authModal.register)
+  const dispatch = useDispatch()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
   const [isValid, setIsValid] = useState(false)
   const formRef = useRef(null)
-  const { saveEmail } = useUserContext()
   const [isShow, setIsShow] = useState(false)
 
   useEffect(() => {
@@ -43,23 +45,24 @@ function RegisterModal() {
   const handleContinue = async (e) => {
     e.preventDefault()
     try {
-      openGlobalModal('loading')
-      saveEmail(email)
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+      dispatch(saveEmail(email))
       await register(email, password, confirmPass)
-      closeGlobalModal('loading')
-      await closeAuthModal('register')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
       reset()
-      openAuthModal('authCode', { type: 'register' })
+      dispatch(setAuthModalVisible({ modalName: modalNames.AUTH_CODE, isVisible: true }))
     } catch (message) {
-      closeGlobalModal('loading')
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       toast.error(message, { autoClose: 2000 })
       setIsShow(message.includes(config.message.emailConfirm))
     }
   }
 
   const handleShowLogin = () => {
-    closeAuthModal('register')
-    openAuthModal('login')
+    reset()
+    dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
+    dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
   }
 
   const handleChange = useCallback((value, functionChange) => {
@@ -67,15 +70,35 @@ function RegisterModal() {
   }, [])
 
   const handleShowOTPModal = async () => {
-    closeAuthModal('register')
+    reset()
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
     setIsShow(false)
     await resendOTP(email)
-    toast.info('Kiểm tra email để nhận OTP')
-    openAuthModal('authCode', { type: 'register' })
+    dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+    dispatch(setAuthModalVisible({ modalName: modalNames.AUTH_CODE, isVisible: true }))
+    toast.info('Kiểm tra email để nhận OTP', { autoClose: 1200 })
+  }
+
+  const handleGoogleLogin = (e) => {
+    e.preventDefault()
+    const redirectUri = config.variables.redirectUrl
+    const authUrl = config.variables.authGoogleUrl
+    const googleClientId = config.variables.googleClientId
+
+    const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
+      redirectUri,
+    )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`
+
+    window.location.href = targetUrl
   }
 
   return (
-    <Modal show={isOpenAuthModal.register} onHide={() => closeAuthModal('register')} centered>
+    <Modal
+      show={showRegister}
+      onHide={() => dispatch(setAuthModalVisible({ modalName: modalNames.REGISTER, isVisible: false }))}
+      centered
+    >
       <Modal.Header closeButton>
         <div className={cx('header')}>
           <Modal.Title className={cx('title')}>Đăng ký</Modal.Title>
@@ -132,7 +155,7 @@ function RegisterModal() {
             Tiếp tục
           </Button>
           <div className={cx('other')}>hoặc</div>
-          <button className={cx('btn-google')}>
+          <button className={cx('btn-google')} onClick={handleGoogleLogin}>
             <span className={cx('icon')}>
               <img src={images.google} alt="google" className={cx('google-img')}></img>
             </span>
@@ -140,7 +163,7 @@ function RegisterModal() {
           </button>
           <div className={cx('bottom')}>
             <span className={cx('content')}>Bạn đã có tài khoản?</span>
-            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowLogin}>
+            <button className={cx('btn-link', 'btn-bottom')} onClick={handleShowLogin} type="button">
               Đăng nhập
             </button>
           </div>

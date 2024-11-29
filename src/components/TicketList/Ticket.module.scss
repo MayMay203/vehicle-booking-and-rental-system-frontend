@@ -41,12 +41,6 @@
     font-weight: 600;
 }
 
-.amount{
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #BA6B2B;
-}
-
 .location-time{
     font-weight: 600;
 }
@@ -97,6 +91,12 @@
     @include abstracts.screen(md){
         font-size: 2.2rem;
     }
+}
+
+.amount{
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #BA6B2B;
 }
 
 .sale-off{

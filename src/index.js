@@ -7,25 +7,14 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import AuthModalProvider from './Context/AuthModalProvider'
-import UserProvider from './Context/UserProvider';
-import ServiceModalProvider from './Context/ServiceModalProvider'
-import GlobalModalProvider from './Context/GlobalModalProvider';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  <GlobalModalProvider>
-    <UserProvider>
-      <AuthModalProvider>
-        <ServiceModalProvider>
-          <App />
-        </ServiceModalProvider>
-      </AuthModalProvider>
-    </UserProvider>
-  </GlobalModalProvider>,
+  <Provider store={store}>
+      <App />
+  </Provider>,
 )
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

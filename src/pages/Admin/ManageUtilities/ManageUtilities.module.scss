@@ -1,0 +1,36 @@
+
+.header{
+    text-align: center;
+    text-transform: uppercase;
+    margin: 40px 0;
+    font-size: 3rem;
+    font-weight: 500;
+    color: #D5420C;
+}
+.btn-add{
+    width: 150px;
+
+}
+.table-container{
+    max-height: 20rem;
+    overflow-y: auto;
+}
+.txt{
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: black;
+}
+.icon-edit{
+    color: #FF7F50;
+}
+.icon-delete{
+    color: #E20D0D;
+}
+.custom-search{
+    width: 300px;
+    margin-bottom: 30px;
+}
+// Màu bạc
+// .colored-image {
+//   filter: brightness(1.1) saturate(0) contrast(1.2);
+// }

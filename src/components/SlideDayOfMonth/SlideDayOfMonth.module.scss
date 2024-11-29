@@ -1,0 +1,58 @@
+.wrap-slide {
+  text-align: center;
+  padding: 20px;
+  display: flex;
+}
+.wrap-dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+.date {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #d5420c;
+  color: #d5420c;
+  border-radius: 4px;
+}
+.no-date {
+}
+.nav-button-page {
+  font-size: 2rem;
+  padding: 1rem;
+  color: #e20d0d;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+.nav-button-page:hover,
+.nav-button-page:active,
+.nav-button-page:focus {
+  background-color: #fcd4c6;
+  color: #e20d0d;
+  outline: none;
+  box-shadow: none;
+}
+.nav-button-page:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  background-color: white;
+}
+.background-red {
+  display: flex;
+  background-color: #fff6f3;
+  padding: 10px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+}
+.text {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  margin: 1rem;
+}

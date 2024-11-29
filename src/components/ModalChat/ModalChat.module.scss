@@ -1,29 +1,45 @@
-.modal-chat {
-  max-height: 15rem; 
-  overflow: visible; 
-  position:relative;
+.wrapper{
+  padding: 4px 2px 0 2px;
+  min-width: 380px;
 }
+
 .body-message {
-  max-height: 400px; 
+  max-height: 56vh; 
   overflow-y: auto; 
+  margin-right: -10px;
+  padding-right: 4px;
+  overscroll-behavior: contain;
 }
-.title{
-  font-size: 2rem;
-  margin-right: 1rem;
+
+.heading{
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1.8rem;
 }
+
 .wrap-btn{
-  padding: 0 0 2rem 0;
-  margin: 1rem 0;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.175);
 }
+
 .btn{
-  background-color: white;
-  color: #FF7F50;
-  border: 1px solid #FF7F50;
-  height: 36px;
-  
+  font-size: 1.4rem;
+  min-width: 50px!important;
+  height: 32px;
+  font-weight: 400;
+  border-color: var(--orange-color);
+  color: var(--orange-color);
+  background-color: #fff;
 }
+
 .btn.active{
   background-color: #FF7F50;
   color: white;
+}
+
+@media (max-width:400px) {
+  .wrapper{
+      min-width: 333px;
+  }
 }
