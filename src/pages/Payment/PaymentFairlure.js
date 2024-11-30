@@ -1,5 +1,6 @@
-import { Button, Result } from 'antd'
+import {Result } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import Button from '~/components/Button'
 import { config } from '~/config'
 
 function PaymentFailure() {
@@ -10,14 +11,16 @@ function PaymentFailure() {
       status="error"
       title="Đặt vé không thành công"
       subTitle="Giao dịch của bạn không thành công do đã quá thời hạn thanh toán hoặc xảy ra sự cố mạng. Vui lòng thử lại!"
-      extra={[
-        <Button type="primary" key="console" onClick={() => navigate(config.routes.home)}>
-          Trở về trang chủ
-        </Button>,
-        <Button key="buy" onClick={() => navigate(config.routes.ticket)}>
-          Đặt vé lại
-        </Button>,
-      ]}
+      extra={
+       <div className='d-flex justify-content-center row-gap-3'>
+          <Button outline onClick={() => navigate(config.routes.home)} style={{width: '160px'}}>
+            Trở về trang chủ
+          </Button>,
+          <Button primary onClick={() => navigate(config.routes.ticket)} style={{width: '160px'}}>
+            Đặt vé lại
+          </Button>,
+       </div>
+      }
     ></Result>
   )
 }

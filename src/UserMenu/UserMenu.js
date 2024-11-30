@@ -1,7 +1,7 @@
 import Image from '~/components/Image'
 import styles from './UserMenu.module.scss'
 import classNames from 'classnames/bind'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { config } from '~/config'
 import Button from '~/components/Button'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,7 @@ import { setMenu } from '~/redux/slices/menuSlice'
 const cx = classNames.bind(styles)
 function UserMenu() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [showMode, setShowMode] = useState(false)
   const currentUser = useSelector((state) => state.user.currentUser)
 
@@ -53,11 +54,21 @@ function UserMenu() {
       )}
       {showMode && (
         <div className="d-flex flex-column row-gap-2">
-          <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('userMenu'))}>
+          <Button
+            className={cx('mode-item')}
+            onClick={() => {
+              dispatch(setMenu('userMenu'))
+              navigate(config.routes.home)
+            }}
+          >
             Chế độ người dùng
           </Button>
           {currentUser.roles.includes(config.variables.busPartner) && (
-            <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('busPartnerMenu'))}>
+            <Button className={cx('mode-item')} onClick={() => {
+              dispatch(setMenu('busPartnerMenu'))
+              navigate(config.routes.busTrip)
+            }}>
+    
               Đối tác nhà xe
             </Button>
           )}

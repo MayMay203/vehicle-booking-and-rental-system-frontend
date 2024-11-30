@@ -11,7 +11,7 @@ import { createSearchParams, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllDriverPartners, fetchAllRegisterPartners } from '~/redux/slices/partnerSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { Pagination } from 'antd'
+import { Empty, Pagination } from 'antd'
 
 const cx = classNames.bind(styles)
 function ManagePartners() {
@@ -126,6 +126,10 @@ function ManagePartners() {
           total={total}
           onChange={(page) => setCurrentPage(page)}
         />
+      )}
+
+      {partnerList.result.length === 0 && (
+        <Empty style={{ marginTop: '70px' }} description="Không có dữ liệu đối tác nào" />
       )}
     </div>
   )

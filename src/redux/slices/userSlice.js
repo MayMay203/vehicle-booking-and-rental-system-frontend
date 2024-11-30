@@ -14,6 +14,7 @@ const initialState = {
 }
 
 export const getCurrentUser = createAsyncThunk('user/getCurrentUser', async () => {
+  console.log('Vo day nhá')
   const data = await getMyAccount()
   return data
 })
@@ -88,11 +89,15 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getCurrentUser.pending, (state) => {
-        state.loading = true
+      .addCase(getCurrentUser.pending, () => {
+        // state.loading = true
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
-        state.loading = false
+        // state.loading = false
+        state.currentUser = action.payload
+      })
+      .addCase(getCurrentUser.rejected, (state, action) => {
+        // state.loading = false
         state.currentUser = action.payload
       })
       .addCase(checkLogin.pending, (state) => {
@@ -101,8 +106,11 @@ const userSlice = createSlice({
       .addCase(checkLogin.fulfilled, (state) => {
         state.loading = false
       })
-      .addCase(checkLoginSession.fulfilled, (state) => {
+      .addCase(checkLogin.rejected, (state) => {
         state.loading = false
+      })
+      .addCase(checkLoginSession.fulfilled, () => {
+        // state.loading = false
       })
   },
 })

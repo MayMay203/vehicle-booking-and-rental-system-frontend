@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 function TicketList({ status, dataList }) {
   return (
     <div>
-      {dataList.map((ticket) => (
-        <TicketItem key={ticket.busTripScheduleId} status={status} data={ticket} />
+      {dataList.map((ticket, index) => (
+        <TicketItem key={index} status={status} data={ticket} />
       ))}
     </div>
   )

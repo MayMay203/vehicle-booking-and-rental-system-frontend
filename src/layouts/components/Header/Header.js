@@ -35,7 +35,7 @@ function Header() {
   const [isShowMessage, setIsShowMessage] = useState(false)
   const [isShowDetailPartner, setShowDetailPartner] = useState(false)
   const [isSmall, setIsSmall] = useState(window.innerWidth < 768)
-
+  console.log('Loading:', loading)
   // Menu
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.currentMenu)
@@ -455,12 +455,20 @@ function Header() {
                     <PopperWrapper className={cx('custom-border')}>
                       <div className="d-flex flex-column">
                         <div className={cx('wrap-link')}>
-                          <NavLink className={cx('link')} to={config.routes.busType}>
+                          <NavLink
+                            className={cx('link')}
+                            to={config.routes.busType}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
                             Quản lý loại xe
                           </NavLink>
                         </div>
                         <div className={cx('wrap-link')}>
-                          <NavLink to={config.routes.bus} className={cx('link')}>
+                          <NavLink
+                            to={config.routes.bus}
+                            className={cx('link')}
+                            onClick={() => setShowDetailPartner(false)}
+                          >
                             Quản lý xe
                           </NavLink>
                         </div>

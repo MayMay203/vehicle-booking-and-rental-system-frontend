@@ -169,7 +169,7 @@ function PaymentSuccess() {
                 <div className="p-4">
                   <div className="d-flex justify-content-between mb-4">
                     <span>Tiền vé xe:</span>
-                    <span style={{ color: '#008E28', fontWeight: 600 }}>{detailData.orderInfo?.pricePerTicket}</span>
+                    <span style={{ color: '#008E28', fontWeight: 600 }}>{detailData.orderInfo?.pricePerTicket.replace('.',',')}</span>
                   </div>
                   <div className="d-flex justify-content-between mb-4">
                     <span>Số lượng vé:</span>
@@ -195,7 +195,7 @@ function PaymentSuccess() {
                   <div className={cx('d-flex', 'justify-content-between', 'mb-4')}>
                     <span>Tổng tiền đã thanh toán:</span>
                     <span className="fw-bold" style={{ color: 'var(--primary-color)' }}>
-                      {detailData.orderInfo?.priceTotal}
+                      {detailData.orderInfo?.priceTotal.replace('.',',')}
                     </span>
                   </div>
 

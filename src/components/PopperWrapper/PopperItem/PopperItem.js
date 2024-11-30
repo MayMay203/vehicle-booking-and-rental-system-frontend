@@ -2,12 +2,14 @@ import styles from './PopperItem.module.scss'
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
-function PopperItem({ id, title }) {
+function PopperItem({ id, title, onClick}) {
   return (
-    <label htmlFor={id} className={cx('wrapper')}>
-      <input id={id} type="radio" name="item" />
-      {title}
-    </label>
+    <button className={cx('wrapper')} onClick={onClick}>
+      <input id={id} type="radio" name="item" className={cx('radio-button')} hidden defaultChecked={id === '1'} />
+      <label htmlFor={id} className={cx('label')}>
+        {title}
+      </label>
+    </button>
   )
 }
 

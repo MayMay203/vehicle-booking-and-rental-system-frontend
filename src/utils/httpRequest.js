@@ -20,6 +20,11 @@ export const put = async (url, body = {}, options = {}) => {
   return response.data
 }
 
+export const patch = async (url, body = {}, options = {}) => {
+  const response = await httpRequest.patch(url, body, options)
+  return response.data
+}
+
 export const DELETE = async (path, options = {}, body = {}) => {
   const response = await httpRequest.delete(path, {
     ...options,

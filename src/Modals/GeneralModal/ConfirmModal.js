@@ -15,6 +15,8 @@ import { setMenu } from '~/redux/slices/menuSlice'
 import { deleteUtility } from '~/apiServices/manageUtilities/deleteUtility'
 import { fetchAllFeeServices, fetchAllUtilities } from '~/redux/slices/generalAdminSlice'
 import { deleteFeeService } from '~/apiServices/manageFeeService/deleteFeeService'
+import { cancelTicket } from '~/apiServices/ticket/cancelTicket'
+import { fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -90,6 +92,27 @@ function ConfirmModal() {
       } catch (message) {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+      }
+    } else if (showConfirmModal.name === generalModalNames.CANCEL_TICKET) {
+      try {
+        if (dispatch(checkLoginSession())) {
+          await cancelTicket(showConfirmModal.id)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          toast.success('Vé của bạn đã được hủy thành công!', { autoClose: 800, position: 'top-center' })
+          dispatch(
+            fetchAllMyTicketOrders({
+                isCanceled: 0,
+                isGone: false,
+              }),
+            )
+        }
+      }
+      catch (message) {
+         if (message.includes("You can't cancel this order because it has exceed the time limit")) {
+          toast.error('Vé xe không thể hủy vì đã quá thời hạn.!', { autoClose: 1000, position: 'top-center' })
+          return
+        }
+        toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau!', { autoClose: 800, position: 'top-center' })
       }
     }
   }

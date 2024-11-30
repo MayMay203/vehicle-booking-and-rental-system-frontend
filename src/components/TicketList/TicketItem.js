@@ -20,6 +20,8 @@ import { getBusUtilities } from '~/apiServices/ticket/getBusUtilities'
 import { getPoliciesTicket } from '~/apiServices/ticket/getPoliciesTicket'
 import { getBusImage } from '~/apiServices/ticket/getBusImage'
 import { getPickReturnLocations } from '~/apiServices/ticket/getPickReturnLocations'
+import { useNavigate } from 'react-router-dom'
+import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status, data = {} }) {
@@ -29,6 +31,7 @@ function TicketItem({ status, data = {} }) {
   const [isDetail, setIsDetail] = useState(false)
   const [detailInfor, setDetaiInfor] = useState({})
   const { isLogin } = useSelector((state) => state.user)
+  const navigate = useNavigate()
 
   const settings = useMemo(
     () => ({
@@ -98,16 +101,15 @@ function TicketItem({ status, data = {} }) {
     async function getDetail() {
       const actions = {
         utility: async () => {
-          const utilitiesList = await getBusUtilities(data.busInfo.busId)
+          const utilitiesList = await getBusUtilities(data.busInfo?.busType?.id || data.busInfo?.busId)
           setDetaiInfor((prev) => ({ ...prev, [type]: utilitiesList }))
         },
         policy: async () => {
-          const policiesList = await getPoliciesTicket(data.busTripScheduleId)
-          console.log(policiesList)
+          const policiesList = await getPoliciesTicket(data.businessPartnerInfo?.id || data.businessPartner.id)
           setDetaiInfor((prev) => ({ ...prev, [type]: policiesList }))
         },
         image: async () => {
-          const imagesList = await getBusImage(data.busInfo.busId)
+          const imagesList = await getBusImage(data.busInfo?.busType?.id || data.busInfo?.busId)
           setDetaiInfor((prev) => ({ ...prev, [type]: imagesList }))
         },
         feedback: async () => {
@@ -117,7 +119,7 @@ function TicketItem({ status, data = {} }) {
           // Implement discount logic here
         },
         pickReturn: async () => {
-          const locations = await getPickReturnLocations(data.busTripInfo.id)
+          const locations = await getPickReturnLocations(data.busTripInfo?.id || data.tripInfo?.id)
           setDetaiInfor((prev) => ({ ...prev, [type]: locations }))
         },
       }
@@ -145,6 +147,7 @@ function TicketItem({ status, data = {} }) {
   }
 
   const handleChooseTicket = () => {
+    console.log(busTripScheduleId)
     if (isLogin) {
       dispatch(
         setTicketModalVisible({
@@ -173,13 +176,23 @@ function TicketItem({ status, data = {} }) {
   const handleCancelTicket = () => {
     dispatch(
       setConfirmModalVisible({
-        modalType: 'inputConfirm',
+        modalType: 'confirm',
         isOpen: true,
         title: 'Xác nhận huỷ vé',
-        description: 'Bạn chắc chắn muốn huỷ vé xe này?',
+        description: 'Vui lòng hủy vé ít nhất 12 tiếng trước giờ khởi hành. Bạn có chắc chắn muốn hủy vé xe này không?',
         name: generalModalNames.CANCEL_TICKET,
+        id: data.orderInfo.orderId,
       }),
     )
+  }
+
+  const handleSendMessage = () => {
+    // Create new conversation
+
+    // Get id conversation
+
+    // Navigate message detail page get all message
+    navigate(config.routes.message)
   }
 
   return (
@@ -188,14 +201,14 @@ function TicketItem({ status, data = {} }) {
         <div className="col">
           <div className={cx('image-wrapper')}>
             <img src={data.busInfo.imageRepresentative} alt="car" className={cx('image')}></img>
-            <button className={cx('btn-msg')}>
+            <button className={cx('btn-msg')} onClick={handleSendMessage}>
               <MessageIcon />
             </button>
           </div>
         </div>
         <div className="col d-flex flex-column gap-2 gap-lg-4">
           <div className="d-flex gap-4 align-items-center">
-            <span className={cx('name')}>{data.businessPartnerInfo?.name || 'hihi'}</span>
+            <span className={cx('name')}>{data.businessPartnerInfo?.name || data.businessPartner.name}</span>
             {/* {status && <span className={cx('amount')}>2 x 150.000đ</span>} */}
           </div>
           <div className="d-flex flex-wrap align-items-center gap-3">
@@ -209,9 +222,10 @@ function TicketItem({ status, data = {} }) {
             <img className={cx('location-img')} alt="location" src={images.location} />
             <div className={cx('location-time', 'd-flex', 'flex-column', 'gap-4', 'justify-content-center')}>
               <div className="d-flex gap-4">
-                <span>{`${data.departureTime || data.tripInfo.departureDateTime} ${
-                  data.busTripInfo?.departureLocation || data.tripInfo.departureLocation
-                }`}</span>
+                <p style={{ fontWeight: 400 }}>
+                  <span style={{ fontWeight: 600 }}>{data.departureTime || data.tripInfo.departureDateTime}</span>
+                  {` • ${data.busTripInfo?.departureLocation || data.tripInfo?.departureLocation}`}
+                </p>
                 {/* {status && (
                   <p className={cx('date')}>
                     <FontAwesomeIcon icon={faCalendar} />
@@ -220,21 +234,26 @@ function TicketItem({ status, data = {} }) {
                 )} */}
               </div>
 
-              <span className={cx('duration')}>{data.busTripInfo?.durationJourney || '2h'}</span>
-              <span>{`${data.arrivalTime || data.tripInfo.arrivalDateTime} ${
-                data.busTripInfo?.arrivalLocation || data.tripInfo.arrivalLocation
-              }`}</span>
+              <span className={cx('duration')}>
+                {data.busTripInfo?.durationJourney || data.tripInfo?.durationJourney}
+              </span>
+              <p style={{ fontWeight: 400 }}>
+                <span style={{ fontWeight: 600 }}>{data.arrivalTime || data.tripInfo.arrivalDateTime}</span>
+                {` • ${data.busTripInfo?.arrivalLocation || data.tripInfo.arrivalLocation}`}
+              </p>
             </div>
           </div>
         </div>
         <div className=" col col-md-12 d-flex flex-column justify-content-between align-items-start align-items-lg-end justify-content-md-end justify-content-lg-between">
           <div className="d-flex justify-content-md-end w-100 flex-lg-column gap-5 mb-4 mb-lg-0 gap-lg-4 align-items-center align-items-lg-end">
-            <span className={cx('price',{'amount':status})}>
+            <span className={cx('price', { amount: status })}>
               {data.priceTicket || `${data.orderInfo.numberOfTicket} x ${data.orderInfo.pricePerTicket}`}
             </span>
-            <span className={cx('sale-off')}>{`-${Math.round(
-              data.discountPercentage || data.orderInfo?.discountPercentage,
-            )}%`}</span>
+            {status ? (
+              <span className={cx('sale-off')}>{`-${Math.round(data.orderInfo?.discountPercentage)}%`}</span>
+            ) : (
+              <span className={cx('sale-off')}>{`-${Math.round(data.discountPercentage)}%`}</span>
+            )}
           </div>
           {!status && <span className={cx('status', 'w-100')}>{`Còn ${data.availableSeats} chỗ trống`}</span>}
           {status && (
@@ -248,7 +267,7 @@ function TicketItem({ status, data = {} }) {
           )}
           <div className="d-flex w-100 align-items-center justify-content-between justify-content-md-end justify-content-lg-none mt-4 mt-lg-0 gap-sm-2 gap-md-5 gap-lg-5">
             <button className={cx('actions', 'd-flex', 'gap-2', 'align-items-center')} onClick={handleShowDetail}>
-              <span>Thông tin chi tiết</span>
+              <span>Chi tiết chuyến xe</span>
               <FontAwesomeIcon
                 icon={faCaretDown}
                 style={{ rotate: isDetail ? '-180deg' : '0deg', transition: 'rotate .2s ease' }}
@@ -262,10 +281,11 @@ function TicketItem({ status, data = {} }) {
               <Button rounded onClick={handleCancelTicket}>
                 Huỷ
               </Button>
-            ) : (
-              <Button rounded onClick={handleChooseTicket}>
-                Đặt lại
-              </Button>
+              ) : (
+                  <></>
+              // <Button rounded onClick={handleChooseTicket}>
+              //   Đặt lại
+              // </Button>
             )}
           </div>
         </div>

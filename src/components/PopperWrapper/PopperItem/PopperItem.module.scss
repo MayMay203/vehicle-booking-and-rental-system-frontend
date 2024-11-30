@@ -4,7 +4,47 @@
     font-weight: 500;
     font-size: 1.7rem;
     align-items: center;
-    padding: 8px;
+    padding: 11px 8px;
     cursor: pointer;
     font-weight: 400;
+}
+
+.label{
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding-left: 22px;
+    height: 17px;
+    cursor: pointer;
+}
+
+.label::after,
+.label::before {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.label::before{
+    left: 0px;
+    width: 17px;
+    height: 17px;
+    background-color: #fff;
+    border: 1.6px solid var(--orange-color);
+}
+
+.label::after{
+    left: 4px;
+    bottom: 4px;
+    width: 9px;
+    height: 9px;
+    background-color: var(--orange-color);
+    display: none;
+}
+
+.radio-button:checked ~ .label::after{
+    display: block;
 }

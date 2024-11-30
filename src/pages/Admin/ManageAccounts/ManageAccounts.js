@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
-import { Pagination } from 'antd'
+import { Empty, Pagination } from 'antd'
 import { config } from '~/config'
 
 const cx = classNames.bind(styles)
@@ -118,6 +118,7 @@ function ManageAccounts() {
           onChange={(page) => setCurrentPage(page)}
         />
       )}
+      {accountList.length === 0 && <Empty style={{ marginTop: '70px' }} description="Không có dữ liệu tài khoản nào" />}
     </div>
   )
 }

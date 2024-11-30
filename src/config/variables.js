@@ -9,7 +9,7 @@ export const variables = {
   notConfirmed: 'PENDING_APPROVAL',
   cancelled: 'CANCEL',
   pagesize: 3,
-  busName: 'Nhà xe Tú Lạc',
+  busName: 'all',
   departureLocation: 'Đà Nẵng',
   arrivalLocation: 'Nam Định',
   departureDate: new Date().toISOString().split('T')[0],
