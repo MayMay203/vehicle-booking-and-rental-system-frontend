@@ -37,7 +37,8 @@ const initialState = {
   buyTicket: {
     isOpen: false,
     type: '',
-    id: ''
+    id: '',
+    transactionCode: '',
   },
   loading: false,
   detailPartner: {

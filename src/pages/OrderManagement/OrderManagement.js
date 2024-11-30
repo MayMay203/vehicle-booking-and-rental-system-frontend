@@ -5,23 +5,26 @@ import TicketList from '~/components/TicketList'
 import { config } from '~/config'
 import classNames from 'classnames/bind'
 import styles from './OrderManagement.module.scss'
-import Button from '~/components/Button'
-import { getAllTickets } from '~/apiServices/ticket/getAllTicket'
+import { getAllTicketOrders } from '~/apiServices/user/getAllTicketOrders'
+import { Pagination } from 'antd'
 
 const cx = classNames.bind(styles)
 function OrderManagement() {
   const [status, setStatus] = useState('current')
   const [ticketList, setTicketList] = useState([])
+  const [total, setTotal] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     async function fetchAllTicketList() {
-      const data = await getAllTickets()
+      const data = await getAllTicketOrders(status === 'completed')
       if (data) {
         setTicketList(data.result)
+        setTotal(data.meta.total)
       }
     }
     fetchAllTicketList()
-  }, [])
+  }, [status])
 
   const settings = useMemo(
     () => ({
@@ -62,9 +65,16 @@ function OrderManagement() {
       </Breadcrumb>
       <Tabs tabList={tabList} settings={settings} type={status} handleClickTab={handleClickTab}></Tabs>
       <TicketList status={status} dataList={ticketList}></TicketList>
-      <Button roundHalf className={cx('btn-more')}>
-        Xem thêm
-      </Button>
+      {ticketList.length > 0 && (
+        <Pagination
+          className="mt-5"
+          align="center"
+          current={currentPage}
+          pageSize={config.variables.pagesize}
+          total={total}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </div>
   )
 }

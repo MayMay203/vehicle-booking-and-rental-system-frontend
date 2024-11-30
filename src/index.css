@@ -526,3 +526,8 @@ html *::-webkit-scrollbar-track {
   width: 100%!important;
   height: 34px;
 }
+
+:where(.css-dev-only-do-not-override-apn68).ant-result{
+  padding: 32px 8px;
+}
+

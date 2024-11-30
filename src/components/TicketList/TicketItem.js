@@ -12,7 +12,6 @@ import ImageList from '../ImageList'
 import FeedbackSlider from '../FeedbackSlider'
 import Tabs from '../Tabs'
 import { faReadme } from '@fortawesome/free-brands-svg-icons'
-import { faCalendar } from '@fortawesome/free-regular-svg-icons'
 import Comment from '../Comment'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible, setTicketModalVisible } from '~/redux/slices/generalModalSlice'
@@ -97,7 +96,6 @@ function TicketItem({ status, data = {} }) {
 
   useEffect(() => {
     async function getDetail() {
-      console.log('Vo get detail')
       const actions = {
         utility: async () => {
           const utilitiesList = await getBusUtilities(data.busInfo.busId)
@@ -162,7 +160,14 @@ function TicketItem({ status, data = {} }) {
   }
 
   const handleShowDetailOrder = () => {
-    dispatch(setTicketModalVisible({ name: generalModalNames.BUY_TICKET, type: 'detailOrder', isOpen: true }))
+    dispatch(
+      setTicketModalVisible({
+        name: generalModalNames.BUY_TICKET,
+        type: 'detailOrder',
+        transactionCode: data.orderInfo.transactionCode,
+        isOpen: true,
+      }),
+    )
   }
 
   const handleCancelTicket = () => {
@@ -190,11 +195,11 @@ function TicketItem({ status, data = {} }) {
         </div>
         <div className="col d-flex flex-column gap-2 gap-lg-4">
           <div className="d-flex gap-4 align-items-center">
-            <span className={cx('name')}>{data.businessPartnerInfo.name}</span>
-            {status && <span className={cx('amount')}>2 x 150.000đ</span>}
+            <span className={cx('name')}>{data.businessPartnerInfo?.name || 'hihi'}</span>
+            {/* {status && <span className={cx('amount')}>2 x 150.000đ</span>} */}
           </div>
           <div className="d-flex flex-wrap align-items-center gap-3">
-            <span className={cx('type')}>{data.busInfo.nameVehicleType}</span>
+            <span className={cx('type')}>{data.busInfo?.nameVehicleType || data.busInfo.nameBusType}</span>
             <div className={cx('rating')}>
               <StarIcon className={cx('icon')} width="2.6rem" />
               <span>4.5(5)</span>
@@ -204,24 +209,32 @@ function TicketItem({ status, data = {} }) {
             <img className={cx('location-img')} alt="location" src={images.location} />
             <div className={cx('location-time', 'd-flex', 'flex-column', 'gap-4', 'justify-content-center')}>
               <div className="d-flex gap-4">
-                <span>{`${data.departureTime} ${data.busTripInfo.departureLocation}`}</span>
-                {status && (
+                <span>{`${data.departureTime || data.tripInfo.departureDateTime} ${
+                  data.busTripInfo?.departureLocation || data.tripInfo.departureLocation
+                }`}</span>
+                {/* {status && (
                   <p className={cx('date')}>
                     <FontAwesomeIcon icon={faCalendar} />
                     05/10/2024
                   </p>
-                )}
+                )} */}
               </div>
 
-              <span className={cx('duration')}>{data.busTripInfo.durationJourney}</span>
-              <span>{`${data.arrivalTime} ${data.busTripInfo.arrivalLocation}`}</span>
+              <span className={cx('duration')}>{data.busTripInfo?.durationJourney || '2h'}</span>
+              <span>{`${data.arrivalTime || data.tripInfo.arrivalDateTime} ${
+                data.busTripInfo?.arrivalLocation || data.tripInfo.arrivalLocation
+              }`}</span>
             </div>
           </div>
         </div>
         <div className=" col col-md-12 d-flex flex-column justify-content-between align-items-start align-items-lg-end justify-content-md-end justify-content-lg-between">
           <div className="d-flex justify-content-md-end w-100 flex-lg-column gap-5 mb-4 mb-lg-0 gap-lg-4 align-items-center align-items-lg-end">
-            <span className={cx('price')}>{data.priceTicket}</span>
-            <span className={cx('sale-off')}>{`-${Math.round(data.discountPercentage)}%`}</span>
+            <span className={cx('price',{'amount':status})}>
+              {data.priceTicket || `${data.orderInfo.numberOfTicket} x ${data.orderInfo.pricePerTicket}`}
+            </span>
+            <span className={cx('sale-off')}>{`-${Math.round(
+              data.discountPercentage || data.orderInfo?.discountPercentage,
+            )}%`}</span>
           </div>
           {!status && <span className={cx('status', 'w-100')}>{`Còn ${data.availableSeats} chỗ trống`}</span>}
           {status && (
