@@ -9,6 +9,7 @@ import { config } from '~/config'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSearchTicket } from '~/redux/slices/searchSlice'
+import { getBusinessName } from '~/apiServices/user/getBusPartnerName'
 
 const cx = classNames.bind(styles)
 function Search({ noSelectBus, noSelectDate = false }) {
@@ -17,6 +18,7 @@ function Search({ noSelectBus, noSelectDate = false }) {
   const [departureLocation, setDepartureLocation] = useState(searchValues.departureLocation)
   const [arrivalLocation, setArrivalLocation] = useState(searchValues.arrivalLocation)
   const [provincesList, setProvincesList] = useState([])
+  const [businessList, setBusinessList] = useState([])
   const [departureDate, setDepartureDate] = useState(searchValues.departureDate)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -39,6 +41,11 @@ function Search({ noSelectBus, noSelectDate = false }) {
           }
         })
         setProvincesList(cleanedProvinces)
+      }
+      const businessNames = await getBusinessName()
+      if (businessNames) {
+        console.log(businessNames)
+        setBusinessList(businessNames)
       }
     }
     fetchApi()
@@ -85,18 +92,7 @@ function Search({ noSelectBus, noSelectDate = false }) {
                     value: 'all',
                     label: 'Tất cả',
                   },
-                  {
-                    value: 'Nhà xe Tú Lạc',
-                    label: 'Nhà xe Tú Lạc',
-                  },
-                  {
-                    value: 'Minh Phương',
-                    label: 'Minh Phương',
-                  },
-                  {
-                    value: 'Đông Hưng',
-                    label: 'Đông Hưng',
-                  },
+                  ...businessList?.map((business) => ({ value: business, label: business })),
                 ]}
               />
             </div>

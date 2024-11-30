@@ -4,8 +4,7 @@
     font-weight: 500;
     font-size: 1.7rem;
     align-items: center;
-    padding: 8px;
-    line-height: 1.2;
+    padding: 11px 8px;
     cursor: pointer;
     font-weight: 400;
 }
@@ -14,7 +13,10 @@
     width: 100%;
     position: relative;
     display: flex;
-    margin-left: 22px;
+    align-items: center;
+    justify-content: start;
+    padding-left: 22px;
+    height: 17px;
     cursor: pointer;
 }
 
@@ -27,7 +29,7 @@
 }
 
 .label::before{
-    left: -22px;
+    left: 0px;
     width: 17px;
     height: 17px;
     background-color: #fff;
@@ -35,11 +37,10 @@
 }
 
 .label::after{
-    left: -18px;
-    bottom: 8px;
-    width: 8px;
-    height: 8px;
-    height: 8px;
+    left: 4px;
+    bottom: 4px;
+    width: 9px;
+    height: 9px;
     background-color: var(--orange-color);
     display: none;
 }

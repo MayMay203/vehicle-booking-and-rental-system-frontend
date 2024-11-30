@@ -48,12 +48,10 @@ function TicketModal() {
       if (dispatch(checkLoginSession())) {
         let data = {}
         if (type) {
-          console.log(transactionCode)
           data = await getDetailTransaction(transactionCode, 'BUS_TRIP_ORDER')
         } else {
           data = await getDetailTicket(id)
         }
-        console.log(data)
         if (data) {
           setTicketDetail(data)
         }
@@ -90,8 +88,8 @@ function TicketModal() {
   }
 
   const handleClose = () => {
-    setFullName('')
-    setPhone('')
+    // setFullName('')
+    // setPhone('')
     setQuantity(1)
     dispatch(setTicketModalVisible({ name: generalModalNames.BUY_TICKET, isOpen: false }))
   }
@@ -281,7 +279,10 @@ function TicketModal() {
             <div className="p-4 pb-2">
               <div className="d-flex justify-content-between mb-4">
                 <span>Tiền vé xe:</span>
-                <span>{ticketDetail.priceTicket?.replace('.',',') || ticketDetail.orderInfo?.pricePerTicket.replace('.',',')}</span>
+                <span>
+                  {ticketDetail.priceTicket?.replace('.', ',') ||
+                    ticketDetail.orderInfo?.pricePerTicket.replace('.', ',')}
+                </span>
               </div>
               <div className="d-flex justify-content-between mb-4">
                 <span>Số lượng:</span>
@@ -331,12 +332,12 @@ function TicketModal() {
                 </div>
               )}
 
-              {/* {type && (
+              {type && ticketDetail.cancelTime && (
                 <div className={cx('d-flex', 'justify-content-between', 'mt-4')}>
-                  <span>Thời gian hoàn thành: </span>
-                  <span>15-09-2024 10:30</span>
+                  <span>Thời gian huỷ vé: </span>
+                  <span style={{color: 'red'}}>{ticketDetail.cancelTime}</span>
                 </div>
-              )} */}
+              )}
 
               {!type && (
                 <Button text className={cx('m-auto', 'mt-5', 'btn-pay')} disabled={!isValid} onClick={handlePayment}>
@@ -346,9 +347,9 @@ function TicketModal() {
 
               {!type && (
                 <div className="mt-5">
-                  <div className={cx('warning')}>
+                  <div className={cx('warning')} style={{ textAlign: 'center' }}>
                     <FontAwesomeIcon icon={faWarning} className="me-3" style={{ fontSize: '2rem' }} />
-                    Vé xe chỉ được huỷ trước 2h khi bắt đầu khởi hành.
+                    Vé xe chỉ được huỷ trước ít nhất 12 tiếng khi bắt đầu khởi hành.
                   </div>
                 </div>
               )}

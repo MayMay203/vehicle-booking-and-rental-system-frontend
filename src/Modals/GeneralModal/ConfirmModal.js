@@ -100,9 +100,9 @@ function ConfirmModal() {
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
           toast.success('Vé của bạn đã được hủy thành công!', { autoClose: 800, position: 'top-center' })
           dispatch(
-              fetchAllMyTicketOrders({
-                isGone: false,
+            fetchAllMyTicketOrders({
                 isCanceled: 0,
+                isGone: false,
               }),
             )
         }

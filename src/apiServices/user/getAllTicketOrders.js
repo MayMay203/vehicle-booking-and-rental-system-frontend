@@ -2,13 +2,10 @@ import { config } from '~/config'
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const getAllTicketOrders = async (status, isCancel = 0, page = 1) => {
-  console.log(status, isCancel, page)
+export const getAllTicketOrders = async (isCancel, page = 1, status) => {
   try {
-    let url = `/v1/orderBusTrips?page=${page}&size=${config.variables.pagesize}`
-    if (isCancel === 1) {
-      url += `&filter=status: ${isCancel}`
-    } else {
+    let url = `/v1/orderBusTrips?page=${page}&size=${config.variables.pagesize}&filter=status:${isCancel}`
+    if (isCancel === 0) {
       url += `&isGone=${status}`
     }
     const response = await httpRequest.get(url, {

@@ -101,16 +101,15 @@ function TicketItem({ status, data = {} }) {
     async function getDetail() {
       const actions = {
         utility: async () => {
-          const utilitiesList = await getBusUtilities(data.busInfo.busType.id)
+          const utilitiesList = await getBusUtilities(data.busInfo?.busType?.id || data.busInfo?.busId)
           setDetaiInfor((prev) => ({ ...prev, [type]: utilitiesList }))
         },
         policy: async () => {
-          const policiesList = await getPoliciesTicket(data.busTripScheduleId)
-          console.log(policiesList)
+          const policiesList = await getPoliciesTicket(data.businessPartnerInfo?.id || data.businessPartner.id)
           setDetaiInfor((prev) => ({ ...prev, [type]: policiesList }))
         },
         image: async () => {
-          const imagesList = await getBusImage(data.busInfo.busType.id)
+          const imagesList = await getBusImage(data.busInfo?.busType?.id || data.busInfo?.busId)
           setDetaiInfor((prev) => ({ ...prev, [type]: imagesList }))
         },
         feedback: async () => {
@@ -120,7 +119,7 @@ function TicketItem({ status, data = {} }) {
           // Implement discount logic here
         },
         pickReturn: async () => {
-          const locations = await getPickReturnLocations(data.busTripInfo.id)
+          const locations = await getPickReturnLocations(data.busTripInfo?.id || data.tripInfo?.id)
           setDetaiInfor((prev) => ({ ...prev, [type]: locations }))
         },
       }
@@ -148,6 +147,7 @@ function TicketItem({ status, data = {} }) {
   }
 
   const handleChooseTicket = () => {
+    console.log(busTripScheduleId)
     if (isLogin) {
       dispatch(
         setTicketModalVisible({
@@ -179,7 +179,7 @@ function TicketItem({ status, data = {} }) {
         modalType: 'confirm',
         isOpen: true,
         title: 'Xác nhận huỷ vé',
-        description: 'Vui lòng hủy vé ít nhất 2 tiếng trước giờ khởi hành. Bạn có chắc chắn muốn hủy vé xe này không?',
+        description: 'Vui lòng hủy vé ít nhất 12 tiếng trước giờ khởi hành. Bạn có chắc chắn muốn hủy vé xe này không?',
         name: generalModalNames.CANCEL_TICKET,
         id: data.orderInfo.orderId,
       }),
@@ -194,8 +194,6 @@ function TicketItem({ status, data = {} }) {
     // Navigate message detail page get all message
     navigate(config.routes.message)
   }
-
-  console.log(detailInfor)
 
   return (
     <div className={cx('wrapper')}>
@@ -269,7 +267,7 @@ function TicketItem({ status, data = {} }) {
           )}
           <div className="d-flex w-100 align-items-center justify-content-between justify-content-md-end justify-content-lg-none mt-4 mt-lg-0 gap-sm-2 gap-md-5 gap-lg-5">
             <button className={cx('actions', 'd-flex', 'gap-2', 'align-items-center')} onClick={handleShowDetail}>
-              <span>Thông tin chi tiết</span>
+              <span>Chi tiết chuyến xe</span>
               <FontAwesomeIcon
                 icon={faCaretDown}
                 style={{ rotate: isDetail ? '-180deg' : '0deg', transition: 'rotate .2s ease' }}
@@ -283,10 +281,11 @@ function TicketItem({ status, data = {} }) {
               <Button rounded onClick={handleCancelTicket}>
                 Huỷ
               </Button>
-            ) : (
-              <Button rounded onClick={handleChooseTicket}>
-                Đặt lại
-              </Button>
+              ) : (
+                  <></>
+              // <Button rounded onClick={handleChooseTicket}>
+              //   Đặt lại
+              // </Button>
             )}
           </div>
         </div>

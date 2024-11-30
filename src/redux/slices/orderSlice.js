@@ -7,8 +7,9 @@ const initialState = {
 
 export const fetchAllMyTicketOrders = createAsyncThunk(
   'orders/fetchAllMyOrders',
-  async ({ isGone, isCanceled, page }) => {
-    const data = await getAllTicketOrders(isGone, isCanceled, page)
+  async ({ isGone = undefined, isCanceled, page }) => {
+    // console.log(isGone)
+    const data = await getAllTicketOrders(isCanceled, page, isGone)
     return data || {}
   },
 )
