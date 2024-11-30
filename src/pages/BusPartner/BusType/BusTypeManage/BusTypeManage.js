@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { getAllBusTypes } from '~/apiServices/busPartner/getAllBusTypes'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
+import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 const cx = classNames.bind(styles)
 function BusTypeManage() {
   const dispatch = useDispatch()
@@ -101,11 +102,28 @@ function BusTypeManage() {
       title: 'Xóa',
       dataIndex: 'delete',
       align: 'center',
-      render: (record) => (
-        <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
+      render: (text, record) => (
+        <FontAwesomeIcon
+          icon={faTrash}
+          style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }}
+          onClick={() => handleDelete(record.key)}
+        />
       ),
     },
   ]
+  
+  const handleDelete = (id) => {
+    dispatch(
+      setConfirmModalVisible({
+        name: generalModalNames.UTILITY_MODAL,
+        title: 'Xác nhận xoá loại xe',
+        description: 'Bạn có chắc chắn xoá loại xe này?',
+        isOpen: true,
+        modalType: 'confirm',
+        id,
+      }),
+    )
+  }
   const [data, setData] = useState([])
   // Dùng useCallback để ghi nhớ hàm handleGetAllBusTypes
   const handleGetAllBusTypes = useCallback(async () => {
