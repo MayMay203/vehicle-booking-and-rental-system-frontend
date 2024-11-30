@@ -7,6 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { fetchAllBus } from '~/apiServices/busPartner/fetchAllBuses'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { deleteBus } from '~/apiServices/busPartner/deleteBus'
+import { toast } from 'react-toastify'
 const cx = classNames.bind(styles)
 function Bus() {
   const columns = [
@@ -117,42 +123,49 @@ function Bus() {
       dataIndex: 'delete',
       align: 'center',
       render: (record) => (
-        <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
+        <FontAwesomeIcon
+          icon={faTrash}
+          style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }}
+          onClick={() => handleDeleteBus(record.key)}
+        />
       ),
     },
   ]
-  
-  const data = [
-    {
-      key: '1',
-      licensePlateNumber: '30G-49344',
-      typeVehicle: 'Limounsine 34 chỗ giường nằm',
-      image: 'https://limody.vn/wp-content/uploads/2020/05/xe-di-bac-kan-5.png',
-      view: '',
-    },
-    {
-      key: '2',
-      licensePlateNumber: '40G-49344',
-      typeVehicle: 'Limounsine 34 chỗ giường nằm',
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs9Bjixv9pTmcH-o0hi6OIpTEXB2T1VbhvwhfRcD_r9E3OD-MiAtMQYxC7QXDOYnSWC7A&usqp=CAU',
-      view: '',
-    },
-    {
-      key: '3',
-      licensePlateNumber: '50G-49344',
-      typeVehicle: 'Limounsine 34 chỗ giường nằm',
-      image: 'https://limosine.vn/wp-content/uploads/2021/11/xe-quyen-quang-ha-noi-2.jpg',
-      view: '',
-    },
-    {
-      key: '5',
-      licensePlateNumber: '60G-49344',
-      typeVehicle: 'Limounsine 34 chỗ giường nằm',
-      image: 'https://datvere24h.com/partner/nha-xe-phu-loc/1724401439nh%C3%A0%20xe%20ph%C3%BA%20l%E1%BB%99c.jpg',
-      view: '',
-    },
-  ]
+
+  // const data = [
+  //   {
+  //     key: '1',
+  //     licensePlateNumber: '30G-49344',
+  //     typeVehicle: 'Limounsine 34 chỗ giường nằm',
+  //     image: 'https://limody.vn/wp-content/uploads/2020/05/xe-di-bac-kan-5.png',
+  //     view: '',
+  //   },
+  // ]
+  const dispatch = useDispatch()
+  const [data, setData] = useState([])
+  // const [idSlectedBusType, setIDSlectedBusType] = useState(null)
+  // Dùng useCallback để ghi nhớ hàm handleGetAllBus
+  const handleGetAllBus = useCallback(async () => {
+    if (dispatch(checkLoginSession())) {
+      try {
+        const allBus = await fetchAllBus()
+        console.log('allBus:', allBus)
+        const newData = allBus?.result.map((item) => ({
+          key: item.busId,
+          licensePlateNumber: item.licensePlate,
+          typeVehicle: item.nameBusType,
+          image: item.imageRepresentative,
+        }))
+        setData(newData)
+        console.log('newData:', newData)
+      } catch (message) {
+        console.log(message)
+      }
+    }
+  }, [dispatch])
+  useEffect(() => {
+    handleGetAllBus()
+  }, [handleGetAllBus])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
@@ -161,16 +174,32 @@ function Bus() {
     navigate('add-bus')
   }
   const handleViewBus = (id) => {
-    navigate('update-bus', {state: {enableEdit: false, busID: id}})
+    navigate('update-bus', { state: { enableEdit: false, busID: id } })
   }
   const handleEditBus = (id) => {
     navigate('update-bus', { state: { enableEdit: true, busID: id } })
   }
+
+  const handleDeleteBus = async (id) => {
+    if (dispatch(checkLoginSession())) {
+      try {
+        const response = await deleteBus(id)
+        if (response) {
+          toast.success('Xóa xe thành công!', { autoClose: 2000 })
+          console.log('Xóa xe thành công!', response)
+        }
+      } catch (error) {
+        console.log('Xóa thất bại:')
+        console.log(error)
+        // if (message === 'You have already registered this business partner') {
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+        // }
+      }
+    }
+  }
   return (
     <div className="container mt-4 mb-5">
-      <div className={cx('header')}>
-        <p>Danh sách xe khách</p>
-      </div>
+      <div className={cx('header')}>{/* <p>Danh sách xe khách</p> */}</div>
       <div className={cx('d-flex', 'mb-4')}>
         <TxtSearch content={'Tìm xe khách'}></TxtSearch>
         <Button primary className={cx('btn-add')} onClick={handleAddBus}>
@@ -183,7 +212,7 @@ function Bus() {
         onChange={onChange}
         bordered
         pagination={false}
-        scroll={{y: 500 }}
+        scroll={{ y: 500 }}
         // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{
