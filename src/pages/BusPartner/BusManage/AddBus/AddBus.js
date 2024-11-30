@@ -46,7 +46,7 @@ function AddBus() {
   const [formData, setFormData] = useState({
     licensePlateNumber: '',
     idBusType: '',
-    typeVehicle: '',
+    // typeVehicle: '',
     typeSeat: '',
     numberSeat: '',
     busImages: [''],
@@ -62,10 +62,13 @@ function AddBus() {
       }
     }
   }, [dispatch])
+
   useEffect(() => {
     handleGetAllBusTypes()
-  }, [handleGetAllBusTypes])
-  const getInforBusType = useCallback(async () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  
+  const getInforBusType = async () => {
     if (formData.idBusType != null) {
       try {
         const data = await fetchBusTypeByID(formData.idBusType)
@@ -84,12 +87,13 @@ function AddBus() {
         console.log('Lỗi khi lấy thông tin xe:', error)
       }
     }
-  }, [formData])
+  }
   // const [enableAdd, setEnableAdd] = useState(false)
   // const prevFormData = useRef(formData)
   useEffect(() => {
     getInforBusType()
-  }, [getInforBusType])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.idBusType])
   useEffect(() => {
     const { busImages = [], ...restOfFormData } = formData
     const allFieldsFilled =
@@ -100,6 +104,7 @@ function AddBus() {
     console.log(allFieldsFilled)
     // prevFormData.current = formData
   }, [formData])
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prevState) => ({
@@ -111,15 +116,16 @@ function AddBus() {
     setFormData({
       licensePlateNumber: '',
       idBusType: '',
-      typeVehicle: '',
+      // typeVehicle: '',
       typeSeat: '',
       numberSeat: '',
       busImages: [''],
     })
+    setSelectedFiles([])
   }
-  useEffect(() => {
-    handleCancel()
-  }, [])
+  // useEffect(() => {
+  //   handleCancel()
+  // }, [])
   const handleAdd = async (e) => {
     e.preventDefault()
     if (dispatch(checkLoginSession())) {
@@ -152,9 +158,12 @@ function AddBus() {
       } catch (error) {
         console.log('Thêm thất bại:')
         console.log(error)
-        // if (message === 'You have already registered this business partner') {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
-        // }
+        if (error === "Bus is available") {
+          toast.error('Biển số xe đã tồn tại!', { autoClose: 2000, position: 'top-center' })
+        }
+        else {
+          toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+        }
       }
     }
   }
@@ -245,6 +254,7 @@ function AddBus() {
                 aria-label="licensePlateNumber"
                 className={cx('txt')}
                 value={formData.licensePlateNumber}
+                onChange={handleInputChange}
               />
               <InputGroup.Text className={cx('txt')}>
                 <FontAwesomeIcon icon={faTicket} />
@@ -261,7 +271,7 @@ function AddBus() {
                 aria-label="typeSeat"
                 name="typeSeat"
                 className={cx('txt', 'selectbox', 'infor-item')}
-                onChange={handleInputChange}
+                // onChange={handleInputChange}
                 value={formData.typeSeat}
                 readOnly
               ></Form.Control>

@@ -7,13 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ModalManageBusType from '../ModalManageBusType'
 import { useCallback, useEffect, useState } from 'react'
-import { getAllBusTypes } from '~/apiServices/busPartner/getAllBusTypes'
-import { checkLoginSession } from '~/redux/slices/userSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 const cx = classNames.bind(styles)
 function BusTypeManage() {
   const dispatch = useDispatch()
+  const allBusTypes = useSelector((state) => state.busPartner.busTypeList)
   const columns = [
     {
       title: 'STT',
@@ -115,7 +114,7 @@ function BusTypeManage() {
   const handleDelete = (id) => {
     dispatch(
       setConfirmModalVisible({
-        name: generalModalNames.UTILITY_MODAL,
+        name: generalModalNames.DEL_BUS_TYPE,
         title: 'Xác nhận xoá loại xe',
         description: 'Bạn có chắc chắn xoá loại xe này?',
         isOpen: true,
@@ -127,9 +126,8 @@ function BusTypeManage() {
   const [data, setData] = useState([])
   // Dùng useCallback để ghi nhớ hàm handleGetAllBusTypes
   const handleGetAllBusTypes = useCallback(async () => {
-    if (dispatch(checkLoginSession())) {
       try {
-        const allBusTypes = await getAllBusTypes()
+        // const allBusTypes = await getAllBusTypes()
         console.log('allBusTypes:', allBusTypes)
         const newData = allBusTypes?.result.map((item) => ({
           key: item.id,
@@ -142,8 +140,7 @@ function BusTypeManage() {
       } catch (message) {
         console.log(message)
       }
-    }
-  }, [dispatch]) // Giới hạn dependency cho dispatch nếu cần thiết
+  }, [allBusTypes])
   
   const closeModalAdd = () => {
     setShowModalAdd(false)
