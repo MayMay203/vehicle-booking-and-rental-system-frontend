@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteBus } from '~/apiServices/busPartner/deleteBus'
 import { toast } from 'react-toastify'
+import ModalBusInfor from '../ModalBusInfor'
 const cx = classNames.bind(styles)
 function Bus() {
   const columns = [
@@ -143,6 +144,8 @@ function Bus() {
   // ]
   const dispatch = useDispatch()
   const [data, setData] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [selectedBus, setSelectedBus] = useState(null)
   // const [idSlectedBusType, setIDSlectedBusType] = useState(null)
   // Dùng useCallback để ghi nhớ hàm handleGetAllBus
   const handleGetAllBus = useCallback(async () => {
@@ -174,12 +177,15 @@ function Bus() {
     navigate('add-bus')
   }
   const handleViewBus = (id) => {
-    navigate('update-bus', { state: { enableEdit: false, busID: id } })
+    setShowModal(true)
+    setSelectedBus(id)
   }
   const handleEditBus = (id) => {
     navigate('update-bus', { state: { enableEdit: true, busID: id } })
   }
-
+  const closeModal = () => {
+    setShowModal(false)
+  }
   const handleDeleteBus = async (id) => {
     if (dispatch(checkLoginSession())) {
       try {
@@ -218,6 +224,14 @@ function Bus() {
         showSorterTooltip={{
           target: 'sorter-icon',
         }}
+      />
+      <ModalBusInfor
+        functionModal={'add'}
+        enableEdit={true}
+        show={showModal}
+        id={selectedBus}
+        closeModal={closeModal}
+        onHide={() => setShowModal(false)}
       />
     </div>
   )

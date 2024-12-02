@@ -7,10 +7,10 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import Utility from './Utility'
 
 const cx = classNames.bind(styles)
-function SlideUtility({ listUtilities, isModal = false, enableEdit = true }) {
+function SlideUtility({ listUtilities, setUpdateUtilitiesOfBus, utilitiesOfBus, isModal = false, enableEdit = true }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [utilitiesPerPage, setUtilitiesPerPage] = useState(8)
-
+  const [utilitiesPerPage, setUtilitiesPerPage] = useState(7)
+  // const [selectedUtilities, setSelectedUtilities] = useState(utilitiesOfBus)
   useEffect(() => {
     const updateUtilitiesPerPage = () => {
       if (isModal) {
@@ -39,7 +39,11 @@ function SlideUtility({ listUtilities, isModal = false, enableEdit = true }) {
     window.addEventListener('resize', updateUtilitiesPerPage)
     return () => window.removeEventListener('resize', updateUtilitiesPerPage)
   }, [isModal])
-  const [activeUtilities, setActiveUtilities] = useState(Array(listUtilities.length).fill(false))
+  // const [activeUtilities, setActiveUtilities] = useState(Array(listUtilities.length).fill(false))
+  const [activeUtilities, setActiveUtilities] = useState(
+    listUtilities?.map((utility) => utilitiesOfBus?.includes(utility.id))
+  )
+
   const [currentPage, setCurrentPage] = useState(0)
 
   // const resetUtilitiesStates = () => {
@@ -63,10 +67,19 @@ function SlideUtility({ listUtilities, isModal = false, enableEdit = true }) {
     }
   }
 
-  const handleChooseUtility = (index) => {
+  const handleChooseUtility = (id) => {
+    const index = listUtilities.findIndex((utility) => utility.id === id) // Find the index based on the id
     const updatedUtilities = [...activeUtilities]
-    updatedUtilities[index] = !updatedUtilities[index]
+    updatedUtilities[index] = !updatedUtilities[index] // Toggle the state at the correct index
     setActiveUtilities(updatedUtilities)
+
+    const activeUtilityIds = listUtilities
+      .filter((utility, index) => updatedUtilities[index]) // Filter based on active state
+      .map((utility) => utility.id) // Map to get the IDs of active utilities
+
+    if(setUpdateUtilitiesOfBus){
+      setUpdateUtilitiesOfBus(activeUtilityIds)
+    }
   }
   return (
     <Row className="justify-content-center align-items-center pt-3 pb-3">
@@ -81,11 +94,20 @@ function SlideUtility({ listUtilities, isModal = false, enableEdit = true }) {
             <Utility
               className=""
               key={index}
+              id={item.id}
               name={item.name}
-              icon={item.icon}
-              active={activeUtilities[currentIndex + index]} // Trạng thái active được truyền vào
-              handleChooseUtility={enableEdit ? () => handleChooseUtility(currentIndex + index) : undefined}
+              image={item.image}
+              active={activeUtilities[listUtilities.findIndex((utility) => utility.id === item.id)]}
+              handleChooseUtility={enableEdit ? () => handleChooseUtility(item.id) : undefined}
             ></Utility>
+          ))}
+          {/* Thêm các Col giả nếu danh sách không đủ utilitiesPerPage */}
+          {Array.from({ length: utilitiesPerPage - displayedUtilities.length }, (_, index) => (
+            <div
+              className="utility-placeholder"
+              key={`placeholder-${index}`}
+              style={{ flex: '1 0 auto', visibility: 'hidden' }}
+            ></div>
           ))}
         </div>
       </Col>

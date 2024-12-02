@@ -6,13 +6,18 @@ import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ModalManageBusType from '../ModalManageBusType'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
+import { fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 const cx = classNames.bind(styles)
 function BusTypeManage() {
   const dispatch = useDispatch()
   const allBusTypes = useSelector((state) => state.busPartner.busTypeList)
+  const [showModalAdd, setShowModalAdd] = useState(false)
+  const [showModalUpdate, setShowModalUpdate] = useState(false)
+  const [idSlectedBusType, setIDSlectedBusType] = useState(null)
   const columns = [
     {
       title: 'STT',
@@ -110,38 +115,46 @@ function BusTypeManage() {
       ),
     },
   ]
-  
+
   const handleDelete = (id) => {
-    dispatch(
-      setConfirmModalVisible({
-        name: generalModalNames.DEL_BUS_TYPE,
-        title: 'Xác nhận xoá loại xe',
-        description: 'Bạn có chắc chắn xoá loại xe này?',
-        isOpen: true,
-        modalType: 'confirm',
-        id,
-      }),
-    )
+    if (dispatch(checkLoginSession())) {
+      dispatch(
+        setConfirmModalVisible({
+          name: generalModalNames.DEL_BUS_TYPE,
+          title: 'Xác nhận xoá loại xe',
+          description: 'Bạn có chắc chắn xoá loại xe này?',
+          isOpen: true,
+          modalType: 'confirm',
+          id,
+        }),
+      )
+    }
   }
   const [data, setData] = useState([])
   // Dùng useCallback để ghi nhớ hàm handleGetAllBusTypes
-  const handleGetAllBusTypes = useCallback(async () => {
-      try {
-        // const allBusTypes = await getAllBusTypes()
-        console.log('allBusTypes:', allBusTypes)
-        const newData = allBusTypes?.result.map((item) => ({
-          key: item.id,
-          typeSeat: item.chairType,
-          typeVehicle: item.name,
-          numberSeat: `${item.numberOfSeat} chỗ`,
-        }))
-        setData(newData)
-        console.log('newData:',newData)
-      } catch (message) {
-        console.log(message)
-      }
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllBusTypes())
+    }
+  }, [dispatch])
+  useEffect(() => {
+    try {
+      // const allBusTypes = await getAllBusTypes()
+      // console.log('allBusTypes:', allBusTypes)
+      // const newData = allBusTypes.result?.map((item) => ({
+      const newData = allBusTypes?.map((item) => ({
+        key: item.id,
+        typeSeat: item.chairType,
+        typeVehicle: item.name,
+        numberSeat: `${item.numberOfSeat} chỗ`,
+      }))
+      setData(newData)
+      console.log('newData:', newData)
+    } catch (message) {
+      console.log(message)
+    }
   }, [allBusTypes])
-  
+
   const closeModalAdd = () => {
     setShowModalAdd(false)
   }
@@ -149,14 +162,11 @@ function BusTypeManage() {
     setShowModalUpdate(false)
   }
   console.log('data:', data)
-  
+
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
 
-  const [showModalAdd, setShowModalAdd] = useState(false)
-  const [showModalUpdate, setShowModalUpdate] = useState(false)
-  const [idSlectedBusType, setIDSlectedBusType] = useState(null)
   const handelAddBusType = () => {
     setShowModalAdd(true)
   }
@@ -164,9 +174,9 @@ function BusTypeManage() {
     setShowModalUpdate(true)
     setIDSlectedBusType(id)
   }
-  useEffect(() => {
-    handleGetAllBusTypes()
-  }, [handleGetAllBusTypes, showModalAdd, showModalUpdate])
+  // useEffect(() => {
+  //   handleGetAllBusTypes()
+  // }, [handleGetAllBusTypes, showModalAdd, showModalUpdate])
   return (
     <div className="container mt-4 mb-5">
       <div className={cx('header')}>{/* <p>Danh sách loại xe khách</p> */}</div>

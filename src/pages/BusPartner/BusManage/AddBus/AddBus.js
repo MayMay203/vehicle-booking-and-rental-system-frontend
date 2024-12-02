@@ -3,41 +3,35 @@ import styles from './AddBus.module.scss'
 import { Col, InputGroup, Row, Form, Image, Alert } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faBottleWater,
   faCouch,
-  faFan,
-  faMattressPillow,
-  faPersonBooth,
-  faRug,
   faTicket,
-  faTv,
 } from '@fortawesome/free-solid-svg-icons'
 import Button from '~/components/Button'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import SlideUtility from '~/components/SlideUtility'
-import { faLightbulb } from '@fortawesome/free-regular-svg-icons'
 import { images } from '~/assets/images'
 import { getAllBusTypes } from '~/apiServices/busPartner/getAllBusTypes'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchBusTypeByID } from '~/apiServices/busPartner/fetchBusTypeByID'
 import { toast } from 'react-toastify'
 import { addBus } from '~/apiServices/busPartner/addBus'
+import { fetchAllUtilities } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
 function AddBus() {
   const dispatch = useDispatch()
   const [allBusTypes, setAllBusTypes] = useState(null)
-  const listUtilities = [
-    { id: 1, icon: faFan, name: 'Quạt', description: 'Xe có hệ thống điều hòa' },
-    { id: 11, icon: faLightbulb, name: 'Đèn đọc sách', description: 'Xe có hệ thống điều hòa' },
-    { id: 12, icon: faTv, name: 'TV', description: 'Xe có hệ thống điều hòa' },
-    { id: 13, icon: faPersonBooth, name: 'Rèm cửa', description: 'Xe có hệ thống điều hòa' },
-    { id: 14, icon: faMattressPillow, name: 'Gối nằm', description: 'Xe có hệ thống điều hòa' },
-    { id: 15, icon: faBottleWater, name: 'Nước uống', description: 'Xe có hệ thống điều hòa' },
-    { id: 16, icon: faRug, name: 'Chăn', description: 'Xe có hệ thống điều hòa' },
-    { id: 17, icon: faFan, name: 'Điều hòa', description: 'Xe có hệ thống điều hòa' },
-    { id: 18, icon: faFan, name: 'Điều hòa', description: 'Xe có hệ thống điều hòa' },
-  ]
+  const listUtilities = useSelector((state) => state.busPartner.utilityList)
+  const [updateUtilitiesOfBus, setUpdateUtilitiesOfBus] = useState([])
+  // const listUtilities = [
+  //   {
+  //     id: 1,
+  //     image:
+  //       'https://vehiclerentalbookingsystem.s3.ap-southeast-2.amazonaws.com/f274a51e-5e30-46e7-8103-e6fb040dfb76_food2.png',
+  //     name: 'Quạt',
+  //     description: 'Xe có hệ thống điều hòa',
+  //   },
+  // ]
   // const typeVehicles = [
   //   { value: '', label: 'Chọn loại phương tiện' },
   //   { value: 'Limousine34GiuongNam', label: 'Limousine34GiuongNam' },
@@ -49,8 +43,32 @@ function AddBus() {
     // typeVehicle: '',
     typeSeat: '',
     numberSeat: '',
+    utilities: [],
     busImages: [''],
   })
+  const [utilitiesOfBus, setUtilitiesOfBus] = useState(formData.utilities)
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllUtilities())
+    }
+  }, [dispatch])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      listUtilities.map((utility) => ({
+        id: utility.id,
+        image: utility.image,
+        name: utility.name,
+        description: utility.description,
+      }))
+    }
+  })
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      utilities: updateUtilitiesOfBus,
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateUtilitiesOfBus])
   const handleGetAllBusTypes = useCallback(async () => {
     if (dispatch(checkLoginSession())) {
       try {
@@ -65,26 +83,28 @@ function AddBus() {
 
   useEffect(() => {
     handleGetAllBusTypes()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  
+
   const getInforBusType = async () => {
-    if (formData.idBusType != null) {
-      try {
-        const data = await fetchBusTypeByID(formData.idBusType)
-        setFormData({
-          ...formData,
-          idBusType: data.id,
-          numberSeat: data.numberOfSeat.toString(),
-          typeSeat: data.chairType,
-        })
-        // setFormDataDefault({
-        //   typeVehicle: data.name,
-        //   numberSeat: data.numberOfSeat.toString(),
-        //   typeSeat: data.chairType,
-        // })
-      } catch (error) {
-        console.log('Lỗi khi lấy thông tin xe:', error)
+    if (dispatch(checkLoginSession())) {
+      if (formData.idBusType != null) {
+        try {
+          const data = await fetchBusTypeByID(formData.idBusType)
+          setFormData({
+            ...formData,
+            idBusType: data.id,
+            numberSeat: data.numberOfSeat.toString(),
+            typeSeat: data.chairType,
+          })
+          // setFormDataDefault({
+          //   typeVehicle: data.name,
+          //   numberSeat: data.numberOfSeat.toString(),
+          //   typeSeat: data.chairType,
+          // })
+        } catch (error) {
+          console.log('Lỗi khi lấy thông tin xe:', error)
+        }
       }
     }
   }
@@ -92,13 +112,14 @@ function AddBus() {
   // const prevFormData = useRef(formData)
   useEffect(() => {
     getInforBusType()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.idBusType])
   useEffect(() => {
-    const { busImages = [], ...restOfFormData } = formData
+    const { busImages = [], utilities = [], ...restOfFormData } = formData
     const allFieldsFilled =
       Object.values(restOfFormData).every((value) => value.toString().trim() !== '') &&
-      busImages.some((img) => img.trim() !== '')
+      busImages.some((img) => img.trim() !== '') &&
+      utilities.length > 0
     setActiveAdd(allFieldsFilled)
     console.log('Có vô', formData)
     console.log(allFieldsFilled)
@@ -117,11 +138,13 @@ function AddBus() {
       licensePlateNumber: '',
       idBusType: '',
       // typeVehicle: '',
+      utilities: [],
       typeSeat: '',
       numberSeat: '',
       busImages: [''],
     })
     setSelectedFiles([])
+    setUtilitiesOfBus([])
   }
   // useEffect(() => {
   //   handleCancel()
@@ -132,7 +155,7 @@ function AddBus() {
       try {
         const busInfor = {
           licensePlate: formData.licensePlateNumber,
-          utilities: [{ id: 3 }, { id: 4 }, { id: 5 }],
+          utilities: formData.utilities.map((utilityId) => ({ id: utilityId })),
           busType: { id: formData.idBusType },
         }
         const formDataAddBus = new FormData()
@@ -158,10 +181,9 @@ function AddBus() {
       } catch (error) {
         console.log('Thêm thất bại:')
         console.log(error)
-        if (error === "Bus is available") {
+        if (error === 'Bus is available') {
           toast.error('Biển số xe đã tồn tại!', { autoClose: 2000, position: 'top-center' })
-        }
-        else {
+        } else {
           toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
         }
       }
@@ -228,7 +250,6 @@ function AddBus() {
             <InputGroup className={cx('txt', 'infor-item')}>
               <Form.Control
                 type="text"
-                placeholder="45"
                 name="numberSeat"
                 aria-label="numberSeat"
                 className={cx('txt')}
@@ -271,7 +292,6 @@ function AddBus() {
                 aria-label="typeSeat"
                 name="typeSeat"
                 className={cx('txt', 'selectbox', 'infor-item')}
-                // onChange={handleInputChange}
                 value={formData.typeSeat}
                 readOnly
               ></Form.Control>
@@ -286,7 +306,7 @@ function AddBus() {
         <div className={cx('txt', 'padding-5')}>
           Tiện ích<span className="text-danger">*</span>
         </div>
-        <SlideUtility listUtilities={listUtilities}></SlideUtility>
+        <SlideUtility listUtilities={listUtilities} setUpdateUtilitiesOfBus={setUpdateUtilitiesOfBus} utilitiesOfBus={utilitiesOfBus}></SlideUtility>
       </Row>
       <Row className={cx('infor-img', 'mt-5')}>
         <div className={cx('txt', 'padding-5')}>
@@ -323,9 +343,7 @@ function AddBus() {
           <Button outline className={cx('ms-5 me-5', 'btn')} onClick={handleCancel}>
             Hủy
           </Button>
-          <Button primary className={cx('ms-5 me-5', 'btn')} disabled={!activeAdd} 
-          onClick={handleAdd}
-          >
+          <Button primary className={cx('ms-5 me-5', 'btn')} disabled={!activeAdd} onClick={handleAdd}>
             Thêm
           </Button>
         </Col>

@@ -18,7 +18,7 @@ import { deleteFeeService } from '~/apiServices/manageFeeService/deleteFeeServic
 import { cancelTicket } from '~/apiServices/ticket/cancelTicket'
 import { fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
 import { deleteBusType } from '~/apiServices/busPartner/deleteBusType'
-import { allBusTypes } from '~/redux/slices/busPartnerSlice'
+import { fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -101,7 +101,7 @@ function ConfirmModal() {
         if (dispatch(checkLoginSession())) {
           await deleteBusType(busTypeId)
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
-          dispatch(allBusTypes())
+          dispatch(fetchAllBusTypes())
           toast.success('Xoá loại xe thành công!', { autoClose: 800, position: 'top-center' })
         }
       } catch (message) {

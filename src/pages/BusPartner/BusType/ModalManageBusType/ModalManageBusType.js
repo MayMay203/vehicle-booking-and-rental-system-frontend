@@ -10,6 +10,7 @@ import { addBusType } from '~/apiServices/busPartner/addBusType'
 import { useDispatch } from 'react-redux'
 import { fetchBusTypeByID } from '~/apiServices/busPartner/fetchBusTypeByID'
 import { updateBusType } from '~/apiServices/busPartner/updateBusType'
+import { fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
 function ModalManageBusType({ enableEdit = true, idBusType = null, functionModal, closeModal, ...props }) {
   const dispatch = useDispatch()
@@ -74,10 +75,14 @@ function ModalManageBusType({ enableEdit = true, idBusType = null, functionModal
         const response = await addBusType(formData.typeVehicle, formData.numberSeat, formData.typeSeat)
         if (response) {
           closeModal()
+          dispatch(fetchAllBusTypes())
           toast.success('Thêm loại xe thành công!', { autoClose: 2000 })
         }
       } catch (message) {
-        toast.error(message, { autoClose: 2000 })
+        if (message === 'This bus type has already existed'){
+          toast.error('Loại xe đã tồi tại', { autoClose: 2000 })
+        }
+        else toast.error(message, { autoClose: 2000 })
       }
     }
   }
@@ -88,6 +93,7 @@ function ModalManageBusType({ enableEdit = true, idBusType = null, functionModal
         const response = await updateBusType(idBusType, formData.typeVehicle, formData.numberSeat, formData.typeSeat)
         if (response) {
           closeModal()
+          dispatch(fetchAllBusTypes())
           toast.success('Cập nhật loại xe thành công!', { autoClose: 2000 })
         }
       } catch (message) {
