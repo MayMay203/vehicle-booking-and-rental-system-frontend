@@ -1,33 +1,26 @@
 import CardMessage from './CardMessage'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-function ListCardMessage({ buttonSelect, handleClose }) {
-  const [messages, setMessages] = useState([
-    { id: 1, name: 'Bùi Thiên Bảo', message: 'Chào bạn....', time: '12h00, 23/08/2024', isSeen: false },
-    { id: 2, name: 'Nguyễn Văn A', message: 'Xin chào!', time: '12h01, 23/08/2024', isSeen: false },
-    { id: 3, name: 'Trần Thị B', message: 'Bạn khỏe không?', time: '12h02, 23/08/2024', isSeen: false },
-    { id: 4, name: 'Lê Văn C', message: 'Tạm biệt!', time: '12h03, 23/08/2024', isSeen: false },
-    { id: 5, name: 'Trần Thị B', message: 'Bạn khỏe không?', time: '12h02, 23/08/2024', isSeen: false },
-    { id: 6, name: 'Lê Văn C', message: 'Tạm biệt!', time: '12h03, 23/08/2024', isSeen: false },
-  ])
-  const navigate = useNavigate()
-  const handleShowMessage = (id, name) => {
-    setMessages((prevMessages) => prevMessages.map((msg) => (msg.id === id ? { ...msg, isSeen: true } : msg)));
-    handleClose();
-    navigate('/message', { state: { id: id, name: name} });
-    
-  }
-  const filteredMessages = buttonSelect === 'Unread' ? messages.filter((msg) => !msg.isSeen) : messages
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
+function ListCardMessage() {
+  const [conversationList, setConversationList] = useState([])
+  const { currentUser } = useSelector((state) => state.user)
+  const {currentRole} = useSelector((state) => state.menu)
+ useEffect(() => {
+   async function fetchAllConversation() {
+     const conversations = await getAllConversation(currentUser.id, currentRole)
+     if (conversations) {
+       setConversationList(conversations.filter(conversation => conversation.lastMessage !== null))
+     }
+   }
+   fetchAllConversation()
+ }, [currentUser.id, currentRole])
   return (
     <div>
-      {filteredMessages.map((msg) => (
+      {conversationList.map((convers, index) => (
         <CardMessage
-          key={msg.id}
-          isSeen={msg.isSeen}
-          handleShowMessage={() => handleShowMessage(msg.id, msg.name)}
-          name={msg.name}
-          message={msg.message}
-          time={msg.time}
+          key={index}
+          data={convers}
         />
       ))}
     </div>

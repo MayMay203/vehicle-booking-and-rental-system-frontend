@@ -35,7 +35,14 @@ const menus = {
   ],
 }
 
-const initialState = { currentMenu: menus.userMenu }
+const roleMap = {
+  userMenu: 'USER',
+  adminMenu: 'ADMIN',
+  busPartnerMenu: 'BUS_PARTNER',
+  carRentalPartnerMenu: 'CAR_RENTAL_PARTNER',
+}
+
+const initialState = { currentMenu: menus.userMenu, currentRole: 'USER' }
 
 const menuSlice = createSlice({
   name: 'menu',
@@ -43,6 +50,7 @@ const menuSlice = createSlice({
   reducers: {
     setMenu: (state, action) => {
       state.currentMenu = menus[action.payload]
+      state.currentRole = roleMap[action.payload]
     },
   },
 })

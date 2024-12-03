@@ -30,6 +30,9 @@
     font-weight: 600;
 }
 .message{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: 1.4rem;
     line-height: 2.5rem;
 }

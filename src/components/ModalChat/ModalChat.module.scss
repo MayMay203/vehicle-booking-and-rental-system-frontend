@@ -1,9 +1,10 @@
 .wrapper{
   padding: 4px 2px 0 2px;
-  min-width: 380px;
+  max-width: 450px;
 }
 
 .body-message {
+  min-height: 56vh;
   max-height: 56vh; 
   overflow-y: auto; 
   margin-right: -10px;

@@ -3,7 +3,7 @@
     display: flex;
     align-items:flex-start;
     width: 80%;
-    margin: 1rem;
+    margin: 2px;
     padding: 0;
 }
 .wrap-receive{
@@ -20,6 +20,7 @@
     border-radius: 50%;
     aspect-ratio: 1/1; 
     border: 1px solid #FFEBE4;
+    object-fit: cover;
 }
 .wrap-content-end{
     justify-items: end;
@@ -40,7 +41,7 @@
     color: white;
 }
 .time{
-    margin: 1rem 2rem;
+    margin: 9px 7px;
     font-size: 1.2rem;
     font-weight: 400;
     color: rgba(0, 0, 0, 0.7);

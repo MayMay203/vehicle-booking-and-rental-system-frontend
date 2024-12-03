@@ -128,7 +128,7 @@ function ManagePartners() {
         />
       )}
 
-      {partnerList.result.length === 0 && (
+      {partnerList.result?.length === 0 && (
         <Empty style={{ marginTop: '70px' }} description="Không có dữ liệu đối tác nào" />
       )}
     </div>

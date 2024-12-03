@@ -44,7 +44,6 @@ function Search({ noSelectBus, noSelectDate = false }) {
       }
       const businessNames = await getBusinessName()
       if (businessNames) {
-        console.log(businessNames)
         setBusinessList(businessNames)
       }
     }
