@@ -105,7 +105,9 @@ function ConfirmModal() {
           toast.success('Xoá loại xe thành công!', { autoClose: 800, position: 'top-center' })
         }
       } catch (message) {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
+        if (message === 'Internal Server Error')
+          toast.error('Loại xe đang được sử dụng. Bạn không thể xóa!', { autoClose: 1500, position: 'top-center' })
+        else toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1500, position: 'top-center' })
       }
     } else if (showConfirmModal.name === generalModalNames.CANCEL_TICKET) {
       try {

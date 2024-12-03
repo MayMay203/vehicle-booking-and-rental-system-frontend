@@ -10,6 +10,7 @@ const cx = classNames.bind(styles)
 function SlideUtility({ listUtilities, setUpdateUtilitiesOfBus, utilitiesOfBus, isModal = false, enableEdit = true }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [utilitiesPerPage, setUtilitiesPerPage] = useState(7)
+  console.log('utilitiesOfBus slider:', utilitiesOfBus)
   // const [selectedUtilities, setSelectedUtilities] = useState(utilitiesOfBus)
   useEffect(() => {
     const updateUtilitiesPerPage = () => {
@@ -41,11 +42,15 @@ function SlideUtility({ listUtilities, setUpdateUtilitiesOfBus, utilitiesOfBus, 
   }, [isModal])
   // const [activeUtilities, setActiveUtilities] = useState(Array(listUtilities.length).fill(false))
   const [activeUtilities, setActiveUtilities] = useState(
-    listUtilities?.map((utility) => utilitiesOfBus?.includes(utility.id))
+    listUtilities?.map((utility) => utilitiesOfBus?.includes(utility.id)),
   )
-
   const [currentPage, setCurrentPage] = useState(0)
+  useEffect(() => {
+    setActiveUtilities(listUtilities?.map((utility) => utilitiesOfBus?.includes(utility.id)))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [utilitiesOfBus])
 
+  console.log('activeUtilities:---', activeUtilities)
   // const resetUtilitiesStates = () => {
   //   setActiveUtilities(Array(listUtilities.length).fill(false))
   // }
@@ -77,7 +82,7 @@ function SlideUtility({ listUtilities, setUpdateUtilitiesOfBus, utilitiesOfBus, 
       .filter((utility, index) => updatedUtilities[index]) // Filter based on active state
       .map((utility) => utility.id) // Map to get the IDs of active utilities
 
-    if(setUpdateUtilitiesOfBus){
+    if (setUpdateUtilitiesOfBus) {
       setUpdateUtilitiesOfBus(activeUtilityIds)
     }
   }
@@ -97,7 +102,7 @@ function SlideUtility({ listUtilities, setUpdateUtilitiesOfBus, utilitiesOfBus, 
               id={item.id}
               name={item.name}
               image={item.image}
-              active={activeUtilities[listUtilities.findIndex((utility) => utility.id === item.id)]}
+              active={activeUtilities[displayedUtilities.findIndex((utility) => utility.id === item.id)]}
               handleChooseUtility={enableEdit ? () => handleChooseUtility(item.id) : undefined}
             ></Utility>
           ))}

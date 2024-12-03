@@ -1,42 +1,27 @@
 import classNames from 'classnames/bind'
 import styles from './ModalBusInfor.module.scss'
-import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { Col, InputGroup, Row, Form, Image } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBus, faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import SlideUtility from '~/components/SlideUtility'
 import { images } from '~/assets/images'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { busByID, fetchAllUtilities } from '~/redux/slices/busPartnerSlice'
+import { fetchAllUtilities } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
-function ModalBusInfor({ enableEdit, id, ...props }) {
+function ModalBusInfor({ selectedBus, ...props }) {
   const dispatch = useDispatch()
   const listUtilities = useSelector((state) => state.busPartner.utilityList)
-  //   const [activeAdd, setActiveAdd] = useState(false)
-  const formData = useSelector((state) => state.busPartner.inforBus)
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
-      listUtilities.map((utility) => ({
-        id: utility.id,
-        image: utility.image,
-        name: utility.name,
-        description: utility.description,
-      }))
       dispatch(fetchAllUtilities())
-      dispatch(busByID(id))
     }
-    // selectedFiles
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
-  const fileInputRefs = useRef(Array(6).fill(null))
-  const selectedFiles = useState(formData.imagesBus)
-  // const [warningMessage, setWarningMessage] = useState('')
-  const handleImageClick = (index) => {
-    fileInputRefs.current[index].click()
-  }
+  const selectedFiles = selectedBus?.imagesBus || []
+  const utilitiesOfBus = selectedBus?.utilities?.map((utility) => utility.id) || []
   return (
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -55,11 +40,11 @@ function ModalBusInfor({ enableEdit, id, ...props }) {
                 <InputGroup className={cx('txt', 'infor-item')}>
                   <Form.Control
                     type="text"
-                    aria-label="typeVehicle"
-                    name="typeVehicle"
+                    // aria-label="typeVehicle"
+                    // name="typeVehicle"
                     className={cx('txt', 'selectbox', 'infor-item')}
-                    value={formData.busType}
-                    disabled={!enableEdit}
+                    value={selectedBus?.busType?.name}
+                    readOnly
                   ></Form.Control>
                   <InputGroup.Text className={cx('txt')}>
                     <FontAwesomeIcon icon={faBus} />
@@ -73,12 +58,12 @@ function ModalBusInfor({ enableEdit, id, ...props }) {
                 <InputGroup className={cx('txt', 'infor-item')}>
                   <Form.Control
                     type="text"
-                    placeholder="45"
-                    name="numberSeat"
-                    value={formData.busType}
-                    aria-label="numberSeat"
+                    // placeholder="45"
+                    // name="numberSeat"
+                    value={selectedBus?.busType?.numberOfSeat}
+                    // aria-label="numberSeat"
                     className={cx('txt')}
-                    disabled={!enableEdit}
+                    readOnly
                   />
                   <InputGroup.Text className={cx('txt')}>
                     <FontAwesomeIcon icon={faTicket} />
@@ -94,12 +79,12 @@ function ModalBusInfor({ enableEdit, id, ...props }) {
                 <InputGroup className={cx('txt', 'infor-item')}>
                   <Form.Control
                     type="text"
-                    placeholder="30G-49344"
-                    name="licensePlate"
-                    value={formData.licensePlate}
-                    aria-label="licensePlate"
+                    // placeholder="30G-49344"
+                    // name="licensePlate"
+                    value={selectedBus?.licensePlate}
+                    // aria-label="licensePlate"
                     className={cx('txt')}
-                    disabled={!enableEdit}
+                    readOnly
                   />
                   <InputGroup.Text className={cx('txt')}>
                     <FontAwesomeIcon icon={faTicket} />
@@ -113,10 +98,10 @@ function ModalBusInfor({ enableEdit, id, ...props }) {
                 <InputGroup className={cx('txt', 'infor-item')}>
                   <Form.Control
                     type="text"
-                    aria-label="typeSeat"
-                    name="typeSeat"
+                    // aria-label="typeSeat"
+                    // name="typeSeat"
                     className={cx('txt', 'selectbox', 'infor-item')}
-                    value={formData.typeSeat}
+                    value={selectedBus?.busType?.chairType}
                     readOnly
                   ></Form.Control>
                   <InputGroup.Text className={cx('txt')}>
@@ -131,9 +116,9 @@ function ModalBusInfor({ enableEdit, id, ...props }) {
               Tiện ích<span className="text-danger">*</span>
             </div>
             <SlideUtility
-              enableEdit={enableEdit}
+              enableEdit={false}
               isModal={true}
-              utilitiesOfBus={formData.utilities}
+              utilitiesOfBus={utilitiesOfBus}
               listUtilities={listUtilities}
             ></SlideUtility>
           </Row>
@@ -146,26 +131,13 @@ function ModalBusInfor({ enableEdit, id, ...props }) {
             <Row className={cx('list-img')}>
               {[...Array(6)].map((_, index) => (
                 <Col xs={12} sm={6} md={4} key={index} className="d-flex justify-content-center">
-                  <div onClick={() => enableEdit && handleImageClick(index)}>
-                    <Image src={selectedFiles[index] || images.no_picture} thumbnail className={cx('img-vehicle')} />
-                    {/* <input
-                      type="file"
-                      ref={(el) => (fileInputRefs.current[index] = el)}
-                      style={{ display: 'none' }}
-                      accept="image/*"
-                    /> */}
-                  </div>
+                  <Image src={selectedFiles[index] || images.no_picture} thumbnail className={cx('img-vehicle')} />
                 </Col>
               ))}
             </Row>
           </Row>
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
-          Xác nhận đã trả xe
-        </Button>
-      </Modal.Footer>
     </Modal>
   )
 }
