@@ -1,91 +1,27 @@
 import classNames from 'classnames/bind'
 import styles from './ModalBusInfor.module.scss'
-import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { Col, InputGroup, Row, Form, Image, Alert } from 'react-bootstrap'
+import { Col, InputGroup, Row, Form, Image } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faBottleWater,
-  faFan,
-  faMattressPillow,
-  faPersonBooth,
-  faRug,
-  faTicket,
-  faTv,
-} from '@fortawesome/free-solid-svg-icons'
-
-import { useState, useEffect, useRef } from 'react'
-import { faLightbulb } from '@fortawesome/free-regular-svg-icons'
+import { faBus, faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
+import { useEffect } from 'react'
 import SlideUtility from '~/components/SlideUtility'
 import { images } from '~/assets/images'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllUtilities } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
-function ModalBusInfor(props, {enableEdit}) {
-  const listUtilities = [
-    { id: 1, icon: faFan, name: 'Quạt', description: 'Xe có hệ thống điều hòa' },
-    { id: 11, icon: faLightbulb, name: 'Đèn đọc sách', description: 'Xe có hệ thống điều hòa' },
-    { id: 12, icon: faTv, name: 'TV', description: 'Xe có hệ thống điều hòa' },
-    { id: 13, icon: faPersonBooth, name: 'Rèm cửa', description: 'Xe có hệ thống điều hòa' },
-    { id: 14, icon: faMattressPillow, name: 'Gối nằm', description: 'Xe có hệ thống điều hòa' },
-    { id: 15, icon: faBottleWater, name: 'Nước uống', description: 'Xe có hệ thống điều hòa' },
-    { id: 16, icon: faRug, name: 'Chăn', description: 'Xe có hệ thống điều hòa' },
-    { id: 17, icon: faFan, name: 'Điều hòa', description: 'Xe có hệ thống điều hòa' },
-    { id: 18, icon: faFan, name: 'Điều hòa', description: 'Xe có hệ thống điều hòa' },
-  ]
-  const typeVehicles = [
-    { value: 'Limousine34GiuongNam', label: 'Limousine34GiuongNam' },
-    { value: 'Limousine34GheNgoi', label: 'Limousine34GheNgoi' },
-  ]
-  const typeSeats = [
-    { value: 'GiuongNam', label: 'GiuongNam' },
-    { value: 'GheNgoi', label: 'GheNgoi' },
-  ]
-  //   const [activeAdd, setActiveAdd] = useState(false)
-  const [formData, setFormData] = useState({
-    licensePlateNumber: '50H-26374',
-    typeVehicle: 'Limousine34GheNgoi',
-    typeSeat: 'Ghế ngồi',
-    numberSeat: '34',
-  })
+function ModalBusInfor({ selectedBus, ...props }) {
+  const dispatch = useDispatch()
+  const listUtilities = useSelector((state) => state.busPartner.utilityList)
   useEffect(() => {
-    const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
-    // setActiveAdd(allFieldsFilled)
-    console.log('Có vô', formData)
-    console.log(allFieldsFilled)
-  }, [formData])
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
-    console.log(formData)
-  }
-  //   const handleCancel = () => {
-  //     setFormData({
-  //       licensePlateNumber: '50H-26374',
-  //       typeVehicle: 'Limousine34GheNgoi',
-  //       typeSeat: 'Ghế ngồi',
-  //       numberSeat: '34',
-  //     })
-  //   }
-  //   const handleAdd = () => {}
-  const fileInputRefs = useRef(Array(6).fill(null))
-  const [selectedFiles, setSelectedFiles] = useState(Array(6).fill(null))
-  const [warningMessage, setWarningMessage] = useState('')
-  const handleImageClick = (index) => {
-    fileInputRefs.current[index].click()
-  }
-  const handleFileChange = (index, event) => {
-    const file = event.target.files[0]
-    if (file && file.type.startsWith('image/')) {
-      const newSelectedFiles = [...selectedFiles]
-      newSelectedFiles[index] = URL.createObjectURL(file) // Create a URL for the selected file
-      setSelectedFiles(newSelectedFiles)
-      setWarningMessage('')
-    } else if (file && !file.type.startsWith('image/')) {
-      setWarningMessage('Vui lòng chọn file ảnh!')
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllUtilities())
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch])
+  const selectedFiles = selectedBus?.imagesBus || []
+  const utilitiesOfBus = selectedBus?.utilities?.map((utility) => utility.id) || []
   return (
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -101,20 +37,19 @@ function ModalBusInfor(props, {enableEdit}) {
                 <Form.Label className="mb-3">
                   Loại phương tiện<span className="text-danger">*</span>
                 </Form.Label>
-                <Form.Select
-                  aria-label="typeVehicle"
-                  name="typeVehicle"
-                  className={cx('txt', 'selectbox', 'infor-item')}
-                  onChange={handleInputChange}
-                  value={formData.typeVehicle}
-                  disabled={!enableEdit}
-                >
-                  {typeVehicles.map((typeVehicle, index) => (
-                    <option key={index} value={typeVehicle.value}>
-                      {typeVehicle.label}
-                    </option>
-                  ))}
-                </Form.Select>
+                <InputGroup className={cx('txt', 'infor-item')}>
+                  <Form.Control
+                    type="text"
+                    // aria-label="typeVehicle"
+                    // name="typeVehicle"
+                    className={cx('txt', 'selectbox', 'infor-item')}
+                    value={selectedBus?.busType?.name}
+                    readOnly
+                  ></Form.Control>
+                  <InputGroup.Text className={cx('txt')}>
+                    <FontAwesomeIcon icon={faBus} />
+                  </InputGroup.Text>
+                </InputGroup>
               </Form.Group>
               <Form.Group className={cx('txt', 'mb-5')} controlId="formAdd.ControlInput5">
                 <Form.Label className="mb-3">
@@ -123,12 +58,12 @@ function ModalBusInfor(props, {enableEdit}) {
                 <InputGroup className={cx('txt', 'infor-item')}>
                   <Form.Control
                     type="text"
-                    placeholder="45"
-                    name="numberSeat"
-                    value={formData.numberSeat}
-                    aria-label="numberSeat"
+                    // placeholder="45"
+                    // name="numberSeat"
+                    value={selectedBus?.busType?.numberOfSeat}
+                    // aria-label="numberSeat"
                     className={cx('txt')}
-                    disabled={!enableEdit}
+                    readOnly
                   />
                   <InputGroup.Text className={cx('txt')}>
                     <FontAwesomeIcon icon={faTicket} />
@@ -144,12 +79,12 @@ function ModalBusInfor(props, {enableEdit}) {
                 <InputGroup className={cx('txt', 'infor-item')}>
                   <Form.Control
                     type="text"
-                    placeholder="30G-49344"
-                    name="licensePlateNumber"
-                    value={formData.licensePlateNumber}
-                    aria-label="licensePlateNumber"
+                    // placeholder="30G-49344"
+                    // name="licensePlate"
+                    value={selectedBus?.licensePlate}
+                    // aria-label="licensePlate"
                     className={cx('txt')}
-                    disabled={!enableEdit}
+                    readOnly
                   />
                   <InputGroup.Text className={cx('txt')}>
                     <FontAwesomeIcon icon={faTicket} />
@@ -160,20 +95,19 @@ function ModalBusInfor(props, {enableEdit}) {
                 <Form.Label className="mb-3">
                   Loại ghế<span className="text-danger">*</span>
                 </Form.Label>
-                <Form.Select
-                  aria-label="typeSeat"
-                  name="typeSeat"
-                  value={formData.typeSeat}
-                  className={cx('txt', 'selectbox', 'infor-item')}
-                  onChange={handleInputChange}
-                  disabled={!enableEdit}
-                >
-                  {typeSeats.map((typeSeat, index) => (
-                    <option key={index} value={typeSeat.value}>
-                      {typeSeat.label}
-                    </option>
-                  ))}
-                </Form.Select>
+                <InputGroup className={cx('txt', 'infor-item')}>
+                  <Form.Control
+                    type="text"
+                    // aria-label="typeSeat"
+                    // name="typeSeat"
+                    className={cx('txt', 'selectbox', 'infor-item')}
+                    value={selectedBus?.busType?.chairType}
+                    readOnly
+                  ></Form.Control>
+                  <InputGroup.Text className={cx('txt')}>
+                    <FontAwesomeIcon icon={faCouch} />
+                  </InputGroup.Text>
+                </InputGroup>
               </Form.Group>
             </Col>
           </Row>
@@ -181,7 +115,12 @@ function ModalBusInfor(props, {enableEdit}) {
             <div className={cx('txt', 'padding-5')}>
               Tiện ích<span className="text-danger">*</span>
             </div>
-            <SlideUtility enableEdit={enableEdit} isModal={true} listUtilities={listUtilities}></SlideUtility>
+            <SlideUtility
+              enableEdit={false}
+              isModal={true}
+              utilitiesOfBus={utilitiesOfBus}
+              listUtilities={listUtilities}
+            ></SlideUtility>
           </Row>
           <Row className={cx('infor-img', 'mt-5')}>
             <div className={cx('txt', 'padding-5')}>
@@ -192,47 +131,13 @@ function ModalBusInfor(props, {enableEdit}) {
             <Row className={cx('list-img')}>
               {[...Array(6)].map((_, index) => (
                 <Col xs={12} sm={6} md={4} key={index} className="d-flex justify-content-center">
-                  <div onClick={() => enableEdit && handleImageClick(index)}>
-                    <Image src={selectedFiles[index] || images.no_picture} thumbnail className={cx('img-vehicle')} />
-                    <input
-                      type="file"
-                      ref={(el) => (fileInputRefs.current[index] = el)}
-                      style={{ display: 'none' }}
-                      accept="image/*"
-                      onChange={(event) => handleFileChange(index, event)}
-                    />
-                  </div>
+                  <Image src={selectedFiles[index] || images.no_picture} thumbnail className={cx('img-vehicle')} />
                 </Col>
               ))}
-
-              {warningMessage && (
-                <Alert variant="danger" className={cx('warn', 'text-center')}>
-                  {warningMessage}
-                </Alert>
-              )}
             </Row>
           </Row>
-          {/* {enableEdit && (
-            <Row className="justify-content-center mt-4">
-              <Col></Col>
-              <Col className="d-flex justify-content-center">
-                <Button outline className={cx('ms-5 me-5', 'btn')} onClick={handleCancel}>
-                  Hủy
-                </Button>
-                <Button primary className={cx('ms-5 me-5', 'btn')} disabled={!activeAdd} onClick={handleAdd}>
-                  Cập nhật
-                </Button>
-              </Col>
-              <Col></Col>
-            </Row>
-          )} */}
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
-          Xác nhận đã trả xe
-        </Button>
-      </Modal.Footer>
     </Modal>
   )
 }

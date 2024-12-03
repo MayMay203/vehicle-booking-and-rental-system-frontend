@@ -7,12 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { fetchAllBus } from '~/apiServices/busPartner/fetchAllBuses'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { useCallback, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteBus } from '~/apiServices/busPartner/deleteBus'
 import { toast } from 'react-toastify'
+import ModalBusInfor from '../ModalBusInfor'
+import { busByID, fetchAllBuses } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
 function Bus() {
   const columns = [
@@ -122,7 +123,7 @@ function Bus() {
       title: 'Xóa',
       dataIndex: 'delete',
       align: 'center',
-      render: (record) => (
+      render: (text, record) => (
         <FontAwesomeIcon
           icon={faTrash}
           style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }}
@@ -143,14 +144,23 @@ function Bus() {
   // ]
   const dispatch = useDispatch()
   const [data, setData] = useState([])
-  // const [idSlectedBusType, setIDSlectedBusType] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const[selectedIDBus, setSelectedIDBus] = useState(null)
+  const allBus = useSelector((state) => state.busPartner.busList)
   // Dùng useCallback để ghi nhớ hàm handleGetAllBus
-  const handleGetAllBus = useCallback(async () => {
+  useEffect(() => {
     if (dispatch(checkLoginSession())) {
       try {
-        const allBus = await fetchAllBus()
-        console.log('allBus:', allBus)
-        const newData = allBus?.result.map((item) => ({
+        dispatch(fetchAllBuses())
+      } catch (message) {
+        console.log(message)
+      }
+    }
+  }, [dispatch])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      try {
+        const newData = allBus?.map((item) => ({
           key: item.busId,
           licensePlateNumber: item.licensePlate,
           typeVehicle: item.nameBusType,
@@ -162,10 +172,8 @@ function Bus() {
         console.log(message)
       }
     }
-  }, [dispatch])
-  useEffect(() => {
-    handleGetAllBus()
-  }, [handleGetAllBus])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allBus])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
@@ -173,13 +181,25 @@ function Bus() {
   const handleAddBus = () => {
     navigate('add-bus')
   }
+  const dataInforBus = useSelector((state) => state.busPartner.inforBus)
   const handleViewBus = (id) => {
-    navigate('update-bus', { state: { enableEdit: false, busID: id } })
+    setShowModal(true)
+    setSelectedIDBus(id)
+    console.log('id:', id)
   }
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(busByID({ id: selectedIDBus }))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedIDBus])
   const handleEditBus = (id) => {
     navigate('update-bus', { state: { enableEdit: true, busID: id } })
   }
-
+  const closeModal = () => {
+    setShowModal(false)
+    setSelectedIDBus(null)
+  }
   const handleDeleteBus = async (id) => {
     if (dispatch(checkLoginSession())) {
       try {
@@ -218,6 +238,12 @@ function Bus() {
         showSorterTooltip={{
           target: 'sorter-icon',
         }}
+      />
+      <ModalBusInfor
+        show={showModal}
+        selectedBus={dataInforBus}
+        closeModal={closeModal}
+        onHide={() => setShowModal(false)}
       />
     </div>
   )
