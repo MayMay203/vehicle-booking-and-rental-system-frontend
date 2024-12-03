@@ -3,6 +3,9 @@ import styles from './AddBusTrip.module.scss'
 import Button from '~/components/Button'
 import { Col, Form, Modal, Row } from 'react-bootstrap'
 import AddManyItems from '~/components/AddManyItems'
+import AddManyDropOffLocation from '~/components/AddManyDropOffLocation'
+import { getLocations } from '~/apiServices/getLocations'
+import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
 function AddBusTrip(props) {
   const handleInputChange = (e) => {
@@ -13,22 +16,27 @@ function AddBusTrip(props) {
     // }))
     // console.log(formData)
   }
-   const initialDepartures = [
-     { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 0 },
-     { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
-     { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
-     { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
-   ]
-   const initialDestination = [
-     { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 0 },
-     { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
-     { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
-     { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
-   ]
-
+ const [provincesList, setProvincesList] = useState([])
+ useEffect(() => {
+   async function fetchApi() {
+     const provices = await getLocations(1)
+     if (provices) {
+       const cleanedProvinces = provices
+         .map((province) => {
+           return {
+             ...province,
+             name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
+           }
+         })
+         .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
+       setProvincesList(cleanedProvinces)
+     }
+   }
+   fetchApi()
+ }, [])
   
   return (
-    <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter" className={cx('title-modal', 'w-100', 'text-center')}>
           Thêm chuyến xe
@@ -48,11 +56,11 @@ function AddBusTrip(props) {
                 onChange={handleInputChange}
                 className={cx('txt', 'selectbox', 'add-item')}
               >
-                {/* {provinces.map((province, index) => (
+                {provincesList.map((province, index) => (
                   <option key={index} value={province.value}>
                     {province.label}
                   </option>
-                ))} */}
+                ))}
               </Form.Select>
             </Form.Group>
           </Col>
@@ -68,11 +76,11 @@ function AddBusTrip(props) {
                 onChange={handleInputChange}
                 className={cx('txt', 'selectbox', 'add-item')}
               >
-                {/* {provinces.map((province, index) => (
+                {provincesList.map((province, index) => (
                   <option key={index} value={province.value}>
                     {province.label}
                   </option>
-                ))} */}
+                ))}
               </Form.Select>
             </Form.Group>
           </Col>
@@ -99,9 +107,26 @@ function AddBusTrip(props) {
             </Form.Group>
           </Col>
         </Row>
-        <AddManyItems initialItems={initialDepartures} content={'Địa điểm đón khách'}></AddManyItems>
+        {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formAdd.ControlInput3">
+          <Form.Label className="mb-3">
+            Địa điểm đón khách<span className="text-danger">*</span>
+          </Form.Label>
+          <AddManyItems initialItems={initialDepartures}></AddManyItems>
+        </Form.Group> */}
+        <AddManyItems
+          initialItems={[1]}
+          content={'Địa điểm đón khách'}
+        ></AddManyItems>
         <div className={cx('line')}></div>
-        <AddManyItems initialItems={initialDestination} content={'Địa điểm trả khách'}></AddManyItems>
+        {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formAdd.ControlInput3">
+          <Form.Label className="mb-3">
+            Địa điểm trả khách<span className="text-danger">*</span>
+          </Form.Label> */}
+        <AddManyDropOffLocation
+          provincesList={provincesList}
+          initialItems={[1]}
+        ></AddManyDropOffLocation>
+        {/* </Form.Group> */}
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center align-items-center">
         <div className="row w-100">

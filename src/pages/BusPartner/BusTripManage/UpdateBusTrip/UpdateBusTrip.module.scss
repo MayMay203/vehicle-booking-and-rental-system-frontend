@@ -28,8 +28,9 @@
     margin: 0 0 1rem 0;
 }
 .btn{
+    align-items: center;
     min-width: 10rem !important;
-    height: 3rem;
+    height: 3.4rem;
     font-weight: 400;
     margin: 0 2rem;
     @include abstracts.screen(sm){

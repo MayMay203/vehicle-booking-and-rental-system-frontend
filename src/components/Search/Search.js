@@ -34,12 +34,14 @@ function Search({ noSelectBus, noSelectDate = false }) {
     async function fetchApi() {
       const provices = await getLocations(1)
       if (provices) {
-        const cleanedProvinces = provices.map((province) => {
-          return {
-            ...province,
-            name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
-          }
-        })
+        const cleanedProvinces = provices
+          .map((province) => {
+            return {
+              ...province,
+              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
+            }
+          })
+          .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
         setProvincesList(cleanedProvinces)
       }
       const businessNames = await getBusinessName()

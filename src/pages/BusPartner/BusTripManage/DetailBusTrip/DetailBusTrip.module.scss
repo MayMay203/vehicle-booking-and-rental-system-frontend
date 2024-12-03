@@ -3,7 +3,8 @@
     font-size: 2rem;
     color: #D34714;
     font-weight: 500;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
+    margin-top: 1.8rem;
 }
 .wrap-infor{
     border-radius: 5px;
@@ -19,13 +20,16 @@
     margin-left: 3rem;
 }
 .txt{
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     // margin-bottom: 1rem;
     font-weight: 500;
     color: black;
     &:focus {
         border-color: #FF9800;
         box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); 
+    }
+    @include abstracts.screen(md){
+        font-size: 1.4rem;
     }
     @include abstracts.screen(sm){
         font-size: 1.4rem;
@@ -39,6 +43,18 @@
     height: 0.2px;
     background-color: #fff2ee;
     margin: 0 0 1rem 0;
+}
+.txt-location{
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin: 1rem  2rem;
+    line-height: 2.5rem;
+    @include abstracts.screen(md){
+        font-size: 1.4rem;
+    }
+    @include abstracts.screen(sm){
+        font-size: 1.4rem;
+    }
 }
 // @use '../../../../abstracts' as abstracts;
 // .wrap-container {

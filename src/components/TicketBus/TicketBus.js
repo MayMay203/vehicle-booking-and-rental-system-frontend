@@ -7,7 +7,7 @@ function TicketBus() {
   return (
     <div className={cx('row', 'wrap-ticket')}>
       <Col className={cx('id-ticket')} lg={1}>
-        Vé 1
+        Vé xe
       </Col>
       <Col lg={5} className={cx('p-3')}>
         <Row>

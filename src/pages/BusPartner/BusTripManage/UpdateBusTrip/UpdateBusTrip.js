@@ -3,6 +3,9 @@ import styles from './UpdateBusTrip.module.scss'
 import Button from '~/components/Button'
 import { Col, Form, Modal, Row } from 'react-bootstrap'
 import AddManyItems from '~/components/AddManyItems'
+import { useEffect, useState } from 'react'
+import { getLocations } from '~/apiServices/getLocations'
+import AddManyDropOffLocation from '~/components/AddManyDropOffLocation'
 const cx = classNames.bind(styles)
 function UpdateBusTrip(props) {
   const handleInputChange = (e) => {
@@ -25,9 +28,26 @@ function UpdateBusTrip(props) {
     { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
     { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
   ]
-
+  const [provincesList, setProvincesList] = useState([])
+  useEffect(() => {
+    async function fetchApi() {
+      const provices = await getLocations(1)
+      if (provices) {
+        const cleanedProvinces = provices
+          .map((province) => {
+            return {
+              ...province,
+              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
+            }
+          })
+          .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
+        setProvincesList(cleanedProvinces)
+      }
+    }
+    fetchApi()
+  }, [])
   return (
-    <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter" className={cx('title-modal', 'w-100', 'text-center')}>
           Cập nhật chuyến xe
@@ -49,11 +69,11 @@ function UpdateBusTrip(props) {
                 readOnly
                 disabled
               >
-                {/* {provinces.map((province, index) => (
+                {provincesList.map((province, index) => (
                   <option key={index} value={province.value}>
                     {province.label}
                   </option>
-                ))} */}
+                ))}
               </Form.Select>
             </Form.Group>
           </Col>
@@ -71,11 +91,11 @@ function UpdateBusTrip(props) {
                 readOnly
                 disabled
               >
-                {/* {provinces.map((province, index) => (
+                {provincesList.map((province, index) => (
                   <option key={index} value={province.value}>
                     {province.label}
                   </option>
-                ))} */}
+                ))}
               </Form.Select>
             </Form.Group>
           </Col>
@@ -104,7 +124,11 @@ function UpdateBusTrip(props) {
         </Row>
         <AddManyItems initialItems={initialDepartures} content={'Địa điểm đón khách'}></AddManyItems>
         <div className={cx('line')}></div>
-        <AddManyItems initialItems={initialDestination} content={'Địa điểm trả khách'}></AddManyItems>
+        <AddManyDropOffLocation
+          initialItems={initialDestination}
+          provincesList={provincesList}
+          content={'Địa điểm trả khách'}
+        ></AddManyDropOffLocation>
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center align-items-center">
         <div className="row w-100">
@@ -116,7 +140,7 @@ function UpdateBusTrip(props) {
           </div>
           <div className="col d-flex justify-content-center">
             <Button primary outline className={cx('btn')}>
-              Thêm
+              Cập nhật
             </Button>
           </div>
           <Col></Col>
