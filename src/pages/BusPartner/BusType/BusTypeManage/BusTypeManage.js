@@ -93,7 +93,7 @@ function BusTypeManage() {
       title: 'Sửa',
       dataIndex: 'update',
       align: 'center',
-
+      width: 70,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faEdit}
@@ -106,6 +106,7 @@ function BusTypeManage() {
       title: 'Xóa',
       dataIndex: 'delete',
       align: 'center',
+      width: 70,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faTrash}

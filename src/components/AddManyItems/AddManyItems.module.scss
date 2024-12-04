@@ -1,12 +1,17 @@
 .txt{
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
     font-weight: 500;
     color: black;
     &:focus {
         border-color: #FF9800;
         box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); 
     }
+}
+.padding-1{
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 .add-item{
     font-size: 2.5rem;

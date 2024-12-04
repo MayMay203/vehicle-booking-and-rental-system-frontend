@@ -2,65 +2,88 @@ import classNames from 'classnames/bind'
 import styles from './UpdateBus.module.scss'
 import { Col, InputGroup, Row, Form, Image, Alert } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faBottleWater,
-  faFan,
-  faMattressPillow,
-  faPersonBooth,
-  faRug,
-  faTicket,
-  faTv,
-} from '@fortawesome/free-solid-svg-icons'
-import Button from '~/components/Button'
-import { useState, useEffect, useRef } from 'react'
+import { faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useRef, useState } from 'react'
 import SlideUtility from '~/components/SlideUtility'
-import { faLightbulb } from '@fortawesome/free-regular-svg-icons'
 import { images } from '~/assets/images'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllBusTypes, fetchAllUtilities } from '~/redux/slices/busPartnerSlice'
 import { useLocation } from 'react-router-dom'
+import Button from '~/components/Button'
+import { detailBusByID } from '~/apiServices/busPartner/detailBusByID'
+import { toast } from 'react-toastify'
+import { updateBus } from '~/apiServices/busPartner/updateBus'
 const cx = classNames.bind(styles)
 function UpdateBus() {
   const location = useLocation()
-  const { enableEdit } = location.state || {}
-  const listUtilities = [
-    { id: 1, icon: faFan, name: 'Quạt', description: 'Xe có hệ thống điều hòa' },
-    { id: 11, icon: faLightbulb, name: 'Đèn đọc sách', description: 'Xe có hệ thống điều hòa' },
-    { id: 12, icon: faTv, name: 'TV', description: 'Xe có hệ thống điều hòa' },
-    { id: 13, icon: faPersonBooth, name: 'Rèm cửa', description: 'Xe có hệ thống điều hòa' },
-    { id: 14, icon: faMattressPillow, name: 'Gối nằm', description: 'Xe có hệ thống điều hòa' },
-    { id: 15, icon: faBottleWater, name: 'Nước uống', description: 'Xe có hệ thống điều hòa' },
-    { id: 16, icon: faRug, name: 'Chăn', description: 'Xe có hệ thống điều hòa' },
-    { id: 17, icon: faFan, name: 'Điều hòa', description: 'Xe có hệ thống điều hòa' },
-    { id: 18, icon: faFan, name: 'Điều hòa', description: 'Xe có hệ thống điều hòa' },
-  ]
-  const typeVehicles = [
-    { value: 'Limousine34GiuongNam', label: 'Limousine34GiuongNam' },
-    { value: 'Limousine34GheNgoi', label: 'Limousine34GheNgoi' },
-  ]
-  const typeSeats = [
-    { value: 'GiuongNam', label: 'GiuongNam' },
-    { value: 'GheNgoi', label: 'GheNgoi' },
-  ]
-  const [activeAdd, setActiveAdd] = useState(false)
+  const { enableEdit, selectedIDBus } = location.state || {}
+  const dispatch = useDispatch()
+  const listUtilities = useSelector((state) => state.busPartner.utilityList)
+  const allBusTypes = useSelector((state) => state.busPartner.busTypeList)
+  const [selectedBus, setSelectedBus] = useState({})
+  const [updateUtilitiesOfBus, setUpdateUtilitiesOfBus] = useState([])
+  const maxSizeImage = 3 * 1024 * 1024
   const [formData, setFormData] = useState({
-    licensePlateNumber: '50H-26374',
-    typeVehicle: 'Limousine34GheNgoi',
-    typeSeat: 'Ghế ngồi',
-    numberSeat: '34',
+    licensePlateNumber: selectedBus.licensePlate,
+    idBusType: selectedBus?.busType?.id,
+    typeSeat: selectedBus.busType?.chairType,
+    numberSeat: selectedBus.busType?.numberOfSeat,
+    utilities: selectedBus?.utilities?.map((utility) => utility.id) || [],
+    busImages: selectedBus?.imagesBus,
   })
+  const fileInputRefs = useRef(Array(6).fill(null))
+  const [selectedFiles, setSelectedFiles] = useState(selectedBus?.imagesBus || [])
+  const [warningMessage, setWarningMessage] = useState('')
   useEffect(() => {
-    const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllUtilities())
+      dispatch(fetchAllBusTypes())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      getInforBusByID()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedIDBus])
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      utilities: updateUtilitiesOfBus,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateUtilitiesOfBus])
+  useEffect(() => {
+    setFormData({
+      licensePlateNumber: selectedBus.licensePlate,
+      idBusType: selectedBus?.busType?.id,
+      // typeVehicle: '',
+      typeSeat: selectedBus.busType?.chairType,
+      numberSeat: selectedBus.busType?.numberOfSeat,
+      utilities: selectedBus?.utilities?.map((utility) => utility.id) || [],
+      busImages: selectedBus?.imagesBus,
+    })
+    setSelectedFiles(selectedBus?.imagesBus || [])
+    
+  }, [selectedBus])
+  const getInforBusByID = async () => {
+    const response = await detailBusByID(selectedIDBus)
+    setSelectedBus(response)
+  }
+  console.log('imagesBus---:', formData?.busImages)
+  const [activeAdd, setActiveAdd] = useState(false)
+  useEffect(() => {
+    const { busImages = [], utilities = [], ...restOfFormData } = formData
+    const allFieldsFilled =
+      Object.values(restOfFormData).every((value) => value?.toString()?.trim() !== '') &&
+      busImages.some((img) => img.trim() !== '') &&
+      utilities.length > 0
     setActiveAdd(allFieldsFilled)
-    console.log('Có vô', formData)
+    // console.log('Có vô update', formData)
     console.log(allFieldsFilled)
   }, [formData])
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
-    console.log(formData)
-  }
   const handleCancel = () => {
     setFormData({
       licensePlateNumber: '50H-26374',
@@ -69,24 +92,159 @@ function UpdateBus() {
       numberSeat: '34',
     })
   }
-  const handleAdd = () => {}
-  const fileInputRefs = useRef(Array(6).fill(null))
-  const [selectedFiles, setSelectedFiles] = useState(Array(6).fill(null))
-  const [warningMessage, setWarningMessage] = useState('')
+  // useEffect(() => {
+  //   async function getMovie() {
+  //     // setIsLoading(true);
+  //     const movieData = await getDetailFilm(id)
+  //     const imagePaths = movieData.imagePaths || []
+  //     const initialImages = await Promise.all(
+  //       imagePaths.slice(1, 7).map(async (path) => {
+  //         const response = await fetch(path)
+  //         const blob = await response.blob()
+  //         return { file: new File([blob], image.jpg, { type: 'image/jpeg' }), imagePreview: path }
+  //       }),
+  //     )
+
+  //     if (initialImages.length < 6) {
+  //       initialImages.push({ imagePreview: NoImage })
+  //     }
+  //     if (movieData) {
+  //       let posterFile = null
+  //       if (imagePaths && imagePaths.length > 1) {
+  //         const response = await fetch(imagePaths?.[0], { mode: 'cors' })
+  //         const blob = await response.blob()
+  //         posterFile = new File([blob], 'poster.jpg', { type: 'image/jpeg' })
+  //       }
+
+  //       setMovie((prevMovie) => ({
+  //         ...prevMovie,
+  //         ...movieData,
+  //         duration: convertDurationToMinutes(movieData.duration),
+  //         genre: movieData.movieGenres[0].id + 1,
+  //         posterPreview: imagePaths && imagePaths.length > 1 ? imagePaths?.[0] : null,
+  //         poster: posterFile,
+  //         images: initialImages,
+  //       }))
+  //     }
+  //   }
+  //   getMovie()
+  //   console.log('Initial movie1: ', movie)
+  // }, [id])
+
+  // Hàm chuyển Base64 sang Blob
+  // const base64ToBlob = (base64, mimeType) => {
+  //   const byteCharacters = atob(base64.split(',')[1])
+  //   const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i))
+  //   return new Blob([new Uint8Array(byteNumbers)], { type: mimeType })
+  // }
+
   const handleImageClick = (index) => {
     fileInputRefs.current[index].click()
   }
   const handleFileChange = (index, event) => {
     const file = event.target.files[0]
-    if (file && file.type.startsWith('image/')) {
-      const newSelectedFiles = [...selectedFiles]
-      newSelectedFiles[index] = URL.createObjectURL(file) // Create a URL for the selected file
-      setSelectedFiles(newSelectedFiles)
-      setWarningMessage('')
+    if (file && file.type.startsWith('image/') && file.size <= maxSizeImage) {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (e) => {
+        const newFiles = [...selectedFiles]
+        newFiles[index] = e.target.result // Lấy Data URL của ảnh
+        setSelectedFiles(newFiles)
+        setWarningMessage('')
+
+        setFormData((prevState) => ({
+          ...prevState,
+          busImages: newFiles,
+        }))
+        // const newBlobs = [...formData.busImages]
+        // newBlobs[index] = file // Gắn File trực tiếp
+        // setFormData((prevState) => ({
+        //   ...prevState,
+        //   busImages: newBlobs,
+        // }))
+      }
     } else if (file && !file.type.startsWith('image/')) {
       setWarningMessage('Vui lòng chọn file ảnh!')
+    } else if (file && file.type.startsWith('image/') && file.size > maxSizeImage) {
+      setWarningMessage('Vui lòng chọn file có kích thước <= 3MB !')
     }
   }
+  
+  // useEffect(() => {
+  //   if (formData?.busImages) {
+  //     // Kiểm tra nếu busImages tồn tại và hợp lệ
+  //     const blobs = formData.busImages.map((imageBase64) => {
+  //       try {
+  //         if (imageBase64 && imageBase64.includes(',')) {
+  //           const base64Data = imageBase64.split(',')[1] // Lấy phần dữ liệu Base64
+  //           return base64ToBlob(base64Data, 'image/png') // Chuyển đổi thành Blob
+  //         }
+  //       } catch (error) {
+  //         console.error('Lỗi khi xử lý Base64:', error, imageBase64)
+  //         return null
+  //       }
+  //       return null
+  //     })
+
+  //     setSelectedFiles(formData.busImages) // Gắn vào UI
+  //     setFormData((prevState) => ({
+  //       ...prevState,
+  //       busImages: blobs,
+  //     }))
+  //     console.log('==========Có vô nè')
+  //   }
+  // }, [formData?.busImages])
+
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+    if (dispatch(checkLoginSession())) {
+      try {
+        const busInfor = {
+          id: selectedIDBus,
+          licensePlate: formData.licensePlateNumber,
+          utilities: formData.utilities.map((utilityId) => ({ id: utilityId })),
+          busType: { id: formData.idBusType },
+        }
+        const formDataUpdateBus = new FormData()
+        formDataUpdateBus.append('busInfo', new Blob([JSON.stringify(busInfor)], { type: 'application/json' }))
+
+        for (let index = 0; index < formData.busImages.length; index++) {
+          const imageBase64 = formData.busImages[index]
+          if (imageBase64) {
+            console.log(`Image ${index}:`, imageBase64)
+
+            if (imageBase64.includes('http')) {
+              const response = await fetch(imageBase64)
+              const imageBlobBus = await response.blob()
+              formDataUpdateBus.append('busImages', imageBlobBus, `busImages${index + 1}.png`)
+            } else {
+              const base64DataBus = imageBase64.split(',')[1]
+              const byteCharactersBus = atob(base64DataBus)
+              const byteNumbersBus = new Array(byteCharactersBus.length)
+                .fill(0)
+                .map((_, i) => byteCharactersBus.charCodeAt(i))
+              const byteArrayBus = new Uint8Array(byteNumbersBus)
+              const imageBlobBus = new Blob([byteArrayBus], { type: 'image/png' })
+              formDataUpdateBus.append('busImages', imageBlobBus, `busImages${index + 1}.png`)
+            }
+          } else {
+            console.warn(`Image ${index} is null or undefined`)
+          }
+        }
+  // console.log(`Image ---:`, formData.busImage)
+        const response = await updateBus(formDataUpdateBus)
+        if (response) {
+          toast.success('Cập nhật xe thành công!', { autoClose: 2000 })
+          console.log('Cập nhật xe thành công!', response)
+        }
+      } catch (error) {
+        console.log('Cập nhật thất bại:')
+        console.log(error)
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+      }
+    }
+  }
+
   return (
     <div className={cx('container mt-5 mb-5', 'wrap-container')}>
       <Row className={cx('form-add-bus-trip', 'justify-content-center')}>
@@ -101,18 +259,19 @@ function UpdateBus() {
               Loại phương tiện<span className="text-danger">*</span>
             </Form.Label>
             <Form.Select
-              aria-label="typeVehicle"
-              name="typeVehicle"
+              aria-label="idBusType"
+              name="idBusType"
               className={cx('txt', 'selectbox', 'infor-item')}
-              onChange={handleInputChange}
-              value={formData.typeVehicle}
-              disabled={!enableEdit}
+              value={formData.idBusType}
+              readOnly
             >
-              {typeVehicles.map((typeVehicle, index) => (
-                <option key={index} value={typeVehicle.value}>
-                  {typeVehicle.label}
-                </option>
-              ))}
+              <option value="">Chọn loại xe</option>
+              {allBusTypes &&
+                allBusTypes.map((typeVehicle, index) => (
+                  <option key={index} value={typeVehicle.id}>
+                    {typeVehicle.name}
+                  </option>
+                ))}
             </Form.Select>
           </Form.Group>
           <Form.Group className={cx('txt', 'mb-5')} controlId="formAdd.ControlInput5">
@@ -122,12 +281,11 @@ function UpdateBus() {
             <InputGroup className={cx('txt', 'infor-item')}>
               <Form.Control
                 type="text"
-                placeholder="45"
                 name="numberSeat"
                 value={formData.numberSeat}
                 aria-label="numberSeat"
                 className={cx('txt')}
-                disabled
+                readOnly
               />
               <InputGroup.Text className={cx('txt')}>
                 <FontAwesomeIcon icon={faTicket} />
@@ -143,12 +301,11 @@ function UpdateBus() {
             <InputGroup className={cx('txt', 'infor-item')}>
               <Form.Control
                 type="text"
-                placeholder="30G-49344"
                 name="licensePlateNumber"
                 value={formData.licensePlateNumber}
                 aria-label="licensePlateNumber"
                 className={cx('txt')}
-                disabled={!enableEdit}
+                readOnly
               />
               <InputGroup.Text className={cx('txt')}>
                 <FontAwesomeIcon icon={faTicket} />
@@ -159,20 +316,19 @@ function UpdateBus() {
             <Form.Label className="mb-3">
               Loại ghế<span className="text-danger">*</span>
             </Form.Label>
-            <Form.Select
-              aria-label="typeSeat"
-              name="typeSeat"
-              value={formData.typeSeat}
-              className={cx('txt', 'selectbox', 'infor-item')}
-              onChange={handleInputChange}
-              disabled
-            >
-              {typeSeats.map((typeSeat, index) => (
-                <option key={index} value={typeSeat.value}>
-                  {typeSeat.label}
-                </option>
-              ))}
-            </Form.Select>
+            <InputGroup className={cx('txt', 'infor-item')}>
+              <Form.Control
+                type="text"
+                aria-label="typeSeat"
+                name="typeSeat"
+                className={cx('txt', 'selectbox', 'infor-item')}
+                value={formData.typeSeat}
+                readOnly
+              ></Form.Control>
+              <InputGroup.Text className={cx('txt')}>
+                <FontAwesomeIcon icon={faCouch} />
+              </InputGroup.Text>
+            </InputGroup>
           </Form.Group>
         </Col>
       </Row>
@@ -180,7 +336,12 @@ function UpdateBus() {
         <div className={cx('txt', 'padding-5')}>
           Tiện ích<span className="text-danger">*</span>
         </div>
-        <SlideUtility listUtilities={listUtilities}></SlideUtility>
+        <SlideUtility
+          enableEdit={true}
+          setUpdateUtilitiesOfBus={setUpdateUtilitiesOfBus}
+          utilitiesOfBus={formData.utilities}
+          listUtilities={listUtilities}
+        ></SlideUtility>
       </Row>
       <Row className={cx('infor-img', 'mt-5')}>
         <div className={cx('txt', 'padding-5')}>
@@ -218,7 +379,7 @@ function UpdateBus() {
             <Button outline className={cx('ms-5 me-5', 'btn')} onClick={handleCancel}>
               Hủy
             </Button>
-            <Button primary className={cx('ms-5 me-5', 'btn')} disabled={!activeAdd} onClick={handleAdd}>
+            <Button primary className={cx('ms-5 me-5', 'btn')} disabled={!activeAdd} onClick={handleUpdate}>
               Cập nhật
             </Button>
           </Col>
