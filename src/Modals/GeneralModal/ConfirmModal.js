@@ -18,7 +18,8 @@ import { deleteFeeService } from '~/apiServices/manageFeeService/deleteFeeServic
 import { cancelTicket } from '~/apiServices/ticket/cancelTicket'
 import { fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
 import { deleteBusType } from '~/apiServices/busPartner/deleteBusType'
-import { fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
+import { fetchAllBuses, fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
+import { deleteBus } from '~/apiServices/busPartner/deleteBus'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -107,6 +108,20 @@ function ConfirmModal() {
       } catch (message) {
         if (message === 'Internal Server Error')
           toast.error('Loại xe đang được sử dụng. Bạn không thể xóa!', { autoClose: 1500, position: 'top-center' })
+        else toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1500, position: 'top-center' })
+      }
+    } else if (showConfirmModal.name === generalModalNames.DEL_BUS) {
+      const busId = showConfirmModal.id
+      try {
+        if (dispatch(checkLoginSession())) {
+          await deleteBus(busId)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllBuses())
+          toast.success('Xoá xe thành công!', { autoClose: 800, position: 'top-center' })
+        }
+      } catch (message) {
+        if (message === 'Internal Server Error')
+          toast.error('Xe đang được sử dụng. Bạn không thể xóa!', { autoClose: 1500, position: 'top-center' })
         else toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1500, position: 'top-center' })
       }
     } else if (showConfirmModal.name === generalModalNames.CANCEL_TICKET) {

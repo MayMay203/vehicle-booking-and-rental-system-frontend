@@ -10,10 +10,10 @@ import { useNavigate } from 'react-router-dom'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteBus } from '~/apiServices/busPartner/deleteBus'
-import { toast } from 'react-toastify'
 import ModalBusInfor from '../ModalBusInfor'
-import { busByID, fetchAllBuses } from '~/redux/slices/busPartnerSlice'
+import { fetchAllBuses } from '~/redux/slices/busPartnerSlice'
+import { detailBusByID } from '~/apiServices/busPartner/detailBusByID'
+import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 const cx = classNames.bind(styles)
 function Bus() {
   const columns = [
@@ -145,8 +145,10 @@ function Bus() {
   const dispatch = useDispatch()
   const [data, setData] = useState([])
   const [showModal, setShowModal] = useState(false)
-  const[selectedIDBus, setSelectedIDBus] = useState(null)
+  const [selectedIDBus, setSelectedIDBus] = useState('')
   const allBus = useSelector((state) => state.busPartner.busList)
+  const [dataInforBus, setDataInforBus] = useState({})
+  //  const dataInforBus = useSelector((state) => state.busPartner.inforBus)
   // Dùng useCallback để ghi nhớ hàm handleGetAllBus
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
@@ -181,40 +183,48 @@ function Bus() {
   const handleAddBus = () => {
     navigate('add-bus')
   }
-  const dataInforBus = useSelector((state) => state.busPartner.inforBus)
+ 
   const handleViewBus = (id) => {
     setShowModal(true)
     setSelectedIDBus(id)
     console.log('id:', id)
   }
+  const handleEditBus = (id) => {
+    setSelectedIDBus(id)
+    navigate('update-bus', { state: { enableEdit: true, selectedIDBus: id } })
+  }
+  // console.log('setSelectedIDBus--id:', selectedIDBus)
+  // console.log('dataInforBus--id:', dataInforBus)
+  const getInforBusByID = async () => {
+    const response = await detailBusByID(selectedIDBus)
+    setDataInforBus(response)
+  }
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
-      dispatch(busByID({ id: selectedIDBus }))
+      // dispatch(busByID({ id: selectedIDBus }))
+      if(showModal === true){
+        getInforBusByID()
+      }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedIDBus])
-  const handleEditBus = (id) => {
-    navigate('update-bus', { state: { enableEdit: true, busID: id } })
-  }
+  // console.log('setSelectedIDBus-----', selectedIDBus)
   const closeModal = () => {
     setShowModal(false)
-    setSelectedIDBus(null)
+    // setSelectedIDBus(null)
   }
   const handleDeleteBus = async (id) => {
     if (dispatch(checkLoginSession())) {
-      try {
-        const response = await deleteBus(id)
-        if (response) {
-          toast.success('Xóa xe thành công!', { autoClose: 2000 })
-          console.log('Xóa xe thành công!', response)
-        }
-      } catch (error) {
-        console.log('Xóa thất bại:')
-        console.log(error)
-        // if (message === 'You have already registered this business partner') {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
-        // }
-      }
+      dispatch(
+        setConfirmModalVisible({
+          name: generalModalNames.DEL_BUS,
+          title: 'Xác nhận xoá xe',
+          description: 'Bạn có chắc chắn xoá xe này?',
+          isOpen: true,
+          modalType: 'confirm',
+          id,
+        }),
+      )
     }
   }
   return (
