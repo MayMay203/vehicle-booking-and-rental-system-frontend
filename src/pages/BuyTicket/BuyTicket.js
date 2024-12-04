@@ -36,6 +36,7 @@ function BuyTicket() {
     fetchAllTicketList()
   }, [currentPage, busName, departureLocation, arrivalLocation, departureDate, sortType])
 
+  console.log(ticketList)
   return (
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb className="mb-5">

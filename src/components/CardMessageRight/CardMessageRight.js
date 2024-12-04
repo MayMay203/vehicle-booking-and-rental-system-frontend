@@ -1,6 +1,8 @@
 import { Col, Row } from 'react-bootstrap'
 import styles from './CardMessageRight.module.scss'
 import classNames from 'classnames/bind'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
 const cx = classNames.bind(styles)
 function CardMessageRight({ data, handleChooseConvers, isClicked }) {
   return (
@@ -8,7 +10,7 @@ function CardMessageRight({ data, handleChooseConvers, isClicked }) {
       className={cx('wrap-message', 'row', {
         'no-seen': !data.seen,
         seen: data.seen,
-        isClicked
+        isClicked,
       })}
       onClick={() => handleChooseConvers(data.conversationId)}
     >
@@ -20,9 +22,11 @@ function CardMessageRight({ data, handleChooseConvers, isClicked }) {
           <Col xs="10" className={cx('name', 'p-0', 'mb-2')}>
             {data.nameRepresentation}
           </Col>
-          {/* <Col xs="2" className={cx('text-end')}>
-            {!isSeen && <FontAwesomeIcon icon={faCircle} className={cx('icon-no-seen')} />}
-          </Col> */}
+          <Col xs="2" className={cx('text-end')}>
+            {!data.seen && !data.lastMessage.includes('null') && (
+              <FontAwesomeIcon icon={faCircle} className={cx('icon-no-seen')} />
+            )}
+          </Col>
         </Row>
         <Row className={cx('message')}>{data.lastMessage}</Row>
         <Row className={cx('time')}>{data.sendAt}</Row>

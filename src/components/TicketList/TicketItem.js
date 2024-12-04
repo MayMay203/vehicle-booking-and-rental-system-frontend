@@ -122,7 +122,7 @@ function TicketItem({ status, data = {} }) {
           // Implement discount logic here
         },
         pickReturn: async () => {
-          const locations = await getPickReturnLocations(data.busTripInfo?.id || data.tripInfo?.id)
+          const locations = await getPickReturnLocations(data.busTripScheduleId || data.tripInfo?.id, data.busTripInfo?.arrivalLocation)
           setDetaiInfor((prev) => ({ ...prev, [type]: locations }))
         },
       }
@@ -150,7 +150,6 @@ function TicketItem({ status, data = {} }) {
   }
 
   const handleChooseTicket = () => {
-    console.log(busTripScheduleId)
     if (isLogin) {
       dispatch(
         setTicketModalVisible({
@@ -200,11 +199,11 @@ function TicketItem({ status, data = {} }) {
         config.variables.busPartner,
       )
       console.log(idConversation)
-      navigate(config.routes.message,{state: idConversation})
+      navigate(config.routes.message, { state: { idConversation } })
     }
   }
 
-  console.log(data)
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
@@ -299,6 +298,10 @@ function TicketItem({ status, data = {} }) {
             )}
           </div>
         </div>
+      </div>
+      <div style={{ color: '#484848', fontSize: '1.5rem', marginTop: '20px', lineHeight: '1.4'}}>
+        <span style={{ color: 'red' }}>* </span>
+        {data.journey}
       </div>
       {isDetail && (
         <div className="mt-5">

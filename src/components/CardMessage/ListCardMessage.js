@@ -10,7 +10,7 @@ function ListCardMessage() {
    async function fetchAllConversation() {
      const conversations = await getAllConversation(currentUser.id, currentRole)
      if (conversations) {
-       setConversationList(conversations.filter(conversation => conversation.lastMessage !== null))
+        setConversationList(conversations.filter((conversation) => !conversation.lastMessage.includes('null')))
      }
    }
    fetchAllConversation()
