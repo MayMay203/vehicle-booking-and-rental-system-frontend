@@ -3,6 +3,7 @@ import styles from './CardMessageRight.module.scss'
 import classNames from 'classnames/bind'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import Image from '../Image'
 const cx = classNames.bind(styles)
 function CardMessageRight({ data, handleChooseConvers, isClicked }) {
   return (
@@ -15,7 +16,7 @@ function CardMessageRight({ data, handleChooseConvers, isClicked }) {
       onClick={() => handleChooseConvers(data.conversationId)}
     >
       <Col xs="3" className={cx('d-flex align-items-center')}>
-        <img src={data.avatarUrl} className={cx('avatar')} alt="avatar" />
+        <Image src={data.avatarUrl} className={cx('avatar')} alt="avatar" />
       </Col>
       <Col xs="9" className={cx('')}>
         <Row className={cx('d-flex')}>

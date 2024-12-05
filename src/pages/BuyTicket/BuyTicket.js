@@ -36,6 +36,10 @@ function BuyTicket() {
     fetchAllTicketList()
   }, [currentPage, busName, departureLocation, arrivalLocation, departureDate, sortType])
 
+  const handleChangeFilter = (value) => {
+    setSortType(value)
+    setTimeout(() => setIsVisible(false), 250)
+  }
   console.log(ticketList)
   return (
     <div className={cx('container', 'wrapper')}>
@@ -62,12 +66,29 @@ function BuyTicket() {
           render={(attrs) => (
             <div className={cx('filter')} tabIndex="-1" {...attrs}>
               <PopperWrapper>
-                <PopperItem id="1" title="Mặc định" onClick={() => setSortType('default')} />
-                <PopperItem id="2" title="Giờ đi sớm nhất" onClick={() => setSortType('departureTime,asc')} />
-                <PopperItem id="3" title="Giờ đi muộn nhất" onClick={() => setSortType('departureTime,desc')} />
-                <PopperItem id="4" title="Lượt đánh giá cao nhất"/>
-                <PopperItem id="5" title="Giá tăng dần" onClick={() => setSortType('priceTicket,asc')} />
-                <PopperItem id="6" title="Giá giảm dần" onClick={() => setSortType('priceTicket,desc')} />
+                <PopperItem
+                  id="1"
+                  title="Mặc định"
+                  onClick={() => {
+                    handleChangeFilter('default')
+                  }}
+                  checked={sortType === 'default'}
+                />
+                <PopperItem
+                  id="2"
+                  title="Giờ đi sớm nhất"
+                  onClick={() => handleChangeFilter('departureTime,asc')}
+                  checked={sortType === 'departureTime,asc'}
+                />
+                <PopperItem
+                  id="3"
+                  title="Giờ đi muộn nhất"
+                  onClick={() => handleChangeFilter('departureTime,desc')}
+                  checked={sortType === 'departureTime,desc'}
+                />
+                <PopperItem id="4" title="Lượt đánh giá cao nhất" />
+                <PopperItem id="5" title="Giá tăng dần" onClick={() => handleChangeFilter('priceTicket,asc')} checked={sortType === 'priceTicket,asc'} />
+                <PopperItem id="6" title="Giá giảm dần" onClick={() => handleChangeFilter('priceTicket,desc')} checked={sortType === 'priceTicket,desc'} />
               </PopperWrapper>
             </div>
           )}

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { config } from '~/config'
+import Image from '../Image'
 const cx = classNames.bind(styles)
 function CardMessage({ data }) {
   const navigate = useNavigate()
@@ -14,7 +15,7 @@ function CardMessage({ data }) {
       onClick={() => navigate(config.routes.message, { state: { idConversation: data.conversationId } })}
     >
       <Col xs="2">
-        <img src={data.avatarUrl} className={cx('avatar')} alt="avatar" />
+        <Image src={data.avatarUrl} className={cx('avatar')} alt="avatar" />
       </Col>
       <Col xs="10" className={cx('')}>
         <Row className={cx('d-flex')}>

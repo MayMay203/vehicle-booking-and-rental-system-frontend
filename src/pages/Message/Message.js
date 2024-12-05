@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 import { useLocation } from 'react-router-dom'
 import TxtSearch from '~/components/TxtSearch'
 import { Row, Col } from 'react-bootstrap'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Button from '~/components/Button'
 import CardMessageRight from '~/components/CardMessageRight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,19 +11,20 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import DetailMessage from '~/components/DetailMessage'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
-import { Empty} from 'antd'
+import { Empty } from 'antd'
 import { getAllMessagesInConversation } from '~/apiServices/messageService/getAllMessagesInConversation'
 import Image from '~/components/Image'
 import { getAccessToken } from '~/utils/cookieUtils'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function Message() {
   const location = useLocation()
   const idConversation = location.state?.idConversation
   const [conversationList, setConversationList] = useState([])
-  const [partnerConvers, setPartnerConvers] = useState({ name: '', avatar: '', role: '', accountId: ''})
+  const [partnerConvers, setPartnerConvers] = useState({ name: '', avatar: '', role: '', accountId: '' })
   const [selectedConvers, setSelectedConvers] = useState(idConversation)
   const [buttonSelect, setButtonSelect] = useState('All')
   const [messages, setMessages] = useState([])
@@ -31,79 +32,107 @@ function Message() {
   const { currentRole } = useSelector((state) => state.menu)
   const [messageText, setMessageText] = useState('')
   const stompClientRef = useRef(null)
+  const detailMessRef = useRef(null)
+  const dispatch = useDispatch()
+
+  const onNotificationRecieved = useCallback((payload) => {
+    const newMessage = JSON.parse(payload.body)
+    console.log('Received message:', newMessage)
+    setMessages((prev) => [...prev, newMessage])
+  }, [])
 
   //connect websocket
   useEffect(() => {
     function connect() {
-      // ownerId = document.querySelector('#username-input').value.trim()
-      // ownerType = document.querySelector('#userType-input').value.trim()
+      if (!stompClientRef.current && currentUser.id) {
+        // Kiểm tra nếu chưa có kết nối WebSocket
+        const socket = new SockJS(`http://localhost:8080/ws`)
+        stompClientRef.current = over(socket)
 
-      // if (ownerId && ownerType) {/
-      // console.log(access_token)
-      const socket = new SockJS(`http://localhost:8080/ws`)
-      stompClientRef.current = over(socket)
+        const headers = {
+          Authorization: 'Bearer ' + getAccessToken(),
+        }
 
-      const headers = {
-        Authorization: 'Bearer ' + getAccessToken(), // Include Bearer token for authentication
+        // Kết nối STOMP với headers chứa token
+        stompClientRef.current.connect(
+          headers,
+          (frame) => {
+            console.log('Connected:', frame)
+
+            // Đăng ký nhận tin nhắn
+            stompClientRef.current.subscribe(
+              `/user/${currentUser.id}/${currentRole}/queue/messages`,
+              onNotificationRecieved,
+            )
+          },
+          (error) => {
+            console.error('Connection error:', error)
+          },
+        )
       }
-
-      // Kết nối STOMP với headers chứa token
-      stompClientRef.current.connect(
-        headers,
-        (frame) => {
-          console.log('Connected:', frame)
-          // onConnected() // Gọi hàm này khi kết nối thành công
-          stompClientRef.current.subscribe(`/user/${currentUser.id}/${currentRole}/queue/messages`, onNotificationRecieved)
-        },
-        (error) => {
-          console.error('Connection error:', error)
-        },
-      )
     }
+
     connect()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
-  function onNotificationRecieved(payload) {
-    const newMessage = JSON.parse(payload.body)
-    console.log(newMessage)
-    setMessages(prev => [...prev, newMessage])
-  }
-
-  useEffect(() => {
-    async function fetchAllMessages() {
-      const dataMsg = await getAllMessagesInConversation(selectedConvers)
-      if (dataMsg) {
-        setMessages(dataMsg)
-      }
-      const partnerConvers = conversationList.find((conversation) => conversation.conversationId === selectedConvers)
-      if (partnerConvers) {
-        setPartnerConvers({
-          name: partnerConvers.nameRepresentation,
-          avatar: partnerConvers.avatarUrl,
-          role: partnerConvers.roleAccount,
-          accountId: partnerConvers.accountId,
+    return () => {
+      // Đảm bảo ngắt kết nối khi component bị unmount
+      if (stompClientRef.current) {
+        stompClientRef.current.disconnect(() => {
+          console.log('WebSocket disconnected')
         })
       }
     }
-    if (selectedConvers) fetchAllMessages()
+  }, [currentUser.id, currentRole, onNotificationRecieved])
+
+  useEffect(() => {
+    if (detailMessRef.current) {
+      detailMessRef.current.scrollTo({
+        top: detailMessRef.current.scrollHeight, // Cuộn tới cuối phần tử
+        behavior: 'smooth', // Cuộn mượt
+      })
+    }
+  }, [messages])
+
+  useEffect(() => {
+    async function fetchAllMessages() {
+      if (dispatch(checkLoginSession())) {
+        console.log('Vô đây fetch lại:(')
+        const dataMsg = await getAllMessagesInConversation(selectedConvers)
+        if (dataMsg) {
+          setMessages(dataMsg)
+        }
+        const partnerConvers = conversationList.find((conversation) => conversation.conversationId === selectedConvers)
+        if (partnerConvers) {
+          setPartnerConvers({
+            name: partnerConvers.nameRepresentation,
+            avatar: partnerConvers.avatarUrl,
+            role: partnerConvers.roleAccount,
+            accountId: partnerConvers.accountId,
+          })
+        }
+      }
+    }
+      if (selectedConvers) fetchAllMessages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConvers])
 
   useEffect(() => {
     async function fetchAllConversation() {
-      const conversations = await getAllConversation(currentUser.id, currentRole)
-      if (conversations) {
-        const partnerConvers = conversations.find(
-          (conversation) => String(conversation.conversationId) === String(selectedConvers),
-        )
-        setConversationList(conversations.filter((conversation) => !conversation.lastMessage.includes('null')))
-        setPartnerConvers({
-          name: partnerConvers.nameRepresentation,
-          avatar: partnerConvers.avatarUrl,
-          role: partnerConvers.roleAccount,
-          accountId: partnerConvers.accountId,
-        })
+      if(dispatch(checkLoginSession())){
+        const conversations = await getAllConversation(currentUser.id, currentRole)
+        if (conversations.length > 0) {
+          if (!idConversation) setSelectedConvers(conversations?.[0].idConversation)
+          const partnerConvers = conversations.find(
+            (conversation) => String(conversation.conversationId) === String(selectedConvers),
+          )
+          setConversationList(conversations.filter((conversation) => !conversation.lastMessage.includes('null')))
+          setPartnerConvers({
+            name: partnerConvers.nameRepresentation,
+            avatar: partnerConvers.avatarUrl,
+            role: partnerConvers.roleAccount,
+            accountId: partnerConvers.accountId,
+          })
+        }
       }
     }
     if (currentUser.id) {
@@ -113,7 +142,6 @@ function Message() {
   }, [currentUser.id, currentRole])
 
   const handleChooseConvers = (id) => {
-    console.log(id)
     setSelectedConvers(id)
   }
 
@@ -131,8 +159,9 @@ function Message() {
       seen: false, // Tin nhắn chưa được xem
     }
     // // Gửi tin nhắn đến server thông qua STOMP client
-     stompClientRef.current.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
-     setMessageText('')
+    stompClientRef.current.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
+    setMessages((prev) => [...prev, messageDTO])
+    setMessageText('')
   }
 
   return (
@@ -179,10 +208,10 @@ function Message() {
             <Image src={partnerConvers.avatar} className={cx('avatar')} alt="avatar" />
             <span className={cx('name', 'p-0')}>{partnerConvers.name}</span>
           </div>
-          <div className={cx('wrap-detail-message')}>
-            {messages.map((message) => (
-              <div key={message.id} className={cx({ 'message-sender': message.senderId === currentUser.id })}>
-                <DetailMessage key={message.id} data={message} image={partnerConvers.avatar}></DetailMessage>
+          <div className={cx('wrap-detail-message')} ref={detailMessRef}>
+            {messages.map((message, index) => (
+              <div key={index} className={cx({ 'message-sender': message.senderId === currentUser.id })}>
+                <DetailMessage data={message} image={partnerConvers.avatar}></DetailMessage>
               </div>
             ))}
           </div>
@@ -198,7 +227,7 @@ function Message() {
                 placeholder="Viết tin nhắn"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    handleSendMessage() 
+                    handleSendMessage()
                   }
                 }}
               />
