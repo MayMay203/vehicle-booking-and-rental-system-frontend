@@ -1,8 +1,9 @@
 import { config } from '~/config'
 import classNames from 'classnames/bind'
 import styles from './RentalServiceDetail.module.scss'
-import { Breadcrumb, Row, Col } from 'react-bootstrap'
+import { Breadcrumb, Row, Col, Carousel } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBoxArchive,
@@ -10,6 +11,7 @@ import {
   faCircleCheck,
   faCircleXmark,
   faClock,
+  faHomeUser,
   faLocationDot,
   faPhone,
   faStopwatch,
@@ -17,13 +19,13 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import Rating from '~/components/Rating'
-import { images } from '~/assets/images'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import Table from 'react-bootstrap/Table'
 import RatingContentList from '~/components/RatingContent/RatingContentList'
 import InforRental from '~/components/InforRental'
 import SurchargeFee from '~/components/InforRental/SurchargeFee'
+import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 
 const cx = classNames.bind(styles)
 function RentalServiceDetail() {
@@ -34,6 +36,31 @@ function RentalServiceDetail() {
   const manned = 'manned'
   const self_driving = 'self_driving'
   const newPrice = inforVehicle.amount - inforVehicle.amount * (inforVehicle.discount_percentage / 100)
+   const [inforVehicleRental, setInforVehicleRental] = useState(null)
+  
+   useEffect(() => {
+     const getInforVehicleRentalByID = async () => {
+       try {
+         const response = await getVehicleRentalByID(inforVehicle.id)
+         setInforVehicleRental(response)
+       } catch (error) {
+         console.error('Failed to fetch vehicle rental info:', error)
+       }
+     }
+
+     getInforVehicleRentalByID()
+   }, [inforVehicle.id]) 
+  // Chia mảng ảnh thành các cặp
+  const chunkArray = (array, size) => {
+    const result = []
+    for (let i = 0; i < array.length; i += size) {
+      result.push(array.slice(i, i + size))
+    }
+    return result
+  }
+
+  // Chia mảng ảnh thành các cặp (2 ảnh mỗi nhóm)
+  const imagePairs = chunkArray(inforVehicle.imagesVehicleRegister, 2)
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
@@ -47,60 +74,122 @@ function RentalServiceDetail() {
           Chi tiết xe
         </Breadcrumb.Item>
       </Breadcrumb>
-      <Row className="mb-5">
-        <Col xs="6">
+      <Row className="mb-1">
+        {/* <Col xs="6">
           <div className={cx('d-flex justify-content-start', 'trapezoid_lelf')}>
             <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.vehicle}></img>
           </div>
-        </Col>
+        </Col> */}
         {/* ---Trường hợp 2 ảnh--- */}
-        {/* <Col xs='6'>
-            <div className={cx('d-flex justify-content-end', 'trapezoid_right')}>
-              <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.vehicle1}></img>
-            </div>
-          </Col> */}
+        {/* <Col xs="6">
+          <div className={cx('d-flex justify-content-end', 'trapezoid_right')}>
+            <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.vehicle1}></img>
+          </div>
+        </Col> */}
 
-        {/* ---Trường hợp 5 ảnh--- */}
-        <Col xs="6" className={cx('')}>
-          <Row>
-            <Col xs="6">
+        {/* ---Trường hợp 4 ảnh--- */}
+        {/* <Col xs="6">
+          <Row className="justify-content-center">
+            <Col xs="12">
               <img
-                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-up')}
-                alt="Vehicle"
-                src={images.vehicle}
-              ></img>
-            </Col>
-            <Col xs="6">
-              <img
-                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-up')}
+                className={cx('d-flex justify-content-center', 'img-basic')}
                 alt="Vehicle"
                 src={images.vehicle1}
               ></img>
             </Col>
           </Row>
           <Row>
-            <Col xs="6">
+            <Col xs="12">
               <img
-                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-down')}
+                className={cx('d-flex justify-content-center', 'img-basic')}
                 alt="Vehicle"
                 src={images.vehicle}
-              ></img>
-            </Col>
-            <Col xs="6">
-              <img
-                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-down')}
-                alt="Vehicle"
-                src={images.vehicle1}
               ></img>
             </Col>
           </Row>
         </Col>
+        <Col xs="6">
+          <Row className="justify-content-center">
+            <Col xs="12">
+              <img
+                className={cx('d-flex justify-content-center', 'img-basic')}
+                alt="Vehicle"
+                src={images.vehicle1}
+              ></img>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs="12">
+              <img
+                className={cx('d-flex justify-content-center', 'img-basic')}
+                alt="Vehicle"
+                src={images.vehicle}
+              ></img>
+            </Col>
+          </Row>
+        </Col> */}
+        {/* ---Trường hợp 5 ảnh--- */}
+        {/* <Col xs="6" className={cx('')}>
+          <Row>
+            <Col xs="6">
+              <img
+                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-up')}
+                alt="Vehicle"
+                src={images.vehicle}
+              ></img>
+            </Col>
+            <Col xs="6">
+              <img
+                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-up')}
+                alt="Vehicle"
+                src={images.vehicle1}
+              ></img>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs="6">
+              <img
+                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-down')}
+                alt="Vehicle"
+                src={images.vehicle}
+              ></img>
+            </Col>
+            <Col xs="6">
+              <img
+                className={cx('d-flex justify-content-end', 'img-vehicle-5', 'img-down')}
+                alt="Vehicle"
+                src={images.vehicle1}
+              ></img>
+            </Col>
+          </Row>
+        </Col> */}
       </Row>
       <Row className="mb-5">
         <Col xl="8" lg="7" md="6">
           <Row className="mb-5">
+            <Col>
+              <Carousel>
+                {imagePairs.map((pair, index) => (
+                  <Carousel.Item key={index} className={cx('carousel-item')}>
+                    <Row>
+                      {pair.map((image, idx) => (
+                        <Col xs="6" key={idx}>
+                          <img
+                            className={cx('d-flex justify-content-end', 'img-vehicle')}
+                            alt={`Vehicle ${index * 2 + idx + 1}`}
+                            src={image}
+                          />
+                        </Col>
+                      ))}
+                    </Row>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            </Col>
+          </Row>
+          <Row className="mb-5">
             <div className={cx('d-flex', 'name-location-vehicle')}>
-              <span className={cx('name-vehicle')}>{inforVehicle.manufacturer} 2023 </span>
+              <span className={cx('name-vehicle')}>{inforVehicle.manufacturer + ' ' + inforVehicle.vehicleLife}</span>
               <Rating></Rating>
             </div>
             <div className={cx('icon-txt')}>
@@ -112,16 +201,24 @@ function RentalServiceDetail() {
             <Tabs defaultActiveKey="information" id="tab-detail-vehicle" className="mb-3">
               <Tab eventKey="information" title="Thông tin">
                 <Row>
+                  <Row>
+                    <span className={cx('title')}>Liên hệ</span>
+                  </Row>
                   <Col>
                     <div className={cx('icon-txt')}>
+                      <FontAwesomeIcon icon={faHomeUser} className={cx('icon', 'icon-agency')} />
+                      {/* <span className={cx('txt')}>Chủ xe:</span> */}
+                      <span className={cx('txt')}>{inforVehicleRental?.partnerName}</span>
+                    </div>
+                    <div className={cx('icon-txt')}>
                       <FontAwesomeIcon icon={faUser} className={cx('icon', 'icon-owner')} />
-                      <span className={cx('txt')}>Chủ xe:</span>
-                      <span className={cx('txt')}>Nguyễn Văn An</span>
+                      <span className={cx('txt')}>Người đại diện:</span>
+                      <span className={cx('txt')}>{inforVehicleRental?.partnerName}</span>
                     </div>
                     <div className={cx('icon-txt')}>
                       <FontAwesomeIcon icon={faPhone} className={cx('icon', 'icon-phone')} />
                       <span className={cx('txt')}>Số điện thoại:</span>
-                      <span className={cx('txt')}>0842059998</span>
+                      <span className={cx('txt')}>{inforVehicleRental?.partnerPhoneNumber}</span>
                     </div>
                   </Col>
                 </Row>
@@ -144,7 +241,7 @@ function RentalServiceDetail() {
                         <FontAwesomeIcon icon={faClock} className={cx('icon', 'icon-year')} />
                         <div>
                           <p className={cx('txt', 'name-feature')}>Đời xe</p>
-                          <p className={cx('txt', 'content-feature')}>2020</p>
+                          <p className={cx('txt', 'content-feature')}>{inforVehicle.vehicleLife}</p>
                         </div>
                       </div>
                     </Col>
@@ -245,7 +342,7 @@ function RentalServiceDetail() {
             <span className={cx('txt', 'charge-new')}>{newPrice.toLocaleString('vi-VN')}đ/ngày</span>
           </Row>
           <Row className={cx('order')}>
-            <InforRental typeService={typeService}></InforRental>
+            <InforRental typeService={typeService} inforVehicleRental={inforVehicleRental}></InforRental>
           </Row>
           <Row className={cx('surcharge')}>
             <SurchargeFee></SurchargeFee>

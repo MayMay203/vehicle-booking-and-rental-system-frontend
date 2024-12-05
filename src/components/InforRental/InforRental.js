@@ -10,13 +10,8 @@ import Form from 'react-bootstrap/Form'
 import { useNavigate } from 'react-router-dom'
 import VoucherSlider from '../Voucher/VoucherSlider'
 const cx = classNames.bind(styles)
-function InforRental({ typeService }) {
-  const listVoucher = [
-    { id: 1 }, 
-    { id: 2 },
-    {id: 3},
-    {id: 4},
-  ]
+function InforRental({ typeService, inforVehicleRental }) {
+  const listVoucher = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
   const [startTime, setStartTime] = useState(new Date())
   const [endTime, setEndTime] = useState(new Date())
   const [startDate, setStartDate] = useState(new Date())
@@ -97,15 +92,16 @@ function InforRental({ typeService }) {
       <div className={cx('txt-title', 'amount-rental')}>
         <span>Số lượng thuê</span>
         <Form.Select aria-label="Default select example" classNames={cx('select-amount', 'align-right')}>
-          {/* <option>Số chiếc thuê</option> */}
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
+          {Array.from({ length: inforVehicleRental?.quantity }, (_, index) => (
+            <option key={index} value={index + 1}>
+              {index + 1}
+            </option>
+          ))}
         </Form.Select>
       </div>
       <div className={cx('txt-title', 'd-flex')}>
         <span>Phí thuê/1 chiếc</span>
-        <span classNames={cx('charge', 'align-right')}>500.000đ</span>
+        <span className={cx('charge', 'align-right')}>{inforVehicleRental?.amount?.toLocaleString('vi-VN')} đ</span>
       </div>
       <div className={cx('txt-title', 'd-flex')}>
         <span>Mã giảm giá</span>
@@ -115,20 +111,20 @@ function InforRental({ typeService }) {
       </div>
       <div>
         <div className={cx('txt-title')}>Chi phí khác</div>
-        <div className={cx('txt-content')}>
+        {/* <div className={cx('txt-content')}>
           <span>Thuế VAT:</span>
           <span className={cx('align-right')}>200.000đ</span>
-        </div>
+        </div> */}
         <div className={cx('txt-content')}>
           <span>Tiền cọc xe:</span>
-          <span className={cx('align-right')}>6.000.000đ</span>
+          <span className={cx('align-right')}>{inforVehicleRental?.car_deposit?.toLocaleString('vi-VN')} đ</span>
         </div>
         <div className={cx('txt-sub-content')}>
           <span>Tiền cọc xe sẽ được hoàn trả sau khi nhận xe và kiểm tra xe.</span>
         </div>
         <div className={cx('txt-content')}>
           <span>Tiền giữ chỗ:</span>
-          <span className={cx('align-right')}>200.000đ</span>
+          <span className={cx('align-right')}>{inforVehicleRental?.reservation_fees?.toLocaleString('vi-VN')} đ</span>
         </div>
         <div className={cx('txt-sub-content')}>
           <span>Tiền giữ chỗ sẽ không được hoàn lại nếu huỷ chuyến. Tiền giữ chỗ sẽ được hoàn lại sau khi trả xe.</span>
