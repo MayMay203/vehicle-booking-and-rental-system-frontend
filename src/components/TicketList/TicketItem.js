@@ -22,6 +22,8 @@ import { getBusImage } from '~/apiServices/ticket/getBusImage'
 import { getPickReturnLocations } from '~/apiServices/ticket/getPickReturnLocations'
 import { useNavigate } from 'react-router-dom'
 import { config } from '~/config'
+import { createCoversation } from '~/apiServices/messageService/createConverstation'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status, data = {} }) {
@@ -30,7 +32,8 @@ function TicketItem({ status, data = {} }) {
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
   const [detailInfor, setDetaiInfor] = useState({})
-  const { isLogin } = useSelector((state) => state.user)
+  const { currentUser, isLogin } = useSelector((state) => state.user)
+  const { currentRole } = useSelector((state) => state.menu)
   const navigate = useNavigate()
 
   const settings = useMemo(
@@ -97,6 +100,8 @@ function TicketItem({ status, data = {} }) {
     return tabs
   }, [])
 
+  console.log(data)
+
   useEffect(() => {
     async function getDetail() {
       const actions = {
@@ -119,7 +124,7 @@ function TicketItem({ status, data = {} }) {
           // Implement discount logic here
         },
         pickReturn: async () => {
-          const locations = await getPickReturnLocations(data.busTripInfo?.id || data.tripInfo?.id)
+          const locations = await getPickReturnLocations(data.busTripScheduleId || data.tripInfo?.id, data.busTripInfo?.arrivalLocation)
           setDetaiInfor((prev) => ({ ...prev, [type]: locations }))
         },
       }
@@ -147,7 +152,6 @@ function TicketItem({ status, data = {} }) {
   }
 
   const handleChooseTicket = () => {
-    console.log(busTripScheduleId)
     if (isLogin) {
       dispatch(
         setTicketModalVisible({
@@ -186,21 +190,28 @@ function TicketItem({ status, data = {} }) {
     )
   }
 
-  const handleSendMessage = () => {
-    // Create new conversation
 
-    // Get id conversation
-
-    // Navigate message detail page get all message
-    navigate(config.routes.message)
+  const handleSendMessage = async () => {
+    if (dispatch(checkLoginSession())) {
+      // Create new conversation
+      const idConversation = await createCoversation(
+        currentUser.id,
+        currentRole,
+        data.businessPartnerInfo?.accountId,
+        config.variables.busPartner,
+      )
+      console.log(idConversation)
+      navigate(config.routes.message, { state: { idConversation } })
+    }
   }
+
 
   return (
     <div className={cx('wrapper')}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
         <div className="col">
           <div className={cx('image-wrapper')}>
-            <img src={data.busInfo.imageRepresentative} alt="car" className={cx('image')}></img>
+            <img src={data.busInfo?.imageRepresentative} alt="car" className={cx('image')}></img>
             <button className={cx('btn-msg')} onClick={handleSendMessage}>
               <MessageIcon />
             </button>
@@ -208,11 +219,11 @@ function TicketItem({ status, data = {} }) {
         </div>
         <div className="col d-flex flex-column gap-2 gap-lg-4">
           <div className="d-flex gap-4 align-items-center">
-            <span className={cx('name')}>{data.businessPartnerInfo?.name || data.businessPartner.name}</span>
+            <span className={cx('name')}>{data.businessPartnerInfo?.name || data.businessPartner?.name}</span>
             {/* {status && <span className={cx('amount')}>2 x 150.000đ</span>} */}
           </div>
           <div className="d-flex flex-wrap align-items-center gap-3">
-            <span className={cx('type')}>{data.busInfo?.nameVehicleType || data.busInfo.nameBusType}</span>
+            <span className={cx('type')}>{data.busInfo?.nameVehicleType || data.busInfo?.nameBusType}</span>
             <div className={cx('rating')}>
               <StarIcon className={cx('icon')} width="2.6rem" />
               <span>4.5(5)</span>
@@ -223,7 +234,7 @@ function TicketItem({ status, data = {} }) {
             <div className={cx('location-time', 'd-flex', 'flex-column', 'gap-4', 'justify-content-center')}>
               <div className="d-flex gap-4">
                 <p style={{ fontWeight: 400 }}>
-                  <span style={{ fontWeight: 600 }}>{data.departureTime || data.tripInfo.departureDateTime}</span>
+                  <span style={{ fontWeight: 600 }}>{data.departureTime || data.tripInfo?.departureDateTime}</span>
                   {` • ${data.busTripInfo?.departureLocation || data.tripInfo?.departureLocation}`}
                 </p>
                 {/* {status && (
@@ -238,8 +249,8 @@ function TicketItem({ status, data = {} }) {
                 {data.busTripInfo?.durationJourney || data.tripInfo?.durationJourney}
               </span>
               <p style={{ fontWeight: 400 }}>
-                <span style={{ fontWeight: 600 }}>{data.arrivalTime || data.tripInfo.arrivalDateTime}</span>
-                {` • ${data.busTripInfo?.arrivalLocation || data.tripInfo.arrivalLocation}`}
+                <span style={{ fontWeight: 600 }}>{data.arrivalTime || data.tripInfo?.arrivalDateTime}</span>
+                {` • ${data.busTripInfo?.arrivalLocation || data.tripInfo?.arrivalLocation}`}
               </p>
             </div>
           </div>
@@ -247,7 +258,7 @@ function TicketItem({ status, data = {} }) {
         <div className=" col col-md-12 d-flex flex-column justify-content-between align-items-start align-items-lg-end justify-content-md-end justify-content-lg-between">
           <div className="d-flex justify-content-md-end w-100 flex-lg-column gap-5 mb-4 mb-lg-0 gap-lg-4 align-items-center align-items-lg-end">
             <span className={cx('price', { amount: status })}>
-              {data.priceTicket || `${data.orderInfo.numberOfTicket} x ${data.orderInfo.pricePerTicket}`}
+              {data.priceTicket || `${data.orderInfo?.numberOfTicket} x ${data.orderInfo?.pricePerTicket}`}
             </span>
             {status ? (
               <span className={cx('sale-off')}>{`-${Math.round(data.orderInfo?.discountPercentage)}%`}</span>
@@ -281,14 +292,18 @@ function TicketItem({ status, data = {} }) {
               <Button rounded onClick={handleCancelTicket}>
                 Huỷ
               </Button>
-              ) : (
-                  <></>
+            ) : (
+              <></>
               // <Button rounded onClick={handleChooseTicket}>
               //   Đặt lại
               // </Button>
             )}
           </div>
         </div>
+      </div>
+      <div style={{ color: '#484848', fontSize: '1.5rem', marginTop: '20px', lineHeight: '1.4'}}>
+        <span style={{ color: 'red' }}>* </span>
+        {data.journey}
       </div>
       {isDetail && (
         <div className="mt-5">

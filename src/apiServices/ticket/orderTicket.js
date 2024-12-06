@@ -7,6 +7,7 @@ export const orderTicket = async (
   busTripScheduleId,
   numberOfTicket,
   departureDate,
+  province
 ) => {
   try {
     const response = await httpRequest.post(
@@ -17,6 +18,7 @@ export const orderTicket = async (
         busTripScheduleId,
         numberOfTicket: Number(numberOfTicket),
         departureDate,
+        province
       },
       {
         headers: {

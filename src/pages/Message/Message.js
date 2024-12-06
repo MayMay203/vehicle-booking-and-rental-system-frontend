@@ -3,152 +3,172 @@ import classNames from 'classnames/bind'
 import { useLocation } from 'react-router-dom'
 import TxtSearch from '~/components/TxtSearch'
 import { Row, Col } from 'react-bootstrap'
-import { useState} from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Button from '~/components/Button'
 import CardMessageRight from '~/components/CardMessageRight'
-import { images } from '~/assets/images'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import DetailMessage from '~/components/DetailMessage'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
+import { Empty } from 'antd'
+import { getAllMessagesInConversation } from '~/apiServices/messageService/getAllMessagesInConversation'
+import Image from '~/components/Image'
 import { getAccessToken } from '~/utils/cookieUtils'
-import * as httpRequest from '~/utils/httpRequest'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function Message() {
-  //example data
-  let conversation_id = 11
-  let ownerId = null
-  let ownerType = null
-  // let selectedUser = null
-  let stompClient = null
-  let access_token = getAccessToken()
-
-  //Socket Client
-  //
-  function connect(event) {
-    event.preventDefault()
-    ownerId = document.querySelector('#username-input').value.trim()
-    ownerType = document.querySelector('#userType-input').value.trim()
-
-    if (ownerId && ownerType) {
-      console.log(access_token)
-      const socket = new SockJS(`http://localhost:8080/ws`)
-      stompClient = over(socket)
-
-      const headers = {
-        Authorization: 'Bearer ' + access_token, // Include Bearer token for authentication
-      }
-
-      // Kết nối STOMP với headers chứa token
-      stompClient.connect(
-        headers,
-        (frame) => {
-          console.log('Connected:', frame)
-          onConnected() // Gọi hàm này khi kết nối thành công
-
-          // Tạo đối tượng MessageDTO để gửi tin nhắn
-          const messageDTO = {
-            recipient_type: 'CAR_RENTAL_PARTNER', // Loại người nhận, ví dụ
-            recipientId: 1, // ID của người nhận
-            senderId: 1, // ID của người gửi
-            sender_type: 'USER', // Loại người gửi
-            seen_at: null, // Có thể để null nếu chưa xem
-            sendAt: new Date().toISOString(), // Thời gian gửi
-            content: 'Hello! This is a test message.', // Nội dung tin nhắn
-            conversation_id: 1, // ID của cuộc trò chuyện
-            seen: false, // Tin nhắn chưa được xem
-          }
-
-          // Gửi tin nhắn đến server thông qua STOMP client
-          stompClient.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
-        },
-        (error) => {
-          console.error('Connection error:', error)
-        },
-      )
-    }
-  }
-
-  function onConnected() {
-    stompClient.subscribe(`/user/${ownerId}/${ownerType}/queue/messages`, onNotificationRecieved)
-    stompClient.subscribe(`/user/${ownerId}/${ownerType}/notification`, (message) => {
-      console.log('Notification: ', message)
-    })
-    findAndDisplayConnectedUser()
-  }
-  function onNotificationRecieved(payload) {
-    const notification = JSON.parse(payload.body)
-    console.log(notification)
-  }
-  async function findAndDisplayConnectedUser() {
-    let response = null
-    try {
-      response = await httpRequest.get(
-        `http://localhost:8080/api/v1/chat/get-connected-account?conversation_id=${conversation_id}&account_id=${ownerId}&role_account=${ownerType}`,
-        {
-          headers: {
-            Authorization: `Bearer ${getAccessToken()}`,
-          },
-        },
-      )
-    } catch (error) {
-      console.error('Failed to update account: ', error)
-    }
-
-    if (response) {
-      let connectedUser = response.data
-      console.log(connectedUser)
-    } else {
-      console.log('No response received.')
-    }
-  }
-
-  // function onError() {}
-  //
-  const [buttonSelect, setButtonSelect] = useState('All')
-  const handleClickButton = (name) => {
-    setButtonSelect(name)
-  }
   const location = useLocation()
-  const id = location.state?.id
-  const [name, setName] = useState(location.state?.name)
-  const [messages, setMessages] = useState([
-    { id: 1, name: 'Bùi Thiên Bảo', message: 'Chào bạn....', time: '12h00, 23/08/2024', isSeen: false },
-    { id: 2, name: 'Nguyễn Văn A', message: 'Xin chào!', time: '12h01, 23/08/2024', isSeen: false },
-    { id: 3, name: 'Trần Thị B', message: 'Bạn khỏe không?', time: '12h02, 23/08/2024', isSeen: true },
-    { id: 4, name: 'Lê Văn C', message: 'Tạm biệt!', time: '12h03, 23/08/2024', isSeen: false },
-    { id: 5, name: 'Trần Thị B', message: 'Bạn khỏe không?', time: '12h02, 23/08/2024', isSeen: false },
-    { id: 6, name: 'Lê Văn C', message: 'Tạm biệt!', time: '12h03, 23/08/2024', isSeen: false },
-  ])
-  const [idClicked, setIdClicked] = useState(id)
-  const handleShowMessage = (id, name) => {
-    setMessages((prevMessages) => prevMessages.map((msg) => (msg.id === id ? { ...msg, isSeen: true } : msg)))
-    setName(name)
-    setIdClicked(id)
-  }
-  const filteredMessages = buttonSelect === 'Unread' ? messages.filter((msg) => !msg.isSeen) : messages
+  const idConversation = location.state?.idConversation
+  const [conversationList, setConversationList] = useState([])
+  const [partnerConvers, setPartnerConvers] = useState({ name: '', avatar: '', role: '', accountId: '' })
+  const [selectedConvers, setSelectedConvers] = useState(idConversation)
+  const [buttonSelect, setButtonSelect] = useState('All')
+  const [messages, setMessages] = useState([])
+  const { currentUser } = useSelector((state) => state.user)
+  const { currentRole } = useSelector((state) => state.menu)
+  const [messageText, setMessageText] = useState('')
+  const stompClientRef = useRef(null)
+  const detailMessRef = useRef(null)
+  const dispatch = useDispatch()
 
-  const detailMessages = [
-    { id: 1, message: 'Chào bạn....', time: '12h00, 23/08/2024', idSender: 2 },
-    { id: 2, message: 'Xin chào!', time: '12h01, 23/08/2024', idSender: 3 },
-    { id: 3, message: 'Bạn khỏe không?', time: '12h02, 23/08/2024', idSender: 2 },
-    { id: 4, message: 'Tôi khỏe! Bạn dạo này thế nào?', time: '12h03, 23/08/2024', idSender: 3 },
-    { id: 5, message: 'Chúc bạn sức khỏe', time: '12h02, 23/08/2024', idSender: 3 },
-    { id: 6, message: 'Tạm biệt!', time: '12h03, 23/08/2024', idSender: 4 },
-  ]
+  const onNotificationRecieved = useCallback((payload) => {
+    const newMessage = JSON.parse(payload.body)
+    console.log('Received message:', newMessage)
+    setMessages((prev) => [...prev, newMessage])
+  }, [])
+
+  //connect websocket
+  useEffect(() => {
+    function connect() {
+      if (!stompClientRef.current && currentUser.id) {
+        // Kiểm tra nếu chưa có kết nối WebSocket
+        const socket = new SockJS(`http://localhost:8080/ws`)
+        stompClientRef.current = over(socket)
+
+        const headers = {
+          Authorization: 'Bearer ' + getAccessToken(),
+        }
+
+        // Kết nối STOMP với headers chứa token
+        stompClientRef.current.connect(
+          headers,
+          (frame) => {
+            console.log('Connected:', frame)
+
+            // Đăng ký nhận tin nhắn
+            stompClientRef.current.subscribe(
+              `/user/${currentUser.id}/${currentRole}/queue/messages`,
+              onNotificationRecieved,
+            )
+          },
+          (error) => {
+            console.error('Connection error:', error)
+          },
+        )
+      }
+    }
+
+    connect()
+
+    return () => {
+      // Đảm bảo ngắt kết nối khi component bị unmount
+      if (stompClientRef.current) {
+        stompClientRef.current.disconnect(() => {
+          console.log('WebSocket disconnected')
+        })
+      }
+    }
+  }, [currentUser.id, currentRole, onNotificationRecieved])
+
+  useEffect(() => {
+    if (detailMessRef.current) {
+      detailMessRef.current.scrollTo({
+        top: detailMessRef.current.scrollHeight, // Cuộn tới cuối phần tử
+        behavior: 'smooth', // Cuộn mượt
+      })
+    }
+  }, [messages])
+
+  useEffect(() => {
+    async function fetchAllMessages() {
+      if (dispatch(checkLoginSession())) {
+        console.log('Vô đây fetch lại:(')
+        const dataMsg = await getAllMessagesInConversation(selectedConvers)
+        if (dataMsg) {
+          setMessages(dataMsg)
+        }
+        const partnerConvers = conversationList.find((conversation) => conversation.conversationId === selectedConvers)
+        if (partnerConvers) {
+          setPartnerConvers({
+            name: partnerConvers.nameRepresentation,
+            avatar: partnerConvers.avatarUrl,
+            role: partnerConvers.roleAccount,
+            accountId: partnerConvers.accountId,
+          })
+        }
+      }
+    }
+      if (selectedConvers) fetchAllMessages()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedConvers])
+
+  useEffect(() => {
+    async function fetchAllConversation() {
+      if(dispatch(checkLoginSession())){
+        const conversations = await getAllConversation(currentUser.id, currentRole)
+        if (conversations.length > 0) {
+          if (!idConversation) setSelectedConvers(conversations?.[0].idConversation)
+          const partnerConvers = conversations.find(
+            (conversation) => String(conversation.conversationId) === String(selectedConvers),
+          )
+          setConversationList(conversations.filter((conversation) => !conversation.lastMessage.includes('null')))
+          setPartnerConvers({
+            name: partnerConvers.nameRepresentation,
+            avatar: partnerConvers.avatarUrl,
+            role: partnerConvers.roleAccount,
+            accountId: partnerConvers.accountId,
+          })
+        }
+      }
+    }
+    if (currentUser.id) {
+      fetchAllConversation()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser.id, currentRole])
+
+  const handleChooseConvers = (id) => {
+    setSelectedConvers(id)
+  }
+
+  const handleSendMessage = () => {
+    // Tạo đối tượng MessageDTO để gửi tin nhắn
+    const messageDTO = {
+      recipient_type: partnerConvers.role, // Loại người nhận, ví dụ
+      recipientId: partnerConvers.accountId, // ID của người nhận
+      senderId: currentUser.id, // ID của người gửi
+      sender_type: currentRole, // Loại người gửi
+      seen_at: null, // Có thể để null nếu chưa xem
+      sendAt: new Date().toISOString(), // Thời gian gửi
+      content: messageText, // Nội dung tin nhắn
+      conversation_id: selectedConvers, // ID của cuộc trò chuyện
+      seen: false, // Tin nhắn chưa được xem
+    }
+    // // Gửi tin nhắn đến server thông qua STOMP client
+    stompClientRef.current.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
+    setMessages((prev) => [...prev, messageDTO])
+    setMessageText('')
+  }
+
   return (
     <div className={cx('container', 'wrap-container')}>
       <div className={cx('d-flex', 'wrap-title-search')}>
         <span className={cx('title')}>Tin nhắn</span>
-        <TxtSearch className={cx('search')}></TxtSearch>
-        <span className={cx('title')}>Account</span>
-        <textarea id="username-input" className={cx('search')}></textarea>
-        <textarea id="userType-input" className={cx('search')}></textarea>
-        <Button id="class-name" rounded className={cx('btn', { active: buttonSelect === 'All  ' })} onClick={connect}>
-          Save
-        </Button>
+        <TxtSearch className={cx('search')} content="Tìm kiếm"></TxtSearch>
       </div>
       <Row className={cx('wrap-messages-details', 'm-0 p-0')}>
         <Col lg="4" md="5" className={cx('wrap-list-messages', 'd-none', 'd-md-block')}>
@@ -156,56 +176,73 @@ function Message() {
             <Button
               rounded
               className={cx('btn', { active: buttonSelect === 'All' })}
-              onClick={() => handleClickButton('All')}
+              onClick={() => setButtonSelect('All')}
             >
               Tất cả
             </Button>
             <Button
               rounded
               className={cx('btn', { active: buttonSelect === 'Unread' })}
-              onClick={() => handleClickButton('Unread')}
+              onClick={() => setButtonSelect('Unread')}
             >
               Chưa đọc
             </Button>
           </div>
-          <div className={cx('list-message')}>
-            {filteredMessages.map((msg) => (
-              <CardMessageRight
-                key={msg.id}
-                id={msg.id}
-                isSeen={msg.isSeen}
-                idClicked={idClicked}
-                handleShowMessage={() => handleShowMessage(msg.id, msg.name)}
-                name={msg.name}
-                message={msg.message}
-                time={msg.time}
-              />
-            ))}
-          </div>
+          {conversationList.length > 0 ? (
+            <div className={cx('list-message')}>
+              {conversationList.map((convers) => (
+                <CardMessageRight
+                  key={convers.conversationId}
+                  data={convers}
+                  handleChooseConvers={handleChooseConvers}
+                  isClicked={selectedConvers === convers.conversationId}
+                />
+              ))}
+            </div>
+          ) : (
+            <Empty style={{ marginTop: '70px' }} description="Không có tin nhắn nào gần đây" />
+          )}
         </Col>
         <Col lg="8" md="7">
           <div className={cx('d-flex', 'wrap-recipient')}>
-            <img src={images.avatar} className={cx('avatar')} alt="avatar" />
-            <span className={cx('name', 'p-0')}>{name}</span>
+            <Image src={partnerConvers.avatar} className={cx('avatar')} alt="avatar" />
+            <span className={cx('name', 'p-0')}>{partnerConvers.name}</span>
           </div>
-          <div className={cx('wrap-detail-message')}>
-            {detailMessages.map((detailmsg) => (
-              // sau thay 1 = id của người đnag đăng nhập
-              <div className={cx({ 'message-sender': detailmsg.idSender === 3 })}>
-                <DetailMessage
-                  key={detailmsg.id}
-                  isSender={detailmsg.idSender === 3}
-                  message={detailmsg.message}
-                  time={detailmsg.time}
-                ></DetailMessage>
+          <div className={cx('wrap-detail-message')} ref={detailMessRef}>
+            {messages.map((message, index) => (
+              <div key={index} className={cx({ 'message-sender': message.senderId === currentUser.id })}>
+                <DetailMessage data={message} image={partnerConvers.avatar}></DetailMessage>
               </div>
             ))}
           </div>
           <div className={cx('d-flex', 'wrap-sent')}>
             <div className={cx('input-content-sent')}>
-              <input className={cx('')} type="text" placeholder="Viết tin nhắn" />
+              <input
+                value={messageText}
+                onChange={(e) => {
+                  e.target.value = e.target.value.trimStart()
+                  setMessageText(e.target.value)
+                }}
+                type="text"
+                placeholder="Viết tin nhắn"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSendMessage()
+                  }
+                }}
+              />
             </div>
-            <FontAwesomeIcon icon={faPaperPlane} className={cx('icon-sent')}></FontAwesomeIcon>
+            <button
+              style={{ padding: '6px', marginLeft: '6px' }}
+              onClick={handleSendMessage}
+              disabled={messageText === ''}
+            >
+              <FontAwesomeIcon
+                icon={faPaperPlane}
+                className={cx('icon-sent')}
+                style={{ color: messageText === '' ? '#ccc' : '#FF7F50' }}
+              ></FontAwesomeIcon>
+            </button>
           </div>
         </Col>
       </Row>

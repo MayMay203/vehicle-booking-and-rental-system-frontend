@@ -32,21 +32,21 @@ function Search({ noSelectBus, noSelectDate = false }) {
 
   useEffect(() => {
     async function fetchApi() {
-      const provices = await getLocations(1)
-      if (provices) {
-        const cleanedProvinces = provices
-          .map((province) => {
-            return {
-              ...province,
-              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
-            }
-          })
-          .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
+      const provinces = await getLocations(1)
+      if (provinces) {
+       const cleanedProvinces = provinces
+         .map((province) => {
+           const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+           return {
+             ...province,
+             name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+           }
+         })
+         .sort((a, b) => a.name.localeCompare(b.name))
         setProvincesList(cleanedProvinces)
       }
       const businessNames = await getBusinessName()
       if (businessNames) {
-        console.log(businessNames)
         setBusinessList(businessNames)
       }
     }

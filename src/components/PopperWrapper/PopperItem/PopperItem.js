@@ -2,10 +2,18 @@ import styles from './PopperItem.module.scss'
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
-function PopperItem({ id, title, onClick, checked }) {
+
+function PopperItem({ id, title, onClick, checked}) {
   return (
     <button className={cx('wrapper')} onClick={onClick}>
-      <input id={id} type="radio" name="item" className={cx('radio-button')} hidden checked={checked} />
+      <input
+        id={id}
+        type="radio"
+        name="item"
+        className={cx('radio-button')}
+        hidden
+        checked={checked}
+      />
       <label htmlFor={id} className={cx('label')}>
         {title}
       </label>

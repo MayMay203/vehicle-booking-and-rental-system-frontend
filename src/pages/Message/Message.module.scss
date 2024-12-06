@@ -36,7 +36,6 @@
 .wrap-list-messages{
   border-right: 1px solid rgba(0, 0, 0, 0.3);
   padding: 0;
-  height: 100%;
 }
 .list-message{
   max-height: 50rem;
@@ -62,7 +61,8 @@
   margin-left: 2rem;
 }
 .wrap-detail-message{
-  height: 44rem;
+  padding-top: 20px;
+  height: 500px;
   overflow-y: auto;
 }
 .message-sender{
@@ -74,7 +74,7 @@
   margin: 1rem 0.5rem 0.5rem;
 }
 .input-content-sent{
-  width: 95%;
+  width: 93%;
   margin-right: 1rem;
 }
 .input-content-sent input{
@@ -85,6 +85,5 @@
   border-radius: 20px;
 }
 .icon-sent{
-  font-size: 2rem;
-  color: #FF7F50;
+  font-size: 2.4rem;
 }
