@@ -1,8 +1,8 @@
 import styles from './Message.module.scss'
 import classNames from 'classnames/bind'
-import { useLocation } from 'react-router-dom'
+// import { useLocation } from 'react-router-dom'
 import TxtSearch from '~/components/TxtSearch'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Modal } from 'react-bootstrap'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Button from '~/components/Button'
 import CardMessageRight from '~/components/CardMessageRight'
@@ -20,9 +20,9 @@ import { getAccessToken } from '~/utils/cookieUtils'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
-function Message() {
-  const location = useLocation()
-  const idConversation = location.state?.idConversation
+function Message({ idConversation, closeModalMessage, ...props }) {
+  // const location = useLocation()
+  // const idConversation = location.state?.idConversation
   const [conversationList, setConversationList] = useState([])
   const [partnerConvers, setPartnerConvers] = useState({ name: '', avatar: '', role: '', accountId: '' })
   const [selectedConvers, setSelectedConvers] = useState(idConversation)
@@ -40,7 +40,7 @@ function Message() {
     console.log('Received message:', newMessage)
     setMessages((prev) => [...prev, newMessage])
   }, [])
-
+  console.log('prop:----', props)
   //connect websocket
   useEffect(() => {
     function connect() {
@@ -104,21 +104,21 @@ function Message() {
         const partnerConvers = conversationList.find((conversation) => conversation.conversationId === selectedConvers)
         if (partnerConvers) {
           setPartnerConvers({
-            name: partnerConvers.nameRepresentation,
-            avatar: partnerConvers.avatarUrl,
-            role: partnerConvers.roleAccount,
-            accountId: partnerConvers.accountId,
+            name: partnerConvers?.nameRepresentation,
+            avatar: partnerConvers?.avatarUrl,
+            role: partnerConvers?.roleAccount,
+            accountId: partnerConvers?.accountId,
           })
         }
       }
     }
-      if (selectedConvers) fetchAllMessages()
+    if (selectedConvers) fetchAllMessages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConvers])
 
   useEffect(() => {
     async function fetchAllConversation() {
-      if(dispatch(checkLoginSession())){
+      if (dispatch(checkLoginSession())) {
         const conversations = await getAllConversation(currentUser.id, currentRole)
         if (conversations.length > 0) {
           if (!idConversation) setSelectedConvers(conversations?.[0].idConversation)
@@ -127,10 +127,10 @@ function Message() {
           )
           setConversationList(conversations.filter((conversation) => !conversation.lastMessage.includes('null')))
           setPartnerConvers({
-            name: partnerConvers.nameRepresentation,
-            avatar: partnerConvers.avatarUrl,
-            role: partnerConvers.roleAccount,
-            accountId: partnerConvers.accountId,
+            name: partnerConvers?.nameRepresentation,
+            avatar: partnerConvers?.avatarUrl,
+            role: partnerConvers?.roleAccount,
+            accountId: partnerConvers?.accountId,
           })
         }
       }
@@ -144,7 +144,7 @@ function Message() {
   const handleChooseConvers = (id) => {
     setSelectedConvers(id)
   }
-
+  //  console.log("onHde", ...props)
   const handleSendMessage = () => {
     // Tạo đối tượng MessageDTO để gửi tin nhắn
     const messageDTO = {
@@ -165,88 +165,102 @@ function Message() {
   }
 
   return (
-    <div className={cx('container', 'wrap-container')}>
-      <div className={cx('d-flex', 'wrap-title-search')}>
-        <span className={cx('title')}>Tin nhắn</span>
-        <TxtSearch className={cx('search')} content="Tìm kiếm"></TxtSearch>
-      </div>
-      <Row className={cx('wrap-messages-details', 'm-0 p-0')}>
-        <Col lg="4" md="5" className={cx('wrap-list-messages', 'd-none', 'd-md-block')}>
-          <div className={cx('d-flex', 'wrap-btn')}>
-            <Button
-              rounded
-              className={cx('btn', { active: buttonSelect === 'All' })}
-              onClick={() => setButtonSelect('All')}
-            >
-              Tất cả
-            </Button>
-            <Button
-              rounded
-              className={cx('btn', { active: buttonSelect === 'Unread' })}
-              onClick={() => setButtonSelect('Unread')}
-            >
-              Chưa đọc
-            </Button>
+    <Modal
+      {...props}
+      size="xl"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      // show={modalShowMessage}
+      // onHide={() => setModalShowMessage(false)}
+    >
+      <Modal.Header closeButton>
+        {/* <Modal.Title id="contained-modal-title-vcenter">Modal heading</Modal.Title> */}
+      </Modal.Header>
+      <Modal.Body>
+        <div className={cx('container', 'wrap-container', 'p-0')}>
+          <div className={cx('d-flex', 'wrap-title-search')}>
+            <span className={cx('title')}>Tin nhắn</span>
+            <TxtSearch className={cx('search')} content="Tìm kiếm"></TxtSearch>
           </div>
-          {conversationList.length > 0 ? (
-            <div className={cx('list-message')}>
-              {conversationList.map((convers) => (
-                <CardMessageRight
-                  key={convers.conversationId}
-                  data={convers}
-                  handleChooseConvers={handleChooseConvers}
-                  isClicked={selectedConvers === convers.conversationId}
-                />
-              ))}
-            </div>
-          ) : (
-            <Empty style={{ marginTop: '70px' }} description="Không có tin nhắn nào gần đây" />
-          )}
-        </Col>
-        <Col lg="8" md="7">
-          <div className={cx('d-flex', 'wrap-recipient')}>
-            <Image src={partnerConvers.avatar} className={cx('avatar')} alt="avatar" />
-            <span className={cx('name', 'p-0')}>{partnerConvers.name}</span>
-          </div>
-          <div className={cx('wrap-detail-message')} ref={detailMessRef}>
-            {messages.map((message, index) => (
-              <div key={index} className={cx({ 'message-sender': message.senderId === currentUser.id })}>
-                <DetailMessage data={message} image={partnerConvers.avatar}></DetailMessage>
+          <Row className={cx('wrap-messages-details', 'm-0 p-0')}>
+            <Col lg="4" md="5" className={cx('wrap-list-messages', 'd-none', 'd-md-block')}>
+              <div className={cx('d-flex', 'wrap-btn')}>
+                <Button
+                  rounded
+                  className={cx('btn', { active: buttonSelect === 'All' })}
+                  onClick={() => setButtonSelect('All')}
+                >
+                  Tất cả
+                </Button>
+                <Button
+                  rounded
+                  className={cx('btn', { active: buttonSelect === 'Unread' })}
+                  onClick={() => setButtonSelect('Unread')}
+                >
+                  Chưa đọc
+                </Button>
               </div>
-            ))}
-          </div>
-          <div className={cx('d-flex', 'wrap-sent')}>
-            <div className={cx('input-content-sent')}>
-              <input
-                value={messageText}
-                onChange={(e) => {
-                  e.target.value = e.target.value.trimStart()
-                  setMessageText(e.target.value)
-                }}
-                type="text"
-                placeholder="Viết tin nhắn"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSendMessage()
-                  }
-                }}
-              />
-            </div>
-            <button
-              style={{ padding: '6px', marginLeft: '6px' }}
-              onClick={handleSendMessage}
-              disabled={messageText === ''}
-            >
-              <FontAwesomeIcon
-                icon={faPaperPlane}
-                className={cx('icon-sent')}
-                style={{ color: messageText === '' ? '#ccc' : '#FF7F50' }}
-              ></FontAwesomeIcon>
-            </button>
-          </div>
-        </Col>
-      </Row>
-    </div>
+              {conversationList.length > 0 ? (
+                <div className={cx('list-message')}>
+                  {conversationList.map((convers) => (
+                    <CardMessageRight
+                      key={convers.conversationId}
+                      data={convers}
+                      handleChooseConvers={handleChooseConvers}
+                      isClicked={selectedConvers === convers.conversationId}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <Empty style={{ marginTop: '70px' }} description="Không có tin nhắn nào gần đây" />
+              )}
+            </Col>
+            <Col lg="8" md="7">
+              <div className={cx('d-flex', 'wrap-recipient')}>
+                <Image src={partnerConvers.avatar} className={cx('avatar')} alt="avatar" />
+                <span className={cx('name', 'p-0')}>{partnerConvers.name}</span>
+              </div>
+              <div className={cx('wrap-detail-message')} ref={detailMessRef}>
+                {messages.map((message, index) => (
+                  <div key={index} className={cx({ 'message-sender': message.senderId === currentUser.id })}>
+                    <DetailMessage data={message} image={partnerConvers.avatar}></DetailMessage>
+                  </div>
+                ))}
+              </div>
+              <div className={cx('d-flex', 'wrap-sent')}>
+                <div className={cx('input-content-sent')}>
+                  <input
+                    value={messageText}
+                    onChange={(e) => {
+                      e.target.value = e.target.value.trimStart()
+                      setMessageText(e.target.value)
+                    }}
+                    type="text"
+                    placeholder="Viết tin nhắn"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSendMessage()
+                      }
+                    }}
+                  />
+                </div>
+                <button
+                  style={{ padding: '6px', marginLeft: '6px' }}
+                  onClick={handleSendMessage}
+                  disabled={messageText === ''}
+                >
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    className={cx('icon-sent')}
+                    style={{ color: messageText === '' ? '#ccc' : '#FF7F50' }}
+                  ></FontAwesomeIcon>
+                </button>
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </Modal.Body>
+    </Modal>
   )
 }
 export default Message

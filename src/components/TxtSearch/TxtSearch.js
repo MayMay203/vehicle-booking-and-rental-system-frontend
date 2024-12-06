@@ -5,7 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
 import useDebounce from '~/hook'
 const cx = classNames.bind(styles)
-function TxtSearch({ content, handleReceiveSearch }) {
+function TxtSearch({ content, handleReceiveSearch = ()=>{} }) {
   const [value, setValue] = useState('')
   const valueDebounce = useDebounce(value, 500)
 

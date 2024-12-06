@@ -1,3 +1,4 @@
+// import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequestV2 from '~/utils/httpRequestV2'
 export const getVehicleRentalByID = async (id) => {
   try {
