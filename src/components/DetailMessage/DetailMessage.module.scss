@@ -1,10 +1,12 @@
 // nhận tin nhắn
 .wrap{
-    display: flex;
+    display: inline-flex;
     align-items:flex-start;
-    width: 80%;
-    margin: 1rem;
+    max-width: 80%;
+    line-height: 1.4;
+    margin: 2px;
     padding: 0;
+    cursor: pointer;
 }
 .wrap-receive{
     justify-content: start;
@@ -20,6 +22,7 @@
     border-radius: 50%;
     aspect-ratio: 1/1; 
     border: 1px solid #FFEBE4;
+    object-fit: cover;
 }
 .wrap-content-end{
     justify-items: end;
@@ -40,11 +43,24 @@
     color: white;
 }
 .time{
-    margin: 1rem 2rem;
+    margin: 7px;
     font-size: 1.2rem;
     font-weight: 400;
     color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    height: 0;
 }
+
+.time.time-visible {
+  opacity: 1;
+  height: auto;
+  visibility: visible;
+  transform: translateY(0);
+}
+
 .align-right{
     text-align: end;
 }
