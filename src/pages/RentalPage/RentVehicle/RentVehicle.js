@@ -51,11 +51,11 @@ function RentVehicle() {
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item className={cx('carousel-item')}>
-              <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.slider1_rental_page}></img>
+              <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.slider2_rental_page}></img>
               <Carousel.Caption></Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item className={cx('carousel-item')}>
-              <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.slider1_rental_page}></img>
+              <img className={cx('d-block w-100')} alt="slider1_rental_page" src={images.slider3_rental_page}></img>
               <Carousel.Caption></Carousel.Caption>
             </Carousel.Item>
           </Carousel>

@@ -16,6 +16,7 @@ export const generalModalNames = {
   REFUSE_DRIVER_PARTNER: 'refuseDriverPartner',
   UTILITY_MODAL: 'utilityModal',
   FEE_SERVICE_MODAL: 'feeServiceModal',
+  DEL_BUS_TYPE: 'deleteBusType',
 }
 
 const initialState = {

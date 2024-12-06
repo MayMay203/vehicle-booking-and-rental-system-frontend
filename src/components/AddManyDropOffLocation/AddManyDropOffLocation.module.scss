@@ -1,0 +1,44 @@
+.txt {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  font-weight: 500;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+}
+.add-item {
+  font-size: 2.5rem;
+  margin-left: 0.5rem;
+  text-align: center;
+  margin-top: 0.35rem;
+  color: #fcd4c6;
+  &:hover {
+    cursor: pointer;
+    color: #ff7f50;
+  }
+}
+.selectbox{
+  width: 100%;
+}
+.wrap-drop-off-location {
+  border: 1px solid rgba($color: #761b00, $alpha: 0.5);
+  border-radius: 5px;
+  padding: 1rem;
+  position: relative; 
+}
+
+.wrap-drop-off-location::before {
+  // content: 'Chữ trên border';
+  content: attr(data-content);
+  position: absolute;
+  top: -8px; 
+  left: 10px; 
+  background-color: #fff;
+  padding: 0 5px; 
+  font-size: 15px; 
+  color: #761b00; 
+}

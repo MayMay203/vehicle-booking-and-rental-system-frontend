@@ -7,6 +7,7 @@ import SlideDayOfMonth from '~/components/SlideDayOfMonth'
 import TableVehiclesOfBusTrip from '~/components/TableVehiclesOfBusTrip'
 import ModalManageBusSchedule from '../../BusSchedule/ModalManageBusSchedule'
 import { useState } from 'react'
+import HolidayCalendar from '~/components/HolidayCalendar'
 const cx = classNames.bind(styles)
 function DetailBusTrip() {
   const handleInputChange = (e) => {
@@ -23,66 +24,198 @@ function DetailBusTrip() {
     { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
     // { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
   ]
+  //  const initialDestination = [
+  //    { value: '54 Nguyễn Lương Bằng, Hòa Khánh Bắc, Đà Nẵng', id: 0 },
+  //    { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
+  //    { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
+  //    // { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
+  //  ]
   const initialDestination = [
-    { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 0 },
-    { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
-    { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
-    { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
-  ]
-  const columns = [
     {
-      title: 'Địa điểm đón khách',
-      dataIndex: 'departure',
-      align: 'left',
-      width: 600,
-      showSorterTooltip: {
-        target: 'full-header',
-      },
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Jim',
-          value: 'Jim',
-        },
-        {
-          text: 'Submenu',
-          value: 'Submenu',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
+      id: 0,
+      province: 'Hà Nội',
+      duration: '2 tiếng',
+      price: '200000',
+      dropOffLocation: [
+        { value: 'Nguyễn Văn Trỗi, Hồ Hoàn Kiếm, Hà Nội', id: 1 },
+        { value: '300 Lê Thánh Tông, Hà Nội', id: 2 },
+        { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
       ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ['descend'],
     },
     {
-      title: 'Địa điểm trả khách',
-      dataIndex: 'destination',
-      align: 'left',
-      defaultSortOrder: 'descend',
-      width: 600,
-      // sorter: (a, b) => a.age - b.age,
+      id: 1,
+      province: 'Nghệ An',
+      duration: '2 tiếng',
+      price: '200000',
+      dropOffLocation: [
+        { value: '54 Nguyễn Lương Bằng, Nghệ An', id: 0 },
+        { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Nghệ An', id: 1 },
+        { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
+        { value: '300 Lê Thánh Tông, Thanh Chương, Nghệ An', id: 3 },
+      ],
     },
+    {
+      id: 2,
+      province: 'Quảng Bình',
+      duration: '2 tiếng',
+      price: '200000',
+      dropOffLocation: [
+        { value: '54 Nguyễn Lương Bằng, Quảng Bình', id: 0 },
+        { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
+        { value: '300 Lê Thánh Tông, Quảng Bình', id: 2 },
+        { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 3 },
+        { value: '300 Lê Thánh Tông, Quảng Bình', id: 4 },
+      ],
+    },
+  ]
+  // const columns = [
+  //   {
+  //     title: 'Địa điểm đón khách',
+  //     dataIndex: 'departure',
+  //     align: 'left',
+  //     width: 600,
+  //     showSorterTooltip: {
+  //       target: 'full-header',
+  //     },
+  //     filters: [
+  //       {
+  //         text: 'Joe',
+  //         value: 'Joe',
+  //       },
+  //       {
+  //         text: 'Jim',
+  //         value: 'Jim',
+  //       },
+  //       {
+  //         text: 'Submenu',
+  //         value: 'Submenu',
+  //         children: [
+  //           {
+  //             text: 'Green',
+  //             value: 'Green',
+  //           },
+  //           {
+  //             text: 'Black',
+  //             value: 'Black',
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //     // specify the condition of filtering result
+  //     // here is that finding the name started with `value`
+  //     onFilter: (value, record) => record.name.indexOf(value) === 0,
+  //     sorter: (a, b) => a.name.length - b.name.length,
+  //     sortDirections: ['descend'],
+  //   },
+  //   {
+  //     title: 'Địa điểm trả khách',
+  //     dataIndex: 'destination',
+  //     align: 'left',
+  //     defaultSortOrder: 'descend',
+  //     width: 600,
+  //     // sorter: (a, b) => a.age - b.age,
+  //   },
+  // ]
+
+  // const data = Array.from({ length: Math.max(initialDepartures.length, initialDestination.length) }, (_, index) => ({
+  //   key: index.toString(),
+  //   departure: initialDepartures[index]?.value || '',
+  //   destination: initialDestination[index]?.value || '',
+  // }))
+  const maxDropOffLength = Math.max(...initialDestination.map((item) => item.dropOffLocation.length))
+  const transformedData = [
+    // {
+    //   key: 'location',
+    //   title: 'Địa điểm',
+    //   ...initialDestination.reduce((acc, item) => {
+    //     acc[item.province] = item.province
+    //     return acc
+    //   }, {}),
+    // },
+    {
+      key: 'duration',
+      title: 'Thời gian di chuyển',
+      ...initialDestination.reduce((acc, item) => {
+        acc[item.province] = item.duration
+        return acc
+      }, {}),
+    },
+    {
+      key: 'price',
+      title: 'Giá vé',
+      ...initialDestination.reduce((acc, item) => {
+        acc[item.province] = item.price
+        return acc
+      }, {}),
+    },
+    // {
+    //   key: 'dropOff',
+    //   title: 'Địa điểm cụ thể',
+    //   ...initialDestination.reduce((acc, item) => {
+    //     ...Array.from({ length: maxDropOffLength }, (_, idx) =>
+    //     return acc
+    //   }, {}),
+    // },
+    // ...Array.from({ length: maxDropOffLength }, (_, idx) =>
+    //   // initialDestination.map((item) =>
+    //     ({
+    //     key: `dropOff-${idx}`,
+    //     title: idx === 0 ? 'Địa điểm cụ thể' : '',
+    //     info: item.dropOffLocation[idx] ? item.dropOffLocation[idx].value : '',
+    //     ...initialDestination.reduce((acc, current) => {
+    //       acc[current.province] = current.dropOffLocation[idx] ? current.dropOffLocation[idx].value : ''
+    //       return acc
+    //     }, {}),
+    //   })
+    // // ),
+    // ).flat(),
+    // Array.from({ length: 4 }, (_, index) => ({
+    //   key: `dropOff-${index}`,
+    //   title: index === 0 ? 'Địa điểm cụ thể' : '',
+    //   ...initialDestination.reduce((acc, current) => {
+    //     acc[current.province] = current.dropOffLocation[index] ? current.dropOffLocation[index].value : ''
+    //     return acc
+    //   }, {}),
+    // })),
+    ...initialDestination.reduce((item, index) =>
+      Array.from({ length: maxDropOffLength }, (_, idx) => ({
+        key: `dropOff-${index}-${idx}`,
+        title: idx === 0 ? 'Địa điểm cụ thể' : '',
+        ...initialDestination.reduce((acc, current) => {
+          acc[current.province] = current.dropOffLocation[idx] ? current.dropOffLocation[idx].value : ''
+          return acc
+        }, {}),
+      })),
+    ),
+    // ...initialDestination.flatMap((item, index) =>
+    //   item.dropOffLocation.map((loc, idx) => ({
+    //     key: `dropOff-${index}-${idx}`,
+    //     title: idx === 0 ? 'Địa điểm cụ thể' : '',
+    //     ...initialDestination.reduce((acc, current) => {
+    //       acc[current.province] = current.dropOffLocation[idx] ? current.dropOffLocation[idx].value : ''
+    //       return acc
+    //     }, {}),
+    //   })),
+    // ),
   ]
 
-  const data = Array.from({ length: Math.max(initialDepartures.length, initialDestination.length) }, (_, index) => ({
-    key: index.toString(),
-    departure: initialDepartures[index]?.value || '',
-    destination: initialDestination[index]?.value || '',
-  }))
+  const columns = [
+    {
+      title: 'Các tỉnh đi qua',
+      dataIndex: 'title',
+      key: 'title',
+      align: 'left',
+      width: 200,
+      render: (text) => <span style={{ fontWeight: 500 }}>{text}</span>,
+    },
+    ...initialDestination.map((item) => ({
+      title: item.province,
+      dataIndex: item.province,
+      key: item.province,
+      align: 'left',
+      width: 400,
+    })),
+  ]
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
@@ -97,14 +230,12 @@ function DetailBusTrip() {
   return (
     <div className="container">
       <div className="mt-4 mb-4">
-        <p className={cx('title')}>Thông tin xe</p>
+        <p className={cx('title')}>Thông tin chuyến xe</p>
         <div className={cx('wrap-infor')}>
           <Row>
             <Col>
               <Form.Group className={cx('txt', 'mb-5')} controlId="formAdd.ControlInput1">
-                <Form.Label className="mb-3">
-                  Địa điểm xuất phát<span className="text-danger">*</span>
-                </Form.Label>
+                <Form.Label className="mb-3">Địa điểm xuất phát</Form.Label>
                 <Form.Select
                   aria-label="departure"
                   name="departure"
@@ -122,9 +253,7 @@ function DetailBusTrip() {
             </Col>
             <Col>
               <Form.Group className={cx('txt', 'mb-5')} controlId="formAdd.ControlInput2">
-                <Form.Label className="mb-3">
-                  Địa điểm đến<span className="text-danger">*</span>
-                </Form.Label>
+                <Form.Label className="mb-3">Địa điểm đến</Form.Label>
                 <Form.Select
                   aria-label="destination"
                   name="destination"
@@ -142,9 +271,7 @@ function DetailBusTrip() {
             </Col>
             <Col>
               <Form.Group className={cx('txt', 'mb-5')} controlId="formAdd.ControlInput3">
-                <Form.Label className="mb-3">
-                  Thời gian di chuyển<span className="text-danger">*</span>
-                </Form.Label>
+                <Form.Label className="mb-3">Thời gian di chuyển</Form.Label>
                 <Form.Select
                   aria-label="duration"
                   name="duration"
@@ -163,20 +290,30 @@ function DetailBusTrip() {
               </Form.Group>
             </Col>
           </Row>
-          <Table
-            columns={columns}
-            dataSource={data}
-            onChange={onChange}
-            bordered
-            pagination={false}
-            scroll={{ y: 500 }}
-            // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-            rowClassName="table-row-center" // Thêm class để căn giữa dọc
-            showSorterTooltip={{
-              target: 'sorter-icon',
-            }}
-            className={cx('')}
-          />
+          <Form.Group className={cx('txt', 'mb-5')} controlId="formAdd.ControlInput6">
+            <Form.Label className="mb-3">Địa điểm đón khách</Form.Label>
+            {initialDepartures.map((location, index) => (
+              <p className={cx('txt-location')}>- {location.value}</p>
+            ))}
+          </Form.Group>
+          <Form.Group className={cx('mb-5')} controlId="formAdd.ControlInput6">
+            <Form.Label className={cx('txt', 'mb-3')}>Địa điểm trả khách</Form.Label>
+            <Table
+              columns={columns}
+              // dataSource={data}
+              dataSource={transformedData}
+              onChange={onChange}
+              bordered
+              pagination={false}
+              scroll={{ x: 'auto', y: 500 }}
+              // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+              rowClassName="table-row-center" // Thêm class để căn giữa dọc
+              showSorterTooltip={{
+                target: 'sorter-icon',
+              }}
+              className={cx('txt-location')}
+            />
+          </Form.Group>
         </div>
       </div>
       <div className="mt-4 mb-4">
@@ -189,6 +326,7 @@ function DetailBusTrip() {
           <div className="mt-3 mb-3"></div>
           <TableVehiclesOfBusTrip handleUpdateSchedule={handleUpdateSchedule}></TableVehiclesOfBusTrip>
         </div>
+        <HolidayCalendar />
       </div>
       <ModalManageBusSchedule
         enableEdit={true}

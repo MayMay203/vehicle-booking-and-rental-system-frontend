@@ -17,6 +17,9 @@ import { fetchAllFeeServices, fetchAllUtilities } from '~/redux/slices/generalAd
 import { deleteFeeService } from '~/apiServices/manageFeeService/deleteFeeService'
 import { cancelTicket } from '~/apiServices/ticket/cancelTicket'
 import { fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
+import { deleteBusType } from '~/apiServices/busPartner/deleteBusType'
+import { fetchAllBuses, fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
+import { deleteBus } from '~/apiServices/busPartner/deleteBus'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -93,6 +96,34 @@ function ConfirmModal() {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 800, position: 'top-center' })
       }
+    } else if (showConfirmModal.name === generalModalNames.DEL_BUS_TYPE) {
+      const busTypeId = showConfirmModal.id
+      try {
+        if (dispatch(checkLoginSession())) {
+          await deleteBusType(busTypeId)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllBusTypes())
+          toast.success('Xoá loại xe thành công!', { autoClose: 800, position: 'top-center' })
+        }
+      } catch (message) {
+        if (message === 'Internal Server Error')
+          toast.error('Loại xe đang được sử dụng. Bạn không thể xóa!', { autoClose: 1500, position: 'top-center' })
+        else toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1500, position: 'top-center' })
+      }
+    } else if (showConfirmModal.name === generalModalNames.DEL_BUS) {
+      const busId = showConfirmModal.id
+      try {
+        if (dispatch(checkLoginSession())) {
+          await deleteBus(busId)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllBuses())
+          toast.success('Xoá xe thành công!', { autoClose: 800, position: 'top-center' })
+        }
+      } catch (message) {
+        if (message === 'Internal Server Error')
+          toast.error('Xe đang được sử dụng. Bạn không thể xóa!', { autoClose: 1500, position: 'top-center' })
+        else toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1500, position: 'top-center' })
+      }
     } else if (showConfirmModal.name === generalModalNames.CANCEL_TICKET) {
       try {
         if (dispatch(checkLoginSession())) {
@@ -101,14 +132,13 @@ function ConfirmModal() {
           toast.success('Vé của bạn đã được hủy thành công!', { autoClose: 800, position: 'top-center' })
           dispatch(
             fetchAllMyTicketOrders({
-                isCanceled: 0,
-                isGone: false,
-              }),
-            )
+              isCanceled: 0,
+              isGone: false,
+            }),
+          )
         }
-      }
-      catch (message) {
-         if (message.includes("You can't cancel this order because it has exceed the time limit")) {
+      } catch (message) {
+        if (message.includes("You can't cancel this order because it has exceed the time limit")) {
           toast.error('Vé xe không thể hủy vì đã quá thời hạn.!', { autoClose: 1000, position: 'top-center' })
           return
         }

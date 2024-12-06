@@ -6,8 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClockRotateLeft, faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
 
 import { useState, useEffect } from 'react'
-import Button from '~/components/Button'
+// import Button from '~/components/Button'
 import AddManyTickets from '~/components/AddManyTickets'
+import TableSchedulesOfBus from '~/components/TableSchedulesOfBus'
 const cx = classNames.bind(styles)
 function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) {
   const [formData, setFormData] = useState({
@@ -19,34 +20,34 @@ function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) 
     numberSeat: '34',
     typeSeat: 'Giường nằm',
   })
-  const [activeUpdate, setActiveUpdate] = useState(false)
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }))
-  //   console.log(formData)
-  // }
+  // const [activeUpdate, setActiveUpdate] = useState(false)
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+    console.log(formData)
+  }
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
     console.log('Có vô', formData)
     console.log(allFieldsFilled)
-    setActiveUpdate(allFieldsFilled)
+    // setActiveUpdate(allFieldsFilled)
   }, [formData])
-  const handleCancel = () => {
-    setFormData({
-      departure: 'Đà Nẵng',
-      typeVehicle: 'Limousine34GiuongNam',
-      licensePlateNumber: '30G-49344',
-      destination: 'Hà Nội',
-      extendTime: '2 tiếng',
-      numberSeat: '34',
-      typeSeat: 'Giường nằm',
-    })
-  }
+  // const handleCancel = () => {
+  //   setFormData({
+  //     departure: 'Đà Nẵng',
+  //     typeVehicle: 'Limousine34GiuongNam',
+  //     licensePlateNumber: '30G-49344',
+  //     destination: 'Hà Nội',
+  //     extendTime: '2 tiếng',
+  //     numberSeat: '34',
+  //     typeSeat: 'Giường nằm',
+  //   })
+  // }
   return (
-    <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter" className={cx('txt-title')}>
           {functionModal === 'add' ? 'THÊM LỊCH KHỞI HÀNH' : 'CẬP NHẬT LỊCH KHỞI HÀNH'}
@@ -65,6 +66,7 @@ function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) 
                   className={cx('txt', 'selectbox', 'infor-item')}
                   readOnly
                   disabled={!enableEdit}
+                  onChange={handleInputChange}
                 >
                   <option value="Đà Nẵng">Đà Nẵng</option>
                 </Form.Select>
@@ -169,9 +171,13 @@ function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) 
             </Col>
           </Row>
           <AddManyTickets initialItems={[1]}></AddManyTickets>
+          <p className={cx('txt', 'mb-2', 'mt-4')}>
+            Lịch khởi hành của xe: <span className={cx('txt-plate-number')}>{formData.licensePlateNumber}</span>
+          </p>
+          <TableSchedulesOfBus></TableSchedulesOfBus>
         </div>
       </Modal.Body>
-      <Modal.Footer>
+      {/* <Modal.Footer>
         <Row className="justify-content-center mt-4">
           <Col></Col>
           <Col className="d-flex justify-content-center">
@@ -184,7 +190,7 @@ function ModalManageBusSchedule({ enableEdit = true, functionModal, ...props }) 
           </Col>
           <Col></Col>
         </Row>
-      </Modal.Footer>
+      </Modal.Footer> */}
     </Modal>
   )
 }

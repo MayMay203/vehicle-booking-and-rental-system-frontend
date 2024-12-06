@@ -16,6 +16,8 @@ export const images = {
   vehicle: require('./vehicle.png'),
   vehicle1: require('./vehicle1.png'),
   slider1_rental_page: require('./slider1_rental_page.png'),
+  slider2_rental_page: require('./slider2_rental_page.png'),
+  slider3_rental_page: require('./slider3_rental_page.png'),
   self_driving: require('./self_driving.png'),
   manned: require('./manned.png'),
   pillow: require('./pillow.png'),
