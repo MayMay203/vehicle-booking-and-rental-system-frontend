@@ -100,6 +100,8 @@ function TicketItem({ status, data = {} }) {
     return tabs
   }, [])
 
+  console.log(data)
+
   useEffect(() => {
     async function getDetail() {
       const actions = {

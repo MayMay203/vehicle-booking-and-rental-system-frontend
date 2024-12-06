@@ -1,10 +1,12 @@
 // nhận tin nhắn
 .wrap{
-    display: flex;
+    display: inline-flex;
     align-items:flex-start;
-    width: 80%;
+    max-width: 80%;
+    line-height: 1.4;
     margin: 2px;
     padding: 0;
+    cursor: pointer;
 }
 .wrap-receive{
     justify-content: start;
@@ -41,11 +43,24 @@
     color: white;
 }
 .time{
-    margin: 9px 7px;
+    margin: 7px;
     font-size: 1.2rem;
     font-weight: 400;
     color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    height: 0;
 }
+
+.time.time-visible {
+  opacity: 1;
+  height: auto;
+  visibility: visible;
+  transform: translateY(0);
+}
+
 .align-right{
     text-align: end;
 }

@@ -28,7 +28,7 @@ function TicketModal() {
   console.log('re-render ticket modal')
   const { currentUser } = useSelector((state) => state.user)
   const showTicketModal = useSelector((state) => state.generalModal.buyTicket)
-  const { departureDate } = useSelector((state) => state.search.searchTicket)
+  const { departureDate, arrivalLocation } = useSelector((state) => state.search.searchTicket)
   const { id, type, transactionCode } = showTicketModal
   const [ticketDetail, setTicketDetail] = useState({})
   const dispatch = useDispatch()
@@ -52,7 +52,7 @@ function TicketModal() {
         if (type) {
           data = await getDetailTransaction(transactionCode, 'BUS_TRIP_ORDER')
         } else {
-          data = await getDetailTicket(id)
+          data = await getDetailTicket(id, departureDate, arrivalLocation)
         }
         if (data) {
           setTicketDetail(data)
@@ -74,7 +74,7 @@ function TicketModal() {
   const handlePayment = async () => {
     try {
       if (dispatch(checkLoginSession())) {
-        const order = await orderTicket(fullName, phone, id, quantity, departureDate.split('-').reverse().join('-'))
+        const order = await orderTicket(fullName, phone, id, quantity, departureDate.split('-').reverse().join('-'), arrivalLocation)
         if (order) {
           const key = order.keyOrder
           const paymentUrl = await createPayment(key)
