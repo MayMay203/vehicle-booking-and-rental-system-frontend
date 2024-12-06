@@ -13,19 +13,19 @@ function BookingServiceCards() {
         <BookingServiceCard name={'Xe ô tô 4 chỗ'} icon={faCar} color={'27AE60'} />
       </Col>
       <Col xs="6" sm="4" md="3" xl="2">
-        <BookingServiceCard name={'Xe máy'} icon={faMotorcycle} color={'E20D0D'} />
+        <BookingServiceCard name={'Xe máy'} icon={faMotorcycle} color={'C39C11'} />
       </Col>
       <Col xs="6" sm="4" md="3" xl="2">
-        <BookingServiceCard name={'Xe đạp'} icon={faBicycle} color={'FFC700'} />
+        <BookingServiceCard name={'Xe đạp'} icon={faBicycle} color={'2474E5'} />
       </Col>
       <Col xs="6" sm="4" md="3" xl="2">
-        <BookingServiceCard name={'Xe buýt'} icon={faBus} color={'2474E5'} />
+        <BookingServiceCard name={'Xe buýt'} icon={faBus} color={'27AE60'} />
       </Col>
       <Col xs="6" sm="4" md="3" xl="2">
-        <BookingServiceCard name={'Xe ô tô 7 chỗ'} icon={faCar} color={'27AE60'} />
+        <BookingServiceCard name={'Xe ô tô 7 chỗ'} icon={faCar} color={'C39C11'} />
       </Col>
       <Col xs="6" sm="4" md="3" xl="2">
-        <BookingServiceCard name={'Xe tải'} icon={faTruck} color={'D34714'} />
+        <BookingServiceCard name={'Xe tải'} icon={faTruck} color={'2474E5'} />
       </Col>
     </div>
   )

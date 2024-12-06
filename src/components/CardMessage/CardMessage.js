@@ -3,16 +3,26 @@ import styles from './CardMessage.module.scss'
 import classNames from 'classnames/bind'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router-dom'
-import { config } from '~/config'
+// import { useNavigate } from 'react-router-dom'
+// import { config } from '~/config'
 import Image from '../Image'
+import {useState} from 'react'
+import Message from '~/pages/Message'
 const cx = classNames.bind(styles)
 function CardMessage({ data }) {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
+  const [modalShowMessage, setModalShowMessage] = useState(false)
+  const closeModalMessage = () => {
+    setModalShowMessage(false)
+  }
+  const handleShowMessage = () => {
+    setModalShowMessage(true)
+  }
   return (
     <div
       className={cx('wrap-message', 'row', { 'no-seen': !data.seen, seen: data.seen })}
-      onClick={() => navigate(config.routes.message, { state: { idConversation: data.conversationId } })}
+      // onClick={() => navigate(config.routes.message, { state: { idConversation: data.conversationId } })}
+      onClick={handleShowMessage}
     >
       <Col xs="2">
         <Image src={data.avatarUrl} className={cx('avatar')} alt="avatar" />
@@ -35,6 +45,16 @@ function CardMessage({ data }) {
           </Col>
         </Row>
       </Col>
+      <Message
+        show={modalShowMessage}
+        // onHide={() => setModalShowMessage(false)}
+        idConversation={data.conversationId}
+        // closeModalMessage={closeModalMessage}
+        onHide={() => {
+          setModalShowMessage(false)
+          closeModalMessage()
+        }}  
+      />
     </div>
   )
 }
