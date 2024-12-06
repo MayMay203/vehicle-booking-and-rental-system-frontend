@@ -41,7 +41,7 @@ function RentalCardItem({typeService, role, item}) {
     >
       <div className={cx('image-name-vehicle')}>
         <img className={cx('image-vehicle')} src={item.imagesVehicleRegister[0]} alt="car"></img>
-        <span className={cx('name-vehicle')}>{item.manufacturer} 2020</span>
+        <span className={cx('name-vehicle')}>{item.manufacturer + ' ' + item.vehicleLife}</span>
         <div className={cx('discount')}>
           <FontAwesomeIcon icon={faAnglesDown} className={cx('icon-discount')} />
           <span className={cx('discount-value')}>Giảm đến {item.discount_percentage}%</span>

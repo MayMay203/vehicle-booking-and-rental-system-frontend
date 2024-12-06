@@ -2,22 +2,21 @@
 
 .wrapper{
     margin-top: 2rem;
-    margin-bottom: 2rem;
-    
+    margin-bottom: 2rem; 
 }
 
 .type-filter-container {
     display: flex;
-    overflow-x: auto; /* Cho phép cuộn ngang khi nội dung tràn */
-    white-space: nowrap; /* Ngăn không cho nội dung xuống hàng */
-    -webkit-overflow-scrolling: touch; /* Cho cuộn mượt mà trên thiết bị cảm ứng */
+    overflow-x: auto; 
+    white-space: nowrap; 
+    -webkit-overflow-scrolling: touch; 
     scrollbar-width: none;
 }
 
 .type-filter{
-    flex-shrink: 0; /* Ngăn không cho button bị co lại */
+    // flex-shrink: 0; /* Ngăn không cho button bị co lại */
     height: 3.4rem !important;
-    min-width: 2rem !important;
+    min-width: 4rem !important;
     margin-bottom: 2rem;
     margin-right: 3rem;
     margin-left: 0 !important;
