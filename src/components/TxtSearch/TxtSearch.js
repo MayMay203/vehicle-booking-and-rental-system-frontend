@@ -5,13 +5,14 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
 import useDebounce from '~/hook'
 const cx = classNames.bind(styles)
-function TxtSearch({ content, handleReceiveSearch }) {
+function TxtSearch({ content, handleReceiveSearch = () => {} }) {
   const [value, setValue] = useState('')
   const valueDebounce = useDebounce(value, 500)
 
   useEffect(() => {
     handleReceiveSearch(valueDebounce)
-  }, [valueDebounce, handleReceiveSearch])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [valueDebounce])
 
   return (
     <div className={cx('search')}>

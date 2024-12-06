@@ -4,7 +4,7 @@ import ListCardMessage from '../CardMessage'
 import TxtSearch from '../TxtSearch'
 import styles from './ModalChat.module.scss'
 import classNames from 'classnames/bind'
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
 const cx = classNames.bind(styles)
 function ModalChat({ handleClose }) {
@@ -39,9 +39,9 @@ function ModalChat({ handleClose }) {
     setButtonSelect(name)
   }
 
-  const handleReceiveSearch = (value) => {
+  const handleReceiveSearch = useCallback((value) => {
     setSearchValue(value)
-  }
+  },[])
 
   return (
     <div className={cx('wrapper')}>
