@@ -9,6 +9,8 @@ import { faClock, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
 import Form from 'react-bootstrap/Form'
 import { useNavigate } from 'react-router-dom'
 import VoucherSlider from '../Voucher/VoucherSlider'
+import { useDispatch, useSelector } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 const cx = classNames.bind(styles)
 function InforRental({ typeService, inforVehicleRental }) {
   const listVoucher = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
@@ -16,10 +18,59 @@ function InforRental({ typeService, inforVehicleRental }) {
   const [endTime, setEndTime] = useState(new Date())
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
+  const dispatch = useDispatch()
+  const { isLogin, currentUser } = useSelector((state) => state.user)
+  const [formData, setFormData] = useState({
+    start_rental_time:
+      startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
+      ' ' +
+      (`0${startDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
+        '-' +
+        `0${startDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
+        '-' +
+        startDate.getFullYear()),
+    end_rental_time:
+      endTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
+      ' ' +
+      (`0${endDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
+        '-' +
+        `0${endDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
+        '-' +
+        endDate.getFullYear()),
+    pickup_location: '',
+    total: 350000,
+    status: '',
+    voucher_value: 20.0,
+    voucher_percentage: 10.0,
+    amount: 1,
+    car_deposit: inforVehicleRental?.car_deposit,
+    reservation_fee: inforVehicleRental?.reservation_fees,
+    price: inforVehicleRental?.amount,
+    vehicle_rental_service_id: 3,
+    customerName: currentUser.name,
+    customerPhoneNumber: currentUser.phoneNumber,
+    account_id: 3,
+  })
   const navigate = useNavigate()
   const handleOrder = (type) => {
-    navigate('/rent-vehicle/rental-service/rental-service-detail/rental-order', { state: { typeService: type } })
+    if (isLogin) {
+      navigate('/rent-vehicle/rental-service/rental-service-detail/rental-order', {
+        state: { typeService: type, formData: formData },
+      })
+    } else {
+      //gọi modal đăng nhập
+      dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+    }
   }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+    console.log(formData)
+  }
+
   return (
     <div className="p-0">
       <div className={cx('datetime-rental')}>
@@ -91,7 +142,12 @@ function InforRental({ typeService, inforVehicleRental }) {
       </div>
       <div className={cx('txt-title', 'amount-rental')}>
         <span>Số lượng thuê</span>
-        <Form.Select aria-label="Default select example" classNames={cx('select-amount', 'align-right')}>
+        <Form.Select
+          name="amount"
+          aria-label="Default select example"
+          classNames={cx('select-amount', 'align-right')}
+          onChange={handleInputChange}
+        >
           {Array.from({ length: inforVehicleRental?.quantity }, (_, index) => (
             <option key={index} value={index + 1}>
               {index + 1}

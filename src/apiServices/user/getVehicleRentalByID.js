@@ -1,14 +1,13 @@
 import * as httpRequestV2 from '~/utils/httpRequestV2'
-import { getAccessToken } from '~/utils/cookieUtils'
 export const getVehicleRentalByID = async (id) => {
   try {
     const response = await httpRequestV2.get(
       `/user/vehicle-register/get-vehicle-register?vehicle_rental_service_id=${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      },
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${getAccessToken()}`,
+      //   },
+      // },
     )
     return response.data
   } catch (error) {

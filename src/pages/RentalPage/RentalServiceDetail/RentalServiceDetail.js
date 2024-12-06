@@ -35,13 +35,13 @@ function RentalServiceDetail() {
   const inforVehicle = location.state?.infor
   const manned = 'manned'
   const self_driving = 'self_driving'
-  const newPrice = inforVehicle.amount - inforVehicle.amount * (inforVehicle.discount_percentage / 100)
+  const newPrice = inforVehicle?.amount - inforVehicle?.amount * (inforVehicle?.discount_percentage / 100)
    const [inforVehicleRental, setInforVehicleRental] = useState(null)
   
    useEffect(() => {
      const getInforVehicleRentalByID = async () => {
        try {
-         const response = await getVehicleRentalByID(inforVehicle.id)
+         const response = await getVehicleRentalByID(inforVehicle?.id)
          setInforVehicleRental(response)
        } catch (error) {
          console.error('Failed to fetch vehicle rental info:', error)
@@ -49,18 +49,18 @@ function RentalServiceDetail() {
      }
 
      getInforVehicleRentalByID()
-   }, [inforVehicle.id]) 
+   }, [inforVehicle?.id]) 
   // Chia mảng ảnh thành các cặp
   const chunkArray = (array, size) => {
     const result = []
-    for (let i = 0; i < array.length; i += size) {
+    for (let i = 0; i < array?.length; i += size) {
       result.push(array.slice(i, i + size))
     }
     return result
   }
 
   // Chia mảng ảnh thành các cặp (2 ảnh mỗi nhóm)
-  const imagePairs = chunkArray(inforVehicle.imagesVehicleRegister, 2)
+  const imagePairs = chunkArray(inforVehicleRental?.imagesVehicleRegister, 2)
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
@@ -189,12 +189,12 @@ function RentalServiceDetail() {
           </Row>
           <Row className="mb-5">
             <div className={cx('d-flex', 'name-location-vehicle')}>
-              <span className={cx('name-vehicle')}>{inforVehicle.manufacturer + ' ' + inforVehicle.vehicleLife}</span>
+              <span className={cx('name-vehicle')}>{inforVehicle?.manufacturer + ' ' + inforVehicle?.vehicleLife}</span>
               <Rating></Rating>
             </div>
             <div className={cx('icon-txt')}>
               <FontAwesomeIcon icon={faLocationDot} className={cx('icon', 'icon-location')} />
-              <span className={cx('txt')}>{inforVehicle.location}</span>
+              <span className={cx('txt')}>{inforVehicle?.location}</span>
             </div>
           </Row>
           <Row className="mb-5">
@@ -232,7 +232,7 @@ function RentalServiceDetail() {
                         <FontAwesomeIcon icon={faCar} className={cx('icon', 'icon-type')} />
                         <div>
                           <p className={cx('txt', 'name-feature')}>Loại xe</p>
-                          <p className={cx('txt', 'content-feature')}>{typeVehicle.name}</p>
+                          <p className={cx('txt', 'content-feature')}>{typeVehicle?.name}</p>
                         </div>
                       </div>
                     </Col>
@@ -241,7 +241,7 @@ function RentalServiceDetail() {
                         <FontAwesomeIcon icon={faClock} className={cx('icon', 'icon-year')} />
                         <div>
                           <p className={cx('txt', 'name-feature')}>Đời xe</p>
-                          <p className={cx('txt', 'content-feature')}>{inforVehicle.vehicleLife}</p>
+                          <p className={cx('txt', 'content-feature')}>{inforVehicle?.vehicleLife}</p>
                         </div>
                       </div>
                     </Col>
@@ -250,7 +250,7 @@ function RentalServiceDetail() {
                         <FontAwesomeIcon icon={faBoxArchive} className={cx('icon', 'icon-amount')} />
                         <div>
                           <p className={cx('txt', 'name-feature')}>Số lượng</p>
-                          <p className={cx('txt', 'content-feature')}>{inforVehicle.quantity} chiếc</p>
+                          <p className={cx('txt', 'content-feature')}>{inforVehicle?.quantity} chiếc</p>
                         </div>
                       </div>
                     </Col>
@@ -258,11 +258,11 @@ function RentalServiceDetail() {
                 </Row>
                 <Row>
                   <span className={cx('title')}>Mô tả</span>
-                  <span className={cx('content')}>{inforVehicle.description}</span>
+                  <span className={cx('content')}>{inforVehicle?.description}</span>
                 </Row>
                 <Row>
                   <span className={cx('title')}>Các tiện ích</span>
-                  <span className={cx('content')}>{inforVehicle.ulties}</span>
+                  <span className={cx('content')}>{inforVehicle?.ulties}</span>
                 </Row>
               </Tab>
               <Tab eventKey="policy" title="Điều khoản">
@@ -338,8 +338,8 @@ function RentalServiceDetail() {
               <FontAwesomeIcon icon={faThumbTack} className={cx('icon', 'm-0')} />
               <span className={cx('txt', 'txt-price-list')}>Bảng giá:</span>
             </div>
-            <span className={cx('txt', 'charge-old')}>{inforVehicle.amount.toLocaleString('vi-VN')}đ/ngày</span>
-            <span className={cx('txt', 'charge-new')}>{newPrice.toLocaleString('vi-VN')}đ/ngày</span>
+            <span className={cx('txt', 'charge-old')}>{inforVehicle?.amount.toLocaleString('vi-VN')}đ/ngày</span>
+            <span className={cx('txt', 'charge-new')}>{Math.floor(newPrice).toLocaleString('vi-VN')}đ/ngày</span>
           </Row>
           <Row className={cx('order')}>
             <InforRental typeService={typeService} inforVehicleRental={inforVehicleRental}></InforRental>

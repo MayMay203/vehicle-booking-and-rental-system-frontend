@@ -9,6 +9,7 @@ const cx = classNames.bind(styles)
 function RentalOrder(){
     const location = useLocation()
     const typeService = location.state?.typeService
+    const formData = location.state?.formData
     const manned = 'manned'
     const self_driving = 'self_driving'
     return (
@@ -29,7 +30,7 @@ function RentalOrder(){
           <StepOrder numberSteps={3} typeService={'thuê xe'} stepDoing={2}></StepOrder>
         </Row>
         <Row>
-          <OrderRental typeService={typeService}></OrderRental>
+          <OrderRental typeService={typeService} formData={formData}></OrderRental>
         </Row>
       </div>
     )
