@@ -44,11 +44,12 @@ function Message() {
 
   const onNotificationRecieved = useCallback((payload) => {
     const newMessage = JSON.parse(payload.body)
-    console.log('Received message:', newMessage)
-    if (newMessage.conversation_id === selectedConvers) setMessages((prev) => [...prev, newMessage])
-    setMessages((prev) => [...prev])
+    if (Number(newMessage.conversation_id) === selectedConvers) setMessages((prev) => [...prev, newMessage])
+    else {
+      setMessages((prev) => [...prev])
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [selectedConvers])
 
   //connect websocket
   useEffect(() => {
@@ -116,7 +117,9 @@ function Message() {
         if (dataMsg) {
           setMessages(dataMsg)
         }
-        const partnerConvers = conversationList.find((conversation) => conversation.conversationId === selectedConvers)
+        const partnerConvers = conversationList.find(
+          (conversation) => Number(conversation.conversationId) === selectedConvers,
+        )
         if (partnerConvers) {
           setPartnerConvers({
             name: partnerConvers?.nameRepresentation,
@@ -140,11 +143,9 @@ function Message() {
         }
         dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
         if (conversationList.length > 0) {
-          // if (!idConversation) setSelectedConvers(conversations?.[0].idConversation)
           const partnerConvers = conversationList.find(
-            (conversation) => String(conversation.conversationId) === String(selectedConvers),
+            (conversation) => Number(conversation.conversationId) === Number(selectedConvers),
           )
-          // setConversationList(conversationList.filter((conversation) => !conversation.lastMessage.includes('null')))
           setPartnerConvers({
             name: partnerConvers?.nameRepresentation,
             avatar: partnerConvers?.avatarUrl,
@@ -162,13 +163,15 @@ function Message() {
 
   useEffect(() => {
     setFilterList(
-      conversationList.filter((conversation) => {
-        const matchesSearch = conversation.nameRepresentation?.toLowerCase().includes(searchValue.toLowerCase())
-        const matchesType =
-          buttonSelect === 'All' ||
-          (buttonSelect === 'Unread' && conversation.seen === false && !conversation.lastMessage.includes('Bạn'))
-        return matchesSearch && matchesType
-      }),
+      conversationList
+        .filter((convers) => !convers.lastMessage.includes('null'))
+        .filter((conversation) => {
+          const matchesSearch = conversation.nameRepresentation?.toLowerCase().includes(searchValue.toLowerCase())
+          const matchesType =
+            buttonSelect === 'All' ||
+            (buttonSelect === 'Unread' && conversation.seen === false && !conversation.lastMessage.includes('Bạn'))
+          return matchesSearch && matchesType
+        }),
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue, conversationList, buttonSelect])
@@ -176,7 +179,7 @@ function Message() {
   const handleChooseConvers = (id) => {
     setSelectedConvers(id)
   }
-  //  console.log("onHde", ...props)
+
   const handleSendMessage = () => {
     // Tạo đối tượng MessageDTO để gửi tin nhắn
     const messageDTO = {

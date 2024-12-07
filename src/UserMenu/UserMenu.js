@@ -64,16 +64,23 @@ function UserMenu() {
             Chế độ người dùng
           </Button>
           {currentUser.roles.includes(config.variables.busPartner) && (
-            <Button className={cx('mode-item')} onClick={() => {
-              dispatch(setMenu('busPartnerMenu'))
-              navigate(config.routes.busTrip)
-            }}>
-    
+            <Button
+              className={cx('mode-item')}
+              onClick={() => {
+                dispatch(setMenu('busPartnerMenu'))
+                navigate(config.routes.busTrip)
+              }}
+            >
               Đối tác nhà xe
             </Button>
           )}
           {currentUser.roles.includes(config.variables.carRentalPartner) && (
-            <Button className={cx('mode-item')} onClick={() => dispatch(setMenu('carRentalPartnerMenu'))}>
+            <Button
+              className={cx('mode-item')}
+              onClick={() => {
+                dispatch(setMenu('carRentalPartnerMenu'))
+              }}
+            >
               Đối tác cho thuê xe
             </Button>
           )}

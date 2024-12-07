@@ -28,6 +28,7 @@ import Message from './pages/Message'
 function App() {
   const dispatch = useDispatch()
   console.log('re-render app.js')
+  console.log(localStorage.getItem('menu'))
 
   useLayoutEffect(() => {
     dispatch(checkLogin())

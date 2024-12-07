@@ -10,7 +10,7 @@ export const fetchAllConversationsByAcc = createAsyncThunk(
   async ({ accountId, roleAccount }) => {
     // console.log(isGone)
     const data = await getAllConversation(accountId, roleAccount)
-    return data.filter(convers => !convers.lastMessage.includes('null')) || []
+    return data || []
   },
 )
 

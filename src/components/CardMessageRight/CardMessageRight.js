@@ -14,7 +14,7 @@ function CardMessageRight({ data, handleChooseConvers, isClicked, type, handleCh
   return (
     <div
       className={cx('wrap-message', 'row', {
-        'no-seen': !data.seen,
+        'no-seen': !data.seen && !data.lastMessage.includes('Bạn'),
         seen: data.seen,
         isClicked,
       })}
