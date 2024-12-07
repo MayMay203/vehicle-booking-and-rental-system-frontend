@@ -5,6 +5,7 @@
   margin-top: 2rem;
   margin-bottom: 2rem;
   overflow: hidden; 
+  overscroll-behavior: contain;
 }
 .wrap-title-search{
   padding: 1rem;

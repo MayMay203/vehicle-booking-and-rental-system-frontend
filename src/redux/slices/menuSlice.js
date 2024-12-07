@@ -42,7 +42,10 @@ const roleMap = {
   carRentalPartnerMenu: 'CAR_RENTAL_PARTNER',
 }
 
-const initialState = { currentMenu: menus.userMenu, currentRole: 'USER' }
+const initialState = {
+  currentMenu: menus[localStorage.getItem('menu')] || menus.userMenu,
+  currentRole: roleMap[localStorage.getItem('menu')] || 'USER',
+}
 
 const menuSlice = createSlice({
   name: 'menu',
@@ -50,6 +53,8 @@ const menuSlice = createSlice({
   reducers: {
     setMenu: (state, action) => {
       state.currentMenu = menus[action.payload]
+      console.log('MENU SLICE', action.payload)
+      localStorage.setItem('menu', action.payload)
       state.currentRole = roleMap[action.payload]
     },
   },
@@ -57,4 +62,3 @@ const menuSlice = createSlice({
 
 export const { setMenu } = menuSlice.actions
 export default menuSlice.reducer
-

@@ -150,6 +150,7 @@ function ConfirmModal() {
   const handleClose = () => {
     dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
     if (showConfirmModal.name === generalModalNames.EXPIRED_SESSION) {
+      dispatch(setMenu('userMenu'))
       navigate('/')
     }
   }

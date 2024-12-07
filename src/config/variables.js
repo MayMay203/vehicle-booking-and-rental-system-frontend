@@ -10,7 +10,7 @@ export const variables = {
   cancelled: 'CANCEL',
   pagesize: 3,
   busName: 'all',
-  departureLocation: 'Đà Nẵng',
-  arrivalLocation: 'Nam Định',
+  departureLocation: 'Thừa Thiên Huế',
+  arrivalLocation: 'Đà Nẵng',
   departureDate: new Date().toISOString().split('T')[0],
 }

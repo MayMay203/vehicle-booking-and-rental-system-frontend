@@ -14,7 +14,6 @@ const initialState = {
 }
 
 export const getCurrentUser = createAsyncThunk('user/getCurrentUser', async () => {
-  console.log('Vo day nhá')
   const data = await getMyAccount()
   return data
 })
@@ -45,6 +44,7 @@ export const checkLogin = createAsyncThunk('user/checkLogin', async (_, { dispat
       //     name: generalModalNames.EXPIRED_SESSION,
       //   }),
       // )
+      localStorage.setItem('menu', 'userMenu')
       dispatch(toggleLogin(false))
     }
   }
@@ -63,6 +63,7 @@ export const checkLoginSession = createAsyncThunk('user/checkLoginSession', asyn
         name: generalModalNames.EXPIRED_SESSION,
       }),
     )
+    localStorage.setMenu('menu', 'userMenu')
     dispatch(toggleLogin(false))
     return false
   }

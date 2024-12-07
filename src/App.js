@@ -23,10 +23,12 @@ import VoucherModal from './Modals/GeneralModal/VoucherModal'
 import DetailDriverPartner from './Modals/GeneralModal/DetailDriverPartnerModal'
 import UtilityModal from './Modals/GeneralModal/UtilityModal'
 import FeeServiceModal from './Modals/GeneralModal/FeeServiceModal'
+import Message from './pages/Message'
 
 function App() {
   const dispatch = useDispatch()
   console.log('re-render app.js')
+  console.log(localStorage.getItem('menu'))
 
   useLayoutEffect(() => {
     dispatch(checkLogin())
@@ -75,6 +77,7 @@ function App() {
         <FeeServiceModal />
         <VoucherModal />
         <DetailDriverPartner />
+        <Message/>
       </Router>
     </div>
   )

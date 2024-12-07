@@ -12,35 +12,45 @@ import DetailMessage from '~/components/DetailMessage'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
 import { Empty } from 'antd'
 import { getAllMessagesInConversation } from '~/apiServices/messageService/getAllMessagesInConversation'
 import Image from '~/components/Image'
 import { getAccessToken } from '~/utils/cookieUtils'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
+import { updateUnseenMessages } from '~/apiServices/messageService/updateUnseenMessages'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
-function Message({ idConversation, closeModalMessage, ...props }) {
-  // const location = useLocation()
-  // const idConversation = location.state?.idConversation
-  const [conversationList, setConversationList] = useState([])
+function Message() {
+  const { conversationId, isOpen } = useSelector((state) => state.generalModal.messageModal)
   const [partnerConvers, setPartnerConvers] = useState({ name: '', avatar: '', role: '', accountId: '' })
-  const [selectedConvers, setSelectedConvers] = useState(idConversation)
+  const [selectedConvers, setSelectedConvers] = useState(conversationId)
   const [buttonSelect, setButtonSelect] = useState('All')
   const [messages, setMessages] = useState([])
   const { currentUser } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
+  const [filterList, setFilterList] = useState([])
+  const [searchValue, setSearchValue] = useState('')
   const [messageText, setMessageText] = useState('')
   const stompClientRef = useRef(null)
   const detailMessRef = useRef(null)
   const dispatch = useDispatch()
+  const { conversationList } = useSelector((state) => state.conversation)
+
+  useEffect(() => {
+    setSelectedConvers(conversationId)
+  }, [conversationId])
 
   const onNotificationRecieved = useCallback((payload) => {
     const newMessage = JSON.parse(payload.body)
-    console.log('Received message:', newMessage)
-    setMessages((prev) => [...prev, newMessage])
-  }, [])
-  console.log('prop:----', props)
+    if (Number(newMessage.conversation_id) === selectedConvers) setMessages((prev) => [...prev, newMessage])
+    else {
+      setMessages((prev) => [...prev])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedConvers])
+
   //connect websocket
   useEffect(() => {
     function connect() {
@@ -72,7 +82,9 @@ function Message({ idConversation, closeModalMessage, ...props }) {
       }
     }
 
-    connect()
+    if (dispatch(checkLoginSession())) {
+      connect()
+    }
 
     return () => {
       // Đảm bảo ngắt kết nối khi component bị unmount
@@ -80,9 +92,14 @@ function Message({ idConversation, closeModalMessage, ...props }) {
         stompClientRef.current.disconnect(() => {
           console.log('WebSocket disconnected')
         })
+        stompClientRef.current = null
       }
     }
-  }, [currentUser.id, currentRole, onNotificationRecieved])
+  }, [currentUser.id, currentRole, onNotificationRecieved, dispatch])
+
+  const handleReceiveSearch = useCallback((value) => {
+    setSearchValue(value)
+  }, [])
 
   useEffect(() => {
     if (detailMessRef.current) {
@@ -96,12 +113,13 @@ function Message({ idConversation, closeModalMessage, ...props }) {
   useEffect(() => {
     async function fetchAllMessages() {
       if (dispatch(checkLoginSession())) {
-        console.log('Vô đây fetch lại:(')
         const dataMsg = await getAllMessagesInConversation(selectedConvers)
         if (dataMsg) {
           setMessages(dataMsg)
         }
-        const partnerConvers = conversationList.find((conversation) => conversation.conversationId === selectedConvers)
+        const partnerConvers = conversationList.find(
+          (conversation) => Number(conversation.conversationId) === selectedConvers,
+        )
         if (partnerConvers) {
           setPartnerConvers({
             name: partnerConvers?.nameRepresentation,
@@ -109,6 +127,7 @@ function Message({ idConversation, closeModalMessage, ...props }) {
             role: partnerConvers?.roleAccount,
             accountId: partnerConvers?.accountId,
           })
+          await updateUnseenMessages(selectedConvers, partnerConvers.accountId, partnerConvers.roleAccount)
         }
       }
     }
@@ -119,13 +138,14 @@ function Message({ idConversation, closeModalMessage, ...props }) {
   useEffect(() => {
     async function fetchAllConversation() {
       if (dispatch(checkLoginSession())) {
-        const conversations = await getAllConversation(currentUser.id, currentRole)
-        if (conversations.length > 0) {
-          if (!idConversation) setSelectedConvers(conversations?.[0].idConversation)
-          const partnerConvers = conversations.find(
-            (conversation) => String(conversation.conversationId) === String(selectedConvers),
+        if (partnerConvers.accountId && partnerConvers.role) {
+          await updateUnseenMessages(selectedConvers, partnerConvers.accountId, partnerConvers.role)
+        }
+        dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
+        if (conversationList.length > 0) {
+          const partnerConvers = conversationList.find(
+            (conversation) => Number(conversation.conversationId) === Number(selectedConvers),
           )
-          setConversationList(conversations.filter((conversation) => !conversation.lastMessage.includes('null')))
           setPartnerConvers({
             name: partnerConvers?.nameRepresentation,
             avatar: partnerConvers?.avatarUrl,
@@ -139,12 +159,27 @@ function Message({ idConversation, closeModalMessage, ...props }) {
       fetchAllConversation()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser.id, currentRole])
+  }, [currentUser.id, currentRole, messages])
+
+  useEffect(() => {
+    setFilterList(
+      conversationList
+        .filter((convers) => !convers.lastMessage.includes('null'))
+        .filter((conversation) => {
+          const matchesSearch = conversation.nameRepresentation?.toLowerCase().includes(searchValue.toLowerCase())
+          const matchesType =
+            buttonSelect === 'All' ||
+            (buttonSelect === 'Unread' && conversation.seen === false && !conversation.lastMessage.includes('Bạn'))
+          return matchesSearch && matchesType
+        }),
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue, conversationList, buttonSelect])
 
   const handleChooseConvers = (id) => {
     setSelectedConvers(id)
   }
-  //  console.log("onHde", ...props)
+
   const handleSendMessage = () => {
     // Tạo đối tượng MessageDTO để gửi tin nhắn
     const messageDTO = {
@@ -164,23 +199,28 @@ function Message({ idConversation, closeModalMessage, ...props }) {
     setMessageText('')
   }
 
+  const handleChangeType = (value) => {
+    setButtonSelect(value)
+  }
+
   return (
     <Modal
-      {...props}
       size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      // show={modalShowMessage}
-      // onHide={() => setModalShowMessage(false)}
+      show={isOpen}
+      onHide={() => dispatch(setMessageModalVisible({ isOpen: false }))}
     >
-      <Modal.Header closeButton>
-        {/* <Modal.Title id="contained-modal-title-vcenter">Modal heading</Modal.Title> */}
-      </Modal.Header>
+      <Modal.Header closeButton></Modal.Header>
       <Modal.Body>
         <div className={cx('container', 'wrap-container', 'p-0')}>
           <div className={cx('d-flex', 'wrap-title-search')}>
             <span className={cx('title')}>Tin nhắn</span>
-            <TxtSearch className={cx('search')} content="Tìm kiếm"></TxtSearch>
+            <TxtSearch
+              className={cx('search')}
+              content="Tìm kiếm"
+              handleReceiveSearch={handleReceiveSearch}
+            ></TxtSearch>
           </div>
           <Row className={cx('wrap-messages-details', 'm-0 p-0')}>
             <Col lg="4" md="5" className={cx('wrap-list-messages', 'd-none', 'd-md-block')}>
@@ -200,14 +240,16 @@ function Message({ idConversation, closeModalMessage, ...props }) {
                   Chưa đọc
                 </Button>
               </div>
-              {conversationList.length > 0 ? (
+              {filterList.length > 0 ? (
                 <div className={cx('list-message')}>
-                  {conversationList.map((convers) => (
+                  {filterList.map((convers) => (
                     <CardMessageRight
                       key={convers.conversationId}
                       data={convers}
                       handleChooseConvers={handleChooseConvers}
                       isClicked={selectedConvers === convers.conversationId}
+                      type={buttonSelect}
+                      handleChangeType={handleChangeType}
                     />
                   ))}
                 </div>
