@@ -4,8 +4,13 @@ import classNames from 'classnames/bind'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import Image from '../Image'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
+import { useDispatch, useSelector } from 'react-redux'
 const cx = classNames.bind(styles)
-function CardMessageRight({ data, handleChooseConvers, isClicked, type, handleChangeType}) {
+function CardMessageRight({ data, handleChooseConvers, isClicked, type, handleChangeType }) {
+  const dispatch = useDispatch()
+   const { currentUser } = useSelector((state) => state.user)
+   const { currentRole } = useSelector((state) => state.menu)
   return (
     <div
       className={cx('wrap-message', 'row', {
@@ -15,6 +20,7 @@ function CardMessageRight({ data, handleChooseConvers, isClicked, type, handleCh
       })}
       onClick={() => {
         handleChooseConvers(data.conversationId)
+        dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
         if (type === 'Unread') {
           handleChangeType('All')
         }

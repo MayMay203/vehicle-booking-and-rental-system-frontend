@@ -23,8 +23,9 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { config } from '~/config'
 import { setMenu } from '~/redux/slices/menuSlice'
 import { getStatusRegisterPartner } from '~/apiServices/user/getStatusRegisterPartner'
-import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
-import { checkLoginSession } from '~/redux/slices/userSlice'
+// import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
+// import { checkLoginSession } from '~/redux/slices/userSlice'
+// import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
 function Header() {
@@ -41,23 +42,7 @@ function Header() {
   // Menu
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.currentMenu)
-  // Message
-  const { currentRole } = useSelector((state) => state.menu)
-  const [countMessage, setCountMessage] = useState(0)
-
-  useEffect(() => {
-    async function fetchAllConversations() {
-      const converstations = await getAllConversation(currentUser.id, currentRole)
-      const filter = converstations.filter((convers) => convers.seen === false && !convers.lastMessage.includes('null') && !convers.lastMessage.includes('Bạn'))
-      console.log(filter.length)
-      setCountMessage(filter.length)
-    }
-
-    if (currentUser.id && dispatch(checkLoginSession())) {
-      fetchAllConversations()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser.id, currentRole])
+const { conversationList } = useSelector((state) => state.conversation)
 
   useEffect(() => {
     if (currentUser.roles?.includes('ADMIN')) {
@@ -329,7 +314,10 @@ function Header() {
                     <button
                       onClick={() => setIsShowMessage((prev) => !prev)}
                       className={cx('btn-action', 'd-none', 'd-md-block')}
-                      data-count={countMessage}
+                      data-count={conversationList.filter(
+        (convers) =>
+          convers.seen === false && !convers.lastMessage.includes('null') && !convers.lastMessage.includes('Bạn'),
+      ).length}
                     >
                       {!window.location.href.includes('/message') ? (
                         <FontAwesomeIcon icon={faComment} />

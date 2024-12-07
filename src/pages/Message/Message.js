@@ -12,7 +12,6 @@ import DetailMessage from '~/components/DetailMessage'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
 import { Empty } from 'antd'
 import { getAllMessagesInConversation } from '~/apiServices/messageService/getAllMessagesInConversation'
 import Image from '~/components/Image'
@@ -20,11 +19,11 @@ import { getAccessToken } from '~/utils/cookieUtils'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
 import { updateUnseenMessages } from '~/apiServices/messageService/updateUnseenMessages'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
 function Message() {
   const { conversationId, isOpen } = useSelector((state) => state.generalModal.messageModal)
-  const [conversationList, setConversationList] = useState([])
   const [partnerConvers, setPartnerConvers] = useState({ name: '', avatar: '', role: '', accountId: '' })
   const [selectedConvers, setSelectedConvers] = useState(conversationId)
   const [buttonSelect, setButtonSelect] = useState('All')
@@ -37,6 +36,7 @@ function Message() {
   const stompClientRef = useRef(null)
   const detailMessRef = useRef(null)
   const dispatch = useDispatch()
+  const { conversationList } = useSelector((state) => state.conversation)
 
   useEffect(() => {
     setSelectedConvers(conversationId)
@@ -46,10 +46,10 @@ function Message() {
     const newMessage = JSON.parse(payload.body)
     console.log('Received message:', newMessage)
     if (newMessage.conversation_id === selectedConvers) setMessages((prev) => [...prev, newMessage])
-    setMessages((prev)=>[...prev])
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setMessages((prev) => [...prev])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  
+
   //connect websocket
   useEffect(() => {
     function connect() {
@@ -138,14 +138,13 @@ function Message() {
         if (partnerConvers.accountId && partnerConvers.role) {
           await updateUnseenMessages(selectedConvers, partnerConvers.accountId, partnerConvers.role)
         }
-        const conversations = await getAllConversation(currentUser.id, currentRole)
-        console.log('Convers:', conversations)
-        if (conversations.length > 0) {
+        dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
+        if (conversationList.length > 0) {
           // if (!idConversation) setSelectedConvers(conversations?.[0].idConversation)
-          const partnerConvers = conversations.find(
+          const partnerConvers = conversationList.find(
             (conversation) => String(conversation.conversationId) === String(selectedConvers),
           )
-          setConversationList(conversations.filter((conversation) => !conversation.lastMessage.includes('null')))
+          // setConversationList(conversationList.filter((conversation) => !conversation.lastMessage.includes('null')))
           setPartnerConvers({
             name: partnerConvers?.nameRepresentation,
             avatar: partnerConvers?.avatarUrl,
@@ -164,7 +163,7 @@ function Message() {
   useEffect(() => {
     setFilterList(
       conversationList.filter((conversation) => {
-        const matchesSearch = conversation.nameRepresentation.toLowerCase().includes(searchValue.toLowerCase())
+        const matchesSearch = conversation.nameRepresentation?.toLowerCase().includes(searchValue.toLowerCase())
         const matchesType =
           buttonSelect === 'All' ||
           (buttonSelect === 'Unread' && conversation.seen === false && !conversation.lastMessage.includes('Bạn'))
@@ -193,7 +192,7 @@ function Message() {
     }
     // // Gửi tin nhắn đến server thông qua STOMP client
     stompClientRef.current.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
-   setMessages((prev) => [...prev, messageDTO])
+    setMessages((prev) => [...prev, messageDTO])
     setMessageText('')
   }
 

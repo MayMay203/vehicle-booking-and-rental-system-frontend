@@ -9,6 +9,7 @@ import generalAdminSlice from './slices/generalAdminSlice'
 import searchSlice from './slices/searchSlice'
 import orderSlice from './slices/orderSlice'
 import busPartnerSlice from './slices/busPartnerSlice'
+import conversationSlice from './slices/conversationSlice'
 
 export const store = configureStore({
   reducer: {
@@ -22,5 +23,6 @@ export const store = configureStore({
     search: searchSlice,
     orders: orderSlice,
     busPartner: busPartnerSlice,
+    conversation: conversationSlice,
   },
 })
