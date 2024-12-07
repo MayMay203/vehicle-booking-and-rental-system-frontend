@@ -48,7 +48,7 @@ function Header() {
   useEffect(() => {
     async function fetchAllConversations() {
       const converstations = await getAllConversation(currentUser.id, currentRole)
-      const filter = converstations.filter((convers) => convers.seen === false)
+      const filter = converstations.filter((convers) => convers.seen === false && !convers.lastMessage.includes('null') && !convers.lastMessage.includes('Bạn'))
       console.log(filter.length)
       setCountMessage(filter.length)
     }

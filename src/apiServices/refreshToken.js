@@ -4,6 +4,6 @@ export const refreshToken = async () => {
     const response = await httpRequest.get('/v1/auth/refresh')
     return response.data
   } catch (error) {
-    // console.log('Failed to refresh token: ', error)
+    console.log('Failed to refresh token: ', error)
   }
 }

@@ -37,7 +37,6 @@ export const routes = {
   statisticsVehicleRental: '/statistics-vehicle-rental',
   orderManage: '/order-manage',
   managePartners: '/manage-partners',
-  message: '/message',
   manageFeeService: '/manage-fee-service',
   error: '/error',
   paymentSuccess: '/payment-success',

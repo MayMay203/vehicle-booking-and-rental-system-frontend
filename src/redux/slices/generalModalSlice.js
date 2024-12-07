@@ -61,6 +61,10 @@ const initialState = {
     isOpen: false,
     id: '',
   },
+  messageModal: {
+    isOpen: false,
+    conversationId: '',
+  },
   addVoucher: false,
 }
 
@@ -121,6 +125,15 @@ const generalModalSlice = createSlice({
         id,
       }
     },
+    setMessageModalVisible: (state, action) => {
+      const { isOpen, conversationId = '' } = action.payload
+      console.log(action.payload)
+      state.messageModal = {
+        ...state.messageModal,
+        isOpen,
+        conversationId,
+      }
+    },
   },
 })
 
@@ -133,6 +146,7 @@ export const {
   setAddVoucherVisible,
   setUtilityModal,
   setFeeServiceModal,
+  setMessageModalVisible
 } = generalModalSlice.actions
 
 export default generalModalSlice.reducer

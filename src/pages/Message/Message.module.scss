@@ -5,9 +5,10 @@
   margin-top: 2rem;
   margin-bottom: 2rem;
   overflow: hidden; 
+  overscroll-behavior: contain;
 }
 .wrap-title-search{
-  padding: 2rem;
+  padding: 1rem;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
@@ -44,25 +45,27 @@
 .wrap-recipient{
   width: 100%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   margin: 0;
   align-items: center;
 }
 .avatar{
   border-radius: 50%;
-  width: 56px;
+  // width: 56px;
+  width: 50px;
   aspect-ratio: 1/1; 
   border: 1px solid #FFEBE4;
 }
 .name{
-  font-size: 2rem;
+  // font-size: 2rem;
+  font-size: 1.8rem;
   line-height: 2.5rem;
   font-weight: 600;
   margin-left: 2rem;
 }
 .wrap-detail-message{
   padding-top: 20px;
-  height: 500px;
+  height: 400px;
   overflow-y: auto;
 }
 .message-sender{

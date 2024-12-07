@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import Image from '../Image'
 const cx = classNames.bind(styles)
-function CardMessageRight({ data, handleChooseConvers, isClicked }) {
+function CardMessageRight({ data, handleChooseConvers, isClicked, type, handleChangeType}) {
   return (
     <div
       className={cx('wrap-message', 'row', {
@@ -13,7 +13,12 @@ function CardMessageRight({ data, handleChooseConvers, isClicked }) {
         seen: data.seen,
         isClicked,
       })}
-      onClick={() => handleChooseConvers(data.conversationId)}
+      onClick={() => {
+        handleChooseConvers(data.conversationId)
+        if (type === 'Unread') {
+          handleChangeType('All')
+        }
+      }}
     >
       <Col xs="3" className={cx('d-flex align-items-center')}>
         <Image src={data.avatarUrl} className={cx('avatar')} alt="avatar" />
@@ -24,12 +29,14 @@ function CardMessageRight({ data, handleChooseConvers, isClicked }) {
             {data.nameRepresentation}
           </Col>
           <Col xs="2" className={cx('text-end')}>
-            {!data.seen && !data.lastMessage.includes('null') && (
+            {!data.seen && !data.lastMessage.includes('Bạn') && (
               <FontAwesomeIcon icon={faCircle} className={cx('icon-no-seen')} />
             )}
           </Col>
         </Row>
-        <Row className={cx('message')}>{data.lastMessage}</Row>
+        <Row className={cx('message', { 'received-no-seen': !data.seen && !data.lastMessage.includes('Bạn') })}>
+          {data.lastMessage}
+        </Row>
         <Row className={cx('time')}>{data.sendAt}</Row>
       </Col>
     </div>

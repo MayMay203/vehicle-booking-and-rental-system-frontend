@@ -25,15 +25,18 @@ function ModalChat({ handleClose }) {
     fetchAllConversation()
   }, [currentUser.id, currentRole])
 
-  useEffect(() => {
-    setFilterList(
-      conversationList.filter((conversation) => {
-        const matchesSearch = conversation.nameRepresentation.toLowerCase().includes(searchValue.toLowerCase())
-        const matchesType = buttonSelect === 'All' || (buttonSelect === 'Unread' && conversation.seen === false)
-        return matchesSearch && matchesType
-      }),
-    )
-  }, [searchValue, conversationList, buttonSelect])
+ useEffect(() => {
+   setFilterList(
+     conversationList.filter((conversation) => {
+       const matchesSearch = conversation.nameRepresentation.toLowerCase().includes(searchValue.toLowerCase())
+       const matchesType =
+         buttonSelect === 'All' ||
+         (buttonSelect === 'Unread' && conversation.seen === false && !conversation.lastMessage.includes('Bạn'))
+       return matchesSearch && matchesType
+     }),
+   )
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [searchValue, conversationList, buttonSelect])
 
   const handleClickButton = (name) => {
     setButtonSelect(name)

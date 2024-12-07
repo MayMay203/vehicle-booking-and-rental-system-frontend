@@ -14,13 +14,17 @@ import Tabs from '../Tabs'
 import { faReadme } from '@fortawesome/free-brands-svg-icons'
 import Comment from '../Comment'
 import { useDispatch, useSelector } from 'react-redux'
-import { generalModalNames, setConfirmModalVisible, setTicketModalVisible } from '~/redux/slices/generalModalSlice'
+import {
+  generalModalNames,
+  setConfirmModalVisible,
+  setMessageModalVisible,
+  setTicketModalVisible,
+} from '~/redux/slices/generalModalSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { getBusUtilities } from '~/apiServices/ticket/getBusUtilities'
 import { getPoliciesTicket } from '~/apiServices/ticket/getPoliciesTicket'
 import { getBusImage } from '~/apiServices/ticket/getBusImage'
 import { getPickReturnLocations } from '~/apiServices/ticket/getPickReturnLocations'
-import { useNavigate } from 'react-router-dom'
 import { config } from '~/config'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { checkLoginSession } from '~/redux/slices/userSlice'
@@ -34,7 +38,6 @@ function TicketItem({ status, data = {} }) {
   const [detailInfor, setDetaiInfor] = useState({})
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
-  const navigate = useNavigate()
 
   const settings = useMemo(
     () => ({
@@ -124,7 +127,10 @@ function TicketItem({ status, data = {} }) {
           // Implement discount logic here
         },
         pickReturn: async () => {
-          const locations = await getPickReturnLocations(data.busTripScheduleId || data.tripInfo?.id, data.busTripInfo?.arrivalLocation)
+          const locations = await getPickReturnLocations(
+            data.busTripScheduleId || data.tripInfo?.id,
+            data.busTripInfo?.arrivalLocation,
+          )
           setDetaiInfor((prev) => ({ ...prev, [type]: locations }))
         },
       }
@@ -190,7 +196,6 @@ function TicketItem({ status, data = {} }) {
     )
   }
 
-
   const handleSendMessage = async () => {
     if (dispatch(checkLoginSession())) {
       // Create new conversation
@@ -200,11 +205,9 @@ function TicketItem({ status, data = {} }) {
         data.businessPartnerInfo?.accountId,
         config.variables.busPartner,
       )
-      console.log(idConversation)
-      navigate(config.routes.message, { state: { idConversation } })
+      dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
     }
   }
-
 
   return (
     <div className={cx('wrapper')}>
@@ -212,9 +215,11 @@ function TicketItem({ status, data = {} }) {
         <div className="col">
           <div className={cx('image-wrapper')}>
             <img src={data.busInfo?.imageRepresentative} alt="car" className={cx('image')}></img>
-            <button className={cx('btn-msg')} onClick={handleSendMessage}>
-              <MessageIcon />
-            </button>
+            {currentUser.id !== data.businessPartnerInfo?.id && (
+              <button className={cx('btn-msg')} onClick={handleSendMessage}>
+                <MessageIcon />
+              </button>
+            )}
           </div>
         </div>
         <div className="col d-flex flex-column gap-2 gap-lg-4">
@@ -301,7 +306,7 @@ function TicketItem({ status, data = {} }) {
           </div>
         </div>
       </div>
-      <div style={{ color: '#484848', fontSize: '1.5rem', marginTop: '20px', lineHeight: '1.4'}}>
+      <div style={{ color: '#484848', fontSize: '1.5rem', marginTop: '20px', lineHeight: '1.4' }}>
         <span style={{ color: 'red' }}>* </span>
         {data.journey}
       </div>

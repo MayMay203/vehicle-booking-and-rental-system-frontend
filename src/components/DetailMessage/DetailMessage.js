@@ -26,7 +26,7 @@ function DetailMessage({ data, image }) {
         </div>
       )}
       <div className={cx({ 'wrap-content-end': isSender })}>
-        <p className={cx({ 'content-receive': !isSender }, { 'content-send': isSender }, 'content-message')}>
+        <p className={cx({ 'content-receive': !isSender}, { 'content-send': isSender }, 'content-message')}>
           {data.content}
         </p>
         <p className={cx('time', { 'align-right': isSender, 'time-visible': isShowDate })}>{formattedTime}</p>

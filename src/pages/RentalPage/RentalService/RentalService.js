@@ -13,8 +13,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { config } from '~/config'
 import { useLocation } from 'react-router-dom'
 import RentalVehicleCard from '~/components/RentalVehicleCard'
-import { getVehicleRental } from '~/apiServices/user/getVehicleRental'
-
+import { getExistFilterVehicleRental } from '~/apiServices/user/getExistFilterVehicleRental'
+import { getAllVehicleTypes } from '~/apiServices/user/getAllVehicleTypes'
+import { filterRentalService } from '~/apiServices/user/filterRentalService'
 const cx = classNames.bind(styles)
 function RentalService() {
   const location = useLocation()
@@ -22,26 +23,96 @@ function RentalService() {
   const manned = 'manned'
   const self_driving = 'self_driving'
 
-  const [activeTypeFilter, setActiveTypeFilter] = useState('all')
-  const handleTypeFilterClick = (btnType) => {
-    setActiveTypeFilter(btnType)
-  }
   const [startTime, setStartTime] = useState(new Date())
   const [endTime, setEndTime] = useState(new Date())
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
+  // const [activeTypeFilter, setActiveTypeFilter] = useState('all')
+  const [activeTypeFilter, setActiveTypeFilter] = useState(['all'])
+
+  const [isVisibleTypeVehicle, setIsVisibleTypeVehicle] = useState(false)
+  const [isVisibleArea, setIsVisibleArea] = useState(false)
+  const [isVisibleBranch, setIsVisibleBranch] = useState(false)
+  const [isVisibleSort, setIsVisibleSort] = useState(false)
+  const [selectedTypeVehicle, setSelectedTypeVehicle] = useState({ id: null, title: '' })
+  const [selectedArea, setSelectedArea] = useState({ id: null, title: '' })
+  const [selectedBranch, setSelectedBranch] = useState({ id: null, title: '' })
+  const [filterOptionsType, setFilterOptionsType] = useState([])
+  const [filterOptionsBranch, setFilterOptionsBranch] = useState([])
+  const [filterOptionsArea, setFilterOptionsArea] = useState([])
 
   const [listVehicleRentals, setListVehicleRentals] = useState([])
   useEffect(() => {
     async function fetchAllVehicleRental() {
-      const data = await getVehicleRental(typeService === 'manned' ? '1' : '0', 'available', '-1')
+      // const data = await getVehicleRental(typeService === 'manned' ? '1' : '0', 'available', '-1')
+      const data = await filterRentalService(
+        selectedArea.title,
+        selectedBranch.title,
+        selectedTypeVehicle.title,
+        typeService === 'manned' ? '1' : '0',
+      )
       if (data) {
         setListVehicleRentals(data)
       }
     }
     fetchAllVehicleRental()
-  }, [typeService])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedArea, selectedBranch, selectedTypeVehicle])
+  const handleTypeFilterClick = (btnType) => {
+    // setActiveTypeFilter(btnType)
+    // if (btnType === 'all') {
+    //   // Nếu "Tất cả" được nhấn, chỉ bật "all" và tắt tất cả các nút khác
+    //   setActiveTypeFilter(['all'])
+    // } else {
+    // Tắt "all" khi các nút khác được nhấn
+    setActiveTypeFilter(
+      (prev) =>
+        // {
+        // const newFilters = prev.includes('all')
+        //   ? [btnType] // Tắt "all" và chỉ bật nút vừa nhấn
+        //   : //  : prev.includes(btnType)
+        //  ? prev.filter((type) => type !== btnType) // Nếu đã bật, tắt nút
+        [...prev, btnType], // Nếu chưa bật, thêm vào
+      // return newFilters
+      // }
+    )
+    // }
+    // setSelectedBranch(0, 'Hãng xe')
+    // setSelectedArea(0, 'Khu vực xe')
+    // setSelectedTypeVehicle(0, 'Loại xe')
+  }
+  const handleSelectTypeVehicle = (id, title) => {
+    setSelectedTypeVehicle({ id, title })
+  }
+  const handleSelectArea = (id, title) => {
+    setSelectedArea({ id, title })
+  }
+  const handleSelectBranch = (id, title) => {
+    setSelectedBranch({ id, title })
+  }
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      // if (activeTypeFilter === 'brand') {
+      const response1 = await getExistFilterVehicleRental('manufacturer')
+      setFilterOptionsBranch(response1)
+      // } else if (activeTypeFilter === 'area') {
+      const response2 = await getExistFilterVehicleRental('location')
+      setFilterOptionsArea(response2)
+      // } else if (activeTypeFilter === 'type') {
+      const dataResponse = await getAllVehicleTypes()
+      const listVehicleTypes = dataResponse.result
+      const response3 = listVehicleTypes.map((item, index) => item.name)
+      setFilterOptionsType(response3)
+      // }
 
+      // console.log('response ---', response)
+    }
+
+    fetchFilterOptions()
+  }, [])
+  // console.log('setFilterOptions1 ---', filterOptionsType)
+  // console.log('setFilterOptions2 ---', filterOptionsBranch)
+  // console.log('setFilterOptions3 ---', filterOptionsArea)
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
@@ -55,57 +126,216 @@ function RentalService() {
       <Row>
         <Col xs="10" className="p-2">
           <div className={cx('type-filter-container')}>
-            <Button
+            {/* <Button
               rounded
-              className={cx('type-filter', { active: activeTypeFilter === 'all' })}
+              className={cx('type-filter', { active: activeTypeFilter.includes('all') })}
               onClick={() => handleTypeFilterClick('all')}
             >
               Tất cả
-            </Button>
-            <Button
-              rounded
-              className={cx('type-filter', { active: activeTypeFilter === 'type' })}
-              onClick={() => handleTypeFilterClick('type')}
+            </Button> */}
+            <Tippy
+              visible={isVisibleTypeVehicle}
+              interactive
+              delay={[50, 400]}
+              placement="bottom-end"
+              onClickOutside={() => setIsVisibleTypeVehicle(false)}
+              render={(attrs) => (
+                <div className={cx('filter')} tabIndex="-1" {...attrs}>
+                  <PopperWrapper>
+                    <PopperItem
+                      key={0}
+                      id={1}
+                      title={'Tất cả'}
+                      checked={selectedTypeVehicle.title === ''}
+                      onClick={() => {
+                        handleSelectTypeVehicle(1, '')
+                        setTimeout(() => setIsVisibleTypeVehicle(false), 250)
+                      }}
+                    />
+                    {Array.isArray(filterOptionsType) &&
+                      filterOptionsType.map((item, index) => (
+                        <PopperItem
+                          key={index}
+                          id={index + 2}
+                          title={item}
+                          checked={selectedTypeVehicle.title === item}
+                          onClick={() => {
+                            handleSelectTypeVehicle(index + 2, item)
+                            setTimeout(() => setIsVisibleTypeVehicle(false), 250)
+                          }}
+                        />
+                      ))}
+                  </PopperWrapper>
+                </div>
+              )}
             >
-              <FontAwesomeIcon icon={faCar} className={cx('icon-type-filter')} />
-              Loại xe
-            </Button>
+              <button>
+                <Button
+                  rounded
+                  className={cx('type-filter', {
+                    active: activeTypeFilter.includes('type') && selectedTypeVehicle.title !== '',
+                  })}
+                  onClick={() => {
+                    handleTypeFilterClick('type')
+                    setIsVisibleTypeVehicle((prev) => !prev)
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCar} className={cx('icon-type-filter')} />
+                  {activeTypeFilter.includes('type') && selectedTypeVehicle.title !== ''
+                    ? selectedTypeVehicle.title
+                    : 'Loại xe'}
+                </Button>
+              </button>
+            </Tippy>
 
-            <Button
-              rounded
-              className={cx('type-filter', { active: activeTypeFilter === 'area' })}
-              onClick={() => handleTypeFilterClick('area')}
+            <Tippy
+              visible={isVisibleArea}
+              interactive
+              delay={[50, 400]}
+              placement="bottom-end"
+              onClickOutside={() => setIsVisibleArea(false)}
+              render={(attrs) => (
+                <div className={cx('filter')} tabIndex="-1" {...attrs}>
+                  <PopperWrapper>
+                    <PopperItem
+                      key={0}
+                      id={1}
+                      title={'Tất cả'}
+                      checked={selectedArea.title === ''}
+                      onClick={() => {
+                        handleSelectArea(1, '')
+                        setTimeout(() => setIsVisibleArea(false), 250)
+                      }}
+                    />
+                    {Array.isArray(filterOptionsArea) &&
+                      filterOptionsArea.map((item, index) => (
+                        <PopperItem
+                          key={index}
+                          id={index + 2}
+                          title={item}
+                          checked={selectedArea.title === item}
+                          onClick={() => {
+                            handleSelectArea(index + 2, item)
+                            setTimeout(() => setIsVisibleArea(false), 250)
+                          }}
+                        />
+                      ))}
+                  </PopperWrapper>
+                </div>
+              )}
             >
-              <FontAwesomeIcon icon={faLocationDot} className={cx('icon-type-filter')} />
-              Khu vực xe
-            </Button>
-            <Button
-              rounded
-              className={cx('type-filter', 'dropdown', { active: activeTypeFilter === 'brand' })}
-              onClick={() => handleTypeFilterClick('brand')}
+              <button>
+                <Button
+                  rounded
+                  className={cx('type-filter', {
+                    active: activeTypeFilter.includes('area') && selectedArea.title !== '',
+                  })}
+                  onClick={() => {
+                    handleTypeFilterClick('area')
+                    setIsVisibleArea((prev) => !prev)
+                  }}
+                >
+                  <FontAwesomeIcon icon={faLocationDot} className={cx('icon-type-filter')} />
+                  {activeTypeFilter.includes('area') && selectedArea.title !== '' ? selectedArea.title : 'Khu vực xe'}
+                </Button>
+              </button>
+            </Tippy>
+            <Tippy
+              visible={isVisibleBranch}
+              interactive
+              delay={[50, 400]}
+              placement="bottom-end"
+              onClickOutside={() => setIsVisibleBranch(false)}
+              render={(attrs) => (
+                <div className={cx('filter')} tabIndex="-1" {...attrs}>
+                  <PopperWrapper>
+                    <PopperItem
+                      key={0}
+                      id={1}
+                      title={'Tất cả'}
+                      checked={selectedBranch.title === ''}
+                      onClick={() => {
+                        handleSelectBranch(1, '')
+                        setTimeout(() => setIsVisibleBranch(false), 250)
+                      }}
+                    />
+                    {filterOptionsBranch.map((item, index) => (
+                      <PopperItem
+                        key={index + 1}
+                        id={index + 2}
+                        title={item}
+                        // checked={selectedBranch.title === item}
+                        onClick={() => {
+                          handleSelectBranch(index + 2, item)
+                          setTimeout(() => setIsVisibleBranch(false), 250)
+                        }}
+                      />
+                    ))}
+                  </PopperWrapper>
+                </div>
+              )}
             >
-              <FontAwesomeIcon icon={faCodeBranch} className={cx('icon-type-filter')} />
-              Hãng xe
-            </Button>
+              <button>
+                <Button
+                  rounded
+                  className={cx('type-filter', {
+                    active: activeTypeFilter.includes('brand') && selectedBranch.title !== '',
+                  })}
+                  onClick={() => {
+                    handleTypeFilterClick('brand')
+                    setIsVisibleBranch((prev) => !prev)
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCodeBranch} className={cx('icon-type-filter')} />
+                  {activeTypeFilter.includes('brand') && selectedBranch.title !== '' ? selectedBranch.title : 'Hãng xe'}
+                </Button>
+              </button>
+            </Tippy>
           </div>
         </Col>
         <Col xs="2" className="d-flex justify-content-end p-2">
           <Tippy
+            visible={isVisibleSort}
             interactive
             delay={[50, 400]}
             placement="bottom-end"
+            onClickOutside={() => setIsVisibleSort(false)}
             render={(attrs) => (
               <div className={cx('filter')} tabIndex="-1" {...attrs}>
                 <PopperWrapper>
-                  <PopperItem id="1" title="Mặc định" />
-                  <PopperItem id="2" title="Giá tăng dần" />
-                  <PopperItem id="3" title="Giá giảm dần" />
+                  <PopperItem
+                    id="1"
+                    title="Mặc định"
+                    // onClick={() => {
+                    //   setTimeout(() => setIsVisibleSort(false), 250)
+                    // }}
+                  />
+                  <PopperItem
+                    id="2"
+                    title="Giá tăng dần"
+                    // onClick={() => {
+                    //   setTimeout(() => setIsVisibleSort(false), 250)
+                    // }}
+                  />
+                  <PopperItem
+                    id="3"
+                    title="Giá giảm dần"
+                    // onClick={() => {
+                    //   setTimeout(() => setIsVisibleSort(false), 250)
+                    // }}
+                  />
                 </PopperWrapper>
               </div>
             )}
           >
             <button>
-              <Button rounded className={cx('btn-sort')}>
+              <Button
+                rounded
+                className={cx('btn-sort')}
+                onClick={() => {
+                  setIsVisibleSort((prev) => !prev)
+                }}
+              >
                 <FontAwesomeIcon icon={faSort} className={cx('icon-sort')} />
                 <span className={cx('d-none d-lg-inline')}>Sắp xếp</span>
               </Button>
@@ -192,7 +422,11 @@ function RentalService() {
           </Button>
         </Col>
       </Row>
-      <RentalVehicleCard typeService={typeService} listVehicleRentals={listVehicleRentals} role={'user'}></RentalVehicleCard>
+      <RentalVehicleCard
+        typeService={typeService}
+        listVehicleRentals={listVehicleRentals}
+        role={'user'}
+      ></RentalVehicleCard>
     </div>
   )
 }
