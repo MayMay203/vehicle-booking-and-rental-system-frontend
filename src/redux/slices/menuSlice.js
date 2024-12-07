@@ -43,8 +43,8 @@ const roleMap = {
 }
 
 const initialState = {
-  currentMenu: menus[localStorage.getItem('menu')],
-  currentRole: roleMap[localStorage.getItem('menu')],
+  currentMenu: menus[localStorage.getItem('menu')] || menus.userMenu,
+  currentRole: roleMap[localStorage.getItem('menu')] || 'USER',
 }
 
 const menuSlice = createSlice({
