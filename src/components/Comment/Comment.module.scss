@@ -5,7 +5,7 @@
     width: 90%;
     padding: 20px 30px;
     background-color: var(--white-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     border-radius: 8px; 
 
     @include abstracts.screen(lg){
@@ -61,4 +61,8 @@
 
 .selected{
     color: #FFC700;
+}
+
+.disabled{
+    opacity: 0.5;
 }

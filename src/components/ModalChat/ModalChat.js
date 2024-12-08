@@ -14,7 +14,7 @@ function ModalChat({ handleClose }) {
 
   useEffect(() => {
     setFilterList(
-      conversationList.filter(convers => !convers.lastMessage.includes('null')).filter((conversation) => {
+    conversationList?.filter(convers => !convers.lastMessage.includes('null'))?.filter((conversation) => {
         const matchesSearch = conversation.nameRepresentation.toLowerCase().includes(searchValue.toLowerCase())
         const matchesType =
           buttonSelect === 'All' ||

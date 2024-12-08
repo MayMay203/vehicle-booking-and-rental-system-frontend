@@ -6,9 +6,10 @@ import {faStar } from '@fortawesome/free-solid-svg-icons'
 import { useRef, useState } from 'react'
 
 const cx = classNames.bind(styles)
-function Comment() {
+function Comment({ handleComment }) {
   const [selectedStar, setSelectedStar] = useState(-1)
   const textareaRef = useRef(null)
+  const [comment, setComment] = useState('')
 
   const handleInput = () => {
     const textarea = textareaRef.current
@@ -18,6 +19,13 @@ function Comment() {
   const handleClickStar = (index) => {
     setSelectedStar(index)
   }
+
+  const handleSendComment = async () => {
+    handleComment('', selectedStar + 1, comment.trim(),'create')
+    setComment('')
+    setSelectedStar(-1)
+  }
+
   return (
     <div className={cx('wrapper')}>
       <div className="d-flex column-gap-3">
@@ -37,14 +45,20 @@ function Comment() {
         <div className={cx('write-comment')}>
           <FontAwesomeIcon icon={faCommentDots} className={cx('icon')} />
           <textarea
+            value={comment}
             ref={textareaRef}
             rows={3}
             placeholder="Đánh giá trải nghiệm"
             className={cx('text-comment')}
             onInput={handleInput}
+            onChange={(e) => setComment(e.target.value)}
           ></textarea>
         </div>
-        <button className={cx('btn-send')}>
+        <button
+          className={cx('btn-send', { disabled: selectedStar === -1 || comment === '' })}
+          disabled={selectedStar === 0 || comment === ''}
+          onClick={handleSendComment}
+        >
           <FontAwesomeIcon icon={faPaperPlane} />
         </button>
       </div>
