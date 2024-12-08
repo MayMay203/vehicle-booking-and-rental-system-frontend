@@ -11,6 +11,7 @@ export const getAllConversation = async (accountId, roleAccount) => {
         },
       },
     )
+    console.log('Response', response)
     return response.data
   } catch (err) {
     console.error('Failed to get all coversation: ', err)

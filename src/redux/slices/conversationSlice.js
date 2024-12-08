@@ -6,10 +6,10 @@ const initialState = {
 }
 
 export const fetchAllConversationsByAcc = createAsyncThunk(
-  'orders/fetchAllMyOrders',
+  'conversation/fetchAllConversationsByAcc',
   async ({ accountId, roleAccount }) => {
-    // console.log(isGone)
     const data = await getAllConversation(accountId, roleAccount)
+    console.log(data)
     return data || []
   },
 )
@@ -20,6 +20,7 @@ const conversationSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchAllConversationsByAcc.fulfilled, (state, action) => {
+      console.log(action.payload)
       state.conversationList = action.payload
     })
   },

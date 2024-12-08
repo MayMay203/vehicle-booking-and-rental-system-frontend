@@ -88,7 +88,7 @@ function Message() {
 
     return () => {
       // Đảm bảo ngắt kết nối khi component bị unmount
-      if (stompClientRef.current) {
+      if (stompClientRef.current?.connected) {
         stompClientRef.current.disconnect(() => {
           console.log('WebSocket disconnected')
         })
@@ -164,8 +164,8 @@ function Message() {
   useEffect(() => {
     setFilterList(
       conversationList
-        .filter((convers) => !convers.lastMessage.includes('null'))
-        .filter((conversation) => {
+        ?.filter((convers) => !convers.lastMessage.includes('null'))
+        ?.filter((conversation) => {
           const matchesSearch = conversation.nameRepresentation?.toLowerCase().includes(searchValue.toLowerCase())
           const matchesType =
             buttonSelect === 'All' ||

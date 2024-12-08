@@ -23,9 +23,8 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { config } from '~/config'
 import { setMenu } from '~/redux/slices/menuSlice'
 import { getStatusRegisterPartner } from '~/apiServices/user/getStatusRegisterPartner'
-// import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
-// import { checkLoginSession } from '~/redux/slices/userSlice'
-// import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
 function Header() {
@@ -33,16 +32,23 @@ function Header() {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
   const { isLogin, currentUser, loading } = useSelector((state) => state.user)
+  const { currentRole } = useSelector((state) => state.menu)
   const [isShowMenu, setIsShowMenu] = useState(false)
   const [isShowNoti, setIsShowNoti] = useState(false)
   const [isShowMessage, setIsShowMessage] = useState(false)
   const [isShowDetailPartner, setShowDetailPartner] = useState(false)
   const [isSmall, setIsSmall] = useState(window.innerWidth < 768)
-  console.log('Loading:', loading)
   // Menu
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.currentMenu)
-const { conversationList } = useSelector((state) => state.conversation)
+  const { conversationList } = useSelector((state) => state.conversation)
+
+  useEffect(() => {
+    if (dispatch(checkLoginSession()) && currentUser.id) {
+      dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (currentUser.roles?.includes('ADMIN')) {
@@ -314,10 +320,17 @@ const { conversationList } = useSelector((state) => state.conversation)
                     <button
                       onClick={() => setIsShowMessage((prev) => !prev)}
                       className={cx('btn-action', 'd-none', 'd-md-block')}
-                      data-count={conversationList.filter(
-        (convers) =>
-          convers.seen === false && !convers.lastMessage.includes('null') && !convers.lastMessage.includes('Bạn'),
-      ).length}
+                      data-count={
+                        Array.isArray(conversationList)
+                          ? conversationList.filter(
+                              (convers) =>
+                                convers.seen === false &&
+                                convers.lastMessage &&
+                                !convers.lastMessage.includes('null') &&
+                                !convers.lastMessage.includes('Bạn'),
+                            ).length
+                          : 0
+                      }
                     >
                       {!window.location.href.includes('/message') ? (
                         <FontAwesomeIcon icon={faComment} />

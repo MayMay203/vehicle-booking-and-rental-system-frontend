@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
 import Voucher from '../Voucher'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import UtilitiesList from '../UtilitiesList'
 import ImageList from '../ImageList'
 import FeedbackSlider from '../FeedbackSlider'
@@ -28,6 +28,11 @@ import { getPickReturnLocations } from '~/apiServices/ticket/getPickReturnLocati
 import { config } from '~/config'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import { getAllRatingOfTicket } from '~/apiServices/ratingService/getAllRatingOfTicket'
+import { Empty } from 'antd'
+import { createRating } from '~/apiServices/ratingService/createRating'
+import { deleteRating } from '~/apiServices/ratingService/deleteRating'
+import { updatRating } from '~/apiServices/ratingService/updateRating'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status, data = {} }) {
@@ -38,39 +43,16 @@ function TicketItem({ status, data = {} }) {
   const [detailInfor, setDetaiInfor] = useState({})
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
+  const detailRef = useRef(null)
 
-  const settings = useMemo(
-    () => ({
-      slidesToShow: 6,
-      infinite: false,
-      swipe: false,
-      draggable: false,
-      responsive: [
-        {
-          breakpoint: 992,
-          settings: {
-            slidesToShow: 4,
-            slidesToScroll: 1,
-          },
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 1,
-          },
-        },
-        {
-          breakpoint: 576,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-          },
-        },
-      ],
-    }),
-    [],
-  )
+  const [time, date] = data.tripInfo.arrivalDateTime.split(' ')
+  const [day, month, year] = date.split('-')
+  const isoDate = `${year}-${month}-${day}T${time}:00`
+
+  // So sánh thời gian hiện tại với commentDate
+  const isCommentable = new Date() - new Date(isoDate) < 24 * 60 * 60 * 1000 * 3
+
+  console.log(data)
 
   const tabList = useMemo(() => {
     const tabs = [
@@ -103,6 +85,39 @@ function TicketItem({ status, data = {} }) {
     return tabs
   }, [])
 
+  const settings = useMemo(
+    () => ({
+      slidesToShow: 6,
+      infinite: false,
+      swipe: true,
+      draggable: true,
+      responsive: [
+        {
+          breakpoint: 992,
+          settings: {
+            slidesToShow: 4,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 576,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+          },
+        },
+      ],
+    }),
+    [],
+  )
+
   console.log(data)
 
   useEffect(() => {
@@ -121,15 +136,16 @@ function TicketItem({ status, data = {} }) {
           setDetaiInfor((prev) => ({ ...prev, [type]: imagesList }))
         },
         feedback: async () => {
-          // Implement feedback logic here
+          const dataRating = await getAllRatingOfTicket(data.busTripScheduleId || data.tripInfo?.busTripScheduleId)
+          setDetaiInfor((prev) => ({ ...prev, [type]: dataRating || {} }))
         },
         discount: async () => {
           // Implement discount logic here
         },
         pickReturn: async () => {
           const locations = await getPickReturnLocations(
-            data.busTripScheduleId || data.tripInfo?.id,
-            data.busTripInfo?.arrivalLocation,
+            data.busTripScheduleId || data.tripInfo?.busTripScheduleId,
+            data.busTripInfo?.arrivalLocation || data.tripInfo?.arrivalLocation,
           )
           setDetaiInfor((prev) => ({ ...prev, [type]: locations }))
         },
@@ -209,6 +225,36 @@ function TicketItem({ status, data = {} }) {
     }
   }
 
+  const reGetAllRating = useCallback(async () => {
+    const dataRating = await getAllRatingOfTicket(data.busTripScheduleId || data.tripInfo?.busTripScheduleId)
+    console.log(dataRating)
+    setDetaiInfor((prev) => ({ ...prev, [type]: dataRating || {} }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleComment = async (id, ratingValue, comment, action) => {
+    switch (action) {
+      case 'create':
+        await createRating(data.orderInfo.orderId, ratingValue, comment)
+        break
+      case 'update':
+        await updatRating(id, ratingValue, comment)
+        break
+      case 'delete':
+        await deleteRating(id)
+        break
+      default:
+    }
+    reGetAllRating()
+  }
+
+  const handleFeedback = () => {
+    if (detailRef.current) {
+      detailRef.current.click()
+      if (type !== 'feedback') setType('feedback')
+    }
+  }
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
@@ -229,10 +275,10 @@ function TicketItem({ status, data = {} }) {
           </div>
           <div className="d-flex flex-wrap align-items-center gap-3">
             <span className={cx('type')}>{data.busInfo?.nameVehicleType || data.busInfo?.nameBusType}</span>
-            <div className={cx('rating')}>
+            {/* <div className={cx('rating')}>
               <StarIcon className={cx('icon')} width="2.6rem" />
-              <span>4.5(5)</span>
-            </div>
+              <span>{`${detailInfor}`}</span>
+            </div> */}
           </div>
           <div className="d-flex gap-3 align-items-center">
             <img className={cx('location-img')} alt="location" src={images.location} />
@@ -282,7 +328,11 @@ function TicketItem({ status, data = {} }) {
             </button>
           )}
           <div className="d-flex w-100 align-items-center justify-content-between justify-content-md-end justify-content-lg-none mt-4 mt-lg-0 gap-sm-2 gap-md-5 gap-lg-5">
-            <button className={cx('actions', 'd-flex', 'gap-2', 'align-items-center')} onClick={handleShowDetail}>
+            <button
+              className={cx('actions', 'd-flex', 'gap-2', 'align-items-center')}
+              onClick={handleShowDetail}
+              ref={detailRef}
+            >
               <span>Chi tiết chuyến xe</span>
               <FontAwesomeIcon
                 icon={faCaretDown}
@@ -299,17 +349,21 @@ function TicketItem({ status, data = {} }) {
               </Button>
             ) : (
               <></>
-              // <Button rounded onClick={handleChooseTicket}>
-              //   Đặt lại
-              // </Button>
+            )}
+            {status === 'completed' && isCommentable && (
+              <Button rounded onClick={handleFeedback}>
+                Đánh giá
+              </Button>
             )}
           </div>
         </div>
       </div>
-      <div style={{ color: '#484848', fontSize: '1.5rem', marginTop: '20px', lineHeight: '1.4' }}>
-        <span style={{ color: 'red' }}>* </span>
-        {data.journey}
-      </div>
+      {data.journey && (
+        <div style={{ color: '#484848', fontSize: '1.5rem', marginTop: '20px', lineHeight: '1.4' }}>
+          <span style={{ color: 'red' }}>* </span>
+          {data.journey}
+        </div>
+      )}
       {isDetail && (
         <div className="mt-5">
           <Tabs tabList={tabList} settings={settings} type={type} handleClickTab={handleClickTab}></Tabs>
@@ -330,55 +384,170 @@ function TicketItem({ status, data = {} }) {
             </div>
           )}
           {type === 'pickReturn' && detailInfor['pickReturn'] && (
-            <div className="py-5 mt-4" style={{ backgroundColor: 'var(--primary-bg)', borderRadius: 8 }}>
-              <span className="text-center mb-5 d-block" style={{ lineHeight: '1.3' }}>
-                Khách hàng vui lòng liên hệ với chủ nhà xe để được đón/trả tại những địa điểm dưới đây:
-              </span>
-              <div className="d-flex flex-column flex-lg-row justify-content-center gap-5 mt-2">
-                <div>
-                  <p className={cx('title', 'fst-italic')}>Điểm đón</p>
-                  <div className={cx('policies')}>
-                    {detailInfor['pickReturn'].pickupLocations.map((pickup) => (
-                      <span className={cx('policy', 'fst-italic')} style={{ fontSize: '1.5rem' }}>
-                        {pickup}
-                      </span>
-                    ))}
-                  </div>
+            <div
+              className="d-flex flex-column flex-lg-row justify-content-center gap-5 mt-2"
+              style={{
+                padding: '20px',
+                backgroundColor: '#f3f4f6',
+                borderRadius: '10px',
+                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              {/* Điểm đón */}
+              <div
+                style={{
+                  flex: 1,
+                  backgroundColor: '#fff',
+                  borderRadius: '8px',
+                  padding: '15px',
+                  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center',
+                }}
+              >
+                <p
+                  className={cx('title', 'fst-italic')}
+                  style={{
+                    fontSize: '1.6rem',
+                    fontWeight: 'bold',
+                    color: '#333',
+                    marginBottom: '15px',
+                  }}
+                >
+                  Điểm đón
+                </p>
+                <div className={cx('policies')} style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  {detailInfor['pickReturn'].pickupLocations.map((pickup, index) => (
+                    <span
+                      key={index}
+                      className={cx('policy', 'fst-italic')}
+                      style={{
+                        fontSize: '1.4rem',
+                        color: '#555',
+                        padding: '8px 12px',
+                        backgroundColor: '#e9ecef',
+                        borderRadius: '5px',
+                      }}
+                    >
+                      {pickup}
+                    </span>
+                  ))}
                 </div>
-                <div>
-                  <p className={cx('title', 'fst-italic')}>Điểm trả</p>
-                  <div className={cx('policies')}>
-                    {detailInfor['pickReturn'].dropOffLocations.map((dropOff) => (
-                      <span className={cx('policy', 'fst-italic')} style={{ fontSize: '1.5rem' }}>
-                        {dropOff}
-                      </span>
-                    ))}
-                  </div>
+              </div>
+
+              {/* Điểm trả */}
+              <div
+                style={{
+                  flex: 1,
+                  backgroundColor: '#fff',
+                  borderRadius: '8px',
+                  padding: '15px',
+                  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center',
+                }}
+              >
+                <p
+                  className={cx('title', 'fst-italic')}
+                  style={{
+                    fontSize: '1.6rem',
+                    fontWeight: 'bold',
+                    color: '#333',
+                    marginBottom: '15px',
+                  }}
+                >
+                  Điểm trả
+                </p>
+                <div className={cx('policies')} style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  {detailInfor['pickReturn'].dropOffLocations.map((dropOff, index) => (
+                    <span
+                      key={index}
+                      className={cx('policy', 'fst-italic')}
+                      style={{
+                        fontSize: '1.4rem',
+                        color: '#555',
+                        padding: '8px 12px',
+                        backgroundColor: '#e9ecef',
+                        borderRadius: '5px',
+                      }}
+                    >
+                      {dropOff}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
           )}
           {type === 'feedback' && (
             <div className="position-relative">
-              <div className={cx('top')}>
-                <div className={cx('rating')}>
-                  <StarIcon className={cx('icon')} width="2.6rem" />
-                  <span>4.5(5)</span>
+              {detailInfor['feedback']?.result?.result.length > 0 && (
+                <div className={cx('top')}>
+                  <div className={cx('rating')}>
+                    <StarIcon className={cx('icon')} width="2.6rem" />
+                    <span>{`${detailInfor['feedback']?.averageRating || 0}(5)`}</span>
+                  </div>
+                  <span className={cx('number')}>{`${
+                    detailInfor['feedback']?.result?.result.length || 0
+                  } đánh giá`}</span>
                 </div>
-                <span className={cx('number')}>830 đánh giá</span>
-              </div>
+              )}
               <div className="p-5 pt-3">
-                <FeedbackSlider />
+                {detailInfor['feedback']?.result?.result.length > 0 ? (
+                  <FeedbackSlider
+                    dataList={detailInfor['feedback'].result.result.reverse()}
+                    handleComment={handleComment}
+                  />
+                ) : (
+                  <Empty
+                    style={{ marginTop: '40px', marginBottom: '12px' }}
+                    description="Không có đánh giá nào gần đây"
+                  />
+                )}
               </div>
-              {status === 'completed' && <Comment />}
+              {status === 'completed' &&
+                isCommentable &&
+                !detailInfor['feedback']?.result?.result.some((feedback) => feedback.accountId === currentUser.id) && (
+                  <Comment handleComment={handleComment} />
+                )}
             </div>
           )}
           {type === 'policy' && detailInfor['policy'] && (
-            <div className={cx('policy-wrapper', 'mt-5')}>
-              <p className={cx('title')}>Chính sách nhà xe</p>
-              <div className={cx('policies')}>
+            <div
+              className={cx('policy-wrapper', 'mt-5')}
+              style={{
+                marginTop: '40px',
+                padding: '20px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <p
+                className={cx('title')}
+                style={{
+                  fontSize: '2rem',
+                  fontWeight: 'bold',
+                  color: '#333',
+                  marginBottom: '20px',
+                  textAlign: 'center',
+                }}
+              >
+                Chính sách nhà xe
+              </p>
+              <div className={cx('policies')} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {detailInfor['policy'].map((policy, index) => (
-                  <span key={index} className={cx('policy')}>
+                  <span
+                    key={index}
+                    className={cx('policy')}
+                    style={{
+                      fontSize: '1.4rem',
+                      color: '#555',
+                      padding: '10px 15px',
+                      backgroundColor: '#e9ecef',
+                      borderRadius: '5px',
+                      // transition: 'background-color 0.3s ease, transform 0.2s ease',
+                    }}
+                    // onMouseEnter={(e) => (e.target.style.backgroundColor = '#dbe2e6')}
+                    // onMouseLeave={(e) => (e.target.style.backgroundColor = '#e9ecef')}
+                  >
                     {policy}
                   </span>
                 ))}

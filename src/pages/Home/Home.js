@@ -9,7 +9,7 @@ import ContentItem from '../../components/ContentItem'
 import NumberList from '~/components/NumberList'
 import LinkItem from '~/components/LinkItem'
 import RentingOffer from '~/components/RentingOffer'
-import FeedbackList from '~/components/FeedbackList'
+// import FeedbackList from '~/components/FeedbackList'
 import FeatureList from '~/components/FeatureList'
 
 const cx = classNames.bind(styles)
@@ -55,7 +55,7 @@ function Home() {
           title="DÀNH CHO ĐỐI TÁC"
           Component={<OfferList title="Đăng ký làm đối tác nhà xe" amount={3} src={images.partner} />}
         />
-        <ContentItem title="PHẢN HỒI CỦA KHÁCH HÀNG" Component={<FeedbackList />} />
+        {/* <ContentItem title="PHẢN HỒI CỦA KHÁCH HÀNG" Component={<FeedbackList />} /> */}
         <ContentItem title="TẠI SAO NÊN LỰA CHỌN CHÚNG TÔI" Component={<FeatureList />} />
       </div>
     </div>
