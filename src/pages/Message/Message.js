@@ -74,6 +74,11 @@ function Message() {
               `/user/${currentUser.id}/${currentRole}/queue/messages`,
               onNotificationRecieved,
             )
+            // Đăng ký nhận thông báo
+            stompClientRef.current.subscribe(`/user/${currentUser.id}/${currentRole}/notification`, (message) => {
+              console.log('Notification: ', message)
+              dispatch(fetchAllConversationsByAcc(currentUser.id, currentRole))
+            })
           },
           (error) => {
             console.error('Connection error:', error)

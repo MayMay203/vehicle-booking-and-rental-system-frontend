@@ -3,94 +3,74 @@ import styles from './Notification.module.scss'
 import Button from '../Button'
 import { memo, useEffect, useState } from 'react'
 import NotificationItem from './NotificationItem'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import {fetchAllNotificationsByAcc } from '~/redux/slices/conversationSlice'
+import { Empty} from 'antd'
 
 const cx = classNames.bind(styles)
 function Notification() {
-  const [active, setActive] = useState('all')
+  const [active, setActive] = useState('All')
+  const { currentUser } = useSelector((state) => state.user)
+  const { currentRole } = useSelector((state) => state.menu)
+  const { notificationList } = useSelector((state) => state.conversation)
+  const [filterList, setFilterList] = useState([])
+  const dispatch = useDispatch()
 
-  //Socket Client
-  //
+  useEffect(() => {
+    async function fetchAllNotifications() {
+      dispatch(fetchAllNotificationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
+    }
+    if (currentUser.id && dispatch(checkLoginSession())) {
+      fetchAllNotifications()
+    }
+  }, [currentUser.id, currentRole, dispatch])
 
-  // function onConnected() {
-  //   stompClient.subscribe(/user/${currentUser.id}/${currentRole}/queue/messages, onNotificationRecieved)
-  //   // stompClient.subscribe(/user/${currentUser.id}/${currentRole}/notification, (message) => {
-  //   //   console.log('Notification: ', message)
-  //   // })
-  //   // findAndDisplayConnectedUser()
-  // }
-
-  // async function findAndDisplayConnectedUser() {
-  //   let response = null
-  //   try {
-  //     response = await httpRequest.get(
-  //       http://localhost:8080/api/v1/chat/get-connected-account?conversation_id=${conversation_id}&account_id=${ownerId}&role_account=${ownerType},
-  //       {
-  //         headers: {
-  //           Authorization: Bearer ${getAccessToken()},
-  //         },
-  //       },
-  //     )
-  //   } catch (error) {
-  //     console.error('Failed to update account: ', error)
-  //   }
-
-  //   if (response) {
-  //     let connectedUser = response.data
-  //     console.log(connectedUser)
-  //   } else {
-  //     console.log('No response received.')
-  //   }
-  // }
-
-  // function onError() {}
-  //
+  useEffect(() => {
+    if (active === 'All') {
+       setFilterList(notificationList)
+    }
+    else {
+      setFilterList(notificationList.filter(notification => notification.seen === false))
+    }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [notificationList, active])
 
   useEffect(() => {}, [])
   const handleChooseAll = () => {
-    if (active === 'unread') {
-      setActive('all')
+    if (active === 'Unread') {
+      setActive('All')
     }
   }
 
   const handleChooseUnread = () => {
-    if (active === 'all') {
-      setActive('unread')
+    if (active === 'All') {
+      setActive('Unread')
     }
   }
   return (
     <div className={cx('wrapper')}>
       <h2 className={cx('heading')}>Thông báo</h2>
-      <div className="d-flex mt-4">
-        <Button rounded className={cx('btn-action', { active: active === 'all' })} onClick={handleChooseAll}>
+      <div className="d-flex mt-4 mb-4">
+        <Button rounded className={cx('btn-action', { active: active === 'All' })} onClick={handleChooseAll}>
           Tất cả
         </Button>
-        <Button rounded className={cx('btn-action', { active: active === 'unread' })} onClick={handleChooseUnread}>
+        <Button rounded className={cx('btn-action', { active: active === 'Unread' })} onClick={handleChooseUnread}>
           Chưa đọc
         </Button>
       </div>
+      <div style={{ border: '1px solid rgba(0, 0, 0, 0.175)'}}></div>
       <div className={cx('mt-4', 'list')}>
-        <NotificationItem
-          title="Đặt xe thành công"
-          content="Bạn đã thanh toán và được xác nhận đặt xe thành công"
-          time="10:00 16-10-2024"
-          unread={true}
-        />
-        <NotificationItem
-          title="Đặt xe thành công"
-          content="Bạn đã thanh toán và được xác nhận đặt xe thành công"
-          time="10:00 16-10-2024"
-        />
-        <NotificationItem
-          title="Đặt xe thành công"
-          content="Bạn đã thanh toán và được xác nhận đặt xe thành công"
-          time="10:00 16-10-2024"
-          unread={true}
-        />
-        <NotificationItem
-          title="Đặt xe thành công"
-          content="Bạn đã thanh toán và được xác nhận đặt xe thành công"
-          time="10:00 16-10-2024"
-        />
+        {filterList.length > 0 ? (
+          filterList.map((notification) => (
+            <NotificationItem
+              key={notification.id}
+              data={notification}
+            />
+          ))
+        ) : (
+          <Empty style={{ marginTop: '40px' }} description="Không có thông báo nào gần đây" />
+        )}
       </div>
     </div>
   )

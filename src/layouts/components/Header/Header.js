@@ -24,7 +24,7 @@ import { config } from '~/config'
 import { setMenu } from '~/redux/slices/menuSlice'
 import { getStatusRegisterPartner } from '~/apiServices/user/getStatusRegisterPartner'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
+import { fetchAllConversationsByAcc, fetchAllNotificationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
 function Header() {
@@ -41,11 +41,12 @@ function Header() {
   // Menu
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.currentMenu)
-  const { conversationList } = useSelector((state) => state.conversation)
+  const { conversationList, notificationList } = useSelector((state) => state.conversation)
 
   useEffect(() => {
     if (dispatch(checkLoginSession()) && currentUser.id) {
       dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
+      dispatch(fetchAllNotificationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -360,7 +361,7 @@ function Header() {
                     <button
                       className={cx('btn-action', 'd-none', 'd-md-block')}
                       onClick={() => setIsShowNoti((prev) => !prev)}
-                      data-count={4}
+                      data-count={notificationList.filter((notification) => notification.seen === false).length}
                     >
                       <FontAwesomeIcon icon={faBell} />
                     </button>
