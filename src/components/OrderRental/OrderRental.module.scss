@@ -16,6 +16,13 @@
   font-size: 2rem;
   color: #ff7f50;
 }
+.txt-warn {
+  color: #d34714;
+  font-size: 1.2rem;
+  margin: 0;
+  padding-left: 7rem;
+  // padding: 1rem 0;
+}
 .txt-title {
   color: #a33a3a;
   font-weight: 600;
@@ -29,14 +36,14 @@
 .wrap-renter {
   padding: 0;
 }
-.wrap-name{
-    width: 90%;
+.wrap-name {
+  width: 90%;
 }
 .box-renter {
   background-color: #fff6f3;
   padding: 0.3rem 2rem;
   // min-width: 60% !important;
-  margin: 1rem 1rem;
+  margin: 0.1rem 1rem;
   border-radius: 5px;
   width: 100%;
   @include abstracts.screen(sm) {
@@ -155,7 +162,7 @@
   margin-left: 1rem;
 }
 .btn-order {
-  width: 10rem;
+  width: 13rem;
   margin: 1.5rem;
 }
 .txt-center {

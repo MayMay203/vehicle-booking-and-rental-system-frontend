@@ -2,7 +2,7 @@
 import * as httpRequest from '~/utils/httpRequest'
 export const getVehicleTypeByID = async (id) => {
   try {
-    const response = await httpRequest.get(`/v1/vehicle-types?idVehicleType=${id}`, 
+    const response = await httpRequest.get(`/v1/vehicle-types/${id}`, 
     //   {
     //   headers: {
     //     Authorization: `Bearer ${getAccessToken()}`,

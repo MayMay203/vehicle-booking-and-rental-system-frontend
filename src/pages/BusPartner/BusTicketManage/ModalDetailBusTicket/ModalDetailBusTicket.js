@@ -70,14 +70,14 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, ...props }) {
       </Modal.Header>
       <Modal.Body>
         <div className={cx('container', 'wrap-container')}>
-          <Col md={3} className={cx('background-red', 'ml-auto')}>
+          {/* <Col md={3} className={cx('background-red', 'ml-auto')}>
             <DatePicker
               onChange={handleDateChange}
               value={selectedDate} // Hiển thị giá trị được chọn
               format="DD/MM/YYYY" // Định dạng ngày
               className={cx('content-calendar')}
             />
-          </Col>
+          </Col> */}
           <Tabs defaultActiveKey="infor" id="fill-tab-bus-ticket" className="mb-3" fill>
             <Tab eventKey="infor" title="Thông tin">
               <Row className={cx('form-infor-bus-trip', 'justify-content-center')}>
@@ -287,6 +287,14 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, ...props }) {
               <AddManyTickets initialItems={[1]}></AddManyTickets>
             </Tab>
             <Tab eventKey="list-order" title="Danh sách đơn đặt vé">
+              <Col md={3} className={cx('background-red', 'ml-auto')}>
+                <DatePicker
+                  onChange={handleDateChange}
+                  value={selectedDate} // Hiển thị giá trị được chọn
+                  format="DD/MM/YYYY" // Định dạng ngày
+                  className={cx('content-calendar')}
+                />
+              </Col>
               <TableListBuyTicket></TableListBuyTicket>
             </Tab>
             <Tab eventKey="rating" title="Đánh giá">

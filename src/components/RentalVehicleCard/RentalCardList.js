@@ -5,14 +5,11 @@ import RentalCardItem from './RentalCardItem'
 import PropTypes from 'prop-types'
 
 const cx = classNames.bind(styles)
-function RentalCardList({ maxColumns = 4, typeService, role, listVehicleRentals }) {
+function RentalCardList({ maxColumns = 4, typeService, role, listVehicleRentals, startDateTime, endDateTime }) {
+   console.log('endDatatime ---1---', endDateTime)
+   console.log('startDatatime ---- 1----', startDateTime)
   const cards = listVehicleRentals.map((item, index) => (
-    <RentalCardItem
-      key={index}
-      typeService={typeService}
-      role={role}
-      item={item}
-    />
+    <RentalCardItem key={index} typeService={typeService} role={role} item={item} startDateTime={startDateTime} endDateTime={endDateTime} />
   ))
 
   const numGhostColumns = maxColumns - (cards.length % maxColumns || maxColumns)
