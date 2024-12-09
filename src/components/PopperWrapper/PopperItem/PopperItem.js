@@ -12,7 +12,7 @@ function PopperItem({ id, title, onClick, checked}) {
         name="item"
         className={cx('radio-button')}
         hidden
-        checked={checked}
+        defaultChecked={checked}
       />
       <label htmlFor={id} className={cx('label')}>
         {title}

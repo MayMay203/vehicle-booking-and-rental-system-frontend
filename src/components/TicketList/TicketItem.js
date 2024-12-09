@@ -58,8 +58,6 @@ function TicketItem({ status, data = {} }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  console.log(data)
-
   const tabList = useMemo(() => {
     const tabs = [
       {
