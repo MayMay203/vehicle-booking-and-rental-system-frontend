@@ -1,62 +1,95 @@
 import Button from '~/components/Button'
-import React, { useState } from 'react'
-import DatePicker from 'react-datepicker'
+import React, { useEffect, useState } from 'react'
 import 'react-datepicker/dist/react-datepicker.css'
 import styles from './InforRental.module.scss'
 import classNames from 'classnames/bind'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClock, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
 import Form from 'react-bootstrap/Form'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import VoucherSlider from '../Voucher/VoucherSlider'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import RentalOrder from '~/pages/RentalPage/RentalOrder'
+import { DatePicker } from 'antd'
+import dayjs from 'dayjs'
 const cx = classNames.bind(styles)
-function InforRental({ typeService, inforVehicleRental }) {
+function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime, endDateTime }) {
   const listVoucher = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
-  const [startTime, setStartTime] = useState(new Date())
-  const [endTime, setEndTime] = useState(new Date())
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  // const [startTime, setStartTime] = useState(new Date())
+  // const [endTime, setEndTime] = useState(new Date())
+  // const [startDate, setStartDate] = useState(new Date())
+  // const [endDate, setEndDate] = useState(new Date())
   const dispatch = useDispatch()
   const { isLogin, currentUser } = useSelector((state) => state.user)
+  const [modalOrderShow, setModalOrderShow] = useState(false)
+  const [type, setType] = useState('')
   const [formData, setFormData] = useState({
-    start_rental_time:
-      startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
-      ' ' +
-      (`0${startDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
-        '-' +
-        `0${startDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
-        '-' +
-        startDate.getFullYear()),
-    end_rental_time:
-      endTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
-      ' ' +
-      (`0${endDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
-        '-' +
-        `0${endDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
-        '-' +
-        endDate.getFullYear()),
-    pickup_location: '',
-    total: 350000,
-    status: '',
-    voucher_value: 20.0,
-    voucher_percentage: 10.0,
+    start_rental_time: startDateTime.startDT,
+      // startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
+      // ' ' +
+      // (`0${startDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
+      //   '-' +
+      //   `0${startDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
+      //   '-' +
+      //   startDate.getFullYear()),
+    end_rental_time: endDateTime.endDT,
+      // endTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
+      // ' ' +
+      // (`0${endDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
+      //   '-' +
+      //   `0${endDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
+      //   '-' +
+      //   endDate.getFullYear()),
+    pickup_location: inforVehicleRental?.location,
+    total: 0,
+    status: 'confirmed',
+    voucher_value: 0,
+    voucher_percentage: 0,
     amount: 1,
     car_deposit: inforVehicleRental?.car_deposit,
     reservation_fee: inforVehicleRental?.reservation_fees,
-    price: inforVehicleRental?.amount,
-    vehicle_rental_service_id: 3,
+    // price: inforVehicleRental?.price,
+    price: newPrice,
+    vehicle_rental_service_id: inforVehicleRental?.id,
     customerName: currentUser.name,
     customerPhoneNumber: currentUser.phoneNumber,
-    account_id: 3,
+    account_id: currentUser.id,
   })
-  const navigate = useNavigate()
+  console.log('endDatatime ---4---', endDateTime)
+  console.log('startDatatime ---- 4----', startDateTime)
+  // useEffect(() => {
+  //   if (startDateTime?.startDT) {
+  //     setStartDate(startDateTime?.startDate)
+  //     setStartTime(startDateTime?.startTime)
+  //     console.log('startDateTime?.startDate ---- 4----', startDateTime?.startDate)
+  //     // setStartTime(startDateTime?.startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }))
+  //   }
+  //   if (endDateTime?.endDT) {
+  //     setEndDate(endDateTime?.endDate)
+  //     setEndTime(endDateTime?.endTime)
+  //     console.log('endDateTime?.endTime ---- 4----', endDateTime?.endTime)
+  //   }
+  // }, [])
+  useEffect(() => {
+    if (inforVehicleRental) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        pickup_location: inforVehicleRental.location,
+        car_deposit: inforVehicleRental.car_deposit,
+        reservation_fee: inforVehicleRental.reservation_fees,
+        // price: inforVehicleRental.amount,
+        vehicle_rental_service_id: inforVehicleRental?.id,
+      }))
+    }
+  }, [inforVehicleRental])
+
+  // const navigate = useNavigate()
   const handleOrder = (type) => {
     if (isLogin) {
-      navigate('/rent-vehicle/rental-service/rental-service-detail/rental-order', {
-        state: { typeService: type, formData: formData },
-      })
+      // navigate('/rent-vehicle/rental-service/rental-service-detail/rental-order', {
+      //   state: { typeService: type, formData: formData },
+      // })
+      setModalOrderShow(true)
+      setType(type)
     } else {
       //gọi modal đăng nhập
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
@@ -68,7 +101,6 @@ function InforRental({ typeService, inforVehicleRental }) {
       ...prevState,
       [name]: value,
     }))
-    console.log(formData)
   }
 
   return (
@@ -79,62 +111,45 @@ function InforRental({ typeService, inforVehicleRental }) {
           <span className={cx('txt-datetime')}>Thời gian nhận:</span>
           <div className={cx('d-flex', 'align-items-center', 'date-time')}>
             <div className={cx('time-rental', 'justify-content-end')}>
-              <span className={cx('content-clock', 'txt-datetime')}>
-                {startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
-              </span>
               <DatePicker
-                selected={startTime}
-                onChange={(time) => setStartTime(time)}
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={15}
-                timeCaption="Time"
-                dateFormat="HH:mm"
-                customInput={<FontAwesomeIcon icon={faClock} className={cx('', 'btn-clock')} />}
+                defaultValue={startDateTime?.startTime ? dayjs(startDateTime.startTime, 'HH:mm') : null}
+                disabled
+                picker="time"
+                format="HH:mm"
+                showNow={false}
               />
             </div>
 
             <div className={cx('date-rental')}>
-              <span className={cx('', 'content-calendar', 'txt-datetime')}>
-                {startDate.toLocaleDateString('vi-VN')}
-              </span>
               <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                dateFormat="dd/MM/yyyy"
-                customInput={<FontAwesomeIcon icon={faCalendarDays} className={cx('', 'btn-calendar')} />}
-                calendarClassName={cx('datetime-picker')}
+                disabled
+                defaultValue={startDateTime?.startDate ? dayjs(startDateTime?.startDate, 'DD-MM-YYYY') : null}
+                format="DD-MM-YYYY"
+                className="content-calendar"
               />
             </div>
           </div>
         </div>
         <div className={cx('content-datetime-rental', 'd-flex', 'align-items-center')}>
-          <span className={cx('txt-datetime')}>Thời gian trả: </span>
-          <div className={cx('d-flex', 'align-items-center', 'date-time')}>
+          <span className={cx('txt-datetime', 'mb-3')}>Thời gian trả: </span>
+          <div className={cx('d-flex', 'align-items-center', 'date-time', 'mb-3')}>
             <div className={cx('time-rental')}>
-              <span className={cx('', 'content-clock', 'txt-datetime')}>
-                {endTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
-              </span>
               <DatePicker
-                selected={endTime}
-                onChange={(time) => setEndTime(time)}
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={15}
-                timeCaption="Time"
-                dateFormat="HH:mm"
-                customInput={<FontAwesomeIcon icon={faClock} className={cx('', 'btn-clock')} />}
+                defaultValue={endDateTime.endTime ? dayjs(endDateTime.endTime, 'HH:mm') : null}
+                disabled
+                picker="time"
+                format="HH:mm"
+                showNow={false}
               />
             </div>
 
             <div className={cx('date-rental')}>
-              <span className={cx('', 'content-calendar', 'txt-datetime')}>{endDate.toLocaleDateString('vi-VN')}</span>
               <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                dateFormat="dd/MM/yyyy"
-                customInput={<FontAwesomeIcon icon={faCalendarDays} className={cx('', 'btn-calendar')} />}
-                calendarClassName={cx('datetime-picker')}
+                disabled
+                defaultValue={endDateTime?.endDate ? dayjs(endDateTime.endDate, 'DD-MM-YYYY') : null}
+                picker="date"
+                showNow={false}
+                format="DD-MM-YYYY"
               />
             </div>
           </div>
@@ -148,7 +163,7 @@ function InforRental({ typeService, inforVehicleRental }) {
           classNames={cx('select-amount', 'align-right')}
           onChange={handleInputChange}
         >
-          {Array.from({ length: inforVehicleRental?.quantity }, (_, index) => (
+          {Array.from({ length: inforVehicleRental?.amount }, (_, index) => (
             <option key={index} value={index + 1}>
               {index + 1}
             </option>
@@ -157,7 +172,8 @@ function InforRental({ typeService, inforVehicleRental }) {
       </div>
       <div className={cx('txt-title', 'd-flex')}>
         <span>Phí thuê/1 chiếc</span>
-        <span className={cx('charge', 'align-right')}>{inforVehicleRental?.amount?.toLocaleString('vi-VN')} đ</span>
+        <span className={cx('charge', 'align-right')}>{Math.floor(newPrice).toLocaleString('vi-VN')} đ</span>
+        {/* <span className={cx('charge', 'align-right')}>{inforVehicleRental?.amount?.toLocaleString('vi-VN')} đ</span> */}
       </div>
       <div className={cx('txt-title', 'd-flex')}>
         <span>Mã giảm giá</span>
@@ -191,6 +207,13 @@ function InforRental({ typeService, inforVehicleRental }) {
           </Button>
         </div>
       </div>
+      <RentalOrder
+        typeService={type}
+        formData={formData}
+        setFormData={setFormData}
+        show={modalOrderShow}
+        onHide={() => setModalOrderShow(false)}
+      />
     </div>
   )
 }

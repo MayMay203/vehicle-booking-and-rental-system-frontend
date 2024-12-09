@@ -57,8 +57,8 @@ function AddBusTrip(props) {
                 className={cx('txt', 'selectbox', 'add-item')}
               >
                 {provincesList.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
+                  <option key={index} value={province.name}>
+                    {province.name}
                   </option>
                 ))}
               </Form.Select>
@@ -77,8 +77,8 @@ function AddBusTrip(props) {
                 className={cx('txt', 'selectbox', 'add-item')}
               >
                 {provincesList.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
+                  <option key={index} value={province.name}>
+                    {province.name}
                   </option>
                 ))}
               </Form.Select>

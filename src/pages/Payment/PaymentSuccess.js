@@ -113,11 +113,11 @@ function PaymentSuccess() {
                     <div className="d-flex column-gap-5 align-items-center justify-content-center mt-5">
                       <div className="d-flex flex-column align-items-center row-gap-4">
                         <span>
-                          <FontAwesomeIcon style={{ color: 'red' }} icon={faLocationCrosshairs} />
+                          <FontAwesomeIcon style={{ color: 'red', fontSize: '2.2rem' }} icon={faLocationCrosshairs} />
                         </span>
                         <div className="d-flex flex-column">
                           <span style={{ color: 'red' }}>{detailData.tripInfo?.departureDateTime}</span>
-                          <span className="mt-3" style={{ color: 'red', fontWeight: 600 }}>
+                          <span className="mt-3" style={{ color: 'red', fontWeight: 600, fontSize: '1.6rem' }}>
                             {detailData.tripInfo?.departureLocation}
                           </span>
                         </div>
@@ -127,11 +127,11 @@ function PaymentSuccess() {
                       </span>
                       <div className="d-flex flex-column  align-items-center row-gap-4">
                         <span>
-                          <FontAwesomeIcon style={{ color: '#008E28' }} icon={faLocationDot} />
+                          <FontAwesomeIcon style={{ color: '#008E28', fontSize: '2.2rem' }} icon={faLocationDot} />
                         </span>
                         <div className="d-flex flex-column">
                           <span style={{ color: '#008E28' }}>{detailData.tripInfo?.arrivalDateTime}</span>
-                          <span className="mt-3" style={{ color: '#008E28', fontWeight: 600 }}>
+                          <span className="mt-3" style={{ color: '#008E28', fontWeight: 600, fontSize: '1.6rem' }}>
                             {detailData.tripInfo?.arrivalLocation}
                           </span>
                         </div>
@@ -230,7 +230,8 @@ function PaymentSuccess() {
               className="p-4 d-flex justify-content-center"
             >
               <span className="d-block" style={{ width: '80%', lineHeight: '1.3', textAlign: 'center' }}>
-                Cảm ơn đã lựa chọn chúng tôi. Chúc bạn có một trải nghiệm tuyệt vời!
+                Cảm ơn bạn đã tin tưởng lựa chọn chúng tôi.<br></br> Safety Travel chúc bạn sẽ có một trải nghiệm tuyệt
+                vời!
               </span>
             </div>
           </div>

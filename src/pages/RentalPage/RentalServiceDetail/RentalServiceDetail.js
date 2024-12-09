@@ -31,25 +31,27 @@ const cx = classNames.bind(styles)
 function RentalServiceDetail() {
   const location = useLocation()
   const typeService = location.state?.typeService
-  const typeVehicle = location.state?.typeVehicle
+  const typeVehicle = location.state.typeVehicle
   const inforVehicle = location.state?.infor
+  const startDateTime = location.state?.startDateTime
+  const endDateTime = location.state?.endDateTime
   const manned = 'manned'
   const self_driving = 'self_driving'
-  const newPrice = inforVehicle?.amount - inforVehicle?.amount * (inforVehicle?.discount_percentage / 100)
-   const [inforVehicleRental, setInforVehicleRental] = useState(null)
-  
-   useEffect(() => {
-     const getInforVehicleRentalByID = async () => {
-       try {
-         const response = await getVehicleRentalByID(inforVehicle?.id)
-         setInforVehicleRental(response)
-       } catch (error) {
-         console.error('Failed to fetch vehicle rental info:', error)
-       }
-     }
-
-     getInforVehicleRentalByID()
-   }, [inforVehicle?.id]) 
+  const newPrice = inforVehicle?.price - inforVehicle?.price * (inforVehicle?.discount_percentage / 100)
+  const [inforVehicleRental, setInforVehicleRental] = useState(null)
+  useEffect(() => {
+    const getInforVehicleRentalByID = async () => {
+      try {
+        const response = await getVehicleRentalByID(inforVehicle?.id)
+        setInforVehicleRental(response)
+      } catch (error) {
+        console.error('Failed to fetch vehicle rental info:', error)
+      }
+    }
+    getInforVehicleRentalByID()
+  }, [inforVehicle?.id])
+  console.log('endDatatime ---3---', endDateTime)
+  console.log('startDatatime ---- 3----', startDateTime)
   // Chia mảng ảnh thành các cặp
   const chunkArray = (array, size) => {
     const result = []
@@ -250,7 +252,7 @@ function RentalServiceDetail() {
                         <FontAwesomeIcon icon={faBoxArchive} className={cx('icon', 'icon-amount')} />
                         <div>
                           <p className={cx('txt', 'name-feature')}>Số lượng</p>
-                          <p className={cx('txt', 'content-feature')}>{inforVehicle?.quantity} chiếc</p>
+                          <p className={cx('txt', 'content-feature')}>{inforVehicle?.amount} chiếc</p>
                         </div>
                       </div>
                     </Col>
@@ -338,11 +340,17 @@ function RentalServiceDetail() {
               <FontAwesomeIcon icon={faThumbTack} className={cx('icon', 'm-0')} />
               <span className={cx('txt', 'txt-price-list')}>Bảng giá:</span>
             </div>
-            <span className={cx('txt', 'charge-old')}>{inforVehicle?.amount.toLocaleString('vi-VN')}đ/ngày</span>
+            <span className={cx('txt', 'charge-old')}>{inforVehicle?.price.toLocaleString('vi-VN')}đ/ngày</span>
             <span className={cx('txt', 'charge-new')}>{Math.floor(newPrice).toLocaleString('vi-VN')}đ/ngày</span>
           </Row>
           <Row className={cx('order')}>
-            <InforRental typeService={typeService} inforVehicleRental={inforVehicleRental}></InforRental>
+            <InforRental
+              typeService={typeService}
+              inforVehicleRental={inforVehicleRental}
+              newPrice={newPrice}
+              startDateTime={startDateTime}
+              endDateTime={endDateTime}
+            ></InforRental>
           </Row>
           <Row className={cx('surcharge')}>
             <SurchargeFee></SurchargeFee>
