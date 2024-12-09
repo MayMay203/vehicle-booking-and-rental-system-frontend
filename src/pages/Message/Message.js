@@ -19,7 +19,7 @@ import { getAccessToken } from '~/utils/cookieUtils'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
 import { updateUnseenMessages } from '~/apiServices/messageService/updateUnseenMessages'
-import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
+import { fetchAllConversationsByAcc, fetchAllNotificationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
 function Message() {
@@ -74,6 +74,11 @@ function Message() {
               `/user/${currentUser.id}/${currentRole}/queue/messages`,
               onNotificationRecieved,
             )
+            // Đăng ký nhận thông báo
+            stompClientRef.current.subscribe(`/user/${currentUser.id}/${currentRole}/notification`, (message) => {
+              console.log('Notification: ', message)
+              dispatch(fetchAllNotificationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
+            })
           },
           (error) => {
             console.error('Connection error:', error)

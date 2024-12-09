@@ -43,14 +43,20 @@ function TicketItem({ status, data = {} }) {
   const [detailInfor, setDetaiInfor] = useState({})
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
+  const [isCommentable, setIsCommentable] = useState(false)
   const detailRef = useRef(null)
 
-  const [time, date] = data.tripInfo.arrivalDateTime.split(' ')
-  const [day, month, year] = date.split('-')
-  const isoDate = `${year}-${month}-${day}T${time}:00`
 
-  // So sánh thời gian hiện tại với commentDate
-  const isCommentable = new Date() - new Date(isoDate) < 24 * 60 * 60 * 1000 * 3
+
+  useEffect(() => {
+    if (data.tripInfo) {
+      const [time, date] = data.tripInfo.arrivalDateTime.split(' ')
+      const [day, month, year] = date.split('-')
+      const isoDate = `${year}-${month}-${day}T${time}:00`
+      setIsCommentable(new Date() - new Date(isoDate) < 24 * 60 * 60 * 1000 * 3)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   console.log(data)
 

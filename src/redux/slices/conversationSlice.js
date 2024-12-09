@@ -1,16 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { getAllConversation } from '~/apiServices/messageService/getAllConversation'
+import { getAllNotifications } from '~/apiServices/messageService/getAllNotification'
 
 const initialState = {
   conversationList: [],
+  notificationList: [],
 }
 
 export const fetchAllConversationsByAcc = createAsyncThunk(
   'conversation/fetchAllConversationsByAcc',
   async ({ accountId, roleAccount }) => {
     const data = await getAllConversation(accountId, roleAccount)
+    return data?.reverse() || []
+  },
+)
+
+export const fetchAllNotificationsByAcc = createAsyncThunk(
+  'notification/fetchAllNotificationsByAcc',
+  async ({ accountId, roleAccount }) => {
+    const data = await getAllNotifications(accountId, roleAccount)
     console.log(data)
-    return data || []
+    return data?.reverse() || []
   },
 )
 
@@ -19,10 +29,13 @@ const conversationSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchAllConversationsByAcc.fulfilled, (state, action) => {
-      console.log(action.payload)
-      state.conversationList = action.payload
-    })
+    builder
+      .addCase(fetchAllConversationsByAcc.fulfilled, (state, action) => {
+        state.conversationList = action.payload
+      })
+      .addCase(fetchAllNotificationsByAcc.fulfilled, (state, action) => {
+        state.notificationList = action.payload
+      })
   },
 })
 

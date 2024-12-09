@@ -4,25 +4,27 @@ import { images } from "~/assets/images";
 import { useState } from 'react'
 
 const cx = classNames.bind(styles)
-function NotificationItem({ title, content, time, unread: unreadProp }) {
-  const [unread, setUnread] = useState(unreadProp)
+function NotificationItem({ data }) {
+  const [isSeen, setIsSeen] = useState(data.seen)
   const handleReaded = () => {
-    if (unread) {
-      setUnread(!unread)
+    if (!isSeen) {
+      console.log('Vào đây nhé')
+      setIsSeen(true)
     }
   }
+  console.log(isSeen)
   return (
-    <div className={cx('d-flex', 'column-gap-3', 'item', { status: unread })} onClick={handleReaded}>
-      <div className={cx('image-wrapper')}>
-        <img src={images.noImage} alt="avatar" className={cx('image')}></img>
+      <div className={cx('d-flex', 'column-gap-3', 'item', { status: !isSeen })} onClick={handleReaded}>
+        <div className={cx('image-wrapper')}>
+          <img src={images.noImage} alt="avatar" className={cx('image')}></img>
+        </div>
+        <div className={cx('d-flex', 'flex-column', 'row-gap-2', 'info')}>
+          <p className={cx('title')}>{data.title}</p>
+          <p className={cx('content')}>{data.message}</p>
+          <span className={cx('time')}>{data.create_at}</span>
+        </div>
+        {!isSeen && <span className={cx('unread')}></span>}
       </div>
-      <div className={cx('d-flex', 'flex-column', 'row-gap-2', 'info')}>
-        <p className={cx('title')}>{title}</p>
-        <p className={cx('content')}>{content}</p>
-        <span className={cx('time')}>{time}</span>
-      </div>
-      {unread && <span className={cx('unread')}></span>}
-    </div>
   )
 }
 

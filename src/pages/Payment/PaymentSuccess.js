@@ -10,20 +10,23 @@ import { getDetailTransaction } from '~/apiServices/order/getDetailTransaction'
 const cx = classNames.bind(styles)
 function PaymentSuccess() {
   const [searchParams] = useSearchParams()
-  const transactionId = searchParams.get('transactionId')
+  const transactionCode = searchParams.get('transactionCode')
+  const orderType = searchParams.get('orderType')
   const [detailData, setDetailData] = useState([])
+
+  console.log(detailData)
 
   useEffect(() => {
     async function fetchDetailTransaction() {
-      const data = await getDetailTransaction(transactionId, 'BUS_TRIP_ORDER')
+      const data = await getDetailTransaction(transactionCode, orderType)
       if (data) {
         setDetailData(data)
       }
     }
-    if (transactionId) {
+    if (transactionCode) {
       fetchDetailTransaction()
     }
-  }, [transactionId])
+  }, [transactionCode, orderType])
 
   return (
     <Result
@@ -142,6 +145,10 @@ function PaymentSuccess() {
                 <span className={cx('title')}>Thông tin xe</span>
                 <div className="px-4 pt-2 pb-0">
                   <div className="mt-3 d-flex justify-content-between">
+                    <span>Nhà xe:</span>
+                    <span className="ms-2">{detailData.businessPartnerInfo?.name}</span>
+                  </div>
+                  <div className="mt-3 d-flex justify-content-between">
                     <span>Biển số xe:</span>
                     <span className="ms-2" style={{ fontWeight: 600 }}>
                       {detailData.busInfo?.licensePlate}
@@ -169,7 +176,9 @@ function PaymentSuccess() {
                 <div className="p-4">
                   <div className="d-flex justify-content-between mb-4">
                     <span>Tiền vé xe:</span>
-                    <span style={{ color: '#008E28', fontWeight: 600 }}>{detailData.orderInfo?.pricePerTicket.replace('.',',')}</span>
+                    <span style={{ color: '#008E28', fontWeight: 600 }}>
+                      {detailData.orderInfo?.pricePerTicket.replace('.', ',')}
+                    </span>
                   </div>
                   <div className="d-flex justify-content-between mb-4">
                     <span>Số lượng vé:</span>
@@ -195,7 +204,7 @@ function PaymentSuccess() {
                   <div className={cx('d-flex', 'justify-content-between', 'mb-4')}>
                     <span>Tổng tiền đã thanh toán:</span>
                     <span className="fw-bold" style={{ color: 'var(--primary-color)' }}>
-                      {detailData.orderInfo?.priceTotal.replace('.',',')}
+                      {detailData.orderInfo?.priceTotal.replace('.', ',')}
                     </span>
                   </div>
 
