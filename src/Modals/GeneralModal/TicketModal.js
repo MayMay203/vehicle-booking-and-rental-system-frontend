@@ -177,7 +177,7 @@ function TicketModal() {
           )}
 
           <div className="mt-2">
-            <span className={cx('title')}>Số lượng vé:</span>
+            <span className={cx('title')}>Số lượng vé: </span>
             {type === 'detailOrder' ? (
               <span>{ticketDetail.orderInfo?.numberOfTicket}</span>
             ) : (

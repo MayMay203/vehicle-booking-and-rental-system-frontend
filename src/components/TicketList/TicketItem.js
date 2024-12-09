@@ -239,11 +239,13 @@ function TicketItem({ status, data = {} }) {
   }, [])
 
   const handleComment = async (id, ratingValue, comment, action) => {
+    console.log(id, action)
     switch (action) {
       case 'create':
         await createRating(data.orderInfo.orderId, ratingValue, comment)
         break
       case 'update':
+        console.log(id)
         await updatRating(id, ratingValue, comment)
         break
       case 'delete':
@@ -288,7 +290,7 @@ function TicketItem({ status, data = {} }) {
           </div>
           <div className="d-flex gap-3 align-items-center">
             <img className={cx('location-img')} alt="location" src={images.location} />
-            <div className={cx('location-time', 'd-flex', 'flex-column', 'gap-4', 'justify-content-center')}>
+            <div className={cx('location-time', 'd-flex', 'flex-column', 'justify-content-center')} style={{gap: '16px'}}>
               <div className="d-flex gap-4">
                 <p style={{ fontWeight: 400 }}>
                   <span style={{ fontWeight: 600 }}>{data.departureTime || data.tripInfo?.departureDateTime}</span>
@@ -302,9 +304,7 @@ function TicketItem({ status, data = {} }) {
                 )} */}
               </div>
 
-              <span className={cx('duration')}>
-                {data.busTripInfo?.durationJourney || data.tripInfo?.durationJourney}
-              </span>
+              <span className={cx('duration')}>{data.journeyDuration || data.tripInfo?.durationJourney}</span>
               <p style={{ fontWeight: 400 }}>
                 <span style={{ fontWeight: 600 }}>{data.arrivalTime || data.tripInfo?.arrivalDateTime}</span>
                 {` • ${data.busTripInfo?.arrivalLocation || data.tripInfo?.arrivalLocation}`}
