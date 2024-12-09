@@ -19,7 +19,6 @@ export const fetchAllNotificationsByAcc = createAsyncThunk(
   'notification/fetchAllNotificationsByAcc',
   async ({ accountId, roleAccount }) => {
     const data = await getAllNotifications(accountId, roleAccount)
-    console.log(data)
     return data?.reverse() || []
   },
 )

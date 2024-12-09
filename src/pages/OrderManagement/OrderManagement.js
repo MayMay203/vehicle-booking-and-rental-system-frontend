@@ -131,9 +131,24 @@ function OrderManagement() {
           render={(attrs) => (
             <div className={cx('filter')} tabIndex="-1" {...attrs}>
               <PopperWrapper>
-                <PopperItem id="1" title="Đơn vé xe" onClick={() => setfilterType('ticketOrder')} />
-                <PopperItem id="2" title="Đơn thuê xe" onClick={() => setfilterType('carRentalOrder')} />
-                <PopperItem id="3" title="Đơn đặt xe" onClick={() => setfilterType('carBookingOrder')} />
+                <PopperItem
+                  id="1"
+                  title="Đơn vé xe"
+                  onClick={() => setfilterType('ticketOrder')}
+                  checked={filterType === 'ticketOrder'}
+                />
+                <PopperItem
+                  id="2"
+                  title="Đơn thuê xe"
+                  onClick={() => setfilterType('carRentalOrder')}
+                  checked={filterType === 'carRentalOrder'}
+                />
+                <PopperItem
+                  id="3"
+                  title="Đơn đặt xe"
+                  onClick={() => setfilterType('carBookingOrder')}
+                  checked={filterType === 'carBookingOrder'}
+                />
               </PopperWrapper>
             </div>
           )}

@@ -40,7 +40,7 @@ function BuyTicket() {
     setSortType(value)
     setTimeout(() => setIsVisible(false), 250)
   }
-  console.log(ticketList)
+  
   return (
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb className="mb-5">
