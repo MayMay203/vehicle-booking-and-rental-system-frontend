@@ -233,7 +233,6 @@ function TicketItem({ status, data = {} }) {
 
   const reGetAllRating = useCallback(async () => {
     const dataRating = await getAllRatingOfTicket(data.busTripScheduleId || data.tripInfo?.busTripScheduleId)
-    console.log(dataRating)
     setDetaiInfor((prev) => ({ ...prev, [type]: dataRating || {} }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -264,7 +263,7 @@ function TicketItem({ status, data = {} }) {
   }
 
   return (
-    <div className={cx('wrapper')}>
+    <div className={cx('wrapper',{'minHeight': isDetail})}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
         <div className="col">
           <div className={cx('image-wrapper')}>
@@ -290,7 +289,10 @@ function TicketItem({ status, data = {} }) {
           </div>
           <div className="d-flex gap-3 align-items-center">
             <img className={cx('location-img')} alt="location" src={images.location} />
-            <div className={cx('location-time', 'd-flex', 'flex-column', 'justify-content-center')} style={{gap: '16px'}}>
+            <div
+              className={cx('location-time', 'd-flex', 'flex-column', 'justify-content-center')}
+              style={{ gap: '16px' }}
+            >
               <div className="d-flex gap-4">
                 <p style={{ fontWeight: 400 }}>
                   <span style={{ fontWeight: 600 }}>{data.departureTime || data.tripInfo?.departureDateTime}</span>
@@ -357,6 +359,11 @@ function TicketItem({ status, data = {} }) {
               <></>
             )}
             {status === 'completed' && isCommentable && (
+              <Button rounded onClick={handleFeedback}>
+                Đánh giá
+              </Button>
+            )}
+            {status === 'canceled' && isCommentable && currentUser.id !== data.cancelUserId && (
               <Button rounded onClick={handleFeedback}>
                 Đánh giá
               </Button>
