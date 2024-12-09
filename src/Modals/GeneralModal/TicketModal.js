@@ -255,7 +255,9 @@ function TicketModal() {
             <div className="px-4 pt-2 pb-0">
               <div className="mt-3 d-flex justify-content-between">
                 <span>Nhà xe:</span>
-                <span className="ms-2">{ticketDetail.businessPartnerInfo?.name}</span>
+                <span className="ms-2">
+                  {ticketDetail.businessPartnerInfo?.name}
+                </span>
               </div>
               <div className="mt-3 d-flex justify-content-between">
                 <span>Biển số xe:</span>
@@ -337,7 +339,7 @@ function TicketModal() {
               {type && ticketDetail.cancelTime && (
                 <div className={cx('d-flex', 'justify-content-between', 'mt-4')}>
                   <span>Thời gian huỷ vé: </span>
-                  <span style={{color: 'red'}}>{ticketDetail.cancelTime}</span>
+                  <span style={{ color: 'red' }}>{ticketDetail.cancelTime}</span>
                 </div>
               )}
 
