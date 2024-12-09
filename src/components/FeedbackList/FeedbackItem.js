@@ -39,7 +39,7 @@ function FeedbackItem({ className, data, handleComment }) {
     <div className="col">
       <div className={cx('item', [className])}>
         <div className={cx('info-wrapper')}>
-          <Image src="default" alt="avatar" className={cx('avatar')} />
+          <Image src={data.avatar} alt="avatar" className={cx('avatar')} />
           <div className={cx('info')}>
             <span className={cx('name')}>{data.customerName}</span>
             <div className={cx('star-list')}>
@@ -92,7 +92,10 @@ function FeedbackItem({ className, data, handleComment }) {
               key="submit"
               type="primary"
               className="custom-confirm-btn"
-              onClick={() => handleComment(data.idRating, selectedStar + 1, comment, 'update')}
+              onClick={() => {
+                handleComment(data.id, selectedStar + 1, comment, 'update')
+                setIsUpdate(false)
+              }}
               style={{ backgroundColor: 'var(--primary-color)', color: '#fff' }}
             >
               Chỉnh sửa
@@ -147,7 +150,10 @@ function FeedbackItem({ className, data, handleComment }) {
               key="submit"
               type="primary"
               className="custom-confirm-btn"
-              onClick={() => handleComment(data.idRating, 0, '', 'delete')}
+              onClick={() => {
+                handleComment(data.id, 0, '', 'delete')
+                setIsDelete(false)
+              }}
               style={{ backgroundColor: 'var(--primary-color)', color: '#fff' }}
             >
               Xác nhận
