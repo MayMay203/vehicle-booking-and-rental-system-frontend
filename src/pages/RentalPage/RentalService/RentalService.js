@@ -52,10 +52,11 @@ function RentalService() {
   const [filterOptionsType, setFilterOptionsType] = useState([])
   const [filterOptionsBranch, setFilterOptionsBranch] = useState([])
   const [filterOptionsArea, setFilterOptionsArea] = useState([])
-
   const [listVehicleRentals, setListVehicleRentals] = useState([])
   console.log('initial start startTime', startTime?.format('HH:mm'))
   console.log('initial start date:', startDate?.format('DD-MM-YYYY'))
+  console.log('initial end endTime', endTime?.format('HH:mm'))
+  console.log('initial end date:', endDate?.format('DD-MM-YYYY'))
   const [startDateTime, setStartDateTime] = useState({
     startDate: startDate?.format('DD-MM-YYYY'),
     startTime: startTime?.format('HH:mm'),
@@ -82,24 +83,30 @@ function RentalService() {
   })
   async function fetchAllVehicleRental() {
     // const data = await getVehicleRental(typeService === 'manned' ? '1' : '0', 'available', '-1')
-    const data = await filterRentalService(
-      selectedArea.title,
-      selectedBranch.title,
-      selectedTypeVehicle.title,
-      typeService === 'manned' ? '1' : '0',
-      startDateTime.startDT,
-      endDateTime.endDT,
-    )
-    if (data) {
-      setListVehicleRentals(data)
+    try {
+      const data = await filterRentalService(
+        selectedArea.title,
+        selectedBranch.title,
+        selectedTypeVehicle.title,
+        typeService === 'manned' ? '1' : '0',
+        startDateTime.startDT,
+        endDateTime.endDT,
+      )
+      if (data) {
+        setListVehicleRentals(data)
+      }
+    } catch (error) {
+      console.log('error--', error)
+    } finally {
+      console.log('listVehicleRentals--', listVehicleRentals)
     }
   }
   useEffect(() => {
-     try {
-       fetchAllVehicleRental()
-     } catch (error) {
-       console.log('error--', error)
-     }
+    try {
+      fetchAllVehicleRental()
+    } catch (error) {
+      console.log('error--', error)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedArea, selectedBranch, selectedTypeVehicle])
   const handleTypeFilterClick = (btnType) => {
@@ -125,9 +132,6 @@ function RentalService() {
     // setSelectedArea(0, 'Khu vực xe')
     // setSelectedTypeVehicle(0, 'Loại xe')
   }
-  // useEffect(() => {
-  //   handleSearchVehicle()
-  // }, [startDate, endDate, startTime, endTime])
   const handleSelectTypeVehicle = (id, title) => {
     setSelectedTypeVehicle({ id, title })
   }
@@ -138,32 +142,36 @@ function RentalService() {
     setSelectedBranch({ id, title })
   }
   const handleSearchVehicle = () => {
-    setEndDateTime((prev) => ({
-      endDate: endDate.format('DD-MM-YYYY'),
-      endTime: endTime?.format('HH:mm'),
-      endDT: endTime?.format('HH:mm') + ' ' + endDate?.format('DD-MM-YYYY'),
-    }))
-    setStartDateTime((prev) => ({
-      startDate: startDate?.format('DD-MM-YYYY'),
-      startTime: startTime?.format('HH:mm'),
-      startDT: startTime?.format('HH:mm') + ' ' + startDate?.format('DD-MM-YYYY'),
-    }))
-    const start = dayjs(`${startDate.format('YYYY-MM-DD')} ${startTime?.format('HH:mm')}`)
-    const end = dayjs(`${endDate.format('YYYY-MM-DD')} ${endTime?.format('HH:mm')}`)
+    if (!startDate || !startTime || !endDate || !endTime) {
+      toast.error('Vui lòng không để trống ngày giờ tìm kiếm', { autoClose: 1500, position: 'top-center' })
+      return
+    } else {
+      setEndDateTime((prev) => ({
+        endDate: endDate.format('DD-MM-YYYY'),
+        endTime: endTime?.format('HH:mm'),
+        endDT: endTime?.format('HH:mm') + ' ' + endDate?.format('DD-MM-YYYY'),
+      }))
+      setStartDateTime((prev) => ({
+        startDate: startDate?.format('DD-MM-YYYY'),
+        startTime: startTime?.format('HH:mm'),
+        startDT: startTime?.format('HH:mm') + ' ' + startDate?.format('DD-MM-YYYY'),
+      }))
+      const start = dayjs(`${startDate?.format('YYYY-MM-DD')} ${startTime?.format('HH:mm')}`)
+      const end = dayjs(`${endDate?.format('YYYY-MM-DD')} ${endTime?.format('HH:mm')}`)
 
-    if (start.isAfter(end)) {
-      toast.error('Ngày giờ bắt đầu phải sớm hơn ngày giờ kết thúc.', { autoClose: 1500, position: 'top-center' })
-      return // Dừng nếu điều kiện không thỏa mãn
-    }
-    console.log('endDatatime', endDateTime)
-    console.log('startDatatime', startDateTime)
-    try{
-      fetchAllVehicleRental()
-    }
-    catch(error){
-      console.log('error--', error)
+      if (start.isAfter(end)) {
+        toast.error('Ngày giờ bắt đầu phải sớm hơn ngày giờ kết thúc.', { autoClose: 1500, position: 'top-center' })
+        return // Dừng nếu điều kiện không thỏa mãn
+      }
+      try {
+        fetchAllVehicleRental()
+        console.log('fetchAllVehicleRental--')
+      } catch (error) {
+        console.log('error--', error)
+      }
     }
   }
+
   const [provincesList, setProvincesList] = useState([])
   useEffect(() => {
     async function fetchApi() {
@@ -204,25 +212,39 @@ function RentalService() {
     fetchFilterOptions()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provincesList])
+
   const handleStartTimeChange = (time) => {
     setStartTime(time)
-    console.log('Selected start Time:', time?.format('HH:mm')) // Example time format
+    setStartDateTime((prev) => ({
+      ...prev,
+      startTime: time?.format('HH:mm'),
+      startDT: time?.format('HH:mm') + ' ' + startDate?.format('DD-MM-YYYY'),
+    }))
   }
-   const handleEndTimeChange = (time) => {
-     setEndTime(time)
-     console.log('Selected end Time:', time?.format('HH:mm')) // Example time format
-   }
-   const handleStartDateChange = (date) => {
-     setStartDate(date)
-     console.log('Selected sd:', date?.format('DD-MM-YYYY')) // Example time format
-   }
-   const handleEndDateChange = (date) => {
-     setEndDate(date)
-     console.log('Selected ed:', date?.format('DD-MM-YYYY')) // Example time format
-   }
-  // console.log('setFilterOptions1 ---', filterOptionsType)
-  // console.log('setFilterOptions2 ---', filterOptionsBranch)
-  // console.log('setFilterOptions3 ---', filterOptionsArea)
+  const handleEndTimeChange = (time) => {
+    setEndTime(time)
+    setEndDateTime((prev) => ({
+      ...prev,
+      endTime: time?.format('HH:mm'),
+      endDT: time?.format('HH:mm') + ' ' + endDate?.format('DD-MM-YYYY'),
+    }))
+  }
+  const handleStartDateChange = (date) => {
+    setStartDate(date)
+    setStartDateTime((prev) => ({
+      ...prev,
+      startDate: date?.format('DD-MM-YYYY'),
+      startDT: startTime?.format('HH:mm') + ' ' + date?.format('DD-MM-YYYY'),
+    }))
+  }
+  const handleEndDateChange = (date) => {
+    setEndDate(date)
+    setEndDateTime((prev) => ({
+      ...prev,
+      endDate: date?.format('DD-MM-YYYY'),
+      endDT: endTime?.format('HH:mm') + ' ' + date?.format('DD-MM-YYYY'),
+    }))
+  }
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
@@ -557,19 +579,23 @@ function RentalService() {
           </div>
         </Col>
         <Col xs="12" md="2" lg="2" xl="4" className={cx('d-flex justify-content-end p-0', 'btn-search-wrapper')}>
-          <Button variant="none" className={cx('', 'btn-search')} onClick={handleSearchVehicle}>
+          <Button variant="none" className={cx('', 'btn-search')} onClick={() => handleSearchVehicle()}>
             Tìm xe
           </Button>
         </Col>
       </Row>
+      {/* {loading ? (
+        <Spinner animation="border" variant="primary" />
+      ) : ( */}
       <RentalVehicleCard
         typeService={typeService}
         listVehicleRentals={listVehicleRentals}
-        role={'user'}
+        role="user"
         endDate={endDate}
         startDateTime={startDateTime}
         endDateTime={endDateTime}
-      ></RentalVehicleCard>
+      />
+      {/* )} */}
     </div>
   )
 }

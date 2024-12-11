@@ -30,8 +30,8 @@ function RentalCardItem({ typeService, role, item,startDateTime, endDateTime }) 
       })
     }
   }
-  console.log('endDatatime ---2---', endDateTime)
-  console.log('startDatatime ---- 2----', startDateTime)
+  // console.log('endDatatime ---2---', endDateTime)
+  // console.log('startDatatime ---- 2----', startDateTime)
   useEffect(() => {
     async function fetchVehicleRentalByID() {
       const data = await getVehicleTypeByID(item.vehicle_type_id)
