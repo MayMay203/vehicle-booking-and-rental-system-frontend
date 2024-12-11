@@ -99,14 +99,27 @@ import { Row } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AddBusTrip from '../AddBusTrip'
 import UpdateBusTrip from '../UpdateBusTrip'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllBusTrips } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
+function convertTimeFormat(timeString) {
+  // Tách chuỗi thành giờ và phút
+  const [hours, minutes] = timeString.split('h:')
+  // Loại bỏ số 0 ở đầu của giờ (nếu có)
+  const formattedHours = parseInt(hours, 10)
+  const formattedMinutes = parseInt(minutes.replace('m', ''), 10)
+  // Trả về chuỗi với định dạng "X tiếng Y phút"
+  return `${formattedHours} tiếng ${formattedMinutes} phút`
+}
 function BusTrip() {
   const [showModalAdd, setShowModalAdd] = useState(false)
   const [showModalUpdate, setShowModalUpdate] = useState(false)
+  const dispatch = useDispatch()
   const columns = [
     {
       title: 'STT',
@@ -197,32 +210,28 @@ function BusTrip() {
       ),
     },
   ]
-  const data = [
-    {
-      key: '1',
-      departure: 'Hà Nội',
-      destination: 'Đà Nẵng',
-      duration: '8 tiếng',
-    },
-    {
-      key: '2',
-      departure: 'Hà Nội',
-      destination: 'Đà Nẵng',
-      duration: '8 tiếng',
-    },
-    {
-      key: '3',
-      departure: 'Hà Nội',
-      destination: 'Đà Nẵng',
-      duration: '8 tiếng',
-    },
-    {
-      key: '5',
-      departure: 'Hà Nội',
-      destination: 'Đà Nẵng',
-      duration: '8 tiếng',
-    },
-  ]
+  const allBusTrips = useSelector((state) => state.busPartner.busTrips)
+  const [data, setData] = useState([])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllBusTrips())
+      console.log('có vô---:')
+    }
+  }, [dispatch])
+  useEffect(() => {
+    try {
+      const newData = allBusTrips?.map((item) => ({
+        key: item.id,
+        departure: item.departureLocation,
+        destination: item.arrivalLocation,
+        duration: convertTimeFormat(item.journeyDuration),
+      }))
+      setData(newData)
+      console.log('newData:', newData)
+    } catch (message) {
+      console.log(message)
+    }
+  }, [allBusTrips])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
@@ -232,7 +241,7 @@ function BusTrip() {
   }
   const navigate = useNavigate()
   const handleViewBus = (id) => {
-    navigate('/bus-trip/detail-bus-trip', { state: id  })
+    navigate('/bus-trip/detail-bus-trip', { state: {id} })
   }
   const handleEditBus = () => {
     setShowModalUpdate(true)
