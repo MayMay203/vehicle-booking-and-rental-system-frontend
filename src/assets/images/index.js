@@ -52,4 +52,9 @@ export const images = {
   guide_registration_certificate_2: require('./guide-registration-certificate-2.png'),
   addImage: require('./add-image.png'),
   logoImage: require('./carLogo.png'),
+  logoBill1: require('./logoBill1.png'),
+  logoBill2: require('./logoBill2.png'),
+  logoBill3: require('./logoBill3.png'),
+  logoBill4: require('./logoBill4.png'),
+  logoBill5: require('./logoBill5.png'),
 }
