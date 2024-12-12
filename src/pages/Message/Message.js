@@ -1,6 +1,5 @@
 import styles from './Message.module.scss'
 import classNames from 'classnames/bind'
-// import { useLocation } from 'react-router-dom'
 import TxtSearch from '~/components/TxtSearch'
 import { Row, Col, Modal } from 'react-bootstrap'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -42,21 +41,25 @@ function Message() {
     setSelectedConvers(conversationId)
   }, [conversationId])
 
-  const onNotificationRecieved = useCallback((payload) => {
-    const newMessage = JSON.parse(payload.body)
-    if (Number(newMessage.conversation_id) === selectedConvers) setMessages((prev) => [...prev, newMessage])
-    else {
-      setMessages((prev) => [...prev])
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConvers])
+  const onNotificationRecieved = useCallback(
+    (payload) => {
+      const newMessage = JSON.parse(payload.body)
+      console.log(newMessage)
+      if (Number(newMessage.conversation_id) === selectedConvers) setMessages((prev) => [...prev, newMessage])
+      else {
+        setMessages((prev) => [...prev])
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [selectedConvers],
+  )
 
   //connect websocket
   useEffect(() => {
     function connect() {
       if (!stompClientRef.current && currentUser.id) {
         // Kiểm tra nếu chưa có kết nối WebSocket
-        const socket = new SockJS(`https://localhost:8080/ws`)
+        const socket = new SockJS(`http://localhost:8080/ws`)
         stompClientRef.current = over(socket)
 
         const headers = {
@@ -200,8 +203,26 @@ function Message() {
     }
     // // Gửi tin nhắn đến server thông qua STOMP client
     stompClientRef.current.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
-    setMessages((prev) => [...prev, messageDTO])
+
+    const sendAtDate = new Date(messageDTO.sendAt)
+    const hours = sendAtDate.getHours().toString().padStart(2, '0')
+    const minutes = sendAtDate.getMinutes().toString().padStart(2, '0')
+    const day = sendAtDate.getDate().toString().padStart(2, '0')
+    const month = (sendAtDate.getMonth() + 1).toString().padStart(2, '0') // Tháng bắt đầu từ 0
+    const year = sendAtDate.getFullYear()
+
+    // Tạo định dạng mới
+    const formattedDate = `${hours}:${minutes} ${day}-${month}-${year}`
+    setMessages((prev) => [...prev, { ...messageDTO, sendAt: formattedDate }])
     setMessageText('')
+  }
+
+  const handleUpdateMessage = (id, content) => {
+    console.log(id, content)
+    // const messageDTO = messages.find((message) => message.id === id)
+    // messageDTO.content = content
+    // setMessages((prev) => [...prev])
+    // console.log(messageDTO)
   }
 
   const handleChangeType = (value) => {
@@ -270,7 +291,11 @@ function Message() {
               <div className={cx('wrap-detail-message')} ref={detailMessRef}>
                 {messages.map((message, index) => (
                   <div key={index} className={cx({ 'message-sender': message.senderId === currentUser.id })}>
-                    <DetailMessage data={message} image={partnerConvers.avatar}></DetailMessage>
+                    <DetailMessage
+                      data={message}
+                      image={partnerConvers.avatar}
+                      handleUpdateMessage={handleUpdateMessage}
+                    ></DetailMessage>
                   </div>
                 ))}
               </div>
