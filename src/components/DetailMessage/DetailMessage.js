@@ -2,34 +2,80 @@ import styles from './DetailMessage.module.scss'
 import classNames from 'classnames/bind'
 import { useSelector } from 'react-redux'
 import Image from '../Image'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckCircle, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 const cx = classNames.bind(styles)
-function DetailMessage({ data, image }) {
+
+function DetailMessage({ data, image, handleUpdateMessage }) {
   const { currentUser } = useSelector((state) => state.user)
   const [isShowDate, setIsShowDate] = useState(false)
+  const [contentUpdate, setContentUpdate] = useState('')
+  const [isEditing, setIsEditing] = useState(false)
   const isSender = data.senderId === currentUser.id
-  const date = new Date(data.sendAt)
-  const formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date
-    .getMinutes()
-    .toString()
-    .padStart(2, '0')} ${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}-${date.getFullYear()}`
+  const textAreaRef = useRef(null)
+  console.log(data)
+  const handleSaveEdit = () => {
+    setIsEditing(false)
+    console.log(data.id)
+    handleUpdateMessage(data.id, contentUpdate)
+  }
+
+  const handleDoubleClick = () => {
+    if (!isSender) return
+    const [time, date] = data.sendAt.split(' ')
+    const [day, month, year] = date.split('-')
+    const formattedDate = `${year}-${month}-${day}T${time}:00`
+    const timeDifference = (new Date() - new Date(formattedDate)) / 1000 / 60
+    if (timeDifference <= 50) {
+      setIsEditing(true)
+    }
+  }
   return (
     <div
       onClick={() => setIsShowDate((prev) => !prev)}
       className={cx('wrap', { 'wrap-receive': !isSender }, { 'wrap-send': isSender })}
+      onDoubleClick={handleDoubleClick}
     >
       {!isSender && (
         <div className={cx('wrap-avatar')}>
           <Image alt="avatar" className={cx('avatar')} src={image}></Image>
         </div>
       )}
-      <div className={cx({ 'wrap-content-end': isSender })}>
-        <p className={cx({ 'content-receive': !isSender}, { 'content-send': isSender }, 'content-message')}>
-          {data.content}
-        </p>
-        <p className={cx('time', { 'align-right': isSender, 'time-visible': isShowDate })}>{formattedTime}</p>
+      <div className={cx({ 'wrap-content-end': isSender })} style={{ width: '100%' }}>
+        {isEditing ? (
+          <div style={{ width: '100%' }}>
+            <textarea
+              rows={1}
+              ref={textAreaRef}
+              type="text"
+              className={cx('edit-input')}
+              value={contentUpdate}
+              onChange={(e) => {
+                setContentUpdate(e.target.value)
+                textAreaRef.current.style.height = 'auto'
+                textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSaveEdit()
+              }}
+              autoFocus
+            />
+            <div className="mt-1 d-flex justify-content-end">
+              <button onClick={handleSaveEdit} className={cx('button-complete')}>
+                <FontAwesomeIcon icon={faCheckCircle} />
+              </button>
+              <button onClick={() => setIsEditing(false)} className={cx('button-close')}>
+                <FontAwesomeIcon icon={faCircleXmark} />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p className={cx({ 'content-receive': !isSender }, { 'content-send': isSender }, 'content-message')}>
+            {data.content}
+          </p>
+        )}
+        <p className={cx('time', { 'align-right': isSender, 'time-visible': isShowDate })}>{data.sendAt}</p>
       </div>
       {isSender && (
         <div className={cx('wrap-avatar')}>
@@ -39,4 +85,5 @@ function DetailMessage({ data, image }) {
     </div>
   )
 }
+
 export default DetailMessage
