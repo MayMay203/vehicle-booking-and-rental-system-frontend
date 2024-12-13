@@ -3,19 +3,34 @@ import styles from './ManageVoucher.module.scss'
 import Button from '~/components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBullseye, faCheckDouble, faPlusCircle, faTicket, faUpDown } from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { setAddVoucherVisible } from '~/redux/slices/generalModalSlice'
+import { Empty, Pagination } from 'antd'
+import { config } from '~/config'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllVouchers } from '~/redux/slices/voucherSlice'
 import Voucher from '~/components/Voucher'
+// import Voucher from '~/components/Voucher'
 
 const cx = classNames.bind(styles)
 function ManageVouchers() {
   const [type, setType] = useState('all')
   const dispatch = useDispatch()
+  const {voucherList} = useSelector(state => state.voucher)
+  const [currentPage, setCurrentPage] = useState(1)
+
+  
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllVouchers({page: currentPage}))
+    }
+  },[currentPage, dispatch])
 
   const handleAddVoucher = () => {
     dispatch(setAddVoucherVisible(true))
   }
+
   return (
     <div className={cx('wrapper')}>
       <div className="row row-cols-1 row-cols-lg-2 gy-5">
@@ -75,13 +90,28 @@ function ManageVouchers() {
         </div>
       </div>
       <div className="row mt-5 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 gx-5">
+        {voucherList.result?.map((voucher) => (
+          <Voucher key={voucher.id} className="m-auto" data={voucher} />
+        ))}
+        {/* <Voucher className="m-auto" />
         <Voucher className="m-auto" />
         <Voucher className="m-auto" />
         <Voucher className="m-auto" />
-        <Voucher className="m-auto" />
-        <Voucher className="m-auto" />
-        <Voucher className="m-auto" />
+        <Voucher className="m-auto" /> */}
       </div>
+      {voucherList.result?.length > 0 && (
+        <Pagination
+          className="mt-5"
+          align="center"
+          current={currentPage}
+          pageSize={config.variables.pagesize}
+          total={voucherList.meta?.total}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      )}
+      {voucherList.result?.length === 0 && (
+        <Empty style={{ marginTop: '70px' }} description="Không có voucher nào gần đây" />
+      )}
     </div>
   )
 }

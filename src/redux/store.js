@@ -10,6 +10,7 @@ import searchSlice from './slices/searchSlice'
 import orderSlice from './slices/orderSlice'
 import busPartnerSlice from './slices/busPartnerSlice'
 import conversationSlice from './slices/conversationSlice'
+import voucherSlice from './slices/voucherSlice'
 
 export const store = configureStore({
   reducer: {
@@ -24,5 +25,6 @@ export const store = configureStore({
     orders: orderSlice,
     busPartner: busPartnerSlice,
     conversation: conversationSlice,
+    voucher: voucherSlice
   },
 })

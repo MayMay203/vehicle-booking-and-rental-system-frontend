@@ -49,73 +49,31 @@ function VoucherModal() {
       <Modal.Body>
         <form ref={formRef} noValidate>
           <FormInput
-            title="Tiêu đề"
-            error="Vui lòng nhập tiêu đề"
+            title="Tên mã"
+            error="Vui lòng nhập tên mã"
             id="title"
             type="text"
-            placeholder="Nhập tiêu đề"
+            placeholder="Nhập tên mã khuyến mãi"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             isValid={isValid}
             required
             star
           ></FormInput>
-          <div className="d-flex column-gap-3 mt-5">
-            <FormInput
-              title="Giá trị khuyến mãi"
-              error={value === '' ? 'Vui lòng nhập giá trị voucher' : 'Giá trị voucher phải lớn hơn 0'}
-              id="value"
-              type="number"
-              min={1}
-              placeholder="Nhập giá trị"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              isValid={isValid}
-              required
-              star
-            ></FormInput>
-            <div className="flex flex-column align-items-center justify-content-center row-gap-3">
-              <div className="d-flex justify-content-center">
-                <Button
-                  rounded
-                  style={{
-                    fontSize: '1.3rem',
-                    height: '30px',
-                    minWidth: '90px',
-                    backgroundColor: '#fff',
-                    color: 'var(--orange-color)',
-                    borderColor: 'var(--orange-color)',
-                  }}
-                  className={cx({ active: typeValue === 'byPercent' })}
-                  onClick={() => setTypeValue('byPercent')}
-                  type="button"
-                >
-                  Theo %
-                </Button>
-                <Button
-                  rounded
-                  style={{
-                    fontSize: '1.3rem',
-                    height: '30px',
-                    minWidth: '110px',
-                    backgroundColor: '#fff',
-                    color: 'var(--orange-color)',
-                    borderColor: 'var(--orange-color)',
-                  }}
-                  className={cx({ active: typeValue === 'byValue' })}
-                  onClick={() => setTypeValue('byValue')}
-                  type="button"
-                >
-                  Theo giá trị
-                </Button>
-              </div>
-              <span className={cx('note')}>
-                {typeValue === 'byPercent'
-                  ? 'Giảm phần trăm theo giá trị đơn hàng'
-                  : 'Giảm giá trị cố định cho mỗi đơn hàng'}
-              </span>
-            </div>
-          </div>
+          <FormInput
+            title="Giá trị phần trăm khuyến mãi"
+            error={value === '' ? 'Vui lòng nhập giá trị voucher' : 'Giá trị voucher không hợp lệ'}
+            id="value"
+            type="number"
+            min={1}
+            max={100}
+            placeholder="Nhập giá trị phần trăm"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            isValid={isValid}
+            required
+            star
+          ></FormInput>
           <div className={cx('date-wrapper')}>
             <label htmlFor="effectiveDate" className="date-picker-label">
               Ngày có hiệu lực
@@ -123,11 +81,12 @@ function VoucherModal() {
             </label>
             <DatePicker
               className={cx('custom-date-picker')}
-              id="effectiveDate"
               selected={effectiveDate}
+              dateFormat="dd/MM/yyyy"
+              minDate={new Date()}
+              maxDate={new Date('2025-12-31')}
+              onKeyDown={(e) => e.preventDefault()}
               onChange={(date) => setEffectiveDate(date)}
-              showTimeSelect
-              dateFormat="Pp"
             />
           </div>
           <div className={cx('date-wrapper')}>
@@ -137,26 +96,42 @@ function VoucherModal() {
             </label>
             <DatePicker
               className={cx('custom-date-picker')}
-              id="expiredDate"
               selected={expiredDate}
-              onChange={(date) => setExpiredDate(date)}
-              showTimeSelect
-              dateFormat="Pp"
+              dateFormat="dd/MM/yyyy"
+              minDate={new Date()}
+              maxDate={new Date('2025-12-31')}
+              onKeyDown={(e) => e.preventDefault()}
+              onChange={(date) => setEffectiveDate(date)}
             />
           </div>
-          <FormInput
-            title="Số lượng"
-            error="Số lượng phải lớn hơn 0"
-            id="quantity"
-            placeholder="Nhập số lượng voucher"
-            min={1}
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            isValid={isValid}
-            type="number"
-            required
-            star
-          ></FormInput>
+          <div class="d-flex column-gap-3">
+            <FormInput
+              title="Số lượng"
+              error="Số lượng phải lớn hơn 0"
+              id="quantity"
+              placeholder="Nhập số lượng voucher"
+              min={1}
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              isValid={isValid}
+              type="number"
+              required
+              star
+            ></FormInput>
+            <FormInput
+              title="Giá trị đơn hàng tối thiểu"
+              error="Vui lòng nhập giá trị đơn hàng tối thiểu"
+              id="quantity"
+              placeholder="Nhập giá trị tối thiểu"
+              min={0}
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              isValid={isValid}
+              type="number"
+              required
+              star
+            ></FormInput>
+          </div>
           <div className="d-flex justify-content-center column-gap-5 mt-5">
             <Button outline type="button" onClick={handleClose}>
               Huỷ

@@ -5,7 +5,6 @@
 }
 .voucher {
     width: 35rem;
-    height: 16rem;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -15,6 +14,12 @@
 
     @include abstracts.screen(xs){
         width: 30rem;
+    }
+
+    .description{
+        margin-top: 10px;
+        line-height: 1.2;
+        font-size: 1.4rem;
     }
 }
 .voucher-small{
@@ -62,8 +67,9 @@
 }
 .voucher-name{
     color: #D5420C;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 600;
+    line-height: 1.4;
     @include abstracts.screen(xs){
         font-size: 1.2rem;
     }
