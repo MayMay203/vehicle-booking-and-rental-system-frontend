@@ -93,11 +93,6 @@ function ManageVouchers() {
         {voucherList.result?.map((voucher) => (
           <Voucher key={voucher.id} className="m-auto" data={voucher} />
         ))}
-        {/* <Voucher className="m-auto" />
-        <Voucher className="m-auto" />
-        <Voucher className="m-auto" />
-        <Voucher className="m-auto" />
-        <Voucher className="m-auto" /> */}
       </div>
       {voucherList.result?.length > 0 && (
         <Pagination

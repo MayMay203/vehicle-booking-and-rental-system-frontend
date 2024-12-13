@@ -20,7 +20,6 @@ function VoucherModal() {
   const [expiredDate, setExpiredDate] = useState(new Date())
   const [quantity, setQuantity] = useState(1)
   const [isValid, setIsValid] = useState(false)
-  const [typeValue, setTypeValue] = useState('byPercent')
 
   const formRef = useRef(null)
 
@@ -33,7 +32,6 @@ function VoucherModal() {
   const handleClose = () => {
     setTitle('')
     setValue('')
-    setTypeValue('byPercent')
     dispatch(setAddVoucherVisible(false))
   }
 
@@ -101,7 +99,7 @@ function VoucherModal() {
               minDate={new Date()}
               maxDate={new Date('2025-12-31')}
               onKeyDown={(e) => e.preventDefault()}
-              onChange={(date) => setEffectiveDate(date)}
+              onChange={(date) => setExpiredDate(date)}
             />
           </div>
           <div class="d-flex column-gap-3">
