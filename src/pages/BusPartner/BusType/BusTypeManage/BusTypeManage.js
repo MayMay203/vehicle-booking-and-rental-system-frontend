@@ -150,7 +150,6 @@ function BusTypeManage() {
         numberSeat: `${item.numberOfSeat} chỗ`,
       }))
       setData(newData)
-      console.log('newData:', newData)
     } catch (message) {
       console.log(message)
     }

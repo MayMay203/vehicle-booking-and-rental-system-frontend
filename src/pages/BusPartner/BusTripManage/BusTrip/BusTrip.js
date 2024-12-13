@@ -99,14 +99,19 @@ import { Row } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AddBusTrip from '../AddBusTrip'
 import UpdateBusTrip from '../UpdateBusTrip'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllBusTrips } from '~/redux/slices/busPartnerSlice'
+import { convertTimeFormat } from '~/utils/convertTimeFormat'
 const cx = classNames.bind(styles)
 function BusTrip() {
   const [showModalAdd, setShowModalAdd] = useState(false)
   const [showModalUpdate, setShowModalUpdate] = useState(false)
+  const dispatch = useDispatch()
   const columns = [
     {
       title: 'STT',
@@ -197,32 +202,28 @@ function BusTrip() {
       ),
     },
   ]
-  const data = [
-    {
-      key: '1',
-      departure: 'Hà Nội',
-      destination: 'Đà Nẵng',
-      duration: '8 tiếng',
-    },
-    {
-      key: '2',
-      departure: 'Hà Nội',
-      destination: 'Đà Nẵng',
-      duration: '8 tiếng',
-    },
-    {
-      key: '3',
-      departure: 'Hà Nội',
-      destination: 'Đà Nẵng',
-      duration: '8 tiếng',
-    },
-    {
-      key: '5',
-      departure: 'Hà Nội',
-      destination: 'Đà Nẵng',
-      duration: '8 tiếng',
-    },
-  ]
+  const allBusTrips = useSelector((state) => state.busPartner.busTrips)
+  const [data, setData] = useState([])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllBusTrips())
+      console.log('có vô---:')
+    }
+  }, [dispatch])
+  useEffect(() => {
+    try {
+      const newData = allBusTrips?.map((item) => ({
+        key: item.id,
+        departure: item.departureLocation,
+        destination: item.arrivalLocation,
+        duration: convertTimeFormat(item.journeyDuration),
+      }))
+      setData(newData)
+      // console.log('newData:', newData)
+    } catch (message) {
+      console.log(message)
+    }
+  }, [allBusTrips])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
@@ -232,7 +233,7 @@ function BusTrip() {
   }
   const navigate = useNavigate()
   const handleViewBus = (id) => {
-    navigate('/bus-trip/detail-bus-trip', { state: id  })
+    navigate('/bus-trip/detail-bus-trip', { state: {id} })
   }
   const handleEditBus = () => {
     setShowModalUpdate(true)
@@ -254,16 +255,16 @@ function BusTrip() {
         dataSource={data}
         onChange={onChange}
         bordered
-        pagination={false}
+        // pagination={false}
         scroll={{ x: 'max-content', y: 500 }}
-        // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+        pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{
           target: 'sorter-icon',
         }}
         className={cx('')}
       />
-      <AddBusTrip show={showModalAdd} onHide={() => setShowModalAdd(false)} />
+      <AddBusTrip show={showModalAdd} closeModal={() => setShowModalAdd(false)} onHide={() => setShowModalAdd(false)} />
       <UpdateBusTrip show={showModalUpdate} onHide={() => setShowModalUpdate(false)}></UpdateBusTrip>
     </div>
   )
