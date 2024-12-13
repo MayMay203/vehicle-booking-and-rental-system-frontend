@@ -106,16 +106,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllBusTrips } from '~/redux/slices/busPartnerSlice'
+import { convertTimeFormat } from '~/utils/convertTimeFormat'
 const cx = classNames.bind(styles)
-function convertTimeFormat(timeString) {
-  // Tách chuỗi thành giờ và phút
-  const [hours, minutes] = timeString.split('h:')
-  // Loại bỏ số 0 ở đầu của giờ (nếu có)
-  const formattedHours = parseInt(hours, 10)
-  const formattedMinutes = parseInt(minutes.replace('m', ''), 10)
-  // Trả về chuỗi với định dạng "X tiếng Y phút"
-  return `${formattedHours} tiếng ${formattedMinutes} phút`
-}
 function BusTrip() {
   const [showModalAdd, setShowModalAdd] = useState(false)
   const [showModalUpdate, setShowModalUpdate] = useState(false)
@@ -227,7 +219,7 @@ function BusTrip() {
         duration: convertTimeFormat(item.journeyDuration),
       }))
       setData(newData)
-      console.log('newData:', newData)
+      // console.log('newData:', newData)
     } catch (message) {
       console.log(message)
     }
@@ -263,16 +255,16 @@ function BusTrip() {
         dataSource={data}
         onChange={onChange}
         bordered
-        pagination={false}
+        // pagination={false}
         scroll={{ x: 'max-content', y: 500 }}
-        // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+        pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{
           target: 'sorter-icon',
         }}
         className={cx('')}
       />
-      <AddBusTrip show={showModalAdd} onHide={() => setShowModalAdd(false)} />
+      <AddBusTrip show={showModalAdd} closeModal={() => setShowModalAdd(false)} onHide={() => setShowModalAdd(false)} />
       <UpdateBusTrip show={showModalUpdate} onHide={() => setShowModalUpdate(false)}></UpdateBusTrip>
     </div>
   )

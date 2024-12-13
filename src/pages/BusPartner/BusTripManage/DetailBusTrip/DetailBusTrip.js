@@ -7,21 +7,14 @@ import SlideDayOfMonth from '~/components/SlideDayOfMonth'
 import TableVehiclesOfBusTrip from '~/components/TableVehiclesOfBusTrip'
 import ModalManageBusSchedule from '../../BusSchedule/ModalManageBusSchedule'
 import { useEffect, useState } from 'react'
-import HolidayCalendar from '~/components/HolidayCalendar'
+// import HolidayCalendar from '~/components/HolidayCalendar'
 import { detailBusTrip } from '~/apiServices/busPartner/detailBusTrip'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import { convertTimeFormat } from '~/utils/convertTimeFormat'
 const cx = classNames.bind(styles)
-function convertTimeFormat(timeString) {
-  // Tách chuỗi thành giờ và phút
-  const [hours, minutes] = timeString.split('h:')
-  // Loại bỏ số 0 ở đầu của giờ (nếu có)
-  const formattedHours = parseInt(hours, 10)
-  const formattedMinutes = parseInt(minutes.replace('m', ''), 10)
-  // Trả về chuỗi với định dạng "X tiếng Y phút"
-  return `${formattedHours} tiếng ${formattedMinutes} phút`
-}
+
 function DetailBusTrip() {
   const location = useLocation()
   const idBusTrip = location.state?.id
@@ -68,18 +61,32 @@ function DetailBusTrip() {
     // ),
     ...(data?.dropOffLocationInfos?.length > 0
       ? data.dropOffLocationInfos.reduce((acc, item, index) => {
-          return acc.concat(
-            Array.from({ length: maxDropOffLength }, (_, idx) => ({
-              key: `dropOff-${index}-${idx}`,
-              title: idx === 0 ? 'Địa điểm cụ thể' : '',
-              ...data.dropOffLocationInfos.reduce((accInner, current) => {
-                accInner[current?.province] = current?.dropOffLocations?.[idx] || '' // Kiểm tra giá trị tồn tại
-                return accInner
-              }, {}),
-            })),
-          )
-        }, []) // <-- Thêm giá trị khởi tạo []
+          const dropOffArray = Array.from({ length: maxDropOffLength }, (_, idx) => ({
+            key: `dropOff-${index}-${idx}`,
+            title: idx === 0 ? 'Địa điểm cụ thể' : '',
+            ...data.dropOffLocationInfos.reduce((accInner, current) => {
+              accInner[current.province] = current?.dropOffLocations?.[idx] || ''
+              return accInner
+            }, {}),
+          }))
+          return dropOffArray
+          // return acc.concat(dropOffArray) // Kết hợp giá trị mới vào accumulator
+        }, [])
       : ['']),
+    // ...(data?.dropOffLocationInfos?.length > 0
+    //   ? data.dropOffLocationInfos.reduce((acc, item, index) => {
+    //       return acc.concat(
+    //         Array.from({ length: maxDropOffLength }, (_, idx) => ({
+    //           key: `dropOff-${index}-${idx}`,
+    //           title: idx === 0 ? 'Địa điểm cụ thể' : '',
+    //           ...data.dropOffLocationInfos.reduce((accInner, current) => {
+    //             accInner[current?.province] = current?.dropOffLocations?.[idx] || '' // Kiểm tra giá trị tồn tại
+    //             return accInner
+    //           }, {}),
+    //         })),
+    //       )
+    //     }, []) // <-- Thêm giá trị khởi tạo []
+    //   : ['']),
   ]
 
   const columns = [
@@ -227,7 +234,7 @@ function DetailBusTrip() {
           <div className="mt-3 mb-3"></div>
           <TableVehiclesOfBusTrip handleUpdateSchedule={handleUpdateSchedule}></TableVehiclesOfBusTrip>
         </div>
-        <HolidayCalendar />
+        {/* <HolidayCalendar /> */}
       </div>
       <ModalManageBusSchedule
         enableEdit={true}
