@@ -1,9 +1,9 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const getAllVouchers = async (page) => {
+export const getAllVouchers = async (page=1) => {
   try {
-    const response = await httpRequest.get(`/v1/vouchers?size=9&page=${page}`, {
+    const response = await httpRequest.get(`/v1/vouchers?size=6&page=${page}`, {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
