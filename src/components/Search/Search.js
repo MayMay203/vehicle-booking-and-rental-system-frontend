@@ -10,13 +10,14 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSearchTicket } from '~/redux/slices/searchSlice'
 import { getBusinessName } from '~/apiServices/user/getBusPartnerName'
+import { fetchAllBusTrips } from '~/redux/slices/busPartnerSlice'
 
 const cx = classNames.bind(styles)
-function Search({ noSelectBus, noSelectDate = false }) {
-  const searchValues = useSelector((state) => state.search.searchTicket)
+function Search({ noSelectBus, noSelectDate = false, type }) {
+  const searchValues = useSelector((state) => (type === 'user' ? state.search.searchTicket : state.search.searchBusTrip))
   const [busName, setBusName] = useState(searchValues.busName)
-  const [departureLocation, setDepartureLocation] = useState(searchValues.departureLocation)
-  const [arrivalLocation, setArrivalLocation] = useState(searchValues.arrivalLocation)
+  const [departureLocation, setDepartureLocation] = useState(type === 'user' ? searchValues.departureLocation : '')
+  const [arrivalLocation, setArrivalLocation] = useState(type === 'user' ? searchValues.arrivalLocation : '')
   const [provincesList, setProvincesList] = useState([])
   const [businessList, setBusinessList] = useState([])
   const [departureDate, setDepartureDate] = useState(searchValues.departureDate)
@@ -30,19 +31,41 @@ function Search({ noSelectBus, noSelectDate = false }) {
     setDepartureDate(searchValues.departureDate)
   }, [searchValues])
 
+  // useEffect(() => {
+  //   async function fetchApi() {
+  //     const provinces = await getLocations(1)
+  //     if (provinces) {
+  //       const cleanedProvinces = provinces
+  //         .map((province) => {
+  //           const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+  //           return {
+  //             ...province,
+  //             name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+  //           }
+  //         })
+  //         .sort((a, b) => a.name.localeCompare(b.name))
+  //       setProvincesList(cleanedProvinces)
+  //     }
+  //     const businessNames = await getBusinessName()
+  //     if (businessNames) {
+  //       setBusinessList(businessNames)
+  //     }
+  //   }
+  //   fetchApi()
+  // }, [])
   useEffect(() => {
     async function fetchApi() {
       const provinces = await getLocations(1)
       if (provinces) {
-       const cleanedProvinces = provinces
-         .map((province) => {
-           const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
-           return {
-             ...province,
-             name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
-           }
-         })
-         .sort((a, b) => a.name.localeCompare(b.name))
+        const cleanedProvinces = provinces
+          .map((province) => {
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+            return {
+              ...province,
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+            }
+          })
+          .sort((a, b) => a.name.localeCompare(b.name))
         setProvincesList(cleanedProvinces)
       }
       const businessNames = await getBusinessName()
@@ -54,11 +77,19 @@ function Search({ noSelectBus, noSelectDate = false }) {
   }, [])
 
   const handleSearch = () => {
-    const date = new Date(departureDate)
-    const formattedDate = date.toISOString().split('T')[0]
-    dispatch(setSearchTicket({ busName, departureDate: formattedDate, departureLocation, arrivalLocation }))
-    if (window.location.origin === 'http://localhost:3000' && window.location.pathname === '/') {
-      navigate(config.routes.ticket)
+    if (type === 'user') {
+      const date = new Date(departureDate)
+      const formattedDate = date.toISOString().split('T')[0]
+      dispatch(setSearchTicket({ busName, departureDate: formattedDate, departureLocation, arrivalLocation }))
+      if (window.location.origin === 'http://localhost:3000' && window.location.pathname === '/') {
+        navigate(config.routes.ticket)
+      }
+    } else if (type === 'partner') {
+      console.log('departureLocation:', departureLocation, '- arrivalLocation:', arrivalLocation)
+      dispatch(fetchAllBusTrips({ dep: departureLocation, des: arrivalLocation }))
+      // if (window.location.origin === 'http://localhost:3000' && window.location.pathname === '/') {
+      //   navigate(config.routes.ticket)
+      // }
     }
   }
 
@@ -104,7 +135,7 @@ function Search({ noSelectBus, noSelectDate = false }) {
           <div className={cx('item')}>
             <p className={cx('title')}>Nơi xuất phát</p>
             <div className={cx('custom-select')}>
-              <Select
+              {/* <Select
                 showSearch
                 defaultValue={departureLocation}
                 style={{
@@ -116,6 +147,22 @@ function Search({ noSelectBus, noSelectDate = false }) {
                 }
                 options={provincesList.map((province) => ({ value: province.name, label: province.name }))}
                 onChange={(value) => setDepartureLocation(value)}
+              /> */}
+              <Select
+                showSearch
+                defaultValue={departureLocation}
+                style={{
+                  width: '100%',
+                }}
+                optionFilterProp="label"
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                }
+                options={[
+                  { value: '', label: 'Tất cả' }, // Thêm lựa chọn này vào đầu danh sách
+                  ...provincesList.map((province) => ({ value: province.name, label: province.name })),
+                ]}
+                onChange={(value) => setDepartureLocation(value)}
               />
             </div>
           </div>
@@ -124,7 +171,7 @@ function Search({ noSelectBus, noSelectDate = false }) {
           <div className={cx('item')}>
             <p className={cx('title')}>Nơi đến</p>
             <div className={cx('custom-select')}>
-              <Select
+              {/* <Select
                 showSearch
                 style={{
                   width: '100%',
@@ -137,6 +184,23 @@ function Search({ noSelectBus, noSelectDate = false }) {
                 }
                 onChange={(value) => setArrivalLocation(value)}
                 options={provincesList.map((province) => ({ value: province.name, label: province.name }))}
+              /> */}
+              <Select
+                showSearch
+                style={{
+                  width: '100%',
+                  fontSize: '1.6rem',
+                }}
+                defaultValue={arrivalLocation}
+                optionFilterProp="label"
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                }
+                onChange={(value) => setArrivalLocation(value)}
+                options={[
+                  { value: '', label: 'Tất cả' }, // Thêm lựa chọn này vào đầu danh sách
+                  ...provincesList.map((province) => ({ value: province.name, label: province.name })),
+                ]}
               />
             </div>
           </div>

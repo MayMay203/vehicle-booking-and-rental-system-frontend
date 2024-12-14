@@ -50,7 +50,7 @@ function BuyTicket() {
         </Breadcrumb.Item>
       </Breadcrumb>
 
-      <Search />
+      <Search type={'user'}/>
 
       <div className="mt-5 fw-medium fs-1 d-flex justify-content-between">
         <div>

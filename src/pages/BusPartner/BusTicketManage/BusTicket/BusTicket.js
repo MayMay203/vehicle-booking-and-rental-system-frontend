@@ -36,7 +36,7 @@ function BusTicket() {
   return (
     <div className={cx('container')}>
       <div className="mb-5"></div>
-      <Search noSelectBus={true}></Search>
+      <Search noSelectBus={true} type={'partner'}></Search>
       <div className="d-flex justify-content-center mt-4 align-items-center">
         <Button primary onClick={() => handleAddTicket()}>
           Thêm vé xe

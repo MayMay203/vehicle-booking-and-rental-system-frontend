@@ -25,7 +25,7 @@ function Home() {
             <LinkItem title="Thuê xe" to={config.routes.renting} Icon={<RentingIcon/>} />
           </div>
           <div className={cx('search-block')}>
-            <Search/>
+            <Search type={'user'}/>
           </div>
         </div>
       </div>

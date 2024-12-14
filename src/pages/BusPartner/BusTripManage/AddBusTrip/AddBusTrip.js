@@ -14,6 +14,7 @@ import { convertTimeFormat } from '~/utils/convertTimeFormat'
 import { toast } from 'react-toastify'
 import { addBusTrip } from '~/apiServices/busPartner/addBusTrip'
 import { addDropOffLocations } from '~/apiServices/busPartner/addDropOffLocations'
+import { fetchAllBusTrips } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
 function AddBusTrip({ closeModal, ...props }) {
   const dispatch = useDispatch()
@@ -162,6 +163,9 @@ function AddBusTrip({ closeModal, ...props }) {
         })
 
         closeModal()
+
+       dispatch(fetchAllBusTrips({ dep: '', des: '' }))
+        console.log('có vô--- nè:')
       } catch (error) {
         if (error === 'This bus trip already exists') {
           toast.error('Chuyến xe đã tồn tại', {
