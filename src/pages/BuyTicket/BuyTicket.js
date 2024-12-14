@@ -11,7 +11,8 @@ import PopperItem from '~/components/PopperWrapper/PopperItem'
 import { useEffect, useState } from 'react'
 import { getAllTickets } from '~/apiServices/ticket/getAllTicket'
 import { Empty, Pagination } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllVouchersForUser } from '~/redux/slices/voucherSlice'
 
 const cx = classNames.bind(styles)
 function BuyTicket() {
@@ -20,14 +21,25 @@ function BuyTicket() {
   const [total, setTotal] = useState(0)
   const [sortType, setSortType] = useState('default')
   const [isVisible, setIsVisible] = useState(false)
-
+  const dispatch = useDispatch()
   const { busName, departureLocation, arrivalLocation, departureDate } = useSelector(
     (state) => state.search.searchTicket,
   )
 
   useEffect(() => {
+    dispatch(fetchAllVouchersForUser())
+  }, [dispatch])
+
+  useEffect(() => {
     async function fetchAllTicketList() {
-      const data = await getAllTickets(currentPage, departureLocation, arrivalLocation, busName, departureDate, sortType)
+      const data = await getAllTickets(
+        currentPage,
+        departureLocation,
+        arrivalLocation,
+        busName,
+        departureDate,
+        sortType,
+      )
       if (data) {
         setTicketList(data.result)
         setTotal(data.meta.total)
@@ -40,7 +52,7 @@ function BuyTicket() {
     setSortType(value)
     setTimeout(() => setIsVisible(false), 250)
   }
-  
+
   return (
     <div className={cx('container', 'wrapper')}>
       <Breadcrumb className="mb-5">
@@ -110,12 +122,12 @@ function BuyTicket() {
       </div>
       <TicketList dataList={ticketList} />
       {ticketList.length === 0 && (
-       <div style={{marginTop: '60px'}}>
+        <div style={{ marginTop: '60px' }}>
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description="Không có vé xe nào phù hợp với yêu cầu của bạn lúc này."
           />
-       </div>
+        </div>
       )}
 
       {ticketList.length > 0 && (

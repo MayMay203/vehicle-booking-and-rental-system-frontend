@@ -3,13 +3,32 @@ import styles from './Voucher.module.scss'
 import { images } from '~/assets/images'
 import { Col, Row, ProgressBar } from 'react-bootstrap'
 import Button from '~/components/Button'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { toast } from 'react-toastify'
+import { claimVoucher } from '~/apiServices/vouchers/claimVoucher'
 
 const cx = classNames.bind(styles)
 const now = 60
 
 function Voucher({ className, data }) {
-  const {currentUser} = useSelector(state=>state.user)
+  const { currentUser, isLogin } = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+
+  const hanldeClaimVoucher = async () => {
+    if (!isLogin) {
+      dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+    }
+    else {
+      try {
+        await claimVoucher(data.id)
+        toast.success('Lấy thành công voucher. Hãy đặt đơn ngay để được nhận ưu đãi', {autoClose: 2000, position: 'top-center'})
+      }
+      catch (error) {
+        toast.error('Bạn đã nhận mã voucher này trước đó.', { autoClose: 2000, position: 'top-center' })
+      }
+    }
+  }
   return (
     <div className={cx('wrapper', 'voucher', [className])} style={{ backgroundImage: `url(${images.voucher})` }}>
       <Col xs="3" className={cx('d-flex justify-content-center align-items-center', 'border-right')}>
@@ -22,7 +41,12 @@ function Voucher({ className, data }) {
           </Col>
           {!currentUser.roles?.includes('ADMIN') && (
             <Col xs="auto">
-              <Button rounded className={cx('claim_voucher')}>
+              <Button
+                rounded
+                className={cx('claim_voucher')}
+                onClick={hanldeClaimVoucher}
+                disabled={data.claimStatus === 'CLAIMED'}
+              >
                 Lấy mã
               </Button>
             </Col>
