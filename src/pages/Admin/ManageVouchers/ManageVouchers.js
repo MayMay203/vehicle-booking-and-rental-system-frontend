@@ -7,25 +7,47 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAddVoucherVisible } from '~/redux/slices/generalModalSlice'
 import { Empty, Pagination } from 'antd'
-import { config } from '~/config'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllVouchers } from '~/redux/slices/voucherSlice'
 import Voucher from '~/components/Voucher'
-// import Voucher from '~/components/Voucher'
+import Tippy from '@tippyjs/react'
+import 'tippy.js/dist/tippy.css'
 
 const cx = classNames.bind(styles)
 function ManageVouchers() {
   const [type, setType] = useState('all')
   const dispatch = useDispatch()
-  const {voucherList} = useSelector(state => state.voucher)
+  const { voucherList } = useSelector((state) => state.voucher)
+  const [filteredList, setFilteredList] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [sortOrder, setSortOrder] = useState('asc')
 
-  
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
-      dispatch(fetchAllVouchers({page: currentPage}))
+      dispatch(fetchAllVouchers({ page: currentPage }))
     }
-  },[currentPage, dispatch])
+  }, [currentPage, dispatch])
+
+  useEffect(() => {
+    let result = voucherList.result || []
+
+    if (type === 'hasCode') {
+      result = result.filter((voucher) => voucher.remainingQuantity > 0)
+    } else if (type === 'outOfCode') {
+      result = result.filter((voucher) => voucher.remainingQuantity === 0)
+    }
+
+    if (result.length > 0) {
+      result = [...result].sort((a, b) => {
+        const dateA = new Date(a.startDate.split('-').reverse().join('-'))
+        const dateB = new Date(b.startDate.split('-').reverse().join('-'))
+        return sortOrder === 'asc' ? dateA - dateB : dateB - dateA
+      })
+    }
+
+    setFilteredList(result)
+    console.log('Filtered and Sorted List:', result)
+  }, [voucherList.result, type, sortOrder])
 
   const handleAddVoucher = () => {
     dispatch(setAddVoucherVisible(true))
@@ -67,17 +89,22 @@ function ManageVouchers() {
         </div>
         <div className="col">
           <div className="d-flex column-gap-3 justify-content-start justify-content-lg-end">
-            <Button
-              outline
-              leftIcon={<FontAwesomeIcon icon={faUpDown} />}
-              style={{
-                fontSize: '1.5rem',
-                height: '36px',
-                backgroundColor: '#fff',
-              }}
-            >
-              Sắp xếp
-            </Button>
+            <Tippy content="Tăng dần, giảm dần theo ngày có hiệu lực">
+              <button>
+                <Button
+                  outline
+                  leftIcon={<FontAwesomeIcon icon={faUpDown} />}
+                  style={{
+                    fontSize: '1.5rem',
+                    height: '36px',
+                    backgroundColor: '#fff',
+                  }}
+                  onClick={() => setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'))}
+                >
+                  Sắp xếp
+                </Button>
+              </button>
+            </Tippy>
             <Button
               primary
               leftIcon={<FontAwesomeIcon icon={faPlusCircle} />}
@@ -90,23 +117,21 @@ function ManageVouchers() {
         </div>
       </div>
       <div className="row mt-5 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 gx-5">
-        {voucherList.result?.map((voucher) => (
+        {filteredList?.map((voucher) => (
           <Voucher key={voucher.id} className="m-auto" data={voucher} />
         ))}
       </div>
-      {voucherList.result?.length > 0 && (
+      {filteredList.length > 0 && (
         <Pagination
           className="mt-5"
           align="center"
           current={currentPage}
-          pageSize={config.variables.pagesize}
+          pageSize={6}
           total={voucherList.meta?.total}
           onChange={(page) => setCurrentPage(page)}
         />
       )}
-      {voucherList.result?.length === 0 && (
-        <Empty style={{ marginTop: '70px' }} description="Không có voucher nào gần đây" />
-      )}
+      {filteredList.length === 0 && <Empty style={{ marginTop: '70px' }} description="Không có voucher nào gần đây" />}
     </div>
   )
 }
