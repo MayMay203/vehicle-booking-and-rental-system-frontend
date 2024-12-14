@@ -41,36 +41,18 @@ function Message() {
     setSelectedConvers(conversationId)
   }, [conversationId])
 
-const onNotificationRecieved = useCallback(
-  (payload) => {
-    const newMessage = JSON.parse(payload.body)
-    console.log('Received message: ', newMessage)
-
-    setMessages((prevMessages) => {
-      // Kiểm tra nếu `conversation_id` khớp với `selectedConvers`
-      if (Number(newMessage.conversation_id) === selectedConvers) {
-        // Tìm index của message đã tồn tại
-        const existingIndex = prevMessages.findIndex(
-          (message) => message.id === newMessage.id, // Sử dụng thuộc tính duy nhất (e.g., `id`, `message_id`)
-        )
-
-        if (existingIndex !== -1) {
-          // Nếu message đã tồn tại, thay thế nó
-          const updatedMessages = [...prevMessages]
-          updatedMessages[existingIndex] = newMessage
-          return updatedMessages
-        } else {
-          // Nếu message chưa tồn tại, thêm vào cuối danh sách
-          return [...prevMessages, newMessage]
-        }
-      }
-
-      // Nếu `conversation_id` không khớp, giữ nguyên messages
-      return prevMessages
-    })
-  },
-  [selectedConvers],
-)
+ const onNotificationRecieved = useCallback(
+   (payload) => {
+     const newMessage = JSON.parse(payload.body)
+     console.log(newMessage)
+     if (Number(newMessage.conversation_id) === selectedConvers) setMessages((prev) => [...prev, newMessage])
+     else {
+       setMessages((prev) => [...prev])
+     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+   },
+   [selectedConvers],
+ )
 
 
 
@@ -248,7 +230,7 @@ const handleUpdateMessage = (id, content) => {
   console.log(JSON.stringify(updatedMessage))
 
   // Gửi request cập nhật
-  stompClientRef.current.send('/app/chat/update-message', {}, JSON.stringify(updatedMessage))
+   stompClientRef.current.send('/app/chat/update-message', {}, JSON.stringify(updatedMessage))
 }
 
   const handleChangeType = (value) => {
