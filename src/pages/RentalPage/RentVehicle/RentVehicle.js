@@ -2,7 +2,7 @@ import {Row, Col, Carousel, Button, Breadcrumb } from 'react-bootstrap';
 import styles from './RentVehicle.module.scss'
 import classNames from 'classnames/bind'
 import { images } from '~/assets/images'
-import VoucherList from '~/components/Voucher/VoucherList';
+// import VoucherList from '~/components/Voucher/VoucherList';
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { config } from '~/config'
@@ -82,7 +82,7 @@ function RentVehicle() {
       </Row>
       <Row className={cx(' pt-5 pb-5', 'background')}>
         <p className={cx('title', 'p-5')}>MÃ GIẢM GIÁ</p>
-        <VoucherList></VoucherList>
+        {/* <VoucherList></VoucherList> */}
       </Row>
       <AccordionQAList questionsAndAnswers={questionsAndAnswers}></AccordionQAList>
     </div>
