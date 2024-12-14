@@ -61,7 +61,7 @@ function Message() {
     function connect() {
       if (!stompClientRef.current && currentUser.id) {
         // Kiểm tra nếu chưa có kết nối WebSocket
-        const socket = new SockJS(`http://localhost:8080/ws`)
+        const socket = new SockJS(`https://localhost:8080/ws`)
         stompClientRef.current = over(socket)
 
         const headers = {
