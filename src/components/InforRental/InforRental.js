@@ -5,15 +5,16 @@ import styles from './InforRental.module.scss'
 import classNames from 'classnames/bind'
 import Form from 'react-bootstrap/Form'
 // import { useNavigate } from 'react-router-dom'
-import VoucherSlider from '../Voucher/VoucherSlider'
+// import VoucherSlider from '../Voucher/VoucherSlider'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import RentalOrder from '~/pages/RentalPage/RentalOrder'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
+import { calculateRentalPrice } from '~/apiServices/user/calculateRentalPrice'
 const cx = classNames.bind(styles)
 function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime, endDateTime }) {
-  const listVoucher = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+  // const listVoucher = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
   // const [startTime, setStartTime] = useState(new Date())
   // const [endTime, setEndTime] = useState(new Date())
   // const [startDate, setStartDate] = useState(new Date())
@@ -22,6 +23,7 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
   const { isLogin, currentUser } = useSelector((state) => state.user)
   const [modalOrderShow, setModalOrderShow] = useState(false)
   const [type, setType] = useState('')
+  const [priceRental, setPriceRental] = useState(0)
   const [formData, setFormData] = useState({
     start_rental_time: startDateTime.startDT,
       // startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
@@ -48,7 +50,7 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
     car_deposit: inforVehicleRental?.car_deposit,
     reservation_fee: inforVehicleRental?.reservation_fees,
     // price: inforVehicleRental?.price,
-    price: newPrice,
+    price: priceRental,
     vehicle_rental_service_id: inforVehicleRental?.id,
     customerName: currentUser.name,
     customerPhoneNumber: currentUser.phoneNumber,
@@ -69,6 +71,25 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
   //     console.log('endDateTime?.endTime ---- 4----', endDateTime?.endTime)
   //   }
   // }, [])
+  useEffect(() => {
+      const fetchRentalPrice = async () => {
+    try {
+      const response = await calculateRentalPrice(startDateTime.
+        startDT, endDateTime.endDT, newPrice)
+        console.log("setPriceRental", response)
+      setPriceRental(response);  // Cập nhật giá trị giá thuê
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        price: response,  // Cập nhật formData với giá trị mới
+      }));
+    } catch (error) {
+      console.error("Error fetching rental price:", error)
+    }
+  }
+
+  // Gọi hàm async
+  fetchRentalPrice()
+  }, [newPrice, startDateTime.startDT, endDateTime.endDT])
   useEffect(() => {
     if (inforVehicleRental) {
       setFormData((prevFormData) => ({
@@ -172,14 +193,14 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
       </div>
       <div className={cx('txt-title', 'd-flex')}>
         <span>Phí thuê/1 chiếc</span>
-        <span className={cx('charge', 'align-right')}>{Math.floor(newPrice).toLocaleString('vi-VN')} đ</span>
+        <span className={cx('charge', 'align-right')}>{Math.floor(priceRental).toLocaleString('vi-VN')} đ</span>
         {/* <span className={cx('charge', 'align-right')}>{inforVehicleRental?.amount?.toLocaleString('vi-VN')} đ</span> */}
       </div>
       <div className={cx('txt-title', 'd-flex')}>
         <span>Mã giảm giá</span>
       </div>
       <div className={cx('wrap-voucher')}>
-        <VoucherSlider listVoucher={listVoucher}></VoucherSlider>
+        {/* <VoucherSlider listVoucher={listVoucher}></VoucherSlider> */}
       </div>
       <div>
         <div className={cx('txt-title')}>Chi phí khác</div>
