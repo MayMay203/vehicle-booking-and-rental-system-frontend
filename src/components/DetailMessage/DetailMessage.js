@@ -14,10 +14,8 @@ function DetailMessage({ data, image, handleUpdateMessage }) {
   const [isEditing, setIsEditing] = useState(false)
   const isSender = data.senderId === currentUser.id
   const textAreaRef = useRef(null)
-  console.log(data)
   const handleSaveEdit = () => {
     setIsEditing(false)
-    console.log(data.id)
     handleUpdateMessage(data.id, contentUpdate)
   }
 

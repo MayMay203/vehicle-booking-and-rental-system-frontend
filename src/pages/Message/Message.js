@@ -41,25 +41,45 @@ function Message() {
     setSelectedConvers(conversationId)
   }, [conversationId])
 
-  const onNotificationRecieved = useCallback(
-    (payload) => {
-      const newMessage = JSON.parse(payload.body)
-      console.log(newMessage)
-      if (Number(newMessage.conversation_id) === selectedConvers) setMessages((prev) => [...prev, newMessage])
-      else {
-        setMessages((prev) => [...prev])
+const onNotificationRecieved = useCallback(
+  (payload) => {
+    const newMessage = JSON.parse(payload.body)
+    console.log('Received message: ', newMessage)
+
+    setMessages((prevMessages) => {
+      // Kiểm tra nếu `conversation_id` khớp với `selectedConvers`
+      if (Number(newMessage.conversation_id) === selectedConvers) {
+        // Tìm index của message đã tồn tại
+        const existingIndex = prevMessages.findIndex(
+          (message) => message.id === newMessage.id, // Sử dụng thuộc tính duy nhất (e.g., `id`, `message_id`)
+        )
+
+        if (existingIndex !== -1) {
+          // Nếu message đã tồn tại, thay thế nó
+          const updatedMessages = [...prevMessages]
+          updatedMessages[existingIndex] = newMessage
+          return updatedMessages
+        } else {
+          // Nếu message chưa tồn tại, thêm vào cuối danh sách
+          return [...prevMessages, newMessage]
+        }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    },
-    [selectedConvers],
-  )
+
+      // Nếu `conversation_id` không khớp, giữ nguyên messages
+      return prevMessages
+    })
+  },
+  [selectedConvers],
+)
+
+
 
   //connect websocket
   useEffect(() => {
     function connect() {
       if (!stompClientRef.current && currentUser.id) {
         // Kiểm tra nếu chưa có kết nối WebSocket
-        const socket = new SockJS(`https://localhost:8080/ws`)
+        const socket = new SockJS(`http://localhost:8080/ws`)
         stompClientRef.current = over(socket)
 
         const headers = {
@@ -79,7 +99,6 @@ function Message() {
             )
             // Đăng ký nhận thông báo
             stompClientRef.current.subscribe(`/user/${currentUser.id}/${currentRole}/notification`, (message) => {
-              console.log('Notification: ', message)
               dispatch(fetchAllNotificationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
             })
           },
@@ -204,26 +223,33 @@ function Message() {
     // // Gửi tin nhắn đến server thông qua STOMP client
     stompClientRef.current.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
 
-    const sendAtDate = new Date(messageDTO.sendAt)
-    const hours = sendAtDate.getHours().toString().padStart(2, '0')
-    const minutes = sendAtDate.getMinutes().toString().padStart(2, '0')
-    const day = sendAtDate.getDate().toString().padStart(2, '0')
-    const month = (sendAtDate.getMonth() + 1).toString().padStart(2, '0') // Tháng bắt đầu từ 0
-    const year = sendAtDate.getFullYear()
+    // const sendAtDate = new Date(messageDTO.sendAt)
+    // const hours = sendAtDate.getHours().toString().padStart(2, '0')
+    // const minutes = sendAtDate.getMinutes().toString().padStart(2, '0')
+    // const day = sendAtDate.getDate().toString().padStart(2, '0')
+    // const month = (sendAtDate.getMonth() + 1).toString().padStart(2, '0') // Tháng bắt đầu từ 0
+    // const year = sendAtDate.getFullYear()
 
-    // Tạo định dạng mới
-    const formattedDate = `${hours}:${minutes} ${day}-${month}-${year}`
-    setMessages((prev) => [...prev, { ...messageDTO, sendAt: formattedDate }])
+    // // Tạo định dạng mới
+    // const formattedDate = `${hours}:${minutes} ${day}-${month}-${year}`
+    // setMessages((prev) => [...prev, { ...messageDTO, sendAt: formattedDate }])
     setMessageText('')
   }
 
-  const handleUpdateMessage = (id, content) => {
-    console.log(id, content)
-    // const messageDTO = messages.find((message) => message.id === id)
-    // messageDTO.content = content
-    // setMessages((prev) => [...prev])
-    // console.log(messageDTO)
-  }
+const handleUpdateMessage = (id, content) => {
+  console.log(id, content)
+
+  // Cập nhật message trong danh sách
+  setMessages((prev) => prev.map((message) => (message.id === id ? { ...message, content } : message)))
+
+  // Tạo messageDTO để gửi request
+  const messageDTO = messages.find((message) => message.id === id)
+  const updatedMessage = { ...messageDTO, content }
+  console.log(JSON.stringify(updatedMessage))
+
+  // Gửi request cập nhật
+  stompClientRef.current.send('/app/chat/update-message', {}, JSON.stringify(updatedMessage))
+}
 
   const handleChangeType = (value) => {
     setButtonSelect(value)
