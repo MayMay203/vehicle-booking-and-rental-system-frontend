@@ -74,8 +74,7 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
   useEffect(() => {
       const fetchRentalPrice = async () => {
     try {
-      const response = await calculateRentalPrice(startDateTime.
-        startDT, endDateTime.endDT, newPrice)
+      const response = await calculateRentalPrice(startDateTime.startDT, endDateTime.endDT, newPrice)
         console.log("setPriceRental", response)
       setPriceRental(response);  // Cập nhật giá trị giá thuê
       setFormData((prevFormData) => ({
