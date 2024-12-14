@@ -27,8 +27,9 @@ export const fetchAllBuses = createAsyncThunk('busPartner/getAllBuses', async ()
   console.log('dataaaa:', data.result)
   return data.result || []
 })
-export const fetchAllBusTrips = createAsyncThunk('busPartner/getAllBusTrips', async () => {
-  const data = await getAllBusTrips()
+export const fetchAllBusTrips = createAsyncThunk('busPartner/getAllBusTrips', async ({ dep, des }) => {
+  // const { dep, des } = params
+  const data = await getAllBusTrips(dep, des)
   console.log('dataaaa:', data.result)
   return data.result || []
 })

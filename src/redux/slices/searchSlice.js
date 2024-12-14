@@ -8,6 +8,12 @@ const initialState = {
     arrivalLocation: config.variables.arrivalLocation,
     busName: config.variables.busName,
   },
+  searchBusTrip: {
+    departureLocation: '',
+    
+    arrivalLocation: '',
+    
+  },
 }
 
 const searchSlice = createSlice({
@@ -18,6 +24,13 @@ const searchSlice = createSlice({
       console.log(action.payload)
       state.searchTicket = {
         ...state.searchTicket,
+        ...action.payload,
+      }
+    },
+    setSearchBusTrip: (state, action) => {
+      console.log(action.payload)
+      state.searchBusTrip = {
+        ...state.searchBusTrip,
         ...action.payload,
       }
     },

@@ -206,7 +206,7 @@ function BusTrip() {
   const [data, setData] = useState([])
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
-      dispatch(fetchAllBusTrips())
+      dispatch(fetchAllBusTrips({ dep: '', des: '' }))
       console.log('có vô---:')
     }
   }, [dispatch])
@@ -219,7 +219,7 @@ function BusTrip() {
         duration: convertTimeFormat(item.journeyDuration),
       }))
       setData(newData)
-      // console.log('newData:', newData)
+      console.log('newData:', newData)
     } catch (message) {
       console.log(message)
     }
@@ -242,7 +242,7 @@ function BusTrip() {
     <div className={cx('container', 'mb-5 mt-5')}>
       <Row className="d-flex mb-5">
         <div className="col">
-          <Search noSelectBus={true} noSelectDate={true}></Search>
+          <Search noSelectBus={true} noSelectDate={true} type={'partner'}></Search>
         </div>
         <div className="col col-3 d-flex justify-content-center mt-4 align-items-center">
           <Button primary onClick={handelAddBusTrip}>
