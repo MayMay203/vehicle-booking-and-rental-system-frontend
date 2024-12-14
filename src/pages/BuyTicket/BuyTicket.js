@@ -13,6 +13,7 @@ import { getAllTickets } from '~/apiServices/ticket/getAllTicket'
 import { Empty, Pagination } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllVouchersForUser } from '~/redux/slices/voucherSlice'
+import { checkLoginSession } from "~/redux/slices/userSlice";
 
 const cx = classNames.bind(styles)
 function BuyTicket() {
@@ -27,7 +28,9 @@ function BuyTicket() {
   )
 
   useEffect(() => {
-    dispatch(fetchAllVouchersForUser())
+   if (dispatch(checkLoginSession())) {
+     dispatch(fetchAllVouchersForUser())
+   }
   }, [dispatch])
 
   useEffect(() => {
