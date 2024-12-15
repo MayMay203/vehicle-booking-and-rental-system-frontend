@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { fetchAllBus } from '~/apiServices/busPartner/fetchAllBuses'
+import { getAllBusByBusType } from '~/apiServices/busPartner/getAllBusByBusType'
 import { getAllBusTrips } from '~/apiServices/busPartner/getAllBusTrips'
 import { getAllBusTypes } from '~/apiServices/busPartner/getAllBusTypes'
 import { getAllUtilities } from '~/apiServices/busPartner/getAllUtilities'
@@ -11,6 +12,7 @@ const initialState = {
   // inforBus: {},
   utilityList: [],
   busTrips: [],
+  busListByBusType: [],
 }
 export const fetchAllBusTypes = createAsyncThunk('busPartner/getAllBusTypes', async () => {
   const data = await getAllBusTypes()
@@ -26,6 +28,11 @@ export const fetchAllBuses = createAsyncThunk('busPartner/getAllBuses', async ()
   const data = await fetchAllBus()
   console.log('dataaaa:', data.result)
   return data.result || []
+})
+export const fetchAllBusesByBusType = createAsyncThunk('busPartner/getAllBusesByBusType', async (nameBusType) => {
+  const data = await getAllBusByBusType(nameBusType)
+  console.log('dataaaa:', data)
+  return data || {}
 })
 export const fetchAllBusTrips = createAsyncThunk('busPartner/getAllBusTrips', async ({ dep, des }) => {
   // const { dep, des } = params
@@ -62,6 +69,9 @@ const busPartnerSlice = createSlice({
       })
       .addCase(fetchAllBusTrips.fulfilled, (state, action) => {
         state.busTrips = action.payload
+      })
+      .addCase(fetchAllBusesByBusType.fulfilled, (state, action) => {
+        state.busListByBusType = action.payload
       })
       // .addCase(busByID.fulfilled, (state, action) => {
       //   state.inforBus = action.payload

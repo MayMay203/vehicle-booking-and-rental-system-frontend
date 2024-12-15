@@ -234,7 +234,9 @@ function AddBus() {
               onChange={handleInputChange}
               value={formData.idBusType}
             >
-              <option value="">Chọn loại xe</option>
+              <option key='-1' value="">
+                Chọn loại xe
+              </option>
               {allBusTypes &&
                 allBusTypes.map((typeVehicle, index) => (
                   <option key={index} value={typeVehicle.id}>
@@ -306,7 +308,11 @@ function AddBus() {
         <div className={cx('txt', 'padding-5')}>
           Tiện ích<span className="text-danger">*</span>
         </div>
-        <SlideUtility listUtilities={listUtilities} setUpdateUtilitiesOfBus={setUpdateUtilitiesOfBus} utilitiesOfBus={utilitiesOfBus}></SlideUtility>
+        <SlideUtility
+          listUtilities={listUtilities}
+          setUpdateUtilitiesOfBus={setUpdateUtilitiesOfBus}
+          utilitiesOfBus={utilitiesOfBus}
+        ></SlideUtility>
       </Row>
       <Row className={cx('infor-img', 'mt-5')}>
         <div className={cx('txt', 'padding-5')}>
