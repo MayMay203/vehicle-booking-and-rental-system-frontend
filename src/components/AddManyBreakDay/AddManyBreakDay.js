@@ -8,7 +8,7 @@ import { DatePicker } from 'antd'
 import moment from 'moment'
 const cx = classNames.bind(styles)
 
-function AddManyBreakDay({ initialItems, content, setBreakDays }) {
+function AddManyBreakDay({ initialItems, content, setBreakDays, price=null }) {
   const [items, setItems] = useState(initialItems)
   const [itemCounter, setItemCounter] = useState(items.length)
 
