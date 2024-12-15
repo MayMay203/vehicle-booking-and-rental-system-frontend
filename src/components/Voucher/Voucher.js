@@ -12,23 +12,28 @@ import { fetchAllVouchersForUser } from '~/redux/slices/voucherSlice'
 const cx = classNames.bind(styles)
 const now = 60
 
-function Voucher({ className, data }) {
+function Voucher({ className, data, type, handleApplyVoucher }) {
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
   const hanldeClaimVoucher = async () => {
-    if (!isLogin) {
-      dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
-    }
-    else {
-      try {
-        await claimVoucher(data.id)
-        toast.success('Lấy thành công voucher. Hãy đặt đơn ngay để được nhận ưu đãi', { autoClose: 2000, position: 'top-center' })
-        dispatch(fetchAllVouchersForUser())
+    if (!type) {
+      if (!isLogin) {
+        dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+      } else {
+        try {
+          await claimVoucher(data.id)
+          toast.success('Lấy thành công voucher. Hãy đặt đơn ngay để được nhận ưu đãi', {
+            autoClose: 2000,
+            position: 'top-center',
+          })
+          dispatch(fetchAllVouchersForUser())
+        } catch (error) {
+          toast.error('Bạn đã nhận mã voucher này trước đó.', { autoClose: 2000, position: 'top-center' })
+        }
       }
-      catch (error) {
-        toast.error('Bạn đã nhận mã voucher này trước đó.', { autoClose: 2000, position: 'top-center' })
-      }
+    } else {
+      handleApplyVoucher(data.id, data.voucherPercentage, data.maxDiscountValue)
     }
   }
   return (
@@ -43,14 +48,25 @@ function Voucher({ className, data }) {
           </Col>
           {!currentUser.roles?.includes('ADMIN') && (
             <Col xs="auto">
-              <Button
-                rounded
-                className={cx('claim_voucher')}
-                onClick={hanldeClaimVoucher}
-                disabled={data.claimStatus === 'CLAIMED'}
-              >
-                Lấy mã
-              </Button>
+              {!type ? (
+                <Button
+                  rounded
+                  className={cx('claim_voucher')}
+                  onClick={hanldeClaimVoucher}
+                  disabled={data.claimStatus === 'CLAIMED'}
+                >
+                  Lấy mã
+                </Button>
+              ) : (
+                <Button
+                  rounded
+                  className={cx('claim_voucher')}
+                  onClick={hanldeClaimVoucher}
+                  disabled={new Date(data.startDate.split('-').reverse().join('-')) > new Date()}
+                >
+                  Áp dụng
+                </Button>
+              )}
             </Col>
           )}
         </Row>
@@ -65,7 +81,15 @@ function Voucher({ className, data }) {
         </Row>
         <Row className="d-flex">
           <Col xs="auto" className={cx('time-content')}>
-            <p>Đơn hàng tối thiểu:</p>
+            <p>Giảm tối đa:</p>
+          </Col>
+          <Col className={cx('time')}>
+            <p className="">{data.maxDiscountValue}</p>
+          </Col>
+        </Row>
+        <Row className="d-flex">
+          <Col xs="auto" className={cx('time-content')}>
+            <p>Đơn tối thiểu:</p>
           </Col>
           <Col className={cx('time')}>
             <p className="">{data.minOrderValue}</p>

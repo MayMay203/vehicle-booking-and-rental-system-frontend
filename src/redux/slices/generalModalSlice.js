@@ -17,6 +17,7 @@ export const generalModalNames = {
   UTILITY_MODAL: 'utilityModal',
   FEE_SERVICE_MODAL: 'feeServiceModal',
   DEL_BUS_TYPE: 'deleteBusType',
+  DETAIL_VOUCHER: ''
 }
 
 const initialState = {
@@ -66,6 +67,10 @@ const initialState = {
     conversationId: '',
   },
   addVoucher: false,
+  detailVoucher: {
+    isOpen: false,
+    voucherId: '',
+  },
 }
 
 const generalModalSlice = createSlice({
@@ -127,11 +132,18 @@ const generalModalSlice = createSlice({
     },
     setMessageModalVisible: (state, action) => {
       const { isOpen, conversationId = '' } = action.payload
-      console.log(action.payload)
       state.messageModal = {
         ...state.messageModal,
         isOpen,
         conversationId,
+      }
+    },
+    setVoucherModalVisible: (state, action) => {
+      const { isOpen, voucherId = '' } = action.payload
+      state.detailVoucher = {
+        ...state.detailVoucher,
+        isOpen,
+        voucherId,
       }
     },
   },
@@ -146,7 +158,8 @@ export const {
   setAddVoucherVisible,
   setUtilityModal,
   setFeeServiceModal,
-  setMessageModalVisible
+  setMessageModalVisible,
+  setVoucherModalVisible,
 } = generalModalSlice.actions
 
 export default generalModalSlice.reducer

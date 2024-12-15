@@ -7,25 +7,26 @@ export const orderTicket = async (
   busTripScheduleId,
   numberOfTicket,
   departureDate,
-  province
+  province,
+  voucherId,
 ) => {
   try {
-    const response = await httpRequest.post(
-      '/v1/orderBusTrips',
-      {
-        customerName,
-        customerPhoneNumber,
-        busTripScheduleId,
-        numberOfTicket: Number(numberOfTicket),
-        departureDate,
-        province
+    const payload = {
+      customerName,
+      customerPhoneNumber,
+      busTripScheduleId,
+      numberOfTicket: Number(numberOfTicket),
+      departureDate,
+      province,
+    }
+    if (voucherId) {
+      payload.voucherId = voucherId
+    }
+    const response = await httpRequest.post('/v1/orderBusTrips', payload, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      },
-    )
+    })
     return response.data
   } catch (error) {
     console.error('Failed to order ticket: ', error)
