@@ -16,8 +16,7 @@ export const generalModalNames = {
   REFUSE_DRIVER_PARTNER: 'refuseDriverPartner',
   UTILITY_MODAL: 'utilityModal',
   FEE_SERVICE_MODAL: 'feeServiceModal',
-  DEL_BUS_TYPE: 'deleteBusType',
-  DETAIL_VOUCHER: ''
+  DEL_BUS_TYPE: 'deleteBusType'
 }
 
 const initialState = {
@@ -26,7 +25,7 @@ const initialState = {
     title: '',
     description: '',
     name: '',
-    id: '',
+  id: '',
   },
   inputConfirm: {
     isOpen: false,
@@ -136,14 +135,6 @@ const generalModalSlice = createSlice({
         ...state.messageModal,
         isOpen,
         conversationId,
-      }
-    },
-    setVoucherModalVisible: (state, action) => {
-      const { isOpen, voucherId = '' } = action.payload
-      state.detailVoucher = {
-        ...state.detailVoucher,
-        isOpen,
-        voucherId,
       }
     },
   },

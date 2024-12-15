@@ -57,10 +57,8 @@ function TicketModal() {
     }
   }, [id, ticketDetail])
 
-  console.log(ticketDetail)
   useEffect(() => {
     if (!type && ticketDetail.priceTicket) {
-      console.log('Vo set total')
       setTotal(
         Number(ticketDetail.priceTicket?.replace(/\./g, '').replace(' VND', '')) *
           quantity *
