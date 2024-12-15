@@ -11,7 +11,7 @@ import DetailMessage from '~/components/DetailMessage'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
 import { useDispatch, useSelector } from 'react-redux'
-import { Empty } from 'antd'
+import { Empty} from 'antd'
 import { getAllMessagesInConversation } from '~/apiServices/messageService/getAllMessagesInConversation'
 import Image from '~/components/Image'
 import { getAccessToken } from '~/utils/cookieUtils'
@@ -44,8 +44,22 @@ function Message() {
  const onNotificationRecieved = useCallback(
    (payload) => {
      const newMessage = JSON.parse(payload.body)
-     console.log(newMessage)
-     if (Number(newMessage.conversation_id) === selectedConvers) setMessages((prev) => [...prev, newMessage])
+     if (Number(newMessage.conversation_id) === selectedConvers) {
+       setMessages((prev) => {
+         // Kiểm tra xem message có tồn tại không
+         const existingMessageIndex = prev.findIndex((message) => message.id === newMessage.id)
+
+         if (existingMessageIndex !== -1) {
+           // Nếu tồn tại, thay thế message tại index đó
+           const updatedMessages = [...prev]
+           updatedMessages[existingMessageIndex] = newMessage // Cập nhật message
+           return updatedMessages
+         } else {
+           // Nếu không tồn tại, thêm message mới
+           return [...prev, newMessage]
+         }
+       })
+     }
      else {
        setMessages((prev) => [...prev])
      }
@@ -202,32 +216,34 @@ function Message() {
       conversation_id: selectedConvers, // ID của cuộc trò chuyện
       seen: false, // Tin nhắn chưa được xem
     }
-    // // Gửi tin nhắn đến server thông qua STOMP client
     stompClientRef.current.send('/app/chat/send-message', {}, JSON.stringify(messageDTO))
-
-    // const sendAtDate = new Date(messageDTO.sendAt)
-    // const hours = sendAtDate.getHours().toString().padStart(2, '0')
-    // const minutes = sendAtDate.getMinutes().toString().padStart(2, '0')
-    // const day = sendAtDate.getDate().toString().padStart(2, '0')
-    // const month = (sendAtDate.getMonth() + 1).toString().padStart(2, '0') // Tháng bắt đầu từ 0
-    // const year = sendAtDate.getFullYear()
-
-    // // Tạo định dạng mới
-    // const formattedDate = `${hours}:${minutes} ${day}-${month}-${year}`
-    // setMessages((prev) => [...prev, { ...messageDTO, sendAt: formattedDate }])
     setMessageText('')
   }
 
-const handleUpdateMessage = (id, content) => {
-  console.log(id, content)
+  const convertToISO = (dateString) => {
+    // Tách chuỗi thành giờ, phút, ngày, tháng, năm
+    const [time, date] = dateString.split(' ')
+    const [hours, minutes] = time.split(':').map(Number)
+    const [day, month, year] = date.split('-').map(Number)
 
+    // Tạo đối tượng Date (Lưu ý: tháng bắt đầu từ 0 trong JavaScript)
+    const dateObj = new Date(year, month - 1, day, hours, minutes)
+
+    // Chuyển sang chuỗi ISO
+    return dateObj.toISOString()
+  }
+
+const handleUpdateMessage = (id, content) => {
   // Cập nhật message trong danh sách
   setMessages((prev) => prev.map((message) => (message.id === id ? { ...message, content } : message)))
 
   // Tạo messageDTO để gửi request
   const messageDTO = messages.find((message) => message.id === id)
   const updatedMessage = { ...messageDTO, content }
-  console.log(JSON.stringify(updatedMessage))
+  updatedMessage.sendAt = convertToISO(updatedMessage.sendAt)
+  if (updatedMessage.seen_at) {
+    updatedMessage.seen_at = convertToISO(updatedMessage.seen_at)
+  }
 
   // Gửi request cập nhật
    stompClientRef.current.send('/app/chat/update-message', {}, JSON.stringify(updatedMessage))
