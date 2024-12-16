@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons'
 import TicketBus from '../TicketBus'
-import Button from '../Button'
+// import Button from '../Button'
 const cx = classNames.bind(styles)
 function AddManyTickets({ initialItems, content }) {
   const [items, setItems] = useState(initialItems)
@@ -39,9 +39,9 @@ function AddManyTickets({ initialItems, content }) {
           <div className={cx('d-flex')} key={item.id}>
             {/* <div className={cx('serial-number')}>{index + 1}</div> */}
             <TicketBus initialItems={[]} content={''}></TicketBus>
-            <Button primary className={cx('ms-5 me-5', 'btn-save')}>
+            {/* <Button primary className={cx('ms-5 me-5', 'btn-save')}>
               Lưu
-            </Button>
+            </Button> */}
             {/* <FontAwesomeIcon
               icon={faSquareMinus}
               className={cx('add-item', 'ms-3', 'align-items-center')}

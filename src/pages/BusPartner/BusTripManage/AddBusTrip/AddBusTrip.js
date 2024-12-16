@@ -69,7 +69,7 @@ function AddBusTrip({ closeModal, ...props }) {
     ) {
       toast.error('Vui lòng nhập địa điểm xuất phát và địa điểm đến không trùng nhau!', {
         autoClose: 2000,
-        position: 'top-center',
+        toasposition: 'top-center',
       })
       return
     }

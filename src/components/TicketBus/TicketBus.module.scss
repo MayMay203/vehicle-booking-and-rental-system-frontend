@@ -1,14 +1,53 @@
 @use '../../abstracts' as abstracts;
-.wrap-ticket{
+.wrap-ticket {
+  position: relative;
   border: 1px solid #ff9800;
   border-radius: 5px;
   justify-content: center;
   align-items: center;
   margin-bottom: 1rem;
-  // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.3);
+  padding-right: 60px;
+
+  // .save-label {
+  //   position: absolute;
+  //   right: 10px;
+  //   top: 50%;
+  //   // transform: translateY(-50%);
+  //   font-size: 16px;
+  //   color: #ff9800;
+  //   font-weight: bold;
+  // }
 }
-.id-ticket{
-  background-color: #FFF6F3;
+.save-button {
+  position: absolute;
+  top: 7px;
+  left: 95%;
+  transform: translateX(-50%);
+  width: fit-content;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+  background-color: rgba($color: #f57c00, $alpha: 0.5);
+  color: white;
+   &.disabled {
+    background-color: #ffd4d4;
+    color: #ffffff;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.save-button:hover {
+  background-color: #f57c00;
+  color: white;
+  cursor: pointer;
+}
+
+.id-ticket {
+  background-color: #fff6f3;
   height: 100%;
   align-items: center;
   display: flex;

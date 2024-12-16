@@ -20,7 +20,7 @@ function DetailBusTrip() {
   const idBusTrip = location.state?.id
   const [data, setData] = useState({})
   const dispatch = useDispatch()
-
+console.log('data bên cha:', data)
   console.log('data?.dropOffLocationInfos?.length---', data?.dropOffLocationInfos?.length)
   const maxDropOffLength =
     data?.dropOffLocationInfos?.length > 0
@@ -238,6 +238,8 @@ function DetailBusTrip() {
       </div>
       <ModalManageBusSchedule
         enableEdit={true}
+        idBusTrip={idBusTrip}
+        data={data}
         functionModal={'add'}
         show={modalAddScheduleShow}
         onHide={() => setModalAddScheduleShow(false)}
