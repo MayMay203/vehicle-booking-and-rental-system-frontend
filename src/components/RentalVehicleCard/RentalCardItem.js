@@ -19,6 +19,7 @@ const cx = classNames.bind(styles)
 function RentalCardItem({ typeService, role, item,startDateTime, endDateTime }) {
   const navigate = useNavigate()
   const [typeVehicle, setTypeVehicle] = useState([])
+   const newPrice = item.price - item.price * (item?.discount_percentage / 100)
   const handleClickVehicle = (type) => {
     if (role === 'user') {
       navigate('/rent-vehicle/rental-service/rental-service-detail', {
@@ -80,7 +81,11 @@ function RentalCardItem({ typeService, role, item,startDateTime, endDateTime }) 
         <Rating></Rating>
         <div className={cx('price', 'd-flex', 'align-items-center')}>
           <FontAwesomeIcon icon={faMoneyBill} className={cx('icon', 'icon-money')} />
-          <span className={cx('txt')}>{item.price.toLocaleString('vi-VN')}đ/ngày</span>
+          {/* <span className={cx('txt')}>{item.price.toLocaleString('vi-VN')}đ/ngày</span> */}
+          <div>
+            <p className={cx('txt', 'charge-old')}>{item.price.toLocaleString('vi-VN')}đ/ngày</p>
+            <p className={cx('txt', 'charge-new')}>{Math.floor(newPrice).toLocaleString('vi-VN')}đ/ngày</p>
+          </div>
         </div>
       </div>
     </Button>

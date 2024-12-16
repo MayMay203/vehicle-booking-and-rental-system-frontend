@@ -1,4 +1,11 @@
 @use '../../../../abstracts' as abstracts;
+.txt-title {
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #ff7f50;
+}
 .header {
   text-align: center;
   text-transform: uppercase;
