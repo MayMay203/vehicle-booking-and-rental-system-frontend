@@ -37,6 +37,8 @@ import { updatRating } from '~/apiServices/ratingService/updateRating'
 const cx = classNames.bind(styles)
 function TicketItem({ status, data = {} }) {
   const dispatch = useDispatch()
+  const { voucherUser } = useSelector(state => state.voucher)
+  console.log(voucherUser)
   const { busTripScheduleId } = data
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
@@ -142,9 +144,6 @@ function TicketItem({ status, data = {} }) {
         feedback: async () => {
           const dataRating = await getAllRatingOfTicket(data.busTripScheduleId || data.tripInfo?.busTripScheduleId)
           setDetaiInfor((prev) => ({ ...prev, [type]: dataRating || {} }))
-        },
-        discount: async () => {
-          // Implement discount logic here
         },
         pickReturn: async () => {
           const locations = await getPickReturnLocations(
@@ -261,7 +260,7 @@ function TicketItem({ status, data = {} }) {
   }
 
   return (
-    <div className={cx('wrapper',{'minHeight': isDetail})}>
+    <div className={cx('wrapper', { minHeight: isDetail })}>
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
         <div className="col">
           <div className={cx('image-wrapper')}>
@@ -380,7 +379,12 @@ function TicketItem({ status, data = {} }) {
           <Tabs tabList={tabList} settings={settings} type={type} handleClickTab={handleClickTab}></Tabs>
           {type === 'discount' && (
             <div className="mt-5 row row-cols-1 justify-content-center row-cols-lg-2 gy-5">
-              <div className="col mt-0">
+              {voucherUser.map((voucher) => (
+                <div className="col mt-0" key={voucher.id}>
+                  <Voucher className="m-auto" data={voucher}/>
+                </div>
+              ))}
+              {/* <div className="col mt-0">
                 <Voucher className="m-auto" />
               </div>
               <div className="col mt-0">
@@ -388,10 +392,7 @@ function TicketItem({ status, data = {} }) {
               </div>
               <div className="col mt-0">
                 <Voucher className="m-auto" />
-              </div>
-              <div className="col mt-0">
-                <Voucher className="m-auto" />
-              </div>
+              </div> */}
             </div>
           )}
           {type === 'pickReturn' && detailInfor['pickReturn'] && (

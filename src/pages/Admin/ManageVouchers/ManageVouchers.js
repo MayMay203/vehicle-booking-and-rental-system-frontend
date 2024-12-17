@@ -89,7 +89,7 @@ function ManageVouchers() {
         </div>
         <div className="col">
           <div className="d-flex column-gap-3 justify-content-start justify-content-lg-end">
-            <Tippy content="Tăng dần, giảm dần theo ngày có hiệu lực">
+            <Tippy content="Tăng dần, giảm dần theo ngày có hiệu lực"T>
               <button>
                 <Button
                   outline
