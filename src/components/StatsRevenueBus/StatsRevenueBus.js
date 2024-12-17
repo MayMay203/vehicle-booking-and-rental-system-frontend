@@ -166,7 +166,7 @@ function StatsRevenueBus({ data }) {
     },
     yAxis: {
       title: {
-        text: 'Doanh thu (VND)',
+        text: 'Doanh thu theo tháng(VND)',
       },
       label: {
         formatter: (value) => `${(value / 1000).toFixed(1)}K`, // Format as thousands
