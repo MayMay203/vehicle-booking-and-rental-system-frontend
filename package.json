@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@ant-design/charts": "^2.2.5",
+    "@antv/g2plot": "^2.4.32",
+    "@antv/util": "^3.3.10",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
@@ -23,7 +25,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+   "start": "cross-env GENERATE_SOURCEMAP=false react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
@@ -66,6 +68,7 @@
     "babel-plugin-module-resolver": "^5.0.2",
     "bootstrap": "^5.3.3",
     "classnames": "^2.5.1",
+    "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
     "jwt-decode": "^4.0.0",
     "react-app-rewired": "^2.2.1",
