@@ -24,61 +24,87 @@ function OrderManagement() {
   const [filterType, setfilterType] = useState('ticketOrder')
 
   useEffect(() => {
-    async function fetchAllTicketList() {
+    async function fetchAllOrderList() {
       if (dispatch(checkLoginSession())) {
         if (status === 'canceled') {
+          // Call api phần vé đã huỷ
           if (filterType === 'ticketOrder') {
             dispatch(
               fetchAllMyTicketOrders({
                 isGone: false,
                 isCanceled: 1,
+                page: currentPage,
               }),
             )
+          } else if (filterType === 'carRentalOrder') {
+            //  dispatch canceled rental api
+          } else {
+            // dispatch canceled booking api
+          }
+        } else if (status === 'current') {
+          if (filterType === 'ticketOrder') {
+            dispatch(
+              fetchAllMyTicketOrders({
+                isGone: false,
+                isCanceled: 0,
+                page: currentPage,
+              }),
+            )
+          } else if (filterType === 'carRentalOrder') {
+            // dispatch current rental order api
+          } else {
+            // dispatch current booking order api
           }
         } else {
           if (filterType === 'ticketOrder') {
             dispatch(
               fetchAllMyTicketOrders({
-                isGone: status === 'completed',
+                isGone: true,
                 isCanceled: 0,
+                page: currentPage,
               }),
             )
+          } else if (filterType === 'carRentalOrder') {
+            // dispatch gone rental order api
+          } else {
+            // dispatch gone booking order api
           }
         }
       }
     }
-    fetchAllTicketList()
-  }, [status, dispatch, filterType])
+    fetchAllOrderList()
+    // Call api when status order, type order, current page change
+  }, [status, dispatch, filterType, currentPage])
 
-  useEffect(() => {
-    async function fetchAllTicketList() {
-      if (dispatch(checkLoginSession())) {
-        if (status === 'canceled') {
-          if (filterType === 'ticketOrder') {
-            console.log('Vô cái huỷ')
-            dispatch(
-              fetchAllMyTicketOrders({
-                isCanceled: 1,
-                page: currentPage,
-              }),
-            )
-          }
-        } else {
-          if (filterType === 'ticketOrder') {
-            dispatch(
-              fetchAllMyTicketOrders({
-                isCanceled: 0,
-                page: currentPage,
-                isGone: status === 'completed',
-              }),
-            )
-          }
-        }
-      }
-    }
-    fetchAllTicketList()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage])
+  // useEffect(() => {
+  //   async function fetchAllTicketList() {
+  //     if (dispatch(checkLoginSession())) {
+  //       if (status === 'canceled') {
+  //         if (filterType === 'ticketOrder') {
+  //           console.log('Vô cái huỷ')
+  //           dispatch(
+  //             fetchAllMyTicketOrders({
+  //               isCanceled: 1,
+  //               page: currentPage,
+  //             }),
+  //           )
+  //         }
+  //       } else {
+  //         if (filterType === 'ticketOrder') {
+  //           dispatch(
+  //             fetchAllMyTicketOrders({
+  //               isCanceled: 0,
+  //               page: currentPage,
+  //               isGone: status === 'completed',
+  //             }),
+  //           )
+  //         }
+  //       }
+  //     }
+  //   }
+  //   fetchAllTicketList()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [currentPage])
 
   const settings = useMemo(
     () => ({
