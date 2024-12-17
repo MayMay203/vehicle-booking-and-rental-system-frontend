@@ -4,23 +4,26 @@ import { Col, Row } from "react-bootstrap"
 import Button from "~/components/Button"
 import { useState } from "react"
 import TableListRentalService from "~/components/TableListRentalService/TableListRentalService"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
+import AddServiceRental from "../AddServiceRental"
 const cx = classNames.bind(styles)
 function ServiceManage(){
     const typeService = 'SELF_DRIVING'
     const [activeTypeFilter, setActiveTypeFilter] = useState('all')
+    const [modalAddService, setModalAddService] = useState(false)
     const handleTypeFilterClick = (btnType) => {
       setActiveTypeFilter(btnType)
     }
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const handleAddService = () => {
-      navigate('add-service-rental')
+      // navigate('add-service-rental')
+      setModalAddService(true)
     }
     return (
       <div className="container">
         <Row className="mt-4 justify-content-center align-items-center">
           <div className={cx('header', 'd-flex')}>
-            <p className={cx('justify-content-center', 'txt-header')}>Danh sách dịch vụ cho thuê</p>
+            <p className={cx('justify-content-center', 'txt-header')}>Danh sách dịch vụ cho thuê xe</p>
           </div>
         </Row>
         <Row className="mt-4 justify-content-center align-items-center mb-5">
@@ -66,6 +69,12 @@ function ServiceManage(){
         </Row>
         <TableListRentalService typeService={typeService}></TableListRentalService>
         <div className="mb-5 mt-5"></div>
+        <AddServiceRental
+          // enableEdit={true}
+          // functionModal={'add'}
+          show={modalAddService}
+          onHide={() => setModalAddService(false)}
+        ></AddServiceRental>
       </div>
     )
 }

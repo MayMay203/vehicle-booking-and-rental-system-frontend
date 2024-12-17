@@ -11,7 +11,7 @@ import orderSlice from './slices/orderSlice'
 import busPartnerSlice from './slices/busPartnerSlice'
 import conversationSlice from './slices/conversationSlice'
 import voucherSlice from './slices/voucherSlice'
-
+import rentalPartnerSlice from './slices/rentalPartnerSlice'
 export const store = configureStore({
   reducer: {
     authModal: authModalSlice,
@@ -25,6 +25,7 @@ export const store = configureStore({
     orders: orderSlice,
     busPartner: busPartnerSlice,
     conversation: conversationSlice,
-    voucher: voucherSlice
+    voucher: voucherSlice,
+    rentalPartner: rentalPartnerSlice,
   },
 })
