@@ -200,16 +200,17 @@
 import React, { useEffect, useState } from 'react'
 import { DatePicker } from 'antd'
 import { Line } from '@ant-design/charts'
-import { Col } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import classNames from 'classnames/bind'
 import styles from './StatsRevenueBus.module.scss'
 import { statsRevenueBus } from '~/apiServices/busPartner/statsRevenueBus'
+import Button from '../Button'
 const cx = classNames.bind(styles)
 function StatsRevenueBus() {
   const [time, setTime] = useState('')
   const [data, setData] = useState({ revenueStatistic: [] }) // Initialize with a safe default value
   // const [revenueBy, setRevenueBy] = useState('')
-
+  const [activeTypeFilter, setActiveTypeFilter] = useState('ByMonth')
   const rawData = {
     labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     datasets: [
@@ -284,11 +285,43 @@ function StatsRevenueBus() {
     console.log('Selected year:', dateString)
   }
 
+  const handleTypeFilterClick = (btnType) => {
+    setActiveTypeFilter(btnType)
+  }
   return (
-    <div className="mb-3 mt-3">
+    <div className="mb-3 mt-3 container">
+      <div>
+        {/* <Row className="mt-4 justify-content-center align-items-center">
+          <div className={cx('header', 'd-flex')}>
+            <p className={cx('justify-content-center', 'txt-header')}>DOANH THU THEO THÁNG</p>
+          </div>
+        </Row> */}
+        <Row className="mt-5 justify-content-center align-items-center mb-5">
+          <Col xs="10" className="p-2 align-items-center justify-content-center">
+            <div className={cx('type-filter-container')}>
+              <Button
+                rounded
+                className={cx('type-filter', { active: activeTypeFilter === 'ByMonth' })}
+                onClick={() => handleTypeFilterClick('ByMonth')}
+              >
+                Doanh thu theo tháng
+              </Button>
+              <Button
+                rounded
+                className={cx('type-filter', { active: activeTypeFilter === 'ByYear' })}
+                onClick={() => handleTypeFilterClick('ByYear')}
+              >
+                Doanh thu theo năm
+              </Button>
+            </div>
+          </Col>
+        </Row>
+      </div>
       <div className="row mb-4">
         <Col>
-          <DatePicker placeholder="Chọn năm" onChange={handleOnChange} picker="year" />
+          {activeTypeFilter === 'ByMonth' && (
+            <DatePicker placeholder="Chọn năm" onChange={handleOnChange} picker="year" />
+          )}
         </Col>
         <Col className={cx('justify-content-end', 'wrap-total')}>
           <p className={cx('title-total')}>Tổng doanh thu</p>
@@ -303,4 +336,3 @@ function StatsRevenueBus() {
 }
 
 export default StatsRevenueBus
-
