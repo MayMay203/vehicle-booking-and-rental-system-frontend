@@ -2,14 +2,28 @@ import { Row, Col, Breadcrumb } from 'react-bootstrap'
 import styles from './BookVehicle.module.scss'
 import classNames from 'classnames/bind'
 import { images } from '~/assets/images'
-import VoucherList from '~/components/Voucher/VoucherList'
 import { useNavigate } from 'react-router-dom'
 import { config } from '~/config'
 import Button from '~/components/Button'
 import AccordionQAList from '~/components/AccordionQA/AccordionQAList'
 import BookingServiceCards from '~/components/BookingServiceCard'
+import Voucher from '~/components/Voucher'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllVouchersForUser, fetchAllVouchersInSystem } from '~/redux/slices/voucherSlice'
 const cx = classNames.bind(styles)
 function BookVehicle() {
+  const { voucherUser } = useSelector((state) => state.voucher)
+  const { isLogin } = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (isLogin && dispatch(checkLoginSession())) {
+      dispatch(fetchAllVouchersForUser())
+    } else {
+      dispatch(fetchAllVouchersInSystem())
+    }
+  }, [isLogin, dispatch])
   // Danh sách câu hỏi
   const questionsAndAnswers = [
     { question: 'Tôi có cần vệ sinh khi trả xe?', answer: 'Có, bạn cần đảm bảo xe sạch sẽ khi trả lại.' },
@@ -68,9 +82,13 @@ function BookVehicle() {
         <p className={cx('title', 'p-5')}>DỊCH VỤ ĐẶT XE</p>
         <BookingServiceCards></BookingServiceCards>
       </Row>
-      <Row className={cx(' pt-5 pb-5', 'background')}>
+      <Row className={cx(' pt-5 pb-5', 'background','align-items-center')}>
         <p className={cx('title', 'p-5')}>MÃ GIẢM GIÁ</p>
-        <VoucherList></VoucherList>
+        {voucherUser.map((voucher) => (
+          <Col className="col mt-0" key={voucher.id}>
+            <Voucher className="m-auto" data={voucher} />
+          </Col>
+        ))}
       </Row>
       <AccordionQAList questionsAndAnswers={questionsAndAnswers}></AccordionQAList>
     </div>

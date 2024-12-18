@@ -55,7 +55,9 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
                   onClick={hanldeClaimVoucher}
                   disabled={data.claimStatus === 'CLAIMED'}
                 >
-                  Lấy mã
+                  {
+                    data.claimStatus === 'CLAIMED'?'Đã lấy mã':'Lấy mã'
+                  }
                 </Button>
               ) : (
                 <Button
