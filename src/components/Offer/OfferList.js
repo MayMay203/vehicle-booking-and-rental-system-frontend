@@ -4,9 +4,10 @@ import OfferItem from './OfferItem'
 import { MenuBack, MenuNext } from '../Icon'
 import { useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
+import Voucher from '../Voucher'
 
 const cx = classNames.bind(styles)
-function OfferList({ title, price, link, amount, src, voucher, className }) {
+function OfferList({ dataList, voucher, className }) {
   const [index, setIndex] = useState(0)
   const [number, setNumber] = useState(3)
 
@@ -33,7 +34,34 @@ function OfferList({ title, price, link, amount, src, voucher, className }) {
 
   return (
     <div className={cx('wrapper', [className])}>
-      <OfferItem
+      {voucher &&
+        dataList.map((voucher) => (
+          <div
+            style={
+              index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined
+            }
+            className={cx('offer-item', 'voucher-item')}
+            key={voucher.id}
+          >
+            <Voucher data={voucher} />
+          </div>
+        ))}
+      {!voucher &&
+        dataList.map((item, indexArr) => (
+          <OfferItem
+            key={indexArr}
+            style={
+              index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined
+            }
+            className={cx('offer-item')}
+            title={item.title}
+            price={item.price}
+            link={item.link}
+            src={item.src}
+            voucher={voucher}
+          />
+        ))}
+      {/* <OfferItem
         style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
         className={cx('offer-item')}
         title={title}
@@ -78,14 +106,14 @@ function OfferList({ title, price, link, amount, src, voucher, className }) {
         link={link}
         src={src}
         voucher={voucher}
-      />
+      /> */}
 
-      {amount > 3 && index < 0 && (
+      {dataList.length > 3 && index < 0 && (
         <button className={cx('btn', 'btn-back')} onClick={handleBack}>
           <MenuBack />
         </button>
       )}
-      {amount > number && -1 * index < amount - number && (
+      {dataList.length > number && -1 * index < dataList.length - number && (
         <button className={cx('btn', 'btn-next')} onClick={handleNext}>
           <MenuNext />
         </button>

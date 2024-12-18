@@ -38,7 +38,6 @@ const cx = classNames.bind(styles)
 function TicketItem({ status, data = {} }) {
   const dispatch = useDispatch()
   const { voucherUser } = useSelector(state => state.voucher)
-  console.log(voucherUser)
   const { busTripScheduleId } = data
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
@@ -47,8 +46,6 @@ function TicketItem({ status, data = {} }) {
   const { currentRole } = useSelector((state) => state.menu)
   const [isCommentable, setIsCommentable] = useState(false)
   const detailRef = useRef(null)
-
-
 
   useEffect(() => {
     if (data.tripInfo) {
@@ -384,15 +381,6 @@ function TicketItem({ status, data = {} }) {
                   <Voucher className="m-auto" data={voucher}/>
                 </div>
               ))}
-              {/* <div className="col mt-0">
-                <Voucher className="m-auto" />
-              </div>
-              <div className="col mt-0">
-                <Voucher className="m-auto" />
-              </div>
-              <div className="col mt-0">
-                <Voucher className="m-auto" />
-              </div> */}
             </div>
           )}
           {type === 'pickReturn' && detailInfor['pickReturn'] && (
