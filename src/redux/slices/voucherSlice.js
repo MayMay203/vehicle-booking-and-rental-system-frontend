@@ -16,7 +16,6 @@ export const fetchAllVouchersForUser = createAsyncThunk('vouchers/fetchAllVouche
 
 export const fetchAllVouchersInSystem = createAsyncThunk('vouchers/fetchAllVoucherInSystem', async () => {
   const data = await getAllVouchersInSystem()
-  console.log(data)
   return data || []
 })
 
