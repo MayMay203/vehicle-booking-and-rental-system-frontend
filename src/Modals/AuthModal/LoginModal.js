@@ -13,12 +13,14 @@ import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { setCurrentUser } from '~/redux/slices/userSlice'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import { setMenu } from '~/redux/slices/menuSlice'
+import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
   console.log('re-render-login modal')
   const showLoginModal = useSelector((state) => state.authModal.login)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -54,7 +56,10 @@ function LoginModal() {
     try {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const data = await login(email, password)
-      if (data.accountLogin.roles.includes('ADMIN')) dispatch(setMenu('adminMenu'))
+      if (data.accountLogin.roles.includes('ADMIN')) {
+        dispatch(setMenu('adminMenu'))
+        navigate(config.routes.manageAccounts)
+      }
       else dispatch(setMenu('userMenu'))
       // add localstorage
       localStorage.setItem('accessToken', data.access_token)

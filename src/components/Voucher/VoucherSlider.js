@@ -42,8 +42,8 @@ function VoucherSlider({ listVoucher }) {
           <FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>
         </Button>
         <Row className="justify-content-center">
-          {displayedVoucher.map((list, index) => (
-            <Voucher className={cx('voucher-small')} key={index} id={list.id}></Voucher>
+          {displayedVoucher.map((voucher, index) => (
+            <Voucher className={cx('voucher-small')} key={index} data={voucher} ></Voucher>
           ))}
         </Row>
         <Button

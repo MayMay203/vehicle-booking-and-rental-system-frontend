@@ -5,12 +5,27 @@ import { Row, Breadcrumb} from 'react-bootstrap'
 import { images } from '~/assets/images'
 import BookingVehicleList from '~/components/BookingVehicle/BookingVehicleList'
 import Button from '~/components/Button'
-import VoucherList from '~/components/Voucher/VoucherList'
 import PaymentMethods from '~/components/PaymentMethod'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllVouchersForUser, fetchAllVouchersInSystem } from '~/redux/slices/voucherSlice'
+import Voucher from '~/components/Voucher'
+import { Col } from 'antd'
 const cx = classNames.bind(styles)
 function BookingService() {
   const navigate = useNavigate() 
+   const { voucherUser } = useSelector((state) => state.voucher)
+   const { isLogin } = useSelector((state) => state.user)
+   const dispatch = useDispatch()
+   useEffect(() => {
+     if (isLogin && dispatch(checkLoginSession())) {
+       dispatch(fetchAllVouchersForUser())
+     } else {
+       dispatch(fetchAllVouchersInSystem())
+     }
+   }, [isLogin, dispatch])
   const handleBooking = (id) => {
     navigate('/book-vehicle/booking-service/booking-order', { state: { id: id} }) 
   }
@@ -18,9 +33,7 @@ function BookingService() {
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
         <Breadcrumb.Item href={config.routes.home}>Trang chủ</Breadcrumb.Item>
-        <Breadcrumb.Item href={config.routes.booking} >
-          Đặt xe
-        </Breadcrumb.Item>
+        <Breadcrumb.Item href={config.routes.booking}>Đặt xe</Breadcrumb.Item>
         <Breadcrumb.Item href={config.routes.bookingService} active>
           Bắt đầu đặt xe
         </Breadcrumb.Item>
@@ -51,12 +64,16 @@ function BookingService() {
         <div className={cx('txt-header')}>PHƯƠNG THỨC THANH TOÁN</div>
         <PaymentMethods></PaymentMethods>
       </Row>
-      <Row className={cx('justify-content-center', 'border', 'md-col-2')}>
+      <Row className={cx('justify-content-center', 'border', 'md-col-2','align-items-center')}>
         <div className={cx('txt-header')}>MÃ GIẢM GIÁ</div>
-        <VoucherList></VoucherList>
+        {voucherUser.map((voucher) => (
+          <Col className="col mt-0" key={voucher.id}>
+            <Voucher className="m-auto" data={voucher} />
+          </Col>
+        ))}
       </Row>
       <Row className={cx('justify-content-center')}>
-        <Button primary className={cx('btn-booking')} onClick={()=>handleBooking(1)}>
+        <Button primary className={cx('btn-booking')} onClick={() => handleBooking(1)}>
           Đặt xe
         </Button>
       </Row>
