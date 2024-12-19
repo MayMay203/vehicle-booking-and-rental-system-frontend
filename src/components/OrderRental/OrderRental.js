@@ -78,7 +78,6 @@ function OrderRental({ typeService, formData, setFormData }) {
     async function fetchAllSuitableVoucher() {
       if (dispatch(checkLoginSession())) {
         const data = await getAllSuitableVouchers(formData.amount * formData.price)
-        console.log(data)
         if (data) setSuitableVoucher(data)
       }
     }
