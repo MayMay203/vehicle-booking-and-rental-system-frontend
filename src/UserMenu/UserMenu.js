@@ -43,7 +43,7 @@ function UserMenu() {
         <Image src={currentUser?.avatar} className={cx('avatar', 'ml-0')}></Image>
         <span className="fw-medium">{currentUser?.name}</span>
       </div>
-      {currentUser?.roles.length > 1 && (
+      {currentUser?.roles?.length > 1 && (
         <div className={cx('menu')} onClick={handleModeSetting}>
           Cài đặt chế độ{' '}
           <FontAwesomeIcon

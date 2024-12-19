@@ -31,7 +31,7 @@ import { Empty } from 'antd'
 const cx = classNames.bind(styles)
 function TicketModal() {
   console.log('re-render ticket modal')
-  const { currentUser } = useSelector((state) => state.user)
+  const { currentUser} = useSelector((state) => state.user)
   const showTicketModal = useSelector((state) => state.generalModal.buyTicket)
   const { departureDate, arrivalLocation } = useSelector((state) => state.search.searchTicket)
   const { id, type, transactionCode } = showTicketModal
@@ -162,13 +162,10 @@ function TicketModal() {
       value = (total * percent) / 100
     }
     setTitle(`- ${value.toLocaleString().replace(',','.')} VNĐ`)
-    console.log('ID VOUCHER: ', id)
     setVoucherValue(value % 1 === 0 ? value : value.toFixed(3))
     setIdVoucher(id)
     setIsVoucher(false)
   }
-
-  console.log(total)
 
   return (
     <Modal className={cx('custom-modal')} show={showTicketModal.isOpen} onHide={handleClose} centered size="lg">

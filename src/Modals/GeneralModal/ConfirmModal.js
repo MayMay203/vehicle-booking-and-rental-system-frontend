@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { checkLoginSession, logout } from '~/redux/slices/userSlice'
+import { checkLoginSession, logout, setCurrentUser } from '~/redux/slices/userSlice'
 import { toast } from 'react-toastify'
 import { unlockAccount } from '~/apiServices/unlockAccount'
 import { fetchAllAccounts } from '~/redux/slices/accountSlice'
@@ -38,6 +38,7 @@ function ConfirmModal() {
           await logoutService()
           dispatch(logout())
           dispatch(setMenu('userMenu'))
+          dispatch(setCurrentUser({ currentUser: {} }))
           // add localstorage
           localStorage.removeItem('accessToken')
           navigate('/')

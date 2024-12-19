@@ -12,6 +12,9 @@ import RentalOrder from '~/pages/RentalPage/RentalOrder'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
 import { calculateRentalPrice } from '~/apiServices/user/calculateRentalPrice'
+import VoucherSlider from '../Voucher/VoucherSlider'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllVouchersForUser, fetchAllVouchersInSystem } from '~/redux/slices/voucherSlice'
 const cx = classNames.bind(styles)
 function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime, endDateTime }) {
   // const listVoucher = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
@@ -24,23 +27,24 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
   const [modalOrderShow, setModalOrderShow] = useState(false)
   const [type, setType] = useState('')
   const [priceRental, setPriceRental] = useState(0)
+  const { voucherUser } = useSelector((state) => state.voucher)
   const [formData, setFormData] = useState({
     start_rental_time: startDateTime.startDT,
-      // startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
-      // ' ' +
-      // (`0${startDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
-      //   '-' +
-      //   `0${startDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
-      //   '-' +
-      //   startDate.getFullYear()),
+    // startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
+    // ' ' +
+    // (`0${startDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
+    //   '-' +
+    //   `0${startDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
+    //   '-' +
+    //   startDate.getFullYear()),
     end_rental_time: endDateTime.endDT,
-      // endTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
-      // ' ' +
-      // (`0${endDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
-      //   '-' +
-      //   `0${endDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
-      //   '-' +
-      //   endDate.getFullYear()),
+    // endTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
+    // ' ' +
+    // (`0${endDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
+    //   '-' +
+    //   `0${endDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
+    //   '-' +
+    //   endDate.getFullYear()),
     pickup_location: inforVehicleRental?.location,
     total: 0,
     status: 'confirmed',
@@ -72,22 +76,22 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
   //   }
   // }, [])
   useEffect(() => {
-      const fetchRentalPrice = async () => {
-    try {
-      const response = await calculateRentalPrice(startDateTime.startDT, endDateTime.endDT, newPrice)
-        console.log("setPriceRental", response)
-      setPriceRental(response);  // Cập nhật giá trị giá thuê
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        price: response,  // Cập nhật formData với giá trị mới
-      }));
-    } catch (error) {
-      console.error("Error fetching rental price:", error)
+    const fetchRentalPrice = async () => {
+      try {
+        const response = await calculateRentalPrice(startDateTime.startDT, endDateTime.endDT, newPrice)
+        console.log('setPriceRental', response)
+        setPriceRental(response) // Cập nhật giá trị giá thuê
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          price: response, // Cập nhật formData với giá trị mới
+        }))
+      } catch (error) {
+        console.error('Error fetching rental price:', error)
+      }
     }
-  }
 
-  // Gọi hàm async
-  fetchRentalPrice()
+    // Gọi hàm async
+    fetchRentalPrice()
   }, [newPrice, startDateTime.startDT, endDateTime.endDT])
   useEffect(() => {
     if (inforVehicleRental) {
@@ -122,6 +126,14 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
       [name]: value,
     }))
   }
+
+  useEffect(() => {
+    if (isLogin && dispatch(checkLoginSession())) {
+      dispatch(fetchAllVouchersForUser())
+    } else {
+      dispatch(fetchAllVouchersInSystem())
+    }
+  }, [dispatch, isLogin])
 
   return (
     <div className="p-0">
@@ -199,7 +211,7 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
         <span>Mã giảm giá</span>
       </div>
       <div className={cx('wrap-voucher')}>
-        {/* <VoucherSlider listVoucher={listVoucher}></VoucherSlider> */}
+        <VoucherSlider listVoucher={voucherUser}></VoucherSlider>
       </div>
       <div>
         <div className={cx('txt-title')}>Chi phí khác</div>

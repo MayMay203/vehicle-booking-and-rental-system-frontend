@@ -21,10 +21,14 @@ function Home() {
   const { isLogin } = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
+  console.log(isLogin)
+
   useEffect(() => {
     if (isLogin) {
+      console.log('Vo day ne')
       dispatch(fetchAllVouchersForUser())
     } else {
+      console.log('Khong o ngoai a')
       dispatch(fetchAllVouchersInSystem())
     }
   }, [isLogin, dispatch])
@@ -112,12 +116,9 @@ function Home() {
             <OfferList dataList={popularPath} />
           }
         />
-        <ContentItem
-          title="CÁC ƯU ĐÃI NỔI BẬT"
-          Component={
-            <OfferList dataList={voucherUser} voucher/>
-          }
-        />
+        {voucherUser.length > 0 && (
+          <ContentItem title="CÁC ƯU ĐÃI NỔI BẬT" Component={<OfferList dataList={voucherUser} voucher />} />
+        )}
         <ContentItem
           title="ĐẶT XE"
           Component={
