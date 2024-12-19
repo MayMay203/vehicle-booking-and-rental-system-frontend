@@ -27,6 +27,8 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
       // .filter(Boolean)
       .map((value, index) => ({ value: value.trim(), id: index })) || '',
   )
+  console.log('formData.policy----', formData.policy)
+  console.log('listPolicies----', listPolicies)
   const [policyCounter, setPolicyCounter] = useState(0)
   const typeServices = [
     { value: '', label: 'Chọn loại dịch vụ' },
@@ -44,7 +46,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
       dispatch(fetchAllVehicleTypes())
     }
   }, [dispatch])
-
+console.log("-----formData-------", formData)
   useEffect(() => {
     const updatedListPolicies = policies.map((policy) => policy.value).join(' @#$%& ')
     setListPolicies(updatedListPolicies)
@@ -88,7 +90,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
               className={cx('txt')}
               onChange={handleInputChange}
               readOnly={view}
-              disabled={view}
+              // disabled={view}
             />
             <InputGroup.Text className={cx('txt')}>
               <FontAwesomeIcon icon={faCodeBranch} />
@@ -108,7 +110,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
               aria-label="car_year"
               className={cx('txt')}
               readOnly={view}
-              disabled={view}
+              // disabled={view}
               onChange={handleInputChange}
             />
             <InputGroup.Text className={cx('txt')}>
@@ -126,7 +128,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             name="type_service"
             className={cx('txt', 'selectbox', 'infor-item')}
             readOnly={view}
-            disabled={view}
+            // disabled={view}
             onChange={handleInputChange}
           >
             {typeServices.map((type, index) => (
@@ -146,7 +148,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             className={cx('txt', 'selectbox', 'infor-item')}
             value={formData.price_according}
             readOnly={view}
-            disabled={view}
+            // disabled={view}
             onChange={handleInputChange}
           >
             <option key={1} value="1">
@@ -158,6 +160,18 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             <option key={3} value="3">
               3 ngày
             </option>
+            <option key={4} value="4">
+              4 ngày
+            </option>
+            <option key={5} value="5">
+              5 ngày
+            </option>
+            <option key={6} value="6">
+              6 ngày
+            </option>
+            <option key={7} value="7">
+              7 ngày
+            </option>
           </Form.Select>
         </Form.Group>
         <Form.Group className={cx('txt', 'padding-s', 'mb-5')} controlId="formInfor.ControlInput7">
@@ -167,13 +181,14 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           <InputGroup className={cx('txt', 'infor-item')}>
             <Form.Control
               type="number"
-              value={formData.car_deposit}
+              // value={formData?.car_deposit?.toLocaleString('vi-VN')}
+              value={formData?.car_deposit}
               name="car_deposit"
               aria-label="car_deposit"
               className={cx('txt')}
               onChange={handleInputChange}
               readOnly={view}
-              disabled={view}
+              // disabled={view}
             />
             <InputGroup.Text className={cx('txt')}>
               <FontAwesomeIcon icon={faDongSign} />
@@ -190,7 +205,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             aria-label="location"
             className={cx('txt', 'selectbox', 'infor-item')}
             readOnly={view}
-            disabled={view}
+            // disabled={view}
           >
             {provinces.map((province, index) => (
               <option key={index} value={province.value}>
@@ -205,7 +220,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             aria-label="location"
             className={cx('txt', 'selectbox', 'infor-item')}
             readOnly={view}
-            disabled={view}
+            // disabled={view}
             onChange={handleInputChange}
           ></Form.Control>
         </Form.Group>
@@ -221,7 +236,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             name="type_vehicle"
             className={cx('txt', 'selectbox', 'infor-item')}
             readOnly={view}
-            disabled={view}
+            // disabled={view}
             onChange={handleInputChange}
           >
             <option key={-1} value={''}>
@@ -246,7 +261,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
               aria-label="quantity"
               className={cx('txt')}
               readOnly={view}
-              disabled={view}
+              // disabled={view}
               onChange={handleInputChange}
             />
             <InputGroup.Text className={cx('txt')}>
@@ -255,7 +270,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           </InputGroup>
         </Form.Group>
         <div className="d-flex">
-          {(formData.type_service === 'Thuê xe tự lái' || formData.type_service === 'Cả 2 dịch vụ') && (
+          {[0, '0', 2, '2'].includes(formData.type_service) && (
             <Form.Group className={cx('txt', 'padding-s', 'mb-5')} controlId="formInfor.ControlInput7">
               <Form.Label className="mb-3">
                 Giá thuê tự lái<span className="text-danger">*</span>
@@ -263,13 +278,13 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
               <InputGroup className={cx('txt', 'infor-item')}>
                 <Form.Control
                   type="number"
-                  value={formData.price1}
+                  value={formData?.price1?.toLocaleString('vi-VN')}
                   name="price1"
                   aria-label="price1"
                   className={cx('txt')}
                   onChange={handleInputChange}
                   readOnly={view}
-                  disabled={view}
+                  // disabled={view}
                 />
                 <InputGroup.Text className={cx('txt')}>
                   <FontAwesomeIcon icon={faDongSign} />
@@ -278,7 +293,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             </Form.Group>
           )}
 
-          {(formData.type_service === 'Thuê xe có người lái' || formData.type_service === 'Cả 2 dịch vụ') && (
+          {[1, '1', 2, '2'].includes(formData.type_service) && (
             <Form.Group className={cx('txt', 'padding-s', 'mb-5')} controlId="formInfor.ControlInput8">
               <Form.Label className="mb-3">
                 Giá thuê có người lái<span className="text-danger">*</span>
@@ -286,13 +301,13 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
               <InputGroup className={cx('txt', 'infor-item')}>
                 <Form.Control
                   type="number"
-                  value={formData.price2}
+                  value={formData?.price2?.toLocaleString('vi-VN')}
                   name="price2"
                   aria-label="price2"
                   className={cx('txt')}
                   onChange={handleInputChange}
                   readOnly={view}
-                  disabled={view}
+                  // disabled={view}
                 />
                 <InputGroup.Text className={cx('txt')}>
                   <FontAwesomeIcon icon={faDongSign} />
@@ -313,7 +328,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
               aria-label="reduce"
               className={cx('txt')}
               readOnly={view}
-              disabled={view}
+              // disabled={view}
               onChange={handleInputChange}
             />
             <InputGroup.Text className={cx('txt')}>
@@ -328,13 +343,13 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           <InputGroup className={cx('txt', 'infor-item')}>
             <Form.Control
               type="number"
-              value={formData.reservation_fees}
+              value={formData?.reservation_fees?.toLocaleString('vi-VN')}
               name="reservation_fees"
               aria-label="reservation_fees"
               className={cx('txt')}
               onChange={handleInputChange}
               readOnly={view}
-              disabled={view}
+              // disabled={view}
             />
             <InputGroup.Text className={cx('txt')}>
               <FontAwesomeIcon icon={faDongSign} />
@@ -352,7 +367,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             value={formData.status}
             onChange={handleInputChange}
             readOnly={view}
-            disabled={view}
+            // disabled={view}
           >
             {statuses.map((status, index) => (
               <option key={index} value={status.value}>
@@ -375,9 +390,9 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           value={formData.description}
           maxLength={500}
           readOnly={view}
-          disabled={view}
+          // disabled={view}
         />
-        <p className={cx('max-description')}>{formData.description.length}/500</p>
+        <p className={cx('max-description')}>{formData?.description?.length || 0}/500</p>
       </Form.Group>
       <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput9">
         <Form.Label className="mb-3">
@@ -392,34 +407,36 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           value={formData.utility}
           maxLength={300}
           readOnly={view}
-          disabled={view}
+          // disabled={view}
         />
-        <p className={cx('max-description')}>{formData.description.length}/300</p>
+        <p className={cx('max-description')}>{formData?.utility?.length || 0}/300</p>
       </Form.Group>
-      <Form.Group className={cx('txt', 'padding')} controlId="formMoreInfor.ControlInput2">
-        <div className="align-items-center">
-          <Form.Label>
-            Chính sách <span className="text-danger">*</span>
-          </Form.Label>
-          <FontAwesomeIcon icon={faSquarePlus} className={cx('add-policy')} onClick={handleAddPolicy} />
-        </div>
-        {policies.map((policy, index) => (
-          <div className={cx('d-flex', 'mt-2', 'mb-2')} key={policy.id}>
-            <Form.Control
-              type="text"
-              placeholder={`Nhập chính sách ${index + 1} `}
-              value={policy.value}
-              onChange={(e) => handlePolicyChange(e, policy.id)}
-              className={cx('txt')}
-            />
-            <FontAwesomeIcon
-              icon={faSquareMinus}
-              className={cx('add-policy', 'ms-2')}
-              onClick={() => handleRemovePolicy(policy.id)}
-            />
+      {mode !== 'view' && (
+        <Form.Group className={cx('txt', 'padding')} controlId="formMoreInfor.ControlInput2">
+          <div className="align-items-center">
+            <Form.Label>
+              Chính sách <span className="text-danger">*</span>
+            </Form.Label>
+            <FontAwesomeIcon icon={faSquarePlus} className={cx('add-policy')} onClick={handleAddPolicy} />
           </div>
-        ))}
-      </Form.Group>
+          {policies.map((policy, index) => (
+            <div className={cx('d-flex', 'mt-2', 'mb-2')} key={policy.id}>
+              <Form.Control
+                type="text"
+                placeholder={`Nhập chính sách ${index + 1} `}
+                value={policy.value}
+                onChange={(e) => handlePolicyChange(e, policy.id)}
+                className={cx('txt')}
+              />
+              <FontAwesomeIcon
+                icon={faSquareMinus}
+                className={cx('add-policy', 'ms-2')}
+                onClick={() => handleRemovePolicy(policy.id)}
+              />
+            </div>
+          ))}
+        </Form.Group>
+      )}
     </>
   )
 }

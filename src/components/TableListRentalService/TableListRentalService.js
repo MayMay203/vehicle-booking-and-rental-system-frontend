@@ -1,9 +1,13 @@
-import classNames from "classnames"
+import classNames from 'classnames'
 import styles from './TableListRentalService.module.scss'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowUpRightFromSquare, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons"
-import { useNavigate } from "react-router-dom"
-import { Table } from "antd"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
+import { Table } from 'antd'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllVehicle } from '~/redux/slices/rentalPartnerSlice'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 const cx = classNames.bind(styles)
 function TableListRentalService({ typeService }) {
   const columns = [
@@ -11,14 +15,14 @@ function TableListRentalService({ typeService }) {
       title: 'STT',
       dataIndex: '',
       align: 'center',
-      width: 70,
+      width: 80,
       render: (text, record, index) => index + 1,
     },
     {
       title: 'Hãng xe',
       dataIndex: 'nameCompany',
       align: 'center',
-      width: 200,
+      width: 150,
       showSorterTooltip: {
         target: 'full-header',
       },
@@ -26,10 +30,6 @@ function TableListRentalService({ typeService }) {
         {
           text: 'Joe',
           value: 'Joe',
-        },
-        {
-          text: 'Jim',
-          value: 'Jim',
         },
         {
           text: 'Submenu',
@@ -57,7 +57,7 @@ function TableListRentalService({ typeService }) {
       dataIndex: 'typeVehicle',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 150,
+      width: 120,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -81,7 +81,7 @@ function TableListRentalService({ typeService }) {
       dataIndex: 'location',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 150,
+      width: 230,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -96,11 +96,12 @@ function TableListRentalService({ typeService }) {
       title: 'Xem',
       dataIndex: 'view',
       align: 'center',
+      width: 90,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
           style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-          onClick={() => handleViewBus(record.key)}
+          onClick={() => handleViewVehicle(record.key)}
         />
       ),
     },
@@ -108,17 +109,18 @@ function TableListRentalService({ typeService }) {
       title: 'Sửa',
       dataIndex: 'update',
       align: 'center',
-
+      width: 90,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faEdit}
           style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
-          onClick={() => handleEditBus(record.key)}
+          onClick={() => handleEditVehicle(record.key)}
         />
       ),
     },
     {
       title: 'Xóa',
+      width: 90,
       dataIndex: 'delete',
       align: 'center',
       render: (record) => (
@@ -126,64 +128,66 @@ function TableListRentalService({ typeService }) {
       ),
     },
   ]
-  const data = [
-    {
-      key: '1',
-      nameCompany: 'Honda',
-      typeVehicle: 'Xe máy',
-      number: '10',
-      charge: '100.000đ',
-      location: 'Quảng Nam',
-      status: 'Hoạt động',
-    },
-    {
-      key: '2',
-      nameCompany: 'Honda',
-      typeVehicle: 'Xe máy',
-      number: '10',
-      charge: '100.000đ',
-      location: 'Quảng Nam',
-      status: 'Hoạt động',
-    },
-    {
-      key: '3',
-      nameCompany: 'Honda',
-      typeVehicle: 'Xe máy',
-      number: '10',
-      charge: '100.000đ',
-      location: 'Quảng Nam',
-      status: 'Hoạt động',
-    },
-    {
-      key: '5',
-      nameCompany: 'Honda',
-      typeVehicle: 'Xe máy',
-      number: '10',
-      charge: '100.000đ',
-      location: 'Quảng Nam',
-      status: 'Hoạt động',
-    },
-  ]
+  // const data = [
+  //   {
+  //     key: '1',
+  //     nameCompany: 'Honda',
+  //     typeVehicle: 'Xe máy',
+  //     number: '10',
+  //     charge: '100.000đ',
+  //     location: 'Quảng Nam',
+  //     status: 'Hoạt động',
+  //   },
+
+  // ]
+  const dispatch = useDispatch()
+  const vehicleList = useSelector((state) => state.rentalPartner.vehicleList)
+  const [data, setData] = useState([])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
   const navigate = useNavigate()
-  const handleViewBus = (id) => {
-    navigate('detail-service-rental', { state: { enableEdit: false, busID: id } })
+  const handleViewVehicle = (id) => {
+    navigate('detail-service-rental', { state: { enableEdit: false, vehicleID: id } })
   }
-  const handleEditBus = (id) => {
-    navigate('edit-service-rental', { state: { enableEdit: true, busID: id } })
+  const handleEditVehicle = (id) => {
+    navigate('edit-service-rental', { state: { enableEdit: true, vehicleID: id } })
   }
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllVehicle({ typeService: typeService?.toString(), status: 'available' }))
+    }
+  }, [dispatch, typeService])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      try {
+        const newData = vehicleList?.map((item) => ({
+          key: item.id,
+          nameCompany: item.manufacturer,
+          typeVehicle: item.vehicle_type,
+          number: item.quantity,
+          charge: item.price,
+          location: item.location,
+          status: 'Hoạt động',
+        }))
+        setData(newData)
+        console.log('newData:', newData)
+      } catch (message) {
+        console.log(message)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vehicleList])
   return (
     <Table
       columns={columns}
       dataSource={data}
       onChange={onChange}
       bordered
-      pagination={false}
+      // pagination={false}
       scroll={{ x: 'auto', y: 500 }}
-      // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-      rowClassName="table-row-center" // Thêm class để căn giữa dọc
+      pagination={{ position: ['bottomCenter'], pageSize: 6 }}
+      rowClassName="table-row-center"
       showSorterTooltip={{
         target: 'sorter-icon',
       }}

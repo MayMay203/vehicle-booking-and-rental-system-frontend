@@ -1,12 +1,17 @@
 import classNames from 'classnames'
 import styles from './TableSchedulesOfBus.module.scss'
 import { Table } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ModalBusInfor from '~/pages/BusPartner/BusManage/ModalBusInfor'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllSchedulesByBusID } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
-function TableSchedulesOfBus({ handleUpdateSchedule }) {
+function TableSchedulesOfBus({ handleUpdateSchedule, idBus }) {
   const [isHovered, setIsHovered] = useState(null)
   const [modalBusInforShow, setModalBusInforShow] = useState(false)
+  const dispatch = useDispatch()
+  const listSchedules = useSelector((state) => state.busPartner.scheduleListByBusID)
   const columns = [
     {
       title: 'Giờ xuất phát',
@@ -73,40 +78,36 @@ function TableSchedulesOfBus({ handleUpdateSchedule }) {
       ),
     },
   ]
-  const data = [
-    {
-      key: '1',
-      timeDepart: '12:00',
-      timeDesti: '15:00',
-      dateStart: '20/10/2022',
-      departure: 'Đà Nẵng',
-      destination: 'TP.Hồ Chí Minh',
-    },
-    {
-      key: '2',
-      timeDepart: '14:00',
-      timeDesti: '15:00',
-      dateStart: '20/10/2022',
-      departure: 'Đà Nẵng',
-      destination: 'TP.Hồ Chí Minh',
-    },
-    {
-      key: '3',
-      timeDepart: '12:00',
-      timeDesti: '15:00',
-      dateStart: '20/11/2022',
-      departure: 'Đà Nẵng',
-      destination: 'TP.Hồ Chí Minh',
-    },
-    {
-      key: '5',
-      timeDepart: '12:00',
-      timeDesti: '15:00',
-      dateStart: '20/12/2022',
-      departure: 'Đà Nẵng',
-      destination: 'TP.Hồ Chí Minh',
-    },
-  ]
+  // const data = [
+  //   {
+  //     key: '1',
+  //     timeDepart: '12:00',
+  //     timeDesti: '15:00',
+  //     dateStart: '20/10/2022',
+  //     departure: 'Đà Nẵng',
+  //     destination: 'TP.Hồ Chí Minh',
+  //   },
+  // ]
+const [data, setData] = useState([])
+
+useEffect(() => {
+  if (dispatch(checkLoginSession())) {
+    dispatch(fetchAllSchedulesByBusID({ idBus: idBus }))
+  }
+}, [dispatch, idBus])
+
+useEffect(() => {
+  const transformedData = listSchedules.map((item) => ({
+    key: item.busTripScheduleId,
+    timeDepart: item.departureTime,
+    timeDesti: item.arrivalTime,
+    dateStart: item.startOperationDay,
+    departure: item.departureLocation,
+    destination: item.arrivalLocation,
+  }))
+  setData(transformedData)
+}, [listSchedules])
+
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }

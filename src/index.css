@@ -408,7 +408,7 @@ html *::-webkit-scrollbar-track {
   }
 }
 
-:where(.css-dev-only-do-not-override-apn68).ant-table-wrapper .ant-table-thead >tr>th, :where(.css-dev-only-do-not-override-apn68).ant-table-wrapper .ant-table-thead >tr>td {
+:where(.css-dev-only-do-not-override-1kf000u).ant-table-wrapper .ant-table-thead >tr>th, :where(.css-dev-only-do-not-override-1kf000u).ant-table-wrapper .ant-table-thead >tr>td {
   background-color: #FFEBE4;
 }
 .ant-picker-dropdown {

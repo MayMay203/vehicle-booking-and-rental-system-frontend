@@ -10,9 +10,11 @@ import { useEffect, useState } from 'react'
 // import HolidayCalendar from '~/components/HolidayCalendar'
 import { detailBusTrip } from '~/apiServices/busPartner/detailBusTrip'
 import { useLocation } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
+import { fetchScheduleListByBusTrip } from '~/redux/slices/busPartnerSlice'
+import dayjs from 'dayjs'
 const cx = classNames.bind(styles)
 
 function DetailBusTrip() {
@@ -20,7 +22,9 @@ function DetailBusTrip() {
   const idBusTrip = location.state?.id
   const [data, setData] = useState({})
   const dispatch = useDispatch()
-console.log('data bên cha:', data)
+  const [dateSearch, setDateSearch] = useState('')
+  const dataTable = useSelector((state) => state.busPartner.scheduleListByBusTrip)
+  // console.log('dataTable bên cha:', dataTable)
   console.log('data?.dropOffLocationInfos?.length---', data?.dropOffLocationInfos?.length)
   const maxDropOffLength =
     data?.dropOffLocationInfos?.length > 0
@@ -115,9 +119,28 @@ console.log('data bên cha:', data)
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
       fetchInforBusTrip(idBusTrip)
+      dispatch(
+        fetchScheduleListByBusTrip({
+          date: dayjs(dateSearch, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          idBusTrip: idBusTrip,
+        }),
+      )
+      console.log('dataTable bên cha:', dataTable)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idBusTrip])
+  }, [dispatch, idBusTrip])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(
+        fetchScheduleListByBusTrip({
+          date: dayjs(dateSearch, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          idBusTrip: idBusTrip,
+        }),
+      )
+      console.log('dataTable bên cha----:', dataTable)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateSearch])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
@@ -129,6 +152,7 @@ console.log('data bên cha:', data)
   const handleUpdateSchedule = () => {
     setModalUpdateScheduleShow(true)
   }
+  console.log('----ngay thang: cha---', dayjs(dateSearch, 'DD/MM/YYYY').format('YYYY-MM-DD'))
   return (
     <div className="container">
       <div className="mt-4 mb-4">
@@ -230,9 +254,12 @@ console.log('data bên cha:', data)
           <Button primary onClick={handleAddSchedule}>
             Thêm lịch khởi hành
           </Button>
-          <SlideDayOfMonth></SlideDayOfMonth>
+          <SlideDayOfMonth setDateSearch={setDateSearch}></SlideDayOfMonth>
           <div className="mt-3 mb-3"></div>
-          <TableVehiclesOfBusTrip handleUpdateSchedule={handleUpdateSchedule}></TableVehiclesOfBusTrip>
+          <TableVehiclesOfBusTrip
+            handleUpdateSchedule={handleUpdateSchedule}
+            dataTable={dataTable}
+          ></TableVehiclesOfBusTrip>
         </div>
         {/* <HolidayCalendar /> */}
       </div>

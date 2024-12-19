@@ -18,6 +18,14 @@
   border: 1px solid #d5420c;
   color: #d5420c;
   border-radius: 4px;
+  &:hover {
+    background-color: #ffe0d8;
+    cursor: pointer;
+  }
+}
+.selected-date {
+  background-color: #d5420c;
+  color: white;
 }
 .no-date {
 }

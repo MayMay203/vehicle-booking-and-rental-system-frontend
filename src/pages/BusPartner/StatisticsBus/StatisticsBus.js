@@ -2,7 +2,8 @@ import classNames from "classnames/bind"
 import styles from './StatisticsBus.module.scss'
 import { Tab, Tabs } from "react-bootstrap"
 import StatisticsTicket from "~/components/StatisticsTicket"
-import StatsRevenueBus from "~/components/StatsRevenueBus"
+import StatsRevenueBus from "~/components/StatsRevenueBus/StatsRevenueBus"
+
 const cx = classNames.bind(styles)
 function StatisticsBus(){
     return (
