@@ -15,15 +15,20 @@
     @include abstracts.screen(xs){
         width: 30rem;
     }
-
-    .description{
-        margin-top: 10px;
-        line-height: 1.2;
-        font-size: 1.4rem;
-    }
+    
+    // .description{
+    //     height: 40px;
+    //     margin-top: 10px;
+    //     line-height: 1.4;
+    //     font-size: 1.4rem;
+    //     overflow: hidden;
+    //     display: -webkit-box;
+    //     -webkit-line-clamp: 2; 
+    //     -webkit-box-orient: vertical;
+    // }
 }
 .voucher-small{
-    width: 30rem;
+    width: 33rem;
     .voucher-value{
         font-size: 2rem !important;
     }
@@ -70,6 +75,9 @@
     font-size: 1.3rem;
     font-weight: 600;
     line-height: 1.4;
+    overflow: hidden;
+    margin-bottom: 6px;
+    text-overflow: ellipsis;
     @include abstracts.screen(xs){
         font-size: 1.2rem;
     }
@@ -78,7 +86,7 @@
 .claim_voucher{
     height: 3rem !important;
     min-width: 2rem !important;
-    margin-bottom: 1rem;
+    margin-bottom: 6px;
     background-color: #B83606;
     font-weight: 500 !important;
     font-size: 1.2rem !important;

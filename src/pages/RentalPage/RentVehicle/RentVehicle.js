@@ -3,12 +3,26 @@ import styles from './RentVehicle.module.scss'
 import classNames from 'classnames/bind'
 import { images } from '~/assets/images'
 // import VoucherList from '~/components/Voucher/VoucherList';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { config } from '~/config'
-import AccordionQAList from '~/components/AccordionQA/AccordionQAList';
+import AccordionQAList from '~/components/AccordionQA/AccordionQAList'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllVouchersForUser, fetchAllVouchersInSystem } from '~/redux/slices/voucherSlice'
+import Voucher from '~/components/Voucher'
 const cx = classNames.bind(styles)
 function RentVehicle() {
+  const { voucherUser } = useSelector((state) => state.voucher)
+  const { isLogin } = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (isLogin && dispatch(checkLoginSession())) {
+      dispatch(fetchAllVouchersForUser())
+    } else {
+      dispatch(fetchAllVouchersInSystem())
+    }
+  }, [isLogin, dispatch])
   // Danh sách câu hỏi
   const questionsAndAnswers = [
     { question: 'Tôi có cần vệ sinh khi trả xe?', answer: 'Có, bạn cần đảm bảo xe sạch sẽ khi trả lại.' },
@@ -27,9 +41,9 @@ function RentVehicle() {
   const manned = 'manned'
   const self_driving = 'self_driving'
 
-  const navigate = useNavigate() 
+  const navigate = useNavigate()
   const handleNavigateToRentalService = (type) => {
-    navigate('/rent-vehicle/rental-service', { state: { typeService: type} }) 
+    navigate('/rent-vehicle/rental-service', { state: { typeService: type } })
   }
 
   return (
@@ -80,9 +94,13 @@ function RentVehicle() {
           </Button>
         </Col>
       </Row>
-      <Row className={cx(' pt-5 pb-5', 'background')}>
+      <Row className={cx(' pt-5 pb-5', 'background','align-items-center')}>
         <p className={cx('title', 'p-5')}>MÃ GIẢM GIÁ</p>
-        {/* <VoucherList></VoucherList> */}
+        {voucherUser.map((voucher) => (
+          <Col className="col mt-0" key={voucher.id}>
+            <Voucher className="m-auto" data={voucher} />
+          </Col>
+        ))}
       </Row>
       <AccordionQAList questionsAndAnswers={questionsAndAnswers}></AccordionQAList>
     </div>

@@ -1,19 +1,26 @@
 import classNames from 'classnames/bind'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendar, faLocationDot, faPhone, faUserLarge } from '@fortawesome/free-solid-svg-icons'
+import { faCalendar, faCaretDown, faLocationDot, faPhone, faUserLarge } from '@fortawesome/free-solid-svg-icons'
 import { Col, Form, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import styles from './OrderRental.module.scss'
 import Button from '~/components/Button'
 import { useEffect, useState } from 'react'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { orderVehicleRental } from '~/apiServices/user/orderVehicleRental'
 import { createPayment } from '~/apiServices/ticket/createPayment'
 import { toast } from 'react-toastify'
+import Voucher from '../Voucher'
+import { Empty } from 'antd'
+import { getAllSuitableVouchers } from '~/apiServices/vouchers/getAllSuitableVoucher'
 const cx = classNames.bind(styles)
 function OrderRental({ typeService, formData, setFormData }) {
   const dispatch = useDispatch()
+  const [isVoucher, setIsVoucher] = useState(false)
+  const [suitableVoucher, setSuitableVoucher] = useState([])
+  const { isLogin } = useSelector((state) => state.user)
+  const [voucherDiscount, setVoucherDiscount] = useState('Áp dụng voucher')
   const [warningMessagePhone, setWarningMessagePhone] = useState(
     formData.customerName ? '' : 'Vui lòng nhập số điện thoại!',
   )
@@ -51,10 +58,8 @@ function OrderRental({ typeService, formData, setFormData }) {
   const handleOrder = async () => {
     try {
       if (dispatch(checkLoginSession())) {
-        console.log("--formData:-----", formData)
-        const order = await orderVehicleRental(
-          formData
-        )
+        console.log('--formData:-----', formData)
+        const order = await orderVehicleRental(formData)
         if (order) {
           const key = order.keyOrder
           const paymentUrl = await createPayment(key)
@@ -67,6 +72,26 @@ function OrderRental({ typeService, formData, setFormData }) {
       console.error(error)
       toast.error('Thanh toán thất bại. Vui lòng thử lại!')
     }
+  }
+
+  useEffect(() => {
+    async function fetchAllSuitableVoucher() {
+      if (dispatch(checkLoginSession())) {
+        const data = await getAllSuitableVouchers(formData.amount * formData.price)
+        if (data) setSuitableVoucher(data)
+      }
+    }
+    if (isLogin) fetchAllSuitableVoucher()
+  }, [formData, isLogin, dispatch])
+
+  const handleApplyVoucher = (id, percent, maxValue) => {
+    console.log(id)
+    const amount =
+      (formData.amount * formData.price * percent) / 100 > Number(maxValue.replace(/\./g, '').replace(' VND', ''))
+        ? Number(maxValue.replace(/\./g, '').replace(' VND', ''))
+        : (formData.amount * formData.price * percent) / 100
+    setVoucherDiscount(amount)
+    setIsVoucher(false)
   }
   return (
     <Row className={cx('order', 'm-0')}>
@@ -172,18 +197,32 @@ function OrderRental({ typeService, formData, setFormData }) {
           </span>
         </div>
       </Row>
-      <Row>
+      {/* <Row>
         <div className={cx('wrap-infor')}>
           <span>Giảm giá</span>
           <span className={cx('align-right', 'txt-red')}>-đ</span>
         </div>
-      </Row>
+      </Row> */}
       <Row>
         <div className={cx('wrap-infor')}>
           <span>Giảm giá voucher</span>
-          <span className={cx('align-right', 'txt-red')}>-0đ</span>
+          {/* <span className={cx('align-right', 'txt-red')}>-0đ</span> */}
+          <button onClick={() => setIsVoucher((prev) => !prev)} style={{ color: 'var(--primary-color)' }}>
+            {`-${voucherDiscount.toLocaleString().replace(',','.')} VNĐ`}
+            <FontAwesomeIcon
+              icon={faCaretDown}
+              style={{ rotate: isVoucher ? '-180deg' : '0deg', transition: 'rotate .2s ease', marginLeft: '6px' }}
+            />
+          </button>
         </div>
       </Row>
+      {isVoucher &&
+        suitableVoucher.map((voucher) => (
+          <div className="col mt-0" key={voucher.id}>
+            <Voucher className="m-auto" data={voucher} type="order" handleApplyVoucher={handleApplyVoucher} />
+          </div>
+        ))}
+      {isVoucher && suitableVoucher.length === 0 && <Empty description="Không có voucher nào hợp lệ để sử dùng" />}
       {/* <Row>
         <div className={cx('wrap-infor')}>
           <span>Thuế VAT:</span>

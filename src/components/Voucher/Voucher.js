@@ -55,14 +55,17 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
                   onClick={hanldeClaimVoucher}
                   disabled={data.claimStatus === 'CLAIMED'}
                 >
-                  Lấy mã
+                  {data.claimStatus === 'CLAIMED' ? 'Đã lấy mã' : 'Lấy mã'}
                 </Button>
               ) : (
                 <Button
                   rounded
                   className={cx('claim_voucher')}
                   onClick={hanldeClaimVoucher}
-                  disabled={new Date(data.startDate.split('-').reverse().join('-')) > new Date()}
+                  disabled={
+                    new Date(data.startDate.split('-').reverse().join('-')).setHours(0, 0, 0, 0) >
+                    new Date().setHours(0, 0, 0, 0)
+                  }
                 >
                   Áp dụng
                 </Button>
@@ -73,9 +76,9 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
         <Row className="justify-content-center ">
           <ProgressBar now={now} label={`${now}%`} visuallyHidden className={cx('custom-progress')} variant="none" />
         </Row>
-        <Row>
+        {/* <Row>
           <p className={cx('description')}>{data.description}</p>
-        </Row>
+        </Row> */}
         <Row className={cx('voucher-number')}>
           <p>{`Còn lại ${data.remainingQuantity} mã`}</p>
         </Row>

@@ -12,12 +12,13 @@ import { useEffect, useState } from 'react'
 import { getAllTickets } from '~/apiServices/ticket/getAllTicket'
 import { Empty, Pagination } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllVouchersForUser } from '~/redux/slices/voucherSlice'
-import { checkLoginSession } from "~/redux/slices/userSlice";
+import { fetchAllVouchersForUser, fetchAllVouchersInSystem } from '~/redux/slices/voucherSlice'
+import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function BuyTicket() {
   const [ticketList, setTicketList] = useState([])
+  const { isLogin } = useSelector((state) => state.user)
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [sortType, setSortType] = useState('default')
@@ -28,10 +29,12 @@ function BuyTicket() {
   )
 
   useEffect(() => {
-   if (dispatch(checkLoginSession())) {
-     dispatch(fetchAllVouchersForUser())
-   }
-  }, [dispatch])
+    if (isLogin && dispatch(checkLoginSession())) {
+      dispatch(fetchAllVouchersForUser())
+    } else {
+      dispatch(fetchAllVouchersInSystem())
+    }
+  }, [dispatch, isLogin])
 
   useEffect(() => {
     async function fetchAllTicketList() {
@@ -65,7 +68,7 @@ function BuyTicket() {
         </Breadcrumb.Item>
       </Breadcrumb>
 
-      <Search type={'user'}/>
+      <Search type={'user'} />
 
       <div className="mt-5 fw-medium fs-1 d-flex justify-content-between">
         <div>
