@@ -3,12 +3,14 @@ import styles from './TableVehiclesOfBusTrip.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ModalBusInfor from '~/pages/BusPartner/BusManage/ModalBusInfor'
 const cx = classNames.bind(styles)
-function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
+function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
   const [isHovered, setIsHovered] = useState(null)
   const [modalBusInforShow, setModalBusInforShow] = useState(false)
+  const [data, setData] = useState([])
+   console.log('dataTable bên con:', dataTable)
   const columns = [
     {
       title: 'STT',
@@ -47,7 +49,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
 
     {
       title: 'Loại xe',
-      dataIndex: 'vehicleType',
+      dataIndex: 'busType',
       align: 'center',
       width: 150,
       showSorterTooltip: {
@@ -84,14 +86,6 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
       sortDirections: ['descend'],
     },
     {
-      title: 'Hãng xe',
-      dataIndex: 'nameCompany',
-      align: 'center',
-      defaultSortOrder: 'descend',
-      width: 120,
-      // sorter: (a, b) => a.age - b.age,
-    },
-    {
       title: 'Thời gian khởi hành',
       dataIndex: 'timeDeparture',
       align: 'center',
@@ -108,7 +102,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
       render: (status) => (
         <span
           style={{
-            color: status === 'Đang hoạt động' ? '#008000' : '#E20D0D',
+            color: status === 'Hoạt động' ? '#008000' : '#E20D0D',
           }}
         >
           {status}
@@ -122,14 +116,6 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
       align: 'center',
       defaultSortOrder: 'descend',
       width: 100,
-      // sorter: (a, b) => a.age - b.age,
-    },
-    {
-      title: 'Giá vé',
-      dataIndex: 'price',
-      align: 'center',
-      defaultSortOrder: 'descend',
-      width: 110,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -164,7 +150,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
       title: 'Sửa',
       dataIndex: 'update',
       align: 'center',
-
+      width: 90,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faEdit}
@@ -177,65 +163,40 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule }) {
       title: 'Xóa',
       dataIndex: 'delete',
       align: 'center',
+      width: 90,
       render: (record) => (
         <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
       ),
     },
   ]
-  const data = [
-    {
-      key: '1',
-      licensePlateNumber: '92H-12356',
-      nameCompany: 'Honda',
-      vehicleType: 'Xe máy',
-      status: 'Đang hoạt động',
-      timeDeparture: '5:00; 10:00; 15:00',
-      price: '100.000đ',
-      discount: '10%',
-      available: '12/37',
-      rating: '3/5',
-      location: 'Quảng Nam',
-    },
-    {
-      key: '2',
-      licensePlateNumber: '72H-12356',
-      nameCompany: 'Honda',
-      vehicleType: 'Xe máy',
-      status: 'Đang hoạt động',
-      timeDeparture: '5:00',
-      price: '100.000đ',
-      discount: '10%',
-      available: '12/37',
-      rating: '3/5',
-      location: 'Quảng Nam',
-    },
-    {
-      key: '3',
-      licensePlateNumber: '30H-12356',
-      nameCompany: 'Honda',
-      vehicleType: 'Xe máy',
-      status: 'Đang hoạt động',
-      timeDeparture: '5:00',
-      price: '100.000đ',
-      discount: '10%',
-      available: '12/37',
-      rating: '3/5',
-      location: 'Quảng Nam',
-    },
-    {
-      key: '5',
-      licensePlateNumber: '42H-12356',
-      nameCompany: 'Honda',
-      vehicleType: 'Xe máy',
-      status: 'Đang hoạt động',
-      timeDeparture: '5:00',
-      price: '100.000đ',
-      discount: '10%',
-      available: '12/37',
-      rating: '3/5',
-      location: 'Quảng Nam',
-    },
-  ]
+  // const data = [
+  //   {
+  //     key: '1',
+  //     licensePlateNumber: '92H-12356',
+  //     nameCompany: 'Honda',
+  //     busType: 'Xe máy',
+  //     status: 'Đang hoạt động',
+  //     timeDeparture: '5:00; 10:00; 15:00',
+  //     price: '100.000đ',
+  //     discount: '10%',
+  //     available: '12/37',
+  //     rating: '3/5',
+  //     location: 'Quảng Nam',
+  //   },
+  // ]
+  useEffect(() => {
+    const transformedData = dataTable.map((item) => ({
+      key: item.busTripSchedule,
+      licensePlateNumber: item.busInfo.licensePlate,
+      busType: item.busInfo.busType.name,
+      status: item.status,
+      timeDeparture: item.departureTime,
+      discount: item.discountPercentage,
+      available: item.availableSeats,
+      rating: item.ratingValue,
+    }))
+    setData(transformedData)
+  }, [dataTable])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }

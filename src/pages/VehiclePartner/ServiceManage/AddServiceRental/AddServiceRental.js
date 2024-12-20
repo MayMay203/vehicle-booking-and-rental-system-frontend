@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { toast } from 'react-toastify'
 import { addRentalService } from '~/apiServices/rentalPartner/addRentalService'
+import { fetchAllVehicle } from '~/redux/slices/rentalPartnerSlice'
 
 const cx = classNames.bind(styles)
 function AddServiceRental({ ...props }) {
@@ -133,6 +134,7 @@ function AddServiceRental({ ...props }) {
         })
         const response = await addRentalService(formDataAdd)
         if (response) {
+           dispatch(fetchAllVehicle())
           toast.success('Thêm dịch vụ cho thuê xe thành công!', { autoClose: 2000 })
           console.log('Thêm dịch vụ cho thuê xe thành công!', response)
           handleCancel()
