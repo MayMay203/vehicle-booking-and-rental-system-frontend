@@ -206,6 +206,7 @@ import classNames from 'classnames/bind'
 import styles from './StatsRevenueBus.module.scss'
 import { statsRevenueBus } from '~/apiServices/busPartner/statsRevenueBus'
 import Button from '../Button'
+import LineChartRevenueBus from './LineChartRevenueBus'
 const cx = classNames.bind(styles)
 function StatsRevenueBus() {
   const [time, setTime] = useState('')
@@ -331,6 +332,7 @@ function StatsRevenueBus() {
       </div>
       <div style={{ flex: 1, marginLeft: '20px' }}>
         {/* <Line {...config} /> */}
+        <LineChartRevenueBus data={data}></LineChartRevenueBus>
       </div>
     </div>
   )
