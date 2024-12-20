@@ -200,7 +200,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { DatePicker } from 'antd'
-import { Line } from '@ant-design/charts'
+// import { Line } from '@ant-design/charts'
 import { Col, Row } from 'react-bootstrap'
 import classNames from 'classnames/bind'
 import styles from './StatsRevenueBus.module.scss'
@@ -330,7 +330,7 @@ function StatsRevenueBus() {
         </Col>
       </div>
       <div style={{ flex: 1, marginLeft: '20px' }}>
-        <Line {...config} />
+        {/* <Line {...config} /> */}
       </div>
     </div>
   )
