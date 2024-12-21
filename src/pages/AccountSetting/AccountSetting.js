@@ -227,9 +227,9 @@ function AccountSetting() {
                 <div className="mb-3">
                   <label className="mb-4">Ngày sinh</label>
                   <span className={cx('star')}>*</span>
-                  <div className={cx('date-wrapper', 'd-flex', 'align-items-center')}>
+                  <div className={cx('date-wrapper', 'account-date-wrapper', 'd-flex', 'align-items-center')}>
                     <DatePicker
-                      className={cx('date-input')} // Sử dụng class để áp dụng style cho input
+                      className={cx('date-input')}
                       selected={birthday}
                       onChange={(date) => handleChange(date, setBirthday)}
                       dateFormat="dd-MM-yyyy"
