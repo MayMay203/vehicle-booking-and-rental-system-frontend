@@ -23,10 +23,8 @@ function Home() {
 
   useEffect(() => {
     if (isLogin) {
-      console.log('Vo day ne')
       dispatch(fetchAllVouchersForUser())
     } else {
-      console.log('Khong o ngoai a')
       dispatch(fetchAllVouchersInSystem())
     }
   }, [isLogin, dispatch])

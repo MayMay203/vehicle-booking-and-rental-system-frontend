@@ -25,7 +25,7 @@ function DetailMessage({ data, image, handleUpdateMessage }) {
     const [day, month, year] = date.split('-')
     const formattedDate = `${year}-${month}-${day}T${time}:00`
     const timeDifference = (new Date() - new Date(formattedDate)) / 1000 / 60
-    if (timeDifference <= 50) {
+    if (timeDifference <= 5) {
       setIsEditing(true)
     }
   }

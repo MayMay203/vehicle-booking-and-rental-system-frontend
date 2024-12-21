@@ -116,10 +116,13 @@ function ManageVouchers() {
           </div>
         </div>
       </div>
-      <div className="row mt-5 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 gx-5">
+      <div className="row mt-5 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 gap-5">
         {filteredList?.map((voucher) => (
           <Voucher key={voucher.id} className="m-auto" data={voucher} />
         ))}
+        {
+          filteredList.length % 2 !== 0 && <div className='m-auto'></div>
+        }
       </div>
       {filteredList.length > 0 && (
         <Pagination
