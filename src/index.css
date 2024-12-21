@@ -457,3 +457,7 @@ html *::-webkit-scrollbar-track {
   margin-left: 0;
   margin-right: 0;
 }
+
+.account-date-wrapper .react-datepicker-wrapper{
+  flex: 1
+}

@@ -1,0 +1,34 @@
+.wrapper{
+    margin-top: 50px;
+    padding-bottom: 60px;
+
+    .title{
+        font-size: 2rem;
+        margin-bottom: 30px;
+        font-weight: 400;
+    }
+
+    .stat-btn{
+        padding: 12px 20px;
+        border-radius: 999px;
+        border: 1px solid var(--orange-color);
+        color: var(--orange-color);
+        &.active{
+            background-color: var(--orange-color);
+            color: #fff;
+        }
+        &:not(.active):hover{
+            background-color: var(--primary-bg);
+            color: var(--orange-color);
+            transition: backgroundColor 0.3 ease;
+        }
+    }
+
+    .total{
+        display: block;
+        margin: 24px 0 28px;
+        font-weight: 600;
+        font-size: 1.7rem;
+    }
+}
+
