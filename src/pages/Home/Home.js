@@ -21,8 +21,6 @@ function Home() {
   const { isLogin } = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
-  console.log(isLogin)
-
   useEffect(() => {
     if (isLogin) {
       console.log('Vo day ne')

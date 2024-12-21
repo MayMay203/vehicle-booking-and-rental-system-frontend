@@ -44,6 +44,7 @@ import OrderManage from '~/pages/VehiclePartner/OrderManage/OrderManage'
 import PaymentSuccess from '~/pages/Payment/PaymentSuccess'
 import PaymentFailure from '~/pages/Payment/PaymentFairlure'
 import BusTypeManage from '~/pages/BusPartner/BusType/BusTypeManage'
+import FetchBlob from '~/pages/FetchBlob'
 
 const publicRoutes = [
   {
@@ -227,6 +228,11 @@ const publicRoutes = [
     path: config.routes.paymentFailure,
     component: PaymentFailure,
     layout: HeaderOnly,
+  },
+  {
+    path: config.routes.fetchBlob,
+    component: FetchBlob,
+    layout: null,
   },
 ]
 

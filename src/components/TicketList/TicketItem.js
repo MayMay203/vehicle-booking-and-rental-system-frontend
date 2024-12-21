@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
 import Voucher from '../Voucher'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import UtilitiesList from '../UtilitiesList'
 import ImageList from '../ImageList'
 import FeedbackSlider from '../FeedbackSlider'
@@ -35,9 +35,9 @@ import { deleteRating } from '~/apiServices/ratingService/deleteRating'
 import { updatRating } from '~/apiServices/ratingService/updateRating'
 
 const cx = classNames.bind(styles)
-function TicketItem({ status, data = {} }) {
+function TicketItem({ status, data = {}, isDetailOrder = false }) {
   const dispatch = useDispatch()
-  const { voucherUser } = useSelector(state => state.voucher)
+  const { voucherUser } = useSelector((state) => state.voucher)
   const { busTripScheduleId } = data
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
@@ -52,17 +52,21 @@ function TicketItem({ status, data = {} }) {
       const [time, date] = data.tripInfo.arrivalDateTime.split(' ')
       const [day, month, year] = date.split('-')
       const isoDate = `${year}-${month}-${day}T${time}:00`
-      setIsCommentable(new Date() - new Date(isoDate) < 24 * 60 * 60 * 1000 * 3)
+      setIsCommentable(new Date() - new Date(isoDate) <= 24 * 60 * 60 * 1000 * 5)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
 
   const tabList = useMemo(() => {
     const tabs = [
-      {
-        label: 'Giảm giá',
-        value: 'discount',
-      },
+      ...(isDetailOrder === false
+        ? [
+            {
+              label: 'Giảm giá',
+              value: 'discount',
+            },
+          ]
+        : []),
       {
         label: 'Đón/trả',
         value: 'pickReturn',
@@ -86,11 +90,11 @@ function TicketItem({ status, data = {} }) {
     ]
 
     return tabs
-  }, [])
+  }, [isDetailOrder])
 
   const settings = useMemo(
     () => ({
-      slidesToShow: 6,
+      slidesToShow: isDetailOrder ? 5 : 6,
       infinite: false,
       swipe: true,
       draggable: true,
@@ -118,11 +122,8 @@ function TicketItem({ status, data = {} }) {
         },
       ],
     }),
-    [],
+    [isDetailOrder],
   )
-
-  console.log(data)
-
   useEffect(() => {
     async function getDetail() {
       const actions = {
@@ -225,20 +226,18 @@ function TicketItem({ status, data = {} }) {
     }
   }
 
-  const reGetAllRating = useCallback(async () => {
+  const reGetAllRating = async () => {
     const dataRating = await getAllRatingOfTicket(data.busTripScheduleId || data.tripInfo?.busTripScheduleId)
     setDetaiInfor((prev) => ({ ...prev, [type]: dataRating || {} }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }
 
   const handleComment = async (id, ratingValue, comment, action) => {
-    console.log(id, action)
     switch (action) {
       case 'create':
         await createRating(data.orderInfo.orderId, ratingValue, comment)
         break
       case 'update':
-        console.log(id)
         await updatRating(id, ratingValue, comment)
         break
       case 'delete':
@@ -374,11 +373,11 @@ function TicketItem({ status, data = {} }) {
       {isDetail && (
         <div className="mt-5">
           <Tabs tabList={tabList} settings={settings} type={type} handleClickTab={handleClickTab}></Tabs>
-          {type === 'discount' && (
+          {type === 'discount' && !isDetailOrder && (
             <div className="mt-5 row row-cols-1 justify-content-center row-cols-lg-2 gy-5">
               {voucherUser.map((voucher) => (
                 <div className="col mt-0" key={voucher.id}>
-                  <Voucher className="m-auto" data={voucher}/>
+                  <Voucher className="m-auto" data={voucher} />
                 </div>
               ))}
             </div>

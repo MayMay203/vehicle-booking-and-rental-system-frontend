@@ -21,7 +21,7 @@ function FeedbackItem({ className, data, handleComment }) {
   const [day, month, year] = date.split('-')
   const isoDate = `${year}-${month}-${day}T${time}:00`
 
-  // So sánh thời gian hiện tại với commentDate
+  // Sau 3 tiếng không chỉnh sửa với xoá được nữa
   const isEditable = new Date() - new Date(isoDate) < 3 * 60 * 60 * 1000
 
   const handleInput = () => {

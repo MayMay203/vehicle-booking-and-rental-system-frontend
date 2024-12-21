@@ -48,6 +48,7 @@ function TicketModal() {
   const [voucherValue, setVoucherValue] = useState(0)
   const [idVoucher, setIdVoucher] = useState('')
   const [title, setTitle] = useState('Áp dụng voucher')
+  const { isLogin } = useSelector((state) => state.user)
 
   useEffect(() => {
     if (ticketDetail.orderInfor?.pricePerTicket) {
@@ -81,8 +82,8 @@ function TicketModal() {
       )
       if (data) setSuitableVoucher(data)
     }
-    fetchAllSuitableVoucher()
-  }, [quantity])
+    if (isLogin) fetchAllSuitableVoucher()
+  }, [quantity, isLogin])
 
   useEffect(() => {
     setFullName(currentUser.name || '')
@@ -161,7 +162,7 @@ function TicketModal() {
     } else {
       value = (total * percent) / 100
     }
-    setTitle(`- ${value.toLocaleString().replace(',','.')} VNĐ`)
+    setTitle(`- ${value?.toLocaleString().replace(',','.')} VNĐ`)
     setVoucherValue(value % 1 === 0 ? value : value.toFixed(3))
     setIdVoucher(id)
     setIsVoucher(false)
@@ -361,7 +362,7 @@ function TicketModal() {
                     Number(ticketDetail.priceTicket?.replace(/\./g, '').replace(' VND', '')) *
                     (1 - (ticketDetail.discountPercentage * 1.0) / 100)
                   )
-                    .toLocaleString()
+                    ?.toLocaleString()
                     .replace(',', '.') + ' VNĐ'}
                 </span>
               </div>
@@ -391,7 +392,7 @@ function TicketModal() {
           {isVoucher &&
             suitableVoucher.map((voucher) => (
               <div className="col mt-0" key={voucher.id}>
-                <Voucher className="m-auto" data={voucher} type="order" handleApplyVoucher={handleApplyVoucher}/>
+                <Voucher className="m-auto" data={voucher} type="order" handleApplyVoucher={handleApplyVoucher} />
               </div>
             ))}
           {isVoucher && suitableVoucher.length === 0 && <Empty description="Không có voucher nào hợp lệ để sử dùng" />}
@@ -406,7 +407,7 @@ function TicketModal() {
                       Number(ticketDetail.priceTicket?.replace(/\./g, '').replace(' VND', '')) *
                       (1 - (ticketDetail.discountPercentage * 1.0) / 100)
                     )
-                      .toLocaleString()
+                      ?.toLocaleString()
                       .replace(',', '.') + ' VNĐ'}
                   </span>
                 ) : (
@@ -415,7 +416,7 @@ function TicketModal() {
                       Number(ticketDetail.orderInfo?.pricePerTicket?.replace(/\./g, '').replace(' VND', '')) *
                       (1 - (ticketDetail.orderInfo?.discountPercentage * 1.0) / 100)
                     )
-                      .toLocaleString()
+                      ?.toLocaleString()
                       .replace(',', '.') + ' VNĐ'}
                   </span>
                 )}
@@ -428,8 +429,9 @@ function TicketModal() {
                 <span>Voucher giảm giá:</span>
                 <span className={cx('sale-off')}>
                   {type !== 'detailOrder'
-                    ? `- ${voucherValue.toLocaleString().replace(',', '.')} VNĐ`
-                    : `- ${ticketDetail.orderInfo?.voucherValue.toLocaleString().replace(',', '.')}` || `-0 VNĐ`}
+                    ? `- ${voucherValue?.toLocaleString().replace(',', '.')} VNĐ`
+                    : ticketDetail.orderInfo?.voucherValue ? `${ticketDetail.orderInfo?.voucherValue.toLocaleString().replace(',', '.')}` : ` - 0 VNĐ`
+                  }
                 </span>
               </div>
             </div>
@@ -441,7 +443,11 @@ function TicketModal() {
                 {type ? 'Tổng tiền đã thanh toán' : 'Tổng tiền cần thanh toán'}
               </span>
               <span className="fw-bold">
-                {total !== 0 ? `${total?.toLocaleString().toLocaleString().replace(',', '.')} VNĐ` : `${total} VND`}
+                {type !== 'detailOrder'
+                  ? total !== 0
+                    ? `${total?.toLocaleString()?.replace(',', '.')} VNĐ`
+                    : `${total} VND`
+                  : ticketDetail.orderInfo?.priceTotal}
               </span>
             </div>
 

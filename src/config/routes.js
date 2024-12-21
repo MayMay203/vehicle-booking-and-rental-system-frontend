@@ -41,4 +41,5 @@ export const routes = {
   error: '/error',
   paymentSuccess: '/payment-success',
   paymentFailure: '/payment-failure',
+  fetchBlob: '/fetch-blob',
 }

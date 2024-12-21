@@ -110,7 +110,7 @@ function PaymentSuccess() {
                         <span className="ms-2">{detailData.customerInfo?.phoneNumber}</span>
                       </div>
                       <div className="mt-3 d-flex justify-content-between">
-                        <span>Email nhận thông tin đặt vé:</span>
+                        <span>Email:</span>
                         <span className="ms-2">{detailData.customerInfo?.email}</span>
                       </div>
                     </div>
@@ -199,11 +199,13 @@ function PaymentSuccess() {
                   <div className="mt-3">
                     <span className={cx('title')}>Chi tiết hoá đơn</span>
                     <div className="pt-4">
-                      {/* <div className="p-4"> */}
                       <div className="d-flex justify-content-between mb-4">
                         <span>Tiền vé xe:</span>
                         <span style={{ color: '#008E28', fontWeight: 600 }}>
-                          {detailData.orderInfo?.pricePerTicket.replace('.', ',')}
+                          {(
+                            Number(detailData.orderInfo?.pricePerTicket.replace(/\./g, '').replace(' VND', '')) *
+                            (1 - detailData.orderInfo?.discountPercentage / 100)
+                          ).toLocaleString() + ' VND'}
                         </span>
                       </div>
                       <div className="d-flex justify-content-between mb-4">
@@ -211,10 +213,9 @@ function PaymentSuccess() {
                         <span style={{ fontWeight: 600 }}>{detailData.orderInfo?.numberOfTicket}</span>
                       </div>
                       <div className="d-flex justify-content-between mb-4">
-                        <span>Giảm giá:</span>
-                        <span style={{ color: 'red' }}>{`-${Math.round(
-                          detailData.orderInfo?.discountPercentage || 0,
-                        )}%`}</span>
+                        <span>Giảm giá voucher:</span>
+                        <span style={{ color: 'red' }}>{`-${detailData.orderInfo?.voucherValue.replace('.',',') || '0 VND'}
+                        `}</span>
                       </div>
 
                       <div
@@ -255,7 +256,7 @@ function PaymentSuccess() {
                   }}
                   className="p-4 d-flex justify-content-center"
                 >
-                  <span className="d-block" style={{ width: '80%', lineHeight: '1.3', textAlign: 'center' }}>
+                  <span className={cx('message', 'd-block')}>
                     Cảm ơn bạn đã tin tưởng lựa chọn chúng tôi.<br></br> Safety Travel chúc bạn sẽ có một trải nghiệm
                     tuyệt vời!
                   </span>
@@ -358,7 +359,11 @@ function PaymentSuccess() {
                       <div className="mt-3 d-flex justify-content-between">
                         <span>Loại dịch vụ:</span>
                         <span className="ms-2">
-                          {detailVehicle?.type === 0 ? 'Thuê xe tự lái' : detailVehicle?.type === 1 ? 'Thuê xe có người lái' : ''}
+                          {detailVehicle?.type === 0
+                            ? 'Thuê xe tự lái'
+                            : detailVehicle?.type === 1
+                            ? 'Thuê xe có người lái'
+                            : ''}
                         </span>
                       </div>
                       <div className="mt-3 d-flex justify-content-between">
@@ -406,9 +411,11 @@ function PaymentSuccess() {
                             detailData.pricingInfo?.voucherValue.toLocaleString('vi-VN') + 'đ' ||
                             0,
                         )}`}</span> */}
-                        <span style={{ color: 'red' }}>{ detailData.pricingInfo?.voucherPercentage + '%' ||
+                        <span style={{ color: 'red' }}>
+                          {detailData.pricingInfo?.voucherPercentage + '%' ||
                             detailData.pricingInfo?.voucherValue.toLocaleString('vi-VN') + 'đ' ||
-                            0}</span>
+                            0}
+                        </span>
                       </div>
                       <div className="d-flex justify-content-between mb-4">
                         <span>Tiền cọc xe:</span>
