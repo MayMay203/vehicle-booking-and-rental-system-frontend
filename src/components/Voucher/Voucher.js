@@ -8,6 +8,13 @@ import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { toast } from 'react-toastify'
 import { claimVoucher } from '~/apiServices/vouchers/claimVoucher'
 import { fetchAllVouchersForUser } from '~/redux/slices/voucherSlice'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
+import Tippy from '@tippyjs/react/headless'
+import PopperWrapper from '~/components/PopperWrapper'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { generalModalNames, setAddVoucherVisible, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 const now = 60
@@ -15,6 +22,7 @@ const now = 60
 function Voucher({ className, data, type, handleApplyVoucher }) {
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  const [visibleMenu, setVisibleMenu] = useState(false)
 
   const hanldeClaimVoucher = async () => {
     if (!type) {
@@ -36,6 +44,26 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
       handleApplyVoucher(data.id, data.voucherPercentage, data.maxDiscountValue)
     }
   }
+
+  const handleEdit = () => {
+    dispatch(setAddVoucherVisible({ isOpen: true, voucherId: data.id }))
+    setVisibleMenu(false)
+  }
+
+  const handleDelete = () => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(
+        setConfirmModalVisible({
+          modalType: 'confirm',
+          isOpen: true,
+          title: 'Xác nhận xoá mã khuyến mãi',
+          description: 'Bạn chắc chắn muốn xoá mã khuyến mãi này?',
+          name: generalModalNames.DEL_VOUCHER,
+        }),
+      )
+      setVisibleMenu(false)
+    }
+  }
   return (
     <div className={cx('wrapper', 'voucher', [className])} style={{ backgroundImage: `url(${images.voucher})` }}>
       <Col xs="3" className={cx('d-flex justify-content-center align-items-center', 'border-right')}>
@@ -44,7 +72,38 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
       <Col xs="9" className="justify-content-center align-items-center p-3">
         <Row className="justify-content-center align-items-center">
           <Col>
-            <p className={cx('voucher-name')}>{data.name}</p>
+            <div
+              className="d-flex justify-content-between"
+              style={{ marginLeft: '-4px', marginRight: '-4px', marginBottom: '6px' }}
+            >
+              <p className={cx('voucher-name', 'flex-1')}>{data.name}</p>
+              <Tippy
+                offset={[-40, 0]}
+                visible={visibleMenu}
+                onClickOutside={() => setVisibleMenu(false)}
+                interactive
+                placement="bottom"
+                render={(attrs) => (
+                  <div {...attrs}>
+                    <PopperWrapper className={cx('custom')}>
+                      <button className={cx('voucher-menu')} onClick={handleEdit}>
+                        Chỉnh sửa
+                      </button>
+                      <button className={cx('voucher-menu')} onClick={handleDelete}>
+                        Xoá
+                      </button>
+                    </PopperWrapper>
+                  </div>
+                )}
+              >
+                <button
+                  style={{ fontSize: '2rem', color: 'var(--primary-color)' }}
+                  onClick={() => setVisibleMenu((prev) => !prev)}
+                >
+                  <FontAwesomeIcon icon={faEllipsis} />
+                </button>
+              </Tippy>
+            </div>
           </Col>
           {!currentUser.roles?.includes('ADMIN') && (
             <Col xs="auto">

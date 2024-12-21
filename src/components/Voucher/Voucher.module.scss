@@ -199,3 +199,26 @@
   background-color: none;
 //   border: none; 
 }
+
+.voucher-menu{
+    padding: 10px 20px;
+    color: #dc420a;
+    &:hover{
+        color: #fff;
+        cursor: pointer;
+        background-color: var(--orange-color);
+        transition: backgroundColor 0.3 ease;
+    }
+
+    & ~ .voucher-menu{
+        border-top: 1px solid var(--orange-color);
+    }
+}
+
+.custom{
+    padding: 0!important;
+    border-radius: 0!important;
+    border: 1px solid var(--orange-color);
+    border-radius: 6px!important;
+    overflow: hidden!important;
+}

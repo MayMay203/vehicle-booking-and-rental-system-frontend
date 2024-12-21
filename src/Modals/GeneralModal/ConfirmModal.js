@@ -144,6 +144,11 @@ function ConfirmModal() {
         toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau!', { autoClose: 800, position: 'top-center' })
       }
     }
+    else if (showConfirmModal.name === generalModalNames.DEL_VOUCHER) {
+      if (dispatch(checkLoginSession())) {
+        alert('Xoá thành công voucher')
+      }
+    }
   }
 
   const handleClose = () => {

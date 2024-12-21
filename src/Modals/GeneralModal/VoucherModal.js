@@ -10,11 +10,13 @@ import DatePicker from 'react-datepicker'
 import { createVoucher } from '~/apiServices/vouchers/createVoucher'
 import { fetchAllVouchers } from '~/redux/slices/voucherSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import { getVoucherById } from '~/apiServices/vouchers/getVoucherById'
 
 const cx = classNames.bind(styles)
 function VoucherModal() {
   console.log('re-render ticket modal')
   const showAddVoucher = useSelector((state) => state.generalModal.addVoucher)
+  const { isOpen, voucherId } = showAddVoucher
   const dispatch = useDispatch()
 
   const [title, setTitle] = useState('')
@@ -35,6 +37,21 @@ function VoucherModal() {
     }
   }, [title, quantity, expiredDate, effectiveDate, value])
 
+  useEffect(() => {
+    async function getVoucher() {
+      const data = await getVoucherById(voucherId)
+      if (data) {
+        setTitle(data.name)
+        setEffectiveDate(data.startDate.split('-').reverse().join('-'))
+        setExpiredDate(data.endDate.split('-').reverse().join('-'))
+        setValue(data.voucherPercentage)
+        setMaxDiscountValue(Number(data.maxDiscountValue.replace(/\./g, '').replace(' VND', '')))
+        setQuantity(data.remainingQuantity)
+      }
+    }
+    if (voucherId) getVoucher()
+  }, [voucherId])
+
   const handleClose = () => {
     setDescription('')
     setTitle('')
@@ -42,7 +59,7 @@ function VoucherModal() {
     setMaxDiscountValue('')
     setQuantity('')
     setMinOrderValue('')
-    dispatch(setAddVoucherVisible(false))
+    dispatch(setAddVoucherVisible({ isOpen: false }))
   }
 
   const handleAddVoucher = async (e) => {
@@ -68,10 +85,12 @@ function VoucherModal() {
   }
 
   return (
-    <Modal className={cx('custom-modal')} show={showAddVoucher} onHide={handleClose} centered size="md">
+    <Modal className={cx('custom-modal')} show={isOpen} onHide={handleClose} centered size="md">
       <Modal.Header closeButton>
         <div className={cx('header')}>
-          <Modal.Title className={cx('title-header', 'fs-2')}>Thêm mã khuyến mãi</Modal.Title>
+          <Modal.Title className={cx('title-header', 'fs-2')}>
+            {voucherId ? 'Cập nhật mã khuyến mãi' : 'Thêm mã khuyến mãi'}
+          </Modal.Title>
         </div>
       </Modal.Header>
       <Modal.Body>
@@ -88,7 +107,7 @@ function VoucherModal() {
             required
             star
           ></FormInput>
-          <FormInput
+          {/* <FormInput
             title="Mô tả"
             error="Vui lòng nhập mô tả"
             id="description"
@@ -99,7 +118,7 @@ function VoucherModal() {
             isValid={isValid}
             required
             star
-          ></FormInput>
+          ></FormInput> */}
           <div className="row row-cols-1 row-cols-lg-2">
             <FormInput
               title="Phần trăm khuyến mãi (%)"
@@ -203,7 +222,7 @@ function VoucherModal() {
               Huỷ
             </Button>
             <Button primary className={cx('btn-submit')} onClick={handleAddVoucher} disabled={!isValid} type="submit">
-              Thêm mã
+              {voucherId ? 'Cập nhật' : 'Thêm mã'}
             </Button>
           </div>
         </form>
