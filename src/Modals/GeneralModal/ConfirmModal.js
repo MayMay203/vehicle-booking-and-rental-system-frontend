@@ -33,16 +33,14 @@ function ConfirmModal() {
     if (showConfirmModal.name === generalModalNames.LOGOUT) {
       try {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
-        if (dispatch(checkLoginSession())) {
-          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
-          dispatch(logout())
-          await logoutService()
-          dispatch(setMenu('userMenu'))
-          dispatch(setCurrentUser({ currentUser: {} }))
-          // add localstorage
-          localStorage.removeItem('accessToken')
-          navigate('/')
-        }
+        dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+        await logoutService()
+        dispatch(setMenu('userMenu'))
+        dispatch(setCurrentUser({ currentUser: {} }))
+        dispatch(logout())
+        // add localstorage
+        localStorage.removeItem('accessToken')
+        navigate('/')
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       } catch (message) {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))

@@ -203,7 +203,7 @@ function PaymentSuccess() {
                         <span>Tiền vé xe:</span>
                         <span style={{ color: '#008E28', fontWeight: 600 }}>
                           {(
-                            Number(detailData.orderInfo?.pricePerTicket.replace(/\./g, '').replace(' VND', '')) *
+                            Number(detailData.orderInfo?.pricePerTicket?.replace(/\./g, '')?.replace(' VND', '')) *
                             (1 - detailData.orderInfo?.discountPercentage / 100)
                           ).toLocaleString() + ' VND'}
                         </span>
@@ -214,7 +214,7 @@ function PaymentSuccess() {
                       </div>
                       <div className="d-flex justify-content-between mb-4">
                         <span>Giảm giá voucher:</span>
-                        <span style={{ color: 'red' }}>{`-${detailData.orderInfo?.voucherValue.replace('.',',') || '0 VND'}
+                        <span style={{ color: 'red' }}>{`-${detailData.orderInfo?.voucherValue?.replace('.',',') || '0 VND'}
                         `}</span>
                       </div>
 
