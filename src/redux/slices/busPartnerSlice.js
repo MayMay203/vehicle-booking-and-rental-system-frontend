@@ -5,7 +5,9 @@ import { getAllBusTrips } from '~/apiServices/busPartner/getAllBusTrips'
 import { getAllBusTypes } from '~/apiServices/busPartner/getAllBusTypes'
 import { getAllScheduleByBusTrip } from '~/apiServices/busPartner/getAllScheduleByBusTrip'
 import { getAllSchedulesByIDBus } from '~/apiServices/busPartner/getAllSchedulesByIDBus'
+import { getAllTicket } from '~/apiServices/busPartner/getAllTicket'
 import { getAllUtilities } from '~/apiServices/busPartner/getAllUtilities'
+import { getOrderOfBusTrip } from '~/apiServices/busPartner/getOrderOfBusTrip'
 
 const initialState = {
   busTypeList: [],
@@ -17,6 +19,8 @@ const initialState = {
   busListByBusType: [],
   scheduleListByBusID: [],
   scheduleListByBusTrip: [],
+  busTicketList: [],
+  orderListBusTrip: [],
 }
 export const fetchAllBusTypes = createAsyncThunk('busPartner/getAllBusTypes', async () => {
   const data = await getAllBusTypes()
@@ -53,6 +57,18 @@ export const fetchAllSchedulesByBusID = createAsyncThunk('busPartner/getAllSched
 export const fetchScheduleListByBusTrip = createAsyncThunk('busPartner/getScheduleListByBusTrip', async ({ date, idBusTrip }) => {
   // const { dep, des } = params
   const data = await getAllScheduleByBusTrip(date, idBusTrip)
+  console.log('dataaaa:', data.result)
+  return data.result || []
+})
+export const fetchBusTicketList = createAsyncThunk('busPartner/getBusTicketList', async ({ dep, des }) => {
+  // const { dep, des } = params
+  const data = await getAllTicket(dep, des)
+  console.log('dataaaa:', data.result)
+  return data.result || []
+})
+export const fetchOrderListBusTrip = createAsyncThunk('busPartner/getOrderListBusTrip', async ({ id, date }) => {
+  // const { dep, des } = params
+  const data = await getOrderOfBusTrip(id, date)
   console.log('dataaaa:', data.result)
   return data.result || []
 })
@@ -94,6 +110,12 @@ const busPartnerSlice = createSlice({
       })
       .addCase(fetchScheduleListByBusTrip.fulfilled, (state, action) => {
         state.scheduleListByBusTrip = action.payload
+      })
+      .addCase(fetchBusTicketList.fulfilled, (state, action) => {
+        state.busTicketList = action.payload
+      })
+      .addCase(fetchOrderListBusTrip.fulfilled, (state, action) => {
+        state.orderListBusTrip = action.payload
       })
       // .addCase(busByID.fulfilled, (state, action) => {
       //   state.inforBus = action.payload

@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind'
 import styles from './BusTicket.module.scss'
 import Search from '~/components/Search'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '~/components/Button'
 import { Col, Row } from 'react-bootstrap'
 import Tippy from '@tippyjs/react/headless'
@@ -12,15 +12,28 @@ import { faSort } from '@fortawesome/free-solid-svg-icons'
 import TicketBusTrip from '~/components/TicketBusTrip'
 import ModalManageBusTicket from '../ModalManageBusTicket'
 import ModalDetailBusTicket from '../ModalDetailBusTicket'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchBusTicketList } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
 function BusTicket() {
   const [activeTypeFilter, setActiveTypeFilter] = useState('all')
+  const [busTicket, setBusTicket] = useState({})
+  const dispatch = useDispatch()
+  const listBusTicket = useSelector((state) => state.busPartner.busTicketList)
+  useEffect(() => {
+    if(dispatch(checkLoginSession())){
+      dispatch(fetchBusTicketList({dep: '', des: '' }))
+    }
+  }, [dispatch])
   const handleTypeFilterClick = (btnType) => {
     setActiveTypeFilter(btnType)
   }
-  const handleShowDetail = (id) => {
+  const handleShowDetail = (ticket) => {
     setModalDetailTicketShow(true)
+    setBusTicket(ticket)
   }
+  console.log("bus ticket---", busTicket)
   const [modalAddTicketShow, setModalAddTicketShow] = useState(false)
   const handleAddTicket = () => {
     setModalAddTicketShow(true)
@@ -36,12 +49,22 @@ function BusTicket() {
   return (
     <div className={cx('container')}>
       <div className="mb-5"></div>
-      <Search noSelectBus={true} type={'partner'}></Search>
+      {/* <Search noSelectBus={true} noSelectDate={true} type={'partner'}></Search>
       <div className="d-flex justify-content-center mt-4 align-items-center">
         <Button primary onClick={() => handleAddTicket()}>
           Thêm vé xe
         </Button>
-      </div>
+      </div> */}
+      <Row className="d-flex mb-5">
+        <div className="col">
+          <Search noSelectBus={true} noSelectDate={true} type={'partner'}></Search>
+        </div>
+        <div className="col col-3 d-flex justify-content-center mt-4 align-items-center">
+          <Button primary onClick={() => handleAddTicket()}>
+            Thêm vé xe
+          </Button>
+        </div>
+      </Row>
       <Row className="mt-4 justify-content-center">
         <Col xs="10" className="p-2">
           <div className={cx('type-filter-container')}>
@@ -94,7 +117,9 @@ function BusTicket() {
           </Tippy>
         </Col>
       </Row>
-      <TicketBusTrip id={1} handleShowDetail={() => handleShowDetail(1)}></TicketBusTrip>
+      {listBusTicket.map((ticket, index) => (
+        <TicketBusTrip key={index} ticket={ticket} handleShowDetail={() => handleShowDetail(ticket)}></TicketBusTrip>
+      ))}
       <div className="mb-5"></div>
       <ModalManageBusTicket
         enableEdit={true}
@@ -106,6 +131,8 @@ function BusTicket() {
         enableEdit={false}
         functionModal={'view'}
         show={modalDetailTicketShow}
+        ticket={busTicket}
+        idTicket={busTicket?.busTripScheduleId}
         onHide={() => setModalDetailTicketShow(false)}
       ></ModalDetailBusTicket>
     </div>

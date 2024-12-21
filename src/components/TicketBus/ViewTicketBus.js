@@ -8,8 +8,9 @@ import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { addBusSchedule } from '~/apiServices/busPartner/addBusSchedule'
+import moment from 'moment'
 const cx = classNames.bind(styles)
-function TicketBus({ data, enableEdit = true }) {
+function ViewTicketBus({ data, enableEdit = true }) {
   const dispatch = useDispatch()
   const [activeAdd, setActiveAdd] = useState(false)
   const [startTime, setStartTime] = useState('')
@@ -20,6 +21,7 @@ function TicketBus({ data, enableEdit = true }) {
     departureTime: '',
     breakDays: [''],
   })
+
   const handleReset = () => {
     //chưa reset hết được
     setDataBusTicket({ startOperationDay: '', discountPercentage: '', departureTime: '', breakDays: [''] })
@@ -52,24 +54,34 @@ function TicketBus({ data, enableEdit = true }) {
     }))
   }
   useEffect(() => {
-    // eslint-disable-next-line no-unused-vars
-    const { breakDays = [], ...restOfDataBusTicket } = dataBusTicket
+    if (data) {
+      setDataBusTicket({
+        startOperationDay: data?.startOperationDay,
+        discountPercentage: data.discountPercentage,
+        departureTime: data.departureTime,
+        breakDays: data.breakDays,
+      })
+    }
+  }, [data])
+//   useEffect(() => {
+//     // eslint-disable-next-line no-unused-vars
+//     const { breakDays = [], ...restOfDataBusTicket } = dataBusTicket
 
-    // Check if all fields in `data` and `restOfDataBusTicket` are filled
-    const allFieldsFilled =
-      Object.values(data).every((value) => value?.toString().trim() !== '') &&
-      Object.values(restOfDataBusTicket).every((value) => value?.toString().trim() !== '')
+//     // Check if all fields in `data` and `restOfDataBusTicket` are filled
+//     const allFieldsFilled =
+//       Object.values(data).every((value) => value?.toString().trim() !== '') &&
+//       Object.values(restOfDataBusTicket).every((value) => value?.toString().trim() !== '')
 
-    setActiveAdd(allFieldsFilled)
-    console.log(
-      'Có vô==data:',
-      data,
-      '---restOfDataBusTicket:',
-      restOfDataBusTicket,
-      '---allFieldsFilled',
-      allFieldsFilled,
-    )
-  }, [dataBusTicket, data])
+//     setActiveAdd(allFieldsFilled)
+//     console.log(
+//       'Có vô==data:',
+//       data,
+//       '---restOfDataBusTicket:',
+//       restOfDataBusTicket,
+//       '---allFieldsFilled',
+//       allFieldsFilled,
+//     )
+//   }, [dataBusTicket, data])
   const handleSave = async () => {
     if (dispatch(checkLoginSession())) {
       try {
@@ -112,24 +124,25 @@ function TicketBus({ data, enableEdit = true }) {
               <Form.Label className="mb-2">
                 Giờ khởi hành <span className="text-danger">*</span>
               </Form.Label>
-              {/* <Form.Control
+              <Form.Control
                 type="text"
                 placeholder="45"
                 name="departureTime"
                 aria-label="departureTime"
                 value={dataBusTicket.departureTime}
                 className={cx('txt')}
-              /> */}
-              <DatePicker
+              />
+              {/* <DatePicker
                 value={startTime}
                 placeholder="Chọn giờ"
-                onChange={handleStartTimeChange}
+                // onChange={handleStartTimeChange}
                 picker="time" // Enables time selection
                 format="HH:mm" // Time format
                 minuteStep={15} // 15-minute intervals
                 showNow={false} // Hide "Now" button if not needed
                 className="w-100"
-              />
+                readOnly
+              /> */}
             </Form.Group>
           </Col>
           <Col>
@@ -137,27 +150,28 @@ function TicketBus({ data, enableEdit = true }) {
               <Form.Label className="mb-2">
                 Ngày bắt đầu <span className="text-danger">*</span>
               </Form.Label>
-              {/* <Form.Control
+              <Form.Control
                 type="text"
                 placeholder="45"
                 name="startOperationDay"
                 aria-label="startOperationDay"
                 value={dataBusTicket.startOperationDay}
                 className={cx('txt')}
-              /> */}
-              <DatePicker
+              />
+              {/* <DatePicker
                 placeholder="Chọn ngày"
                 onChange={handleStartDateChange}
                 // selected={startDate}
                 value={startDate}
                 format="DD-MM-YYYY"
                 className="content-calendar w-100"
-              />
+                readOnly
+              /> */}
             </Form.Group>
           </Col>
         </Row>
         <Row>
-          <Col>
+          {/* <Col>
             <Form.Group className={cx('txt', 'mb-3', 'mt-3')} controlId="formAdd.ControlInput5">
               <Form.Label className="mb-2">
                 Giá vé <span className="text-danger">*</span>
@@ -172,16 +186,16 @@ function TicketBus({ data, enableEdit = true }) {
                 disabled
               />
             </Form.Group>
-          </Col>
+          </Col> */}
           <Col>
             <Form.Group className={cx('txt', 'mb-3', 'mt-3')} controlId="formAdd.ControlInput5">
               <Form.Label className="mb-2">
                 Giảm giá<span className="text-danger">*</span>
               </Form.Label>
               <Form.Control
-                type="number"
+                type="text"
                 placeholder="0%"
-                value={dataBusTicket.discountPercentage || ''}
+                value={dataBusTicket.discountPercentage + '%' || ''}
                 name="discountPercentage"
                 aria-label="discountPercentage"
                 className={cx('txt')}
@@ -204,13 +218,49 @@ function TicketBus({ data, enableEdit = true }) {
         </Row>
       </Col>
       <Col sm={12} lg={6} className={cx('wrap-break-days')}>
-        <AddManyBreakDay initialItems={[{ start: '', end: '', id: 1 }]} setBreakDays={setBreakDays}></AddManyBreakDay>
+        <Row className="align-items-start">
+          <div className="d-flex align-items-start">
+            <p className={cx('me-3', 'txt', 'p-2')}>Ngày nghỉ</p>
+          </div>
+          <div>
+            {dataBusTicket?.breakDays?.length > 0 ? (
+              dataBusTicket.breakDays.map((item) => (
+                <div className={cx('d-flex', 'align-items-start', 'mt-2', 'mb-2')} key={item.id}>
+                  <Form.Group className={cx('txt', 'd-flex')} controlId={`formAddStart_${item.id}`}>
+                    <Form.Label className="mb-2 d-flex mt-3 me-2">Từ</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="45"
+                      name="startDay"
+                      aria-label="startDay"
+                      value={item.startDay}
+                      className={cx('txt')}
+                    />
+                  </Form.Group>
+                  <Form.Group className={cx('txt', 'd-flex')} controlId={`formAddEnd_${item.id}`}>
+                    <Form.Label className="mb-2 d-flex mt-3 ms-5 me-2">Đến</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="45"
+                      name="endDay"
+                      aria-label="endDay"
+                      value={item.endDay}
+                      className={cx('txt')}
+                    />
+                  </Form.Group>
+                </div>
+              ))
+            ) : (
+              <div className="text-muted">Không có dữ liệu nghỉ.</div>
+            )}
+          </div>
+        </Row>
       </Col>
-      <div className={cx('save-button', { disabled: !activeAdd })} onClick={activeAdd ? handleSave : undefined}>
+      {/* <div className={cx('save-button', { disabled: !activeAdd })} onClick={activeAdd ? handleSave : undefined}>
         Lưu vé xe
-      </div>
+      </div> */}
       {/* Thêm phần tử này để hiển thị chữ "Lưu..." */}
     </div>
   )
 }
-export default TicketBus
+export default ViewTicketBus
