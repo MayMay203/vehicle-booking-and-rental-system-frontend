@@ -65,7 +65,6 @@ function LoginModal() {
       localStorage.setItem('accessToken', data.access_token)
       dispatch(setCurrentUser({ currentUser: data.accountLogin }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
-      reset()
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       reset()
       // toast.success('Đăng nhập thành công', { autoClose: 1000, position: 'top-center' })

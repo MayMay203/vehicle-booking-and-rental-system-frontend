@@ -35,8 +35,8 @@ function ConfirmModal() {
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
         if (dispatch(checkLoginSession())) {
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
-          await logoutService()
           dispatch(logout())
+          await logoutService()
           dispatch(setMenu('userMenu'))
           dispatch(setCurrentUser({ currentUser: {} }))
           // add localstorage

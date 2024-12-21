@@ -17,3 +17,12 @@
         width: 100%!important;
     }
 }
+
+.message{
+    width: 80%;
+    line-height: 1.4;
+    text-align: 'center';
+    @include abstracts.screen(md){
+        width: 100%
+    }
+}
