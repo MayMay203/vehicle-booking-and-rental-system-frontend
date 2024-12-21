@@ -297,14 +297,23 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
                 <span className="text-danger">*</span>
               </p>
             </div>
-              <div className={cx('d-flex')}>
-                <TicketBus initialItems={[]} content={''} data={formData}></TicketBus>
-              </div>
+            <div className={cx('d-flex')}>
+              <TicketBus initialItems={[]} content={''} data={formData}></TicketBus>
+            </div>
           </div>
-          <p className={cx('txt', 'mb-2', 'mt-4')}>
+          {/* <p className={cx('txt', 'mb-2', 'mt-4')}>
             Lịch khởi hành của xe: <span className={cx('txt-plate-number')}>{formData.licensePlateNumber}</span>
+          </p> */}
+          <p className={cx('txt', 'mb-2', 'mt-4')}>
+            Lịch khởi hành của xe:{' '}
+            <span className={cx('txt-plate-number')}>
+              {Object.entries(listBusByBusType).find(
+                ([key, value]) => key === String(formData.licensePlateNumber),
+                // )?.[1] || 'Không tìm thấy biển số'}
+              )?.[1] || ''}
+            </span>
           </p>
-          <TableSchedulesOfBus></TableSchedulesOfBus>
+          <TableSchedulesOfBus idBus={formData?.licensePlateNumber}></TableSchedulesOfBus>
         </div>
       </Modal.Body>
       {/* <Modal.Footer>

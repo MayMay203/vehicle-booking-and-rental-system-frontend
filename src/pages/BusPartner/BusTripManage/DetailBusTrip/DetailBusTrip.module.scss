@@ -6,6 +6,9 @@
     margin-bottom: 0.8rem;
     margin-top: 1.8rem;
 }
+.txt-color{
+    color: #D34714;
+}
 .wrap-infor{
     border-radius: 5px;
     border: 1px solid #D34714;
@@ -23,7 +26,7 @@
     font-size: 1.7rem;
     // margin-bottom: 1rem;
     font-weight: 500;
-    color: black;
+    // color: black;
     &:focus {
         border-color: #FF9800;
         box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); 

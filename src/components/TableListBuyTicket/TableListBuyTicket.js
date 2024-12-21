@@ -3,8 +3,9 @@ import styles from './TableListBuyTicket.module.scss'
 import { Table } from 'antd'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMessage } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
-function TableListBuyTicket() {
+function TableListBuyTicket({ listOrderOfBusTrip }) {
   const columns = [
     {
       title: 'STT',
@@ -136,40 +137,9 @@ function TableListBuyTicket() {
       cancelAt: '12h, 12/11/2024',
       chat: '',
     },
-    {
-      key: '2',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberTicket: '4',
-      totalCharge: '1.200.00đ',
-      departure: '123 Nguyễn Lương Bằng, Đà Nẵng',
-      destination: '123 Nguyễn Lương Bằng, Hà Nội',
-      cancelAt: '12h, 12/11/2024',
-    },
-    {
-      key: '3',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberTicket: '4',
-      totalCharge: '1.200.00đ',
-      departure: '123 Nguyễn Lương Bằng, Đà Nẵng',
-      destination: '123 Nguyễn Lương Bằng, Hà Nội',
-      cancelAt: '12h, 12/11/2024',
-    },
-    {
-      key: '5',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberTicket: '4',
-      totalCharge: '1.200.00đ',
-      departure: '123 Nguyễn Lương Bằng, Đà Nẵng',
-      destination: '123 Nguyễn Lương Bằng, Hà Nội',
-      cancelAt: '12h, 12/11/2024',
-    },
   ]
+  // const [data, setData] = useState([])
+  // useEffect(() => {setData(listOrderOfBusTrip)}, [listOrderOfBusTrip])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }

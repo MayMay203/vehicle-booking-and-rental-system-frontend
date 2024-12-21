@@ -439,7 +439,8 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
             <span className={cx('txt-plate-number')}>
               {Object.entries(listBusByBusType).find(
                 ([key, value]) => key === String(formData.licensePlateNumber),
-              )?.[1] || 'Không tìm thấy biển số'}
+                // )?.[1] || 'Không tìm thấy biển số'}
+              )?.[1] || ''}
             </span>
           </p>
           <TableSchedulesOfBus idBus={formData?.licensePlateNumber}></TableSchedulesOfBus>

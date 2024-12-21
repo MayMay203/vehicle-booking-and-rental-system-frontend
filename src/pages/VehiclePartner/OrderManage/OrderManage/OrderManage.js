@@ -78,6 +78,7 @@ function OrderManage() {
       title: 'Chi tiết',
       dataIndex: 'view',
       align: 'center',
+      width: 70,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
@@ -90,7 +91,7 @@ function OrderManage() {
       title: 'Đã trả xe',
       dataIndex: 'update',
       align: 'center',
-
+      width: 70,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faSquare}
@@ -103,6 +104,7 @@ function OrderManage() {
       title: 'Nhắn tin',
       dataIndex: 'delete',
       align: 'center',
+      width: 70,
       render: (record) => (
         <FontAwesomeIcon icon={faMessage} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
       ),
@@ -176,9 +178,9 @@ function OrderManage() {
         dataSource={data}
         onChange={onChange}
         bordered
-        pagination={false}
-        scroll={{ y: 500 }}
-        // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+        // pagination={false}
+        scroll={{x:'auto', y: 500 }}
+        pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{
           target: 'sorter-icon',
