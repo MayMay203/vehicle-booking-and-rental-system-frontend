@@ -15,7 +15,6 @@
     "matchmedia-polyfill": "^0.3.2",
     "moment": "^2.30.1",
     "react": "^18.3.1",
-    "react-chartjs-2": "^5.2.0",
     "react-datepicker": "^7.4.0",
     "react-dom": "^18.3.1",
     "react-responsive": "^10.0.0",
@@ -38,7 +37,13 @@
   "jest": {
     "moduleNameMapper": {
       "^axios$": "axios/dist/node/axios.cjs"
-    }
+    },
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!d3-array|@ant-design/plots|@antv)/"
+    ]
   },
   "browserslist": {
     "production": [
@@ -76,6 +81,7 @@
     "jwt-decode": "^4.0.0",
     "react-app-rewired": "^2.2.1",
     "react-bootstrap": "^2.10.4",
+    "react-chartjs-2": "^5.2.0",
     "react-redux": "^9.1.2",
     "react-router-dom": "^6.26.2",
     "react-slick": "^0.30.2",
