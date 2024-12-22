@@ -11,7 +11,7 @@ import DetailMessage from '~/components/DetailMessage'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
 import { useDispatch, useSelector } from 'react-redux'
-import { Empty} from 'antd'
+import { Empty } from 'antd'
 import { getAllMessagesInConversation } from '~/apiServices/messageService/getAllMessagesInConversation'
 import Image from '~/components/Image'
 import { getAccessToken } from '~/utils/cookieUtils'
@@ -24,7 +24,6 @@ import { getMessageById } from '~/apiServices/messageService/getMessageById'
 const cx = classNames.bind(styles)
 function Message() {
   const { conversationId, isOpen } = useSelector((state) => state.generalModal.messageModal)
-  console.log(conversationId)
   const [partnerConvers, setPartnerConvers] = useState({ name: '', avatar: '', role: '', accountId: '' })
   const [selectedConvers, setSelectedConvers] = useState(conversationId)
   const [buttonSelect, setButtonSelect] = useState('All')
