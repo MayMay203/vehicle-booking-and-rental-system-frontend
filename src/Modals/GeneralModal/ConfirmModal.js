@@ -20,6 +20,8 @@ import { fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
 import { deleteBusType } from '~/apiServices/busPartner/deleteBusType'
 import { fetchAllBuses, fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
 import { deleteBus } from '~/apiServices/busPartner/deleteBus'
+import { deleteVoucher } from '~/apiServices/vouchers/deleteVoucher'
+import { fetchAllVouchers } from '~/redux/slices/voucherSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -142,6 +144,23 @@ function ConfirmModal() {
           return
         }
         toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau!', { autoClose: 800, position: 'top-center' })
+      }
+    }
+    else if (showConfirmModal.name === generalModalNames.DEL_VOUCHER) {
+      if (dispatch(checkLoginSession())) {
+        const id = showConfirmModal.id
+        console.log(showConfirmModal)
+        console.log(id)
+        const response = await deleteVoucher(id)
+        if (response?.statusCode === 200) {
+          toast.success('Xoá mã khuyến mãi thành công!', { autoClose: 1000, position: 'top-center' })
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllVouchers({ page: 1 }))
+        }
+        else {
+          toast.error('Mã khuyến mãi đã được sử dụng. Không thể xoá!', { autoClose: 1200, position: 'top-center'})
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+        }
       }
     }
   }

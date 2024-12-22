@@ -10,15 +10,18 @@ import DatePicker from 'react-datepicker'
 import { createVoucher } from '~/apiServices/vouchers/createVoucher'
 import { fetchAllVouchers } from '~/redux/slices/voucherSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import { getVoucherById } from '~/apiServices/vouchers/getVoucherById'
+import { updateVoucher } from '~/apiServices/vouchers/updateVoucher'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 function VoucherModal() {
   console.log('re-render ticket modal')
   const showAddVoucher = useSelector((state) => state.generalModal.addVoucher)
+  const { isOpen, voucherId } = showAddVoucher
   const dispatch = useDispatch()
 
   const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
   const [value, setValue] = useState('')
   const [effectiveDate, setEffectiveDate] = useState(new Date())
   const [expiredDate, setExpiredDate] = useState(new Date())
@@ -35,14 +38,29 @@ function VoucherModal() {
     }
   }, [title, quantity, expiredDate, effectiveDate, value])
 
+  useEffect(() => {
+    async function getVoucher() {
+      const data = await getVoucherById(voucherId)
+      if (data) {
+        setTitle(data.name)
+        setEffectiveDate(new Date(data.startDate.split('-').reverse().join('-')))
+        setExpiredDate(new Date(data.endDate.split('-').reverse().join('-')))
+        setValue(data.voucherPercentage)
+        setMaxDiscountValue(Number(data.maxDiscountValue.replace(/\./g, '').replace(' VND', '')))
+        setQuantity(data.remainingQuantity)
+        setMinOrderValue(Number(data.minOrderValue.replace(/\./g, '').replace(' VND', '')))
+      }
+    }
+    if (voucherId) getVoucher()
+  }, [voucherId])
+
   const handleClose = () => {
-    setDescription('')
     setTitle('')
     setValue('')
     setMaxDiscountValue('')
     setQuantity('')
-    setMinOrderValue('')
-    dispatch(setAddVoucherVisible(false))
+    setMinOrderValue(0)
+    dispatch(setAddVoucherVisible({ isOpen: false }))
   }
 
   const handleAddVoucher = async (e) => {
@@ -53,7 +71,6 @@ function VoucherModal() {
     if (dispatch(checkLoginSession())) {
       await createVoucher({
         name: title,
-        description,
         startDate,
         endDate,
         voucherPercentage: value,
@@ -67,11 +84,42 @@ function VoucherModal() {
     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
   }
 
+  const handleUpdateVoucher = async (e) => {
+    e.preventDefault()
+    console.log('VO DAY ROI')
+     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+     const startDate = effectiveDate.toISOString().split('T')[0].split('-').reverse().join('-')
+     const endDate = expiredDate.toISOString().split('T')[0].split('-').reverse().join('-')
+     if (dispatch(checkLoginSession())) {
+       const data = await updateVoucher({
+         id: voucherId,
+         name: title,
+         startDate,
+         endDate,
+         voucherPercentage: value,
+         maxDiscountValue,
+         minOrderValue,
+         remainingQuantity: quantity,
+       })
+       if (data) {
+         handleClose()
+         toast.success('Cập nhật mã khuyến mãi thành công!', { autoClose: 1000, position: 'top-center' })
+          dispatch(fetchAllVouchers({ page: 1 }))
+       }
+       else {
+         toast.error('Mã khuyến mãi đã được sử dụng. Không thể cập nhật!',{autoClose: 1200, position: 'top-center'})
+       }
+     }
+     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+  }
+
   return (
-    <Modal className={cx('custom-modal')} show={showAddVoucher} onHide={handleClose} centered size="md">
+    <Modal className={cx('custom-modal')} show={isOpen} onHide={handleClose} centered size="md">
       <Modal.Header closeButton>
         <div className={cx('header')}>
-          <Modal.Title className={cx('title-header', 'fs-2')}>Thêm mã khuyến mãi</Modal.Title>
+          <Modal.Title className={cx('title-header', 'fs-2')}>
+            {voucherId ? 'Cập nhật mã khuyến mãi' : 'Thêm mã khuyến mãi'}
+          </Modal.Title>
         </div>
       </Modal.Header>
       <Modal.Body>
@@ -88,7 +136,7 @@ function VoucherModal() {
             required
             star
           ></FormInput>
-          <FormInput
+          {/* <FormInput
             title="Mô tả"
             error="Vui lòng nhập mô tả"
             id="description"
@@ -99,7 +147,7 @@ function VoucherModal() {
             isValid={isValid}
             required
             star
-          ></FormInput>
+          ></FormInput> */}
           <div className="row row-cols-1 row-cols-lg-2">
             <FormInput
               title="Phần trăm khuyến mãi (%)"
@@ -202,8 +250,14 @@ function VoucherModal() {
             <Button outline type="button" onClick={handleClose}>
               Huỷ
             </Button>
-            <Button primary className={cx('btn-submit')} onClick={handleAddVoucher} disabled={!isValid} type="submit">
-              Thêm mã
+            <Button
+              primary
+              className={cx('btn-submit')}
+              onClick={(e) => (voucherId ? handleUpdateVoucher(e) : handleAddVoucher(e))}
+              disabled={!isValid}
+              type="submit"
+            >
+              {voucherId ? 'Cập nhật' : 'Thêm mã'}
             </Button>
           </div>
         </form>

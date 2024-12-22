@@ -20,6 +20,7 @@ function Authenticate() {
         const data = await loginWithGoogle(code)
         if (data) {
           console.log(data)
+          localStorage.setItem('accessToken', data.access_token)
           dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
         } else {
           toast.error('Đăng nhập thất bại', { autoClose: 1500, position: 'top-center' })
