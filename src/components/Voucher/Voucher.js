@@ -59,11 +59,14 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
           title: 'Xác nhận xoá mã khuyến mãi',
           description: 'Bạn chắc chắn muốn xoá mã khuyến mãi này?',
           name: generalModalNames.DEL_VOUCHER,
+          id: data.id
         }),
       )
       setVisibleMenu(false)
     }
   }
+
+  console.log(data.id)
   return (
     <div className={cx('wrapper', 'voucher', [className])} style={{ backgroundImage: `url(${images.voucher})` }}>
       <Col xs="3" className={cx('d-flex justify-content-center align-items-center', 'border-right')}>
