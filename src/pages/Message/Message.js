@@ -11,7 +11,7 @@ import DetailMessage from '~/components/DetailMessage'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
 import { useDispatch, useSelector } from 'react-redux'
-import { Empty} from 'antd'
+import { Empty } from 'antd'
 import { getAllMessagesInConversation } from '~/apiServices/messageService/getAllMessagesInConversation'
 import Image from '~/components/Image'
 import { getAccessToken } from '~/utils/cookieUtils'
@@ -19,6 +19,7 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
 import { updateUnseenMessages } from '~/apiServices/messageService/updateUnseenMessages'
 import { fetchAllConversationsByAcc, fetchAllNotificationsByAcc } from '~/redux/slices/conversationSlice'
+import { getMessageById } from '~/apiServices/messageService/getMessageById'
 
 const cx = classNames.bind(styles)
 function Message() {
@@ -38,44 +39,42 @@ function Message() {
   const { conversationList } = useSelector((state) => state.conversation)
 
   useEffect(() => {
-    setSelectedConvers(conversationId)
+    setSelectedConvers(Number(conversationId))
   }, [conversationId])
 
- const onNotificationRecieved = useCallback(
-   (payload) => {
-     const newMessage = JSON.parse(payload.body)
-     if (Number(newMessage.conversation_id) === selectedConvers) {
-       setMessages((prev) => {
-         // Kiểm tra xem message có tồn tại không
-         const existingMessageIndex = prev.findIndex((message) => message.id === newMessage.id)
+  const onNotificationRecieved = useCallback(
+    (payload) => {
+      const newMessage = JSON.parse(payload.body)
+      console.log(selectedConvers)
+      if (Number(newMessage.conversation_id) === selectedConvers) {
+        setMessages((prev) => {
+          // Kiểm tra xem message có tồn tại không
+          const existingMessageIndex = prev.findIndex((message) => message.id === newMessage.id)
 
-         if (existingMessageIndex !== -1) {
-           // Nếu tồn tại, thay thế message tại index đó
-           const updatedMessages = [...prev]
-           updatedMessages[existingMessageIndex] = newMessage // Cập nhật message
-           return updatedMessages
-         } else {
-           // Nếu không tồn tại, thêm message mới
-           return [...prev, newMessage]
-         }
-       })
-     }
-     else {
-       setMessages((prev) => [...prev])
-     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-   },
-   [selectedConvers],
- )
-
-
+          if (existingMessageIndex !== -1) {
+            // Nếu tồn tại, thay thế message tại index đó
+            const updatedMessages = [...prev]
+            updatedMessages[existingMessageIndex] = newMessage // Cập nhật message
+            return updatedMessages
+          } else {
+            // Nếu không tồn tại, thêm message mới
+            return [...prev, newMessage]
+          }
+        })
+      } else {
+        setMessages((prev) => [...prev])
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [selectedConvers],
+  )
 
   //connect websocket
   useEffect(() => {
     function connect() {
       if (!stompClientRef.current && currentUser.id) {
         // Kiểm tra nếu chưa có kết nối WebSocket
-        const socket = new SockJS(`https://localhost:8080/ws`)
+        const socket = new SockJS(`http://localhost:8080/ws`)
         stompClientRef.current = over(socket)
 
         const headers = {
@@ -233,21 +232,22 @@ function Message() {
     return dateObj.toISOString()
   }
 
-const handleUpdateMessage = (id, content) => {
-  // Cập nhật message trong danh sách
-  setMessages((prev) => prev.map((message) => (message.id === id ? { ...message, content } : message)))
+  const handleUpdateMessage = async (id, content) => {
+    // Cập nhật message trong danh sách
+    const msg = await getMessageById(id)
+    console.log(msg)
+    setMessages((prev) => prev.map((message) => (message.id === id ? { ...msg, content } : message)))
 
-  // Tạo messageDTO để gửi request
-  const messageDTO = messages.find((message) => message.id === id)
-  const updatedMessage = { ...messageDTO, content }
-  updatedMessage.sendAt = convertToISO(updatedMessage.sendAt)
-  if (updatedMessage.seen_at) {
-    updatedMessage.seen_at = convertToISO(updatedMessage.seen_at)
+    const updatedMessage = { ...msg, content }
+    console.log(updatedMessage)
+    updatedMessage.sendAt = convertToISO(updatedMessage.sendAt)
+    if (updatedMessage.seen_at) {
+      updatedMessage.seen_at = convertToISO(updatedMessage.seen_at)
+    }
+
+    // Gửi request cập nhật
+    stompClientRef.current.send('/app/chat/update-message', {}, JSON.stringify(updatedMessage))
   }
-
-  // Gửi request cập nhật
-   stompClientRef.current.send('/app/chat/update-message', {}, JSON.stringify(updatedMessage))
-}
 
   const handleChangeType = (value) => {
     setButtonSelect(value)
