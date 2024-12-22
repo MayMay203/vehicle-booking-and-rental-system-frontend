@@ -11,6 +11,8 @@ import { createVoucher } from '~/apiServices/vouchers/createVoucher'
 import { fetchAllVouchers } from '~/redux/slices/voucherSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getVoucherById } from '~/apiServices/vouchers/getVoucherById'
+import { updateVoucher } from '~/apiServices/vouchers/updateVoucher'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 function VoucherModal() {
@@ -82,6 +84,33 @@ function VoucherModal() {
       dispatch(fetchAllVouchers({ page: 1 }))
     }
     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+  }
+
+  const handleUpdateVoucher = async (e) => {
+     e.preventDefault()
+     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+     const startDate = effectiveDate.toISOString().split('T')[0].split('-').reverse().join('-')
+     const endDate = expiredDate.toISOString().split('T')[0].split('-').reverse().join('-')
+     if (dispatch(checkLoginSession())) {
+       const data = await updateVoucher({
+         name: title,
+         description,
+         startDate,
+         endDate,
+         voucherPercentage: value,
+         maxDiscountValue,
+         minOrderValue,
+         remainingQuantity: quantity,
+       })
+       if (data) {
+          handleClose()
+          dispatch(fetchAllVouchers({ page: 1 }))
+       }
+       else {
+         toast.error('Mã khuyến mãi đã được sử dụng. Không thể cập nhật!')
+       }
+     }
+     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
   }
 
   return (
@@ -221,7 +250,13 @@ function VoucherModal() {
             <Button outline type="button" onClick={handleClose}>
               Huỷ
             </Button>
-            <Button primary className={cx('btn-submit')} onClick={handleAddVoucher} disabled={!isValid} type="submit">
+            <Button
+              primary
+              className={cx('btn-submit')}
+              onClick={() => (voucherId ? handleUpdateVoucher : handleAddVoucher)}
+              disabled={!isValid}
+              type="submit"
+            >
               {voucherId ? 'Cập nhật' : 'Thêm mã'}
             </Button>
           </div>

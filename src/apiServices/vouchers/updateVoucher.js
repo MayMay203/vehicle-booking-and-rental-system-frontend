@@ -1,7 +1,7 @@
 import { getAccessToken } from '~/utils/cookieUtils'
 import * as httpRequest from '~/utils/httpRequest'
 
-export const deleteVoucher = async (voucherUpdate) => {
+export const updateVoucher = async (voucherUpdate) => {
     try {
         const response = await httpRequest.patch(`/v1/vouchers`, {
             ...voucherUpdate
