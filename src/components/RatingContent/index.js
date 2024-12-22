@@ -1,1 +1,1 @@
-export {default} from './RatingContentList'
+export {default} from './RatingContent'

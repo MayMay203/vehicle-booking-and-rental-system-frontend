@@ -1,20 +1,14 @@
 import classNames from 'classnames/bind'
 import styles from './TicketBus.module.scss'
 import { Col, Form, Row } from 'react-bootstrap'
-import AddManyBreakDay from '../AddManyBreakDay'
 import { useEffect, useState } from 'react'
-import { DatePicker } from 'antd'
 import { toast } from 'react-toastify'
-import { useDispatch } from 'react-redux'
-import { checkLoginSession } from '~/redux/slices/userSlice'
-import { addBusSchedule } from '~/apiServices/busPartner/addBusSchedule'
-import moment from 'moment'
 const cx = classNames.bind(styles)
 function ViewTicketBus({ data, enableEdit = true }) {
-  const dispatch = useDispatch()
-  const [activeAdd, setActiveAdd] = useState(false)
-  const [startTime, setStartTime] = useState('')
-  const [startDate, setStartDate] = useState('')
+  // const dispatch = useDispatch()
+  // const [activeAdd, setActiveAdd] = useState(false)
+  // const [startTime, setStartTime] = useState('')
+  // const [startDate, setStartDate] = useState('')
   const [dataBusTicket, setDataBusTicket] = useState({
     startOperationDay: '',
     discountPercentage: '',
@@ -22,10 +16,10 @@ function ViewTicketBus({ data, enableEdit = true }) {
     breakDays: [''],
   })
 
-  const handleReset = () => {
-    //chưa reset hết được
-    setDataBusTicket({ startOperationDay: '', discountPercentage: '', departureTime: '', breakDays: [''] })
-  }
+  // const handleReset = () => {
+  //   //chưa reset hết được
+  //   setDataBusTicket({ startOperationDay: '', discountPercentage: '', departureTime: '', breakDays: [''] })
+  // }
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setDataBusTicket((prevState) => ({
@@ -33,26 +27,26 @@ function ViewTicketBus({ data, enableEdit = true }) {
       [name]: value,
     }))
   }
-  const handleStartTimeChange = (time) => {
-    setStartTime(time)
-    setDataBusTicket((prevState) => ({
-      ...prevState,
-      departureTime: time.format('HH:mm'),
-    }))
-  }
-  const handleStartDateChange = (date) => {
-    setStartDate(date)
-    setDataBusTicket((prevState) => ({
-      ...prevState,
-      startOperationDay: date?.format('DD-MM-YYYY'),
-    }))
-  }
-  const setBreakDays = (days) => {
-    setDataBusTicket((prevState) => ({
-      ...prevState,
-      breakDays: days,
-    }))
-  }
+  // const handleStartTimeChange = (time) => {
+  //   setStartTime(time)
+  //   setDataBusTicket((prevState) => ({
+  //     ...prevState,
+  //     departureTime: time.format('HH:mm'),
+  //   }))
+  // }
+  // const handleStartDateChange = (date) => {
+  //   setStartDate(date)
+  //   setDataBusTicket((prevState) => ({
+  //     ...prevState,
+  //     startOperationDay: date?.format('DD-MM-YYYY'),
+  //   }))
+  // }
+  // const setBreakDays = (days) => {
+  //   setDataBusTicket((prevState) => ({
+  //     ...prevState,
+  //     breakDays: days,
+  //   }))
+  // }
   useEffect(() => {
     if (data) {
       setDataBusTicket({
@@ -82,36 +76,36 @@ function ViewTicketBus({ data, enableEdit = true }) {
 //       allFieldsFilled,
 //     )
 //   }, [dataBusTicket, data])
-  const handleSave = async () => {
-    if (dispatch(checkLoginSession())) {
-      try {
-        const dataPost = {
-          busTripId: data.idBusTrip,
-          busId: data.licensePlateNumber,
-          departureTime: dataBusTicket.departureTime,
-          discountPercentage: dataBusTicket.discountPercentage,
-          // "priceTicket": 350000,
-          startOperationDay: dataBusTicket.startOperationDay,
-          breakDays: dataBusTicket.breakDays,
-        }
-        console.log('------dataPost----', dataPost)
+  // const handleSave = async () => {
+  //   if (dispatch(checkLoginSession())) {
+  //     try {
+  //       const dataPost = {
+  //         busTripId: data.idBusTrip,
+  //         busId: data.licensePlateNumber,
+  //         departureTime: dataBusTicket.departureTime,
+  //         discountPercentage: dataBusTicket.discountPercentage,
+  //         // "priceTicket": 350000,
+  //         startOperationDay: dataBusTicket.startOperationDay,
+  //         breakDays: dataBusTicket.breakDays,
+  //       }
+  //       console.log('------dataPost----', dataPost)
 
-        const response = await addBusSchedule(dataPost)
-        if (response) {
-          toast.success('Thêm vé xe thành công!', { autoClose: 2000 })
-          console.log('Thêm vé xe thành công!', response)
-          handleReset()
-        }
-      } catch (error) {
-        console.log('Thêm thất bại:')
-        console.log(error)
-        // if (error === 'Bus sche is available') {
-        //   toast.error('Biển số xe đã tồn tại!', { autoClose: 2000, position: 'top-center' })
-        // } else {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
-      }
-    }
-  }
+  //       const response = await addBusSchedule(dataPost)
+  //       if (response) {
+  //         toast.success('Thêm vé xe thành công!', { autoClose: 2000 })
+  //         console.log('Thêm vé xe thành công!', response)
+  //         handleReset()
+  //       }
+  //     } catch (error) {
+  //       console.log('Thêm thất bại:')
+  //       console.log(error)
+  //       // if (error === 'Bus sche is available') {
+  //       //   toast.error('Biển số xe đã tồn tại!', { autoClose: 2000, position: 'top-center' })
+  //       // } else {
+  //       toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+  //     }
+  //   }
+  // }
   return (
     <div className={cx('row', 'wrap-ticket')}>
       <Col className={cx('id-ticket')} sm={12} lg={1}>
@@ -217,10 +211,12 @@ function ViewTicketBus({ data, enableEdit = true }) {
           </Col>
         </Row>
       </Col>
-      <Col sm={12} lg={6} className={cx('wrap-break-days')}>
+      <Col lg={1} className={cx('line-vertical')}></Col>
+      <Col sm={12} lg={5} className={cx('wrap-break-days')}>
         <Row className="align-items-start">
+          {/* <div className={cx('line-vertical')}></div> */}
           <div className="d-flex align-items-start">
-            <p className={cx('me-3', 'txt', 'p-2')}>Ngày nghỉ</p>
+            <p className={cx('me-3', 'txt', 'p-2', 'background')}>Ngày nghỉ</p>
           </div>
           <div>
             {dataBusTicket?.breakDays?.length > 0 ? (

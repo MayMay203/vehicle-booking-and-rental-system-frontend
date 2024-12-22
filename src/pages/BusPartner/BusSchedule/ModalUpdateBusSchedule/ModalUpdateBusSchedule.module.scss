@@ -6,9 +6,6 @@
   font-size: 2rem;
   color: #ff7f50;
 }
-.wrap-container{
-  min-height: 45rem;
-}
 .wrap-form-infor {
   // width: 60%;
   justify-content: center;
@@ -18,7 +15,17 @@
   justify-content: center;
 }
 .col-form {
+//   padding-left: 12rem;
   margin-top: 2rem;
+//   @include abstracts.screen(xl) {
+//     padding-left: 8rem;
+//   }
+//   @include abstracts.screen(md) {
+//     padding-left: 4rem;
+//   }
+//   @include abstracts.screen(sm) {
+//     padding-left: 1rem;
+//   }
 }
 .content-tab {
   // display: flex;
@@ -189,11 +196,6 @@
   color: #ff7f50;
   font-size: 2.4rem;
 }
-.line-shadow{
-  border-top: #ff7f50;
-  box-shadow: 1px 0px 0px 0px #d34714;
-}
-.line-top{
-  border-top: #ff7f50;
-  box-shadow: 1px 0px 0px 0px #d34714;
+.txt-plate-number{
+  color: #d34714;
 }

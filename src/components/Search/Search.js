@@ -10,11 +10,17 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSearchTicket } from '~/redux/slices/searchSlice'
 import { getBusinessName } from '~/apiServices/user/getBusPartnerName'
-import { fetchAllBusTrips } from '~/redux/slices/busPartnerSlice'
+import { fetchAllBusTrips, fetchBusTicketList } from '~/redux/slices/busPartnerSlice'
 
 const cx = classNames.bind(styles)
 function Search({ noSelectBus, noSelectDate = false, type }) {
-  const searchValues = useSelector((state) => (type === 'user' ? state.search.searchTicket : state.search.searchBusTrip))
+  const searchValues = useSelector((state) =>
+    type === 'user'
+      ? state.search.searchTicket
+      : type === 'partner'
+      ? state.search.searchBusTrip
+      : state.search.searchTicketPartner,
+  )
   const [busName, setBusName] = useState(searchValues.busName)
   const [departureLocation, setDepartureLocation] = useState(type === 'user' ? searchValues.departureLocation : '')
   const [arrivalLocation, setArrivalLocation] = useState(type === 'user' ? searchValues.arrivalLocation : '')
@@ -67,6 +73,17 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
           })
           .sort((a, b) => a.name.localeCompare(b.name))
         setProvincesList(cleanedProvinces)
+        // const sortedProvinces = provinces
+        //   .map((province) => {
+        //     const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '')
+        //     return {
+        //       ...province,
+        //       name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName,
+        //     }
+        //   })
+        //   .sort((a, b) => a.name.localeCompare(b.name))
+
+        // setProvincesList([{ value: '', label: 'Tất cả' }, ...sortedProvinces])
       }
       const businessNames = await getBusinessName()
       if (businessNames) {
@@ -90,6 +107,9 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
       // if (window.location.origin === 'http://localhost:3000' && window.location.pathname === '/') {
       //   navigate(config.routes.ticket)
       // }
+    } else if (type === 'partner-ticket') {
+      console.log('departureLocation:', departureLocation, '- arrivalLocation:', arrivalLocation)
+      dispatch(fetchBusTicketList({ dep: departureLocation, des: arrivalLocation }))
     }
   }
 

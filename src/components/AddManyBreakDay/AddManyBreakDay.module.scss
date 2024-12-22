@@ -1,6 +1,6 @@
 @use '../../abstracts' as abstracts;
 .txt {
-  width: 100%;
+  // width: 100%;
   font-size: 1.5rem;
   margin: 0.3rem;
   font-weight: 500;
@@ -12,6 +12,9 @@
   @include abstracts.screen(sm) {
     font-size: 1.4rem;
   }
+}
+.background{
+  background-color: #f8ff78;
 }
 .add-item {
   font-size: 2rem;

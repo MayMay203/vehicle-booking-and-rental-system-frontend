@@ -15,11 +15,16 @@ import ModalDetailBusTicket from '../ModalDetailBusTicket'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchBusTicketList } from '~/redux/slices/busPartnerSlice'
+import { Empty, Pagination } from 'antd'
+import { config } from '~/config'
 const cx = classNames.bind(styles)
 function BusTicket() {
   const [activeTypeFilter, setActiveTypeFilter] = useState('all')
   const [busTicket, setBusTicket] = useState({})
   const dispatch = useDispatch()
+  const [currentPage, setCurrentPage] = useState(1)
+  // const [total, setTotal] = useState(0)
+  const total = 0
   const listBusTicket = useSelector((state) => state.busPartner.busTicketList)
   useEffect(() => {
     if(dispatch(checkLoginSession())){
@@ -33,7 +38,6 @@ function BusTicket() {
     setModalDetailTicketShow(true)
     setBusTicket(ticket)
   }
-  console.log("bus ticket---", busTicket)
   const [modalAddTicketShow, setModalAddTicketShow] = useState(false)
   const handleAddTicket = () => {
     setModalAddTicketShow(true)
@@ -57,7 +61,7 @@ function BusTicket() {
       </div> */}
       <Row className="d-flex mb-5">
         <div className="col">
-          <Search noSelectBus={true} noSelectDate={true} type={'partner'}></Search>
+          <Search noSelectBus={true} noSelectDate={true} type={'partner-ticket'}></Search>
         </div>
         <div className="col col-3 d-flex justify-content-center mt-4 align-items-center">
           <Button primary onClick={() => handleAddTicket()}>
@@ -120,6 +124,25 @@ function BusTicket() {
       {listBusTicket.map((ticket, index) => (
         <TicketBusTrip key={index} ticket={ticket} handleShowDetail={() => handleShowDetail(ticket)}></TicketBusTrip>
       ))}
+      {listBusTicket.length === 0 && (
+        <div style={{ marginTop: '110px' }}>
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="Hiện chưa có vé xe trên tuyến đường này."
+          />
+        </div>
+      )}
+
+      {listBusTicket.length > 0 && (
+        <Pagination
+          className="mt-5"
+          align="center"
+          current={currentPage}
+          pageSize={config.variables.pagesize}
+          total={total}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      )}
       <div className="mb-5"></div>
       <ModalManageBusTicket
         enableEdit={true}

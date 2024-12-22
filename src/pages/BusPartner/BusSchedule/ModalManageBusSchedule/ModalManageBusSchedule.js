@@ -50,7 +50,6 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
       }))
     }
   }, [data])
-
   // const [activeUpdate, setActiveUpdate] = useState(false)
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -74,9 +73,10 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
       if (provices) {
         const cleanedProvinces = provices
           .map((province) => {
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
             return {
               ...province,
-              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
             }
           })
           .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
@@ -249,6 +249,9 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
                       {item.name}
                     </option>
                   ))}
+                  <option key="-2" value="-1">
+                    Thêm loại xe
+                  </option>
                 </Form.Select>
               </Form.Group>
 
@@ -330,6 +333,7 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
           <Col></Col>
         </Row>
       </Modal.Footer> */}
+
     </Modal>
   )
 }

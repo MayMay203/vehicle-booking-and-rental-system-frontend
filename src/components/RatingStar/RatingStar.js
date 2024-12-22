@@ -3,15 +3,19 @@ import styles from './RatingStar.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 const cx = classNames.bind(styles)
-function RatingStar() {
+function RatingStar({ numberStar }) {
   return (
     <div className={cx('rating-value')}>
-      <FontAwesomeIcon icon={faStar} className={cx('icon-star')}></FontAwesomeIcon>
-      <FontAwesomeIcon icon={faStar} className={cx('icon-star')}></FontAwesomeIcon>
-      <FontAwesomeIcon icon={faStar} className={cx('icon-star')}></FontAwesomeIcon>
-      <FontAwesomeIcon icon={faStar} className={cx('icon-star')}></FontAwesomeIcon>
-      <FontAwesomeIcon icon={faStar} className={cx('icon-star')}></FontAwesomeIcon>
+      {Array.from({ length: 5 }, (_, index) => (
+        <FontAwesomeIcon
+          key={index}
+          icon={faStar}
+          className={cx('icon-star')}
+          style={{ color: index < numberStar ? '#FFC700' : '#D3D3D3' }} 
+        />
+      ))}
     </div>
   )
 }
+
 export default RatingStar

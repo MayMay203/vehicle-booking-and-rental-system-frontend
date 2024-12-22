@@ -3,21 +3,20 @@ import styles from './ModalDetailBusTicket.module.scss'
 import Modal from 'react-bootstrap/Modal'
 import { Col, InputGroup, Row, Form, Tab, Tabs } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClockRotateLeft, faCouch, faDongSign, faTicket } from '@fortawesome/free-solid-svg-icons'
+import { faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react'
-import AddManyTickets from '~/components/AddManyTickets'
-import { DatePicker } from 'antd'
+import { DatePicker, Empty } from 'antd'
 import dayjs from 'dayjs'
 import TableListBuyTicket from '~/components/TableListBuyTicket'
-import RatingContentList from '~/components/RatingContent'
 import Button from '~/components/Button'
-import { convertTimeFormat } from '~/utils/convertTimeFormat'
 import InforBusTrip from '../../BusTripManage/DetailBusTrip/InforBusTrip'
 import { detailBusSchedule } from '~/apiServices/busPartner/detailBusSchedule'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewTicketBus from '~/components/TicketBus/ViewTicketBus'
 import { fetchOrderListBusTrip } from '~/redux/slices/busPartnerSlice'
+import { getAllRatingOfTicket } from '~/apiServices/ratingService/getAllRatingOfTicket'
+import RatingContent from '~/components/RatingContent'
 const cx = classNames.bind(styles)
 function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...props }) {
   // const [formData, setFormData] = useState({
@@ -49,7 +48,7 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
   const [startDate, setStartDate] = useState(dayjs())
   const [activeUpdate, setActiveUpdate] = useState(false)
   const listOrderOfBusTrip = useSelector((state) => state.busPartner.orderListBusTrip)
-  console.log('nhận date:--', dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD'), '--id:', idTicket)
+  const [listRating, setListRating] = useState([])
   useEffect(() => {
     const fetchBusSchedule = async () => {
       if (dispatch(checkLoginSession())) {
@@ -70,9 +69,9 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
    
   useEffect(() =>{
     if(dispatch(checkLoginSession())){
-      dispatch(fetchOrderListBusTrip({id: idTicket ,date: startDate}))
+      dispatch(fetchOrderListBusTrip({ id: idTicket, date: dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD') }))
     }
-  }, [dispatch])
+  }, [dispatch, idTicket, startDate])
   // const handleInputChange = (e) => {
   //   const { name, value } = e.target
   //   setFormData((prevState) => ({
@@ -130,13 +129,13 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
   //   { value: 'Tạm dừng hoạt động', label: 'Tạm dừng hoạt động' },
   //   { value: 'Dừng hoạt động', label: 'Dừng hoạt động' },
   // ]
-  const [selectedDate, setSelectedDate] = useState(dayjs())
+  // const [selectedDate, setSelectedDate] = useState(dayjs())
 
-  const handleDateChange = (date) => {
-    if (date) {
-      setSelectedDate(dayjs(date))
-    }
-  }
+  // const handleDateChange = (date) => {
+  //   if (date) {
+  //     setSelectedDate(dayjs(date))
+  //   }
+  // }
   
   const handleStartDateChange = (date) => {
     setStartDate(date)
@@ -146,7 +145,20 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
     //   startDT: startTime?.format('HH:mm') + ' ' + date?.format('DD-MM-YYYY'),
     // }))
   }
-
+useEffect(() => {
+  if (ticket.busTripScheduleId) {
+    const getListRating = async () => {
+      const response = await getAllRatingOfTicket(ticket?.busTripScheduleId)
+      if (response && response.result.result) {
+        setListRating(response.result.result)
+      } else {
+        setListRating([])
+      }
+    }
+    getListRating()
+  }
+}, [ticket.busTripScheduleId])
+  console.log("lisst rating", listRating, '---id ve:', ticket.busTripScheduleId)
   return (
     <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -167,7 +179,7 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
           <Tabs defaultActiveKey="infor" id="fill-tab-bus-ticket" className="mb-3" fill>
             <Tab eventKey="infor" title="Thông tin">
               <Row className={cx('form-infor-bus-trip', 'justify-content-center')}>
-                <div className="d-flex align-items-center justify-content-end">
+                <div className="d-flex align-items-center justify-content-end me-4">
                   <span className={cx('text')}>Ngày:</span>
                   <DatePicker
                     onChange={handleStartDateChange}
@@ -177,22 +189,77 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
                     className="content-calendar ms-3"
                   />
                 </div>
-                <InforBusTrip idBusTrip={formData?.idBusTrip}></InforBusTrip>
+
                 <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
-                  <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput1">
-                    <Form.Label className="mb-3">Địa điểm xuất phát</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={formData.departure}
-                      name="departure"
-                      aria-label="departure"
-                      className={cx('txt', 'selectbox', 'infor-item')}
-                      readOnly
-                      // disabled={!enableEdit}
-                    >
-                      {/* <option value="Đà Nẵng">Đà Nẵng</option> */}
-                    </Form.Control>
-                  </Form.Group>
+                  <Row>
+                    <Col></Col>
+                    <Col style={{ visibility: 'hidden' }}>
+                      <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput1">
+                        <Form.Label className="mb-3">Địa điểm xuất phát</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={formData.departure}
+                          name="departure"
+                          aria-label="departure"
+                          className={cx('txt', 'selectbox', 'infor-item')}
+                          readOnly
+                          // disabled={!enableEdit}
+                        >
+                          {/* <option value="Đà Nẵng">Đà Nẵng</option> */}
+                        </Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col style={{ visibility: 'hidden' }}>
+                      <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput11">
+                        <Form.Label className="mb-3">Địa điểm đến</Form.Label>
+                        <Form.Control
+                          value={formData.destination}
+                          name="destination"
+                          aria-label="destination"
+                          className={cx('txt', 'infor-item')}
+                          readOnly
+                          // disabled
+                        >
+                          {/* <option value="Hà Nội">Hà Nội</option> */}
+                        </Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col>
+                      <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput1">
+                        <Form.Label className="mb-3">Địa điểm xuất phát</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={formData.departure}
+                          name="departure"
+                          aria-label="departure"
+                          className={cx('txt', 'selectbox', 'infor-item')}
+                          readOnly
+                          // disabled={!enableEdit}
+                        >
+                          {/* <option value="Đà Nẵng">Đà Nẵng</option> */}
+                        </Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput11">
+                        <Form.Label className="mb-3">Địa điểm đến</Form.Label>
+                        <Form.Control
+                          value={formData.destination}
+                          name="destination"
+                          aria-label="destination"
+                          className={cx('txt', 'infor-item')}
+                          readOnly
+                          // disabled
+                        >
+                          {/* <option value="Hà Nội">Hà Nội</option> */}
+                        </Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
                   {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput13">
                     <Form.Label className="mb-3">Thời gian hành trình</Form.Label>
                     <InputGroup className={cx('txt', 'infor-item')}>
@@ -222,6 +289,90 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
                     >
                       {/* <option value={formData.typeVehicle}>{formData.typeVehicle}</option> */}
                     </Form.Control>
+                  </Form.Group>
+
+                  {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput3">
+                    <Form.Label className="mb-3">
+                      Giá vé<span className="text-danger">*</span>
+                    </Form.Label>
+                    <InputGroup className={cx('txt', 'infor-item')}>
+                      <Form.Control
+                        type="text"
+                        value={formData.price}
+                        name="price"
+                        aria-label="price"
+                        className={cx('txt')}
+                        // onChange={handleInputChange}
+                      />
+                      <InputGroup.Text className={cx('txt')}>
+                        <FontAwesomeIcon icon={faDongSign} />
+                      </InputGroup.Text>
+                    </InputGroup>
+                  </Form.Group> */}
+                </Col>
+                <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
+                  <Row className="d-flex align-items-center justify-content-center">
+                    {/* <div className="d-flex align-items-center justify-content-end">
+                        <span className={cx('text')}>Ngày:</span>
+                        <DatePicker
+                          onChange={handleStartDateChange}
+                          // selected={startDate}
+                          value={startDate}
+                          format="DD-MM-YYYY"
+                          className="content-calendar ms-3"
+                        />
+                      </div> */}
+                    <Col>
+                      <Form.Group
+                        className={cx('txt', 'mb-5', 'line-shadow', 'line-top')}
+                        controlId="formInfor.ControlInput16"
+                      >
+                        <Form.Label className="mb-3">Trạng thái hoạt động</Form.Label>
+                        <Form.Control
+                          name="operation"
+                          aria-label="operation"
+                          value={formData.operation === true ? 'Đang hoạt động' : ''}
+                          className={cx(
+                            'txt',
+                            'Controlbox',
+                            'infor-item',
+                            formData.operation ? 'text-success' : 'text-warning', // Áp dụng màu chữ tùy theo trạng thái
+                          )}
+                          readOnly
+                          //   onChange={handleInputChange}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput16">
+                        <Form.Label className="mb-3">Số vé còn lại</Form.Label>
+                        <Form.Control
+                          name="availableSeat"
+                          aria-label="availableSeat"
+                          value={formData.availableSeat}
+                          className={cx('txt', 'Controlbox', 'infor-item', 'text-danger')}
+                          readOnly
+                          //   onChange={handleInputChange}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput5">
+                    <Form.Label className="mb-3">Biển số xe</Form.Label>
+                    <InputGroup className={cx('txt', 'infor-item')}>
+                      <Form.Control
+                        type="text"
+                        value={formData.licensePlateNumber}
+                        name="licensePlateNumber"
+                        aria-label="licensePlateNumber"
+                        className={cx('txt')}
+                        readOnly
+                        // disabled={!enableEdit}
+                      />
+                      <InputGroup.Text className={cx('txt')}>
+                        <FontAwesomeIcon icon={faTicket} />
+                      </InputGroup.Text>
+                    </InputGroup>
                   </Form.Group>
                   <Row className="d-flex">
                     <Col>
@@ -260,90 +411,9 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
                       </Form.Group>
                     </Col>
                   </Row>
-                  {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput3">
-                    <Form.Label className="mb-3">
-                      Giá vé<span className="text-danger">*</span>
-                    </Form.Label>
-                    <InputGroup className={cx('txt', 'infor-item')}>
-                      <Form.Control
-                        type="text"
-                        value={formData.price}
-                        name="price"
-                        aria-label="price"
-                        className={cx('txt')}
-                        // onChange={handleInputChange}
-                      />
-                      <InputGroup.Text className={cx('txt')}>
-                        <FontAwesomeIcon icon={faDongSign} />
-                      </InputGroup.Text>
-                    </InputGroup>
-                  </Form.Group> */}
-                </Col>
-                <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
-                  <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput11">
-                    <Form.Label className="mb-3">Địa điểm đến</Form.Label>
-                    <Form.Control
-                      value={formData.destination}
-                      name="destination"
-                      aria-label="destination"
-                      className={cx('txt', 'infor-item')}
-                      readOnly
-                      // disabled
-                    >
-                      {/* <option value="Hà Nội">Hà Nội</option> */}
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput5">
-                    <Form.Label className="mb-3">Biển số xe</Form.Label>
-                    <InputGroup className={cx('txt', 'infor-item')}>
-                      <Form.Control
-                        type="text"
-                        value={formData.licensePlateNumber}
-                        name="licensePlateNumber"
-                        aria-label="licensePlateNumber"
-                        className={cx('txt')}
-                        readOnly
-                        // disabled={!enableEdit}
-                      />
-                      <InputGroup.Text className={cx('txt')}>
-                        <FontAwesomeIcon icon={faTicket} />
-                      </InputGroup.Text>
-                    </InputGroup>
-                  </Form.Group>
-                  <Row className="d-flex">
-                    <Col>
-                      <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput16">
-                        <Form.Label className="mb-3">
-                          Trạng thái hoạt động<span className="text-danger">*</span>
-                        </Form.Label>
-                        <Form.Control
-                          name="operation"
-                          aria-label="operation"
-                          value={formData.operation === true ? 'Đang hoạt động' : ''}
-                          className={cx('txt', 'Controlbox', 'infor-item')}
-                          readOnly
-                          //   onChange={handleInputChange}
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput16">
-                        <Form.Label className="mb-3">
-                          Số ghế còn lại<span className="text-danger">*</span>
-                        </Form.Label>
-                        <Form.Control
-                          name="availableSeat"
-                          aria-label="availableSeat"
-                          value={formData.availableSeat}
-                          className={cx('txt', 'Controlbox', 'infor-item')}
-                          readOnly
-                          //   onChange={handleInputChange}
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
                 </Col>
               </Row>
+              <InforBusTrip idBusTrip={formData?.idBusTrip}></InforBusTrip>
               <div className="align-items-center row">
                 <div className={cx('d-flex')}>
                   <ViewTicketBus enableEdit={false} initialItems={[]} content={''} data={ticket}></ViewTicketBus>
@@ -382,7 +452,26 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
               <TableListBuyTicket listOrderOfBusTrip={listOrderOfBusTrip}></TableListBuyTicket>
             </Tab>
             <Tab eventKey="rating" title="Đánh giá">
-              <RatingContentList></RatingContentList>
+              <div>
+                {Array.isArray(listRating) && listRating.map((rating, index) => <RatingContent data={rating} />)}
+
+                {listRating?.length === 0 && (
+                  <div style={{ marginTop: '60px' }}>
+                    <Empty
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                      description="Chưa có đánh giá nào."
+                    />
+                  </div>
+                )}
+                {(listRating === null || listRating === undefined) && (
+                  <div style={{ marginTop: '60px' }}>
+                    <Empty
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                      description="Chưa có đánh giá nào."
+                    />
+                  </div>
+                )}
+              </div>
             </Tab>
           </Tabs>
         </div>

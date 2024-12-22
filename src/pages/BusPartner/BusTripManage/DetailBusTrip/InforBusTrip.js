@@ -10,7 +10,7 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
 const cx = classNames.bind(styles)
 
-function InforBusTrip({idBusTrip}) {
+function InforBusTrip({ idBusTrip }) {
   const [data, setData] = useState({})
   const dispatch = useDispatch()
   // console.log('dataTable bên cha:', dataTable)
@@ -82,7 +82,7 @@ function InforBusTrip({idBusTrip}) {
   }
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
-      if(idBusTrip){
+      if (idBusTrip) {
         fetchInforBusTrip(idBusTrip)
       }
     }
@@ -92,7 +92,7 @@ function InforBusTrip({idBusTrip}) {
     console.log('params', pagination, filters, sorter, extra)
   }
   return (
-    <div className="container">
+    <div className="container p-0">
       <div className="mt-4 mb-4">
         <Accordion>
           <Accordion.Item eventKey={1}>
@@ -200,4 +200,3 @@ function InforBusTrip({idBusTrip}) {
   )
 }
 export default InforBusTrip
-

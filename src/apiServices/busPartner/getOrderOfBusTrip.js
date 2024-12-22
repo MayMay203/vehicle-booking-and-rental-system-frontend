@@ -7,6 +7,7 @@ export const getOrderOfBusTrip = async (id, date) => {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     })
+    
     return response.data
   } catch (error) {
     console.log(error)
