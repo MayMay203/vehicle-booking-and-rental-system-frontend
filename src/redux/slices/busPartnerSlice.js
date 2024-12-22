@@ -8,6 +8,7 @@ import { getAllSchedulesByIDBus } from '~/apiServices/busPartner/getAllSchedules
 import { getAllTicket } from '~/apiServices/busPartner/getAllTicket'
 import { getAllUtilities } from '~/apiServices/busPartner/getAllUtilities'
 import { getOrderOfBusTrip } from '~/apiServices/busPartner/getOrderOfBusTrip'
+import { statsBusTicket } from '~/apiServices/busPartner/statsBusTicket'
 
 const initialState = {
   busTypeList: [],
@@ -21,6 +22,7 @@ const initialState = {
   scheduleListByBusTrip: [],
   busTicketList: [],
   orderListBusTrip: [],
+  statsBusTrip: [],
 }
 export const fetchAllBusTypes = createAsyncThunk('busPartner/getAllBusTypes', async () => {
   const data = await getAllBusTypes()
@@ -72,6 +74,15 @@ export const fetchOrderListBusTrip = createAsyncThunk('busPartner/getOrderListBu
   console.log('dataaaa:', data.result)
   return data.result || []
 })
+export const fetchStatsBusTrip = createAsyncThunk(
+  'busPartner/getStatsBusTrip',
+  async ({ route, year, month, startDate, endDate, statsBy }) => {
+    // const { dep, des } = params
+    const data = await statsBusTicket(route, year, month, startDate, endDate, statsBy)
+    console.log('dataaaa:', data.result)
+    return data.result || []
+  },
+)
 // export const busTypeByID = createAsyncThunk('busPartner/getInforBusTypeByID', async ({ id }) => {
 //   const data = await fetchBusTypeByID(id)
 //   return data || {}
@@ -116,6 +127,9 @@ const busPartnerSlice = createSlice({
       })
       .addCase(fetchOrderListBusTrip.fulfilled, (state, action) => {
         state.orderListBusTrip = action.payload
+      })
+      .addCase(fetchStatsBusTrip.fulfilled, (state, action) => {
+        state.statsBusTrip = action.payload
       })
       // .addCase(busByID.fulfilled, (state, action) => {
       //   state.inforBus = action.payload
