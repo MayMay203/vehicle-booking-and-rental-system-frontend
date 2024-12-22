@@ -22,7 +22,6 @@ function VoucherModal() {
   const dispatch = useDispatch()
 
   const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
   const [value, setValue] = useState('')
   const [effectiveDate, setEffectiveDate] = useState(new Date())
   const [expiredDate, setExpiredDate] = useState(new Date())
@@ -44,23 +43,23 @@ function VoucherModal() {
       const data = await getVoucherById(voucherId)
       if (data) {
         setTitle(data.name)
-        setEffectiveDate(data.startDate.split('-').reverse().join('-'))
-        setExpiredDate(data.endDate.split('-').reverse().join('-'))
+        setEffectiveDate(new Date(data.startDate.split('-').reverse().join('-')))
+        setExpiredDate(new Date(data.endDate.split('-').reverse().join('-')))
         setValue(data.voucherPercentage)
         setMaxDiscountValue(Number(data.maxDiscountValue.replace(/\./g, '').replace(' VND', '')))
         setQuantity(data.remainingQuantity)
+        setMinOrderValue(Number(data.minOrderValue.replace(/\./g, '').replace(' VND', '')))
       }
     }
     if (voucherId) getVoucher()
   }, [voucherId])
 
   const handleClose = () => {
-    setDescription('')
     setTitle('')
     setValue('')
     setMaxDiscountValue('')
     setQuantity('')
-    setMinOrderValue('')
+    setMinOrderValue(0)
     dispatch(setAddVoucherVisible({ isOpen: false }))
   }
 
@@ -72,7 +71,6 @@ function VoucherModal() {
     if (dispatch(checkLoginSession())) {
       await createVoucher({
         name: title,
-        description,
         startDate,
         endDate,
         voucherPercentage: value,
@@ -87,14 +85,15 @@ function VoucherModal() {
   }
 
   const handleUpdateVoucher = async (e) => {
-     e.preventDefault()
+    e.preventDefault()
+    console.log('VO DAY ROI')
      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
      const startDate = effectiveDate.toISOString().split('T')[0].split('-').reverse().join('-')
      const endDate = expiredDate.toISOString().split('T')[0].split('-').reverse().join('-')
      if (dispatch(checkLoginSession())) {
        const data = await updateVoucher({
+         id: voucherId,
          name: title,
-         description,
          startDate,
          endDate,
          voucherPercentage: value,
@@ -103,11 +102,12 @@ function VoucherModal() {
          remainingQuantity: quantity,
        })
        if (data) {
-          handleClose()
+         handleClose()
+         toast.success('Cập nhật mã khuyến mãi thành công!', { autoClose: 1000, position: 'top-center' })
           dispatch(fetchAllVouchers({ page: 1 }))
        }
        else {
-         toast.error('Mã khuyến mãi đã được sử dụng. Không thể cập nhật!')
+         toast.error('Mã khuyến mãi đã được sử dụng. Không thể cập nhật!',{autoClose: 1200, position: 'top-center'})
        }
      }
      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
@@ -253,7 +253,7 @@ function VoucherModal() {
             <Button
               primary
               className={cx('btn-submit')}
-              onClick={() => (voucherId ? handleUpdateVoucher : handleAddVoucher)}
+              onClick={(e) => (voucherId ? handleUpdateVoucher(e) : handleAddVoucher(e))}
               disabled={!isValid}
               type="submit"
             >
