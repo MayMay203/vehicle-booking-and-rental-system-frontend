@@ -179,9 +179,10 @@ function RentalService() {
       if (provices) {
         const cleanedProvinces = provices
           .map((province) => {
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
             return {
               ...province,
-              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
             }
           })
           .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái

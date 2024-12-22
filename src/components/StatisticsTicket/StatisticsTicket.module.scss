@@ -1,6 +1,6 @@
 @use '../../abstracts' as abstracts;
 .txt {
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   // padding: 0 2rem;
   font-weight: 500;
   color: black;
@@ -12,6 +12,9 @@
   @include abstracts.screen(sm) {
     font-size: 1.4rem;
   }
+}
+.content-calendar{
+  width: 100%;
 }
 .wrap-filter{
   border-radius: 5px;

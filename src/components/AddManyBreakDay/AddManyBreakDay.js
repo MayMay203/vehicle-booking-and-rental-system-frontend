@@ -59,7 +59,7 @@ function AddManyBreakDay({ initialItems, content, setBreakDays, price=null }) {
     <Row className="align-items-start">
       <div className="d-flex align-items-center">
         <FontAwesomeIcon icon={faSquarePlus} className={cx('add-item')} onClick={handleAddItem} />
-        <p className={cx('me-3', 'txt', 'p-2')}>Ngày nghỉ</p>
+        <p className={cx('me-3', 'txt', 'p-2', 'background')}>Ngày nghỉ</p>
       </div>
       <div>
         {items.map((item) => (

@@ -84,10 +84,11 @@ function AddBusTrip({ closeModal, ...props }) {
       if (provices) {
         const cleanedProvinces = provices
           .map((province) => {
-            return {
-              ...province,
-              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
-            }
+           const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+           return {
+             ...province,
+             name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+           }
           })
           .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
         setProvincesList(cleanedProvinces)

@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind'
-import styles from './ModalManageBusTicket.module.scss'
+import styles from './ModalUpdateBusSchedule.module.scss'
 import Modal from 'react-bootstrap/Modal'
 import { Col, InputGroup, Row, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,179 +11,75 @@ import { useState, useEffect } from 'react'
 import TableSchedulesOfBus from '~/components/TableSchedulesOfBus'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { fetchAllBusesByBusType, fetchAllBusTrips, fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
+import { fetchAllBusesByBusType, fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
 import { fetchBusTypeByID } from '~/apiServices/busPartner/fetchBusTypeByID'
 import { getLocations } from '~/apiServices/getLocations'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
-import TicketBus from '~/components/TicketBus'
-import { detailBusTrip } from '~/apiServices/busPartner/detailBusTrip'
+// import TicketBus from '~/components/TicketBus'
+import UpdateTicketBus from '~/components/TicketBus/UpdateTicket'
 const cx = classNames.bind(styles)
-function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
+function ModalUpdateBusSchedule({ enableEdit = true, idBusTrip, data, functionModal, ...props }) {
   const dispatch = useDispatch()
   const listBusTypes = useSelector((state) => state.busPartner.busTypeList)
-  const listBusTrips = useSelector((state) => state.busPartner.busTrips)
-  const [filteredDestinations, setFilteredDestinations] = useState([])
   const listBusByBusType = useSelector((state) => state.busPartner.busListByBusType)
   const [provincesList, setProvincesList] = useState([])
-  
 
   const [formData, setFormData] = useState({
-    idBusTrip: '',
-    departure: '',
+    idBusTrip: idBusTrip,
+    departure: data?.busTripInfo?.departureLocation,
     idBusType: '',
     nameType: '',
     licensePlateNumber: '',
-    destination: '',
-    extendTime: '',
+    destination: data?.busTripInfo?.arrivalLocation,
+    extendTime: convertTimeFormat(data?.busTripInfo?.journeyDuration || 'h:m'),
     numberSeat: '',
     typeSeat: '',
-    price: '',
+    price:
+      data?.dropOffLocationInfos?.find((item) => item.province === data?.busTripInfo?.arrivalLocation)?.priceTicket ||
+      '',
   })
-
-  // const [activeUpdate, setActiveUpdate] = useState(false)
-
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target
-  //   if (name === 'departure') {
-  //     const matches = listBusTrips.filter((trip) => trip.departureLocation === value)
-  //     console.log('matches', matches)
-  //     setFilteredDestinations(matches)
-  //   }
-  //   // Khi cả departure và destination đều có giá trị, tìm thời gian hành trình
-  //     if (formData.departure && formData.destination) {
-  //       const matchingTrip = listBusTrips.find(
-  //         (trip) =>
-  //           trip.departureLocation === updatedFormData.departure &&
-  //           trip.arrivalLocation === updatedFormData.destination,
-  //       )
-  //       if (matchingTrip) {
-  //          setFormData((prevState) => ({
-  //     ...prevState,
-  //    extendTime: matchingTrip.journeyDuration,
-  //   }))}
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }))
-  // }
-    useEffect(() => {
-      if (dispatch(checkLoginSession())) {
-        dispatch(fetchAllBusTypes())
-        dispatch(fetchAllBusesByBusType(formData.nameType))
-        dispatch(fetchAllBusTrips())
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch])
-  console.log('listBusTrips---', listBusTrips)
-  const fetchInforBusTrip = async (id) => {
-    try {
-      const response = await detailBusTrip(id)
-      console.log('Bus trip response:', response) // Kiểm tra toàn bộ dữ liệu trả về
-
-      const price = response?.dropOffLocationInfos?.find(
-        (item) => item.province === formData.destination,
-      )?.priceTicket
-
+  useEffect(() => {
+    if (data && data.busTripInfo) {
       setFormData((prevState) => ({
         ...prevState,
-        price: price || '', // Cập nhật giá vé nếu tìm thấy
+        departure: data.busTripInfo.departureLocation,
+        destination: data.busTripInfo.arrivalLocation,
+        extendTime: convertTimeFormat(data.busTripInfo.journeyDuration || 'h:m'),
+        price:
+          data?.dropOffLocationInfos?.find((item) => item.province === data?.busTripInfo?.arrivalLocation)
+            ?.priceTicket || '',
       }))
-    } catch (error) {
-      console.error('Error fetching bus trip details:', error)
     }
+  }, [data])
+
+  // const [activeUpdate, setActiveUpdate] = useState(false)
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
   }
-
-   useEffect(() => {
-     if (formData?.idBusTrip) {
-       if (dispatch(checkLoginSession())) {
-         fetchInforBusTrip(formData?.idBusTrip)
-       }
-     } else {
-       console.log('No Bus Trip ID available')
-     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [formData?.idBusTrip])
-
- const handleInputChange = (e) => {
-   const { name, value } = e.target
-
-   if (name === 'departure') {
-     const matches = listBusTrips.filter((trip) => trip.departureLocation === value)
-     const uniqueDestinations = [...new Set(matches.map((trip) => trip.arrivalLocation))]
-     console.log('Matches:', matches) // Log các chuyến khởi hành
-     console.log('Unique Destinations:', uniqueDestinations) // Log danh sách điểm đến
-     setFilteredDestinations(uniqueDestinations)
-   }
-
-   // Nếu đủ cả departure và destination, tìm duration
-   const updatedFormData = {
-     ...formData,
-     [name]: value,
-   }
-
-   if (updatedFormData.departure && updatedFormData.destination) {
-     const matchingTrip = listBusTrips.find(
-       (trip) =>
-         trip.departureLocation === updatedFormData.departure && trip.arrivalLocation === updatedFormData.destination,
-     )
-
-     if (matchingTrip) {
-       setFormData((prevState) => ({
-         ...prevState,
-         extendTime: matchingTrip.journeyDuration, 
-         idBusTrip: matchingTrip.id,
-       }))
-     }
-   }
-
-   setFormData((prevState) => ({
-     ...prevState,
-     [name]: value,
-   }))
- }
-
-
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target
-  //   setFormData((prevState) => {
-  //     const updatedFormData = {
-  //       ...prevState,
-  //       [name]: value,
-  //     }
-  //     // Khi cả departure và destination đều có giá trị, tìm thời gian hành trình
-  //     if (updatedFormData.departure && updatedFormData.destination) {
-  //       const matchingTrip = listBusTrips.find(
-  //         (trip) =>
-  //           trip.departureLocation === updatedFormData.departure &&
-  //           trip.arrivalLocation === updatedFormData.destination,
-  //       )
-
-  //       // Gán extendTime nếu tìm thấy hành trình phù hợp
-  //       if (matchingTrip) {
-  //         updatedFormData.extendTime = matchingTrip.journeyDuration
-  //       } else {
-  //         updatedFormData.extendTime = '' // Không tìm thấy
-  //       }
-  //     }
-
-  //     return updatedFormData
-  //   })
-  // }
-
-  // console.log('data bên con:', data)
+  console.log('data bên con:', data)
   console.log('formData:', formData)
-
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllBusTypes())
+      dispatch(fetchAllBusesByBusType(formData.nameType))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch])
   useEffect(() => {
     async function fetchApi() {
       const provices = await getLocations(1)
       if (provices) {
         const cleanedProvinces = provices
           .map((province) => {
-           const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
-           return {
-             ...province,
-             name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
-           }
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+            return {
+              ...province,
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+            }
           })
           .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
         setProvincesList(cleanedProvinces)
@@ -247,8 +143,8 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
                   name="departure"
                   aria-label="departure"
                   className={cx('txt', 'selectbox', 'infor-item')}
-                  // readOnly
-                  // disabled
+                  readOnly
+                  disabled
                   onChange={handleInputChange}
                 >
                   <option key={-1} value={''}>
@@ -266,7 +162,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
                 <InputGroup className={cx('txt', 'infor-item')}>
                   <Form.Control
                     type="text"
-                    value={convertTimeFormat(formData.extendTime)}
+                    value={formData.extendTime}
                     name="extendTime"
                     aria-label="extend-time"
                     className={cx('txt')}
@@ -288,7 +184,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
                     aria-label="licensePlateNumber"
                     className={cx('txt')}
                     readOnly
-                    disabled={!enableEdit}
+                    disabled
                     onChange={(e) => {
                       setFormData((prevState) => ({
                         ...prevState,
@@ -317,54 +213,25 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
               </Form.Group>
             </Col>
             <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
-              {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput11">
+              <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput11">
                 <Form.Label className="mb-3">Địa điểm đến</Form.Label>
                 <Form.Select
                   value={formData.destination}
                   name="destination"
                   aria-label="destination"
                   className={cx('txt', 'selectbox', 'infor-item')}
-                  // readOnly
-                  // disabled
+                  readOnly
+                  disabled
                   onChange={handleInputChange}
                 >
-                  <option key={-1} value="">
-                    Chọn tỉnh/thành phố
-                  </option>
-                  {filteredDestinations.map((trip, index) => (
-                    <option key={index} value={trip.arrivalLocation}>
-                      {trip.arrivalLocation} - {trip.journeyDuration}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group> */}
-              <Form.Group className={cx('txt', 'mb-5')} controlId="destination">
-                <Form.Label className="mb-3">Địa điểm đến</Form.Label>
-                <Form.Select
-                  value={formData.destination}
-                  name="destination"
-                  aria-label="destination"
-                  className={cx('txt', 'selectbox', 'infor-item')}
-                  // readOnly
-                  // disabled
-                  onChange={handleInputChange}
-                  disabled={!filteredDestinations.length}
-                >
-                  {/* <Form.Select
-                  name="destination"
-                  value={formData.destination}
-                  onChange={handleInputChange}
-                  disabled={!filteredDestinations.length} // Disable nếu chưa có danh sách
-                > */}
-                  <option value="">Chọn địa điểm đến</option>
-                  {filteredDestinations.map((destination, index) => (
-                    <option key={index} value={destination}>
-                      {destination}
+                  <option key={-1}>Chọn tỉnh/thành phố</option>
+                  {provincesList.map((province, index) => (
+                    <option key={index} value={province.name}>
+                      {province.name}
                     </option>
                   ))}
                 </Form.Select>
               </Form.Group>
-
               <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput4">
                 <Form.Label className="mb-3">Loại phương tiện</Form.Label>
                 <Form.Select
@@ -372,8 +239,8 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
                   aria-label="idBusType"
                   value={formData.idBusType}
                   className={cx('txt', 'selectbox', 'infor-item')}
-                  // readOnly
-                  // disabled
+                  readOnly
+                  disabled
                   onChange={handleInputChange}
                 >
                   <option key="-1" value="">
@@ -428,14 +295,17 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
           <div className="align-items-center row">
             <div className="d-flex align-items-center">
               <p className={cx('mb-2', 'me-3', 'txt')}>
-                Thêm lịch khởi hành
-                <span className="text-danger">*</span>
+                Nội dung cập nhật:
+                {/* <span className="text-danger">*</span> */}
               </p>
             </div>
             <div className={cx('d-flex')}>
-              <TicketBus initialItems={[]} content={''} data={formData}></TicketBus>
+              <UpdateTicketBus initialItems={[]} content={''} data={formData}></UpdateTicketBus>
             </div>
           </div>
+          {/* <p className={cx('txt', 'mb-2', 'mt-4')}>
+            Lịch khởi hành của xe: <span className={cx('txt-plate-number')}>{formData.licensePlateNumber}</span>
+          </p> */}
           <p className={cx('txt', 'mb-2', 'mt-4')}>
             Lịch khởi hành của xe:{' '}
             <span className={cx('txt-plate-number')}>
@@ -462,8 +332,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
           <Col></Col>
         </Row>
       </Modal.Footer> */}
-      
     </Modal>
   )
 }
-export default ModalManageBusTicket
+export default ModalUpdateBusSchedule

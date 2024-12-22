@@ -5,7 +5,7 @@ import { Col, Form, Modal, Row } from 'react-bootstrap'
 import AddManyItems from '~/components/AddManyItems'
 import { useEffect, useState } from 'react'
 import { getLocations } from '~/apiServices/getLocations'
-import AddManyDropOffLocation from '~/components/AddManyDropOffLocation'
+// import AddManyDropOffLocation from '~/components/AddManyDropOffLocation'
 const cx = classNames.bind(styles)
 function UpdateBusTrip(props) {
   const handleInputChange = (e) => {
@@ -17,17 +17,17 @@ function UpdateBusTrip(props) {
     // console.log(formData)
   }
   const initialDepartures = [
-    { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 0 },
-    { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
-    { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
-    { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
+    { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 1 },
+    { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 2 },
+    { value: '300 Lê Thánh Tông, Nghệ An', id: 3 },
+    { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 4 },
   ]
-  const initialDestination = [
-    { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 0 },
-    { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
-    { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
-    { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
-  ]
+  // const initialDestination = [
+  //   { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 0 },
+  //   { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
+  //   { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
+  //   { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
+  // ]
   const [provincesList, setProvincesList] = useState([])
   useEffect(() => {
     async function fetchApi() {
@@ -35,9 +35,10 @@ function UpdateBusTrip(props) {
       if (provices) {
         const cleanedProvinces = provices
           .map((province) => {
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
             return {
               ...province,
-              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
             }
           })
           .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
@@ -124,11 +125,11 @@ function UpdateBusTrip(props) {
         </Row>
         <AddManyItems initialItems={initialDepartures} content={'Địa điểm đón khách'}></AddManyItems>
         <div className={cx('line')}></div>
-        <AddManyDropOffLocation
+        {/* <AddManyDropOffLocation
           initialItems={initialDestination}
           provincesList={provincesList}
           content={'Địa điểm trả khách'}
-        ></AddManyDropOffLocation>
+        ></AddManyDropOffLocation> */}
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center align-items-center">
         <div className="row w-100">

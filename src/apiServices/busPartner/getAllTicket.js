@@ -12,10 +12,10 @@ export const getAllTicket = async (dep, des) => {
 
     // Check and sanitize 'dep' and 'des'
     if (typeof dep === 'string' && sanitize(dep) !== '') {
-      filters.push(`departureLocation: '${sanitize(dep)}'`)
+      filters.push(`busTrip.departureLocation: '${sanitize(dep)}'`)
     }
     if (typeof des === 'string' && sanitize(des) !== '') {
-      filters.push(`arrivalLocation: '${sanitize(des)}'`)
+      filters.push(`busTrip.arrivalLocation: '${sanitize(des)}'`)
     }
 
     // Combine filters into a query string
@@ -27,7 +27,7 @@ export const getAllTicket = async (dep, des) => {
     console.log('dep:', dep)
     console.log('des:', des)
     console.log('filters:', filters)
-    console.log('filter--', filter)
+    console.log('filter--', `/v1/busTripSchedules${filter ? `?filter=${filter}` : ''}`)
 
     // HTTP request to the server
     const response = await httpRequest.get(`/v1/busTripSchedules${filter ? `?filter=${filter}` : ''}`, {

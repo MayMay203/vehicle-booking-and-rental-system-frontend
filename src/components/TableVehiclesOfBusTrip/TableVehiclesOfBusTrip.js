@@ -5,12 +5,22 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'antd'
 import { useEffect, useState } from 'react'
 import ModalBusInfor from '~/pages/BusPartner/BusManage/ModalBusInfor'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllBuses } from '~/redux/slices/busPartnerSlice'
+import { detailBusByID } from '~/apiServices/busPartner/detailBusByID'
+import { ConfigProvider } from 'antd'
+import viVN from 'antd/locale/vi_VN'
 const cx = classNames.bind(styles)
 function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
   const [isHovered, setIsHovered] = useState(null)
   const [modalBusInforShow, setModalBusInforShow] = useState(false)
+  const listBuses = useSelector((state) => state.busPartner.busList)
+  const [selectedBus, setSelectedBus] = useState({ id: '', licensePlateNumber: '' })
   const [data, setData] = useState([])
-   console.log('dataTable bên con:', dataTable)
+  const [dataInforBus, setDataInforBus] = useState({})
+  const dispatch = useDispatch()
+  console.log('dataTable bên con:', dataTable)
   const columns = [
     {
       title: 'STT',
@@ -38,7 +48,13 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
             }}
             onMouseEnter={() => setIsHovered(record.key)}
             onMouseLeave={() => setIsHovered(null)}
-            onClick={() => setModalBusInforShow(true)}
+            onClick={() => {
+              setModalBusInforShow(true)
+              setSelectedBus((prev) => ({
+                ...prev,
+                licensePlateNumber: licensePlateNumber,
+              }))
+            }}
           >
             Chi tiết
           </p>
@@ -55,43 +71,20 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
       showSorterTooltip: {
         target: 'full-header',
       },
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Jim',
-          value: 'Jim',
-        },
-        {
-          text: 'Submenu',
-          value: 'Submenu',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
-      ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ['descend'],
     },
     {
       title: 'Thời gian khởi hành',
       dataIndex: 'timeDeparture',
       align: 'center',
-      defaultSortOrder: 'descend',
+      defaultSortOrder: 'ascend', 
       width: 100,
-      // sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => {
+        const convertToMinutes = (time) => {
+          const [hours, minutes] = time.split(':').map(Number)
+          return hours * 60 + minutes 
+        }
+        return convertToMinutes(a.timeDeparture) - convertToMinutes(b.timeDeparture)
+      },
     },
     {
       title: 'Trạng thái',
@@ -184,6 +177,34 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
   //     location: 'Quảng Nam',
   //   },
   // ]
+  const getInforBusByID = async () => {
+    const response = await detailBusByID(selectedBus.id)
+    setDataInforBus(response)
+  }
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllBuses())
+    }
+  }, [dispatch])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      // dispatch(busByID({ id: selectedIDBus }))
+      if (modalBusInforShow === true) {
+        getInforBusByID()
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedBus.id])
+  useEffect(() => {
+    const matchedBus = listBuses.find((item) => item.licensePlate === selectedBus.licensePlateNumber)
+    if (matchedBus) {
+      setSelectedBus((prev) => ({
+        ...prev,
+        id: matchedBus.busId,
+      }))
+    }
+  }, [listBuses, selectedBus.licensePlateNumber])
+  // console.log('bieenr so xe: selectedBus--', selectedBus)
   useEffect(() => {
     const transformedData = dataTable.map((item) => ({
       key: item.busTripSchedule,
@@ -209,21 +230,29 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
   // }
   return (
     <>
-      <Table
-        columns={columns}
-        dataSource={data}
-        onChange={onChange}
-        bordered
-        pagination={false}
-        scroll={{ x: 'auto', y: 500 }}
-        // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-        rowClassName="table-row-center" // Thêm class để căn giữa dọc
-        showSorterTooltip={{
-          target: 'sorter-icon',
-        }}
-        className={cx('')}
+      <ConfigProvider locale={viVN}>
+        <Table
+          columns={columns}
+          dataSource={data}
+          onChange={onChange}
+          bordered
+          pagination={false}
+          scroll={{ x: 'auto', y: 500 }}
+          // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+          rowClassName="table-row-center" // Thêm class để căn giữa dọc
+          showSorterTooltip={{
+            target: 'sorter-icon',
+          }}
+          className={cx('')}
+        />
+      </ConfigProvider>
+
+      <ModalBusInfor
+        enableEdit={false}
+        show={modalBusInforShow}
+        selectedBus={dataInforBus}
+        onHide={() => setModalBusInforShow(false)}
       />
-      <ModalBusInfor enableEdit={false} show={modalBusInforShow} onHide={() => setModalBusInforShow(false)} />
     </>
   )
 }

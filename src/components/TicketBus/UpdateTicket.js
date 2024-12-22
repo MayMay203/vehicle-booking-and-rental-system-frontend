@@ -3,17 +3,17 @@ import styles from './TicketBus.module.scss'
 import { Col, Form, Row } from 'react-bootstrap'
 import AddManyBreakDay from '../AddManyBreakDay'
 import { useEffect, useState } from 'react'
-import { DatePicker } from 'antd'
+// import { DatePicker } from 'antd'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { addBusSchedule } from '~/apiServices/busPartner/addBusSchedule'
 const cx = classNames.bind(styles)
-function TicketBus({ data, enableEdit = true }) {
+function UpdateTicketBus({ data, enableEdit = true }) {
   const dispatch = useDispatch()
   const [activeAdd, setActiveAdd] = useState(false)
-  const [startTime, setStartTime] = useState('')
-  const [startDate, setStartDate] = useState('')
+//   const [startTime, setStartTime] = useState('')
+//   const [startDate, setStartDate] = useState('')
   const [dataBusTicket, setDataBusTicket] = useState({
     startOperationDay: '',
     discountPercentage: '',
@@ -31,20 +31,20 @@ function TicketBus({ data, enableEdit = true }) {
       [name]: value,
     }))
   }
-  const handleStartTimeChange = (time) => {
-    setStartTime(time)
-    setDataBusTicket((prevState) => ({
-      ...prevState,
-      departureTime: time.format('HH:mm'),
-    }))
-  }
-  const handleStartDateChange = (date) => {
-    setStartDate(date)
-    setDataBusTicket((prevState) => ({
-      ...prevState,
-      startOperationDay: date?.format('DD-MM-YYYY'),
-    }))
-  }
+//   const handleStartTimeChange = (time) => {
+//     setStartTime(time)
+//     setDataBusTicket((prevState) => ({
+//       ...prevState,
+//       departureTime: time.format('HH:mm'),
+//     }))
+//   }
+//   const handleStartDateChange = (date) => {
+//     setStartDate(date)
+//     setDataBusTicket((prevState) => ({
+//       ...prevState,
+//       startOperationDay: date?.format('DD-MM-YYYY'),
+//     }))
+//   }
   const setBreakDays = (days) => {
     setDataBusTicket((prevState) => ({
       ...prevState,
@@ -112,15 +112,16 @@ function TicketBus({ data, enableEdit = true }) {
               <Form.Label className="mb-2">
                 Giờ khởi hành <span className="text-danger">*</span>
               </Form.Label>
-              {/* <Form.Control
+              <Form.Control
                 type="text"
                 placeholder="45"
                 name="departureTime"
                 aria-label="departureTime"
                 value={dataBusTicket.departureTime}
                 className={cx('txt')}
-              /> */}
-              <DatePicker
+                disabled
+              />
+              {/* <DatePicker
                 value={startTime}
                 placeholder="Chọn giờ"
                 onChange={handleStartTimeChange}
@@ -129,7 +130,7 @@ function TicketBus({ data, enableEdit = true }) {
                 minuteStep={15} // 15-minute intervals
                 showNow={false} // Hide "Now" button if not needed
                 className="w-100"
-              />
+              /> */}
             </Form.Group>
           </Col>
           <Col>
@@ -137,22 +138,23 @@ function TicketBus({ data, enableEdit = true }) {
               <Form.Label className="mb-2">
                 Ngày bắt đầu <span className="text-danger">*</span>
               </Form.Label>
-              {/* <Form.Control
+              <Form.Control
                 type="text"
                 placeholder="45"
                 name="startOperationDay"
                 aria-label="startOperationDay"
                 value={dataBusTicket.startOperationDay}
                 className={cx('txt')}
-              /> */}
-              <DatePicker
+                disabled
+              />
+              {/* <DatePicker
                 placeholder="Chọn ngày"
                 onChange={handleStartDateChange}
                 // selected={startDate}
                 value={startDate}
                 format="DD-MM-YYYY"
                 className="content-calendar w-100"
-              />
+              /> */}
             </Form.Group>
           </Col>
         </Row>
@@ -203,10 +205,49 @@ function TicketBus({ data, enableEdit = true }) {
           </Col>
         </Row>
       </Col>
-      <Col lg={1} className={cx('line-vertical')}></Col>
-      <Col sm={12} lg={5} className={cx('wrap-break-days')}>
-        <AddManyBreakDay initialItems={[{ start: '', end: '', id: 1 }]} setBreakDays={setBreakDays}></AddManyBreakDay>
+      <Col sm={12} lg={6} className={cx('wrap-break-days')}>
+        <Row className="align-items-start">
+          {/* <div className="d-flex align-items-start">
+            <p className={cx('me-3', 'txt', 'p-2')}>Ngày nghỉ</p>
+          </div> */}
+          {/* <div>
+            {dataBusTicket?.breakDays?.length > 0 ? (
+              dataBusTicket.breakDays.map((item) => (
+                <div className={cx('d-flex', 'align-items-start', 'mt-2', 'mb-2')} key={item.id}>
+                  <Form.Group className={cx('txt', 'd-flex')} controlId={`formAddStart_${item.id}`}>
+                    <Form.Label className="mb-2 d-flex mt-3 me-2">Từ</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="45"
+                      name="startDay"
+                      aria-label="startDay"
+                      value={item.startDay}
+                      className={cx('txt')}
+                    />
+                  </Form.Group>
+                  <Form.Group className={cx('txt', 'd-flex')} controlId={`formAddEnd_${item.id}`}>
+                    <Form.Label className="mb-2 d-flex mt-3 ms-5 me-2">Đến</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="45"
+                      name="endDay"
+                      aria-label="endDay"
+                      value={item.endDay}
+                      className={cx('txt')}
+                    />
+                  </Form.Group>
+                </div>
+              ))
+            ) : (
+              <div className="text-muted">Không có dữ liệu nghỉ.</div>
+            )}
+          </div> */}
+          <AddManyBreakDay initialItems={[{ start: '', end: '', id: 1 }]} setBreakDays={setBreakDays}></AddManyBreakDay>
+        </Row>
       </Col>
+      {/* <Col sm={12} lg={6} className={cx('wrap-break-days')}>
+        
+      </Col> */}
       <div className={cx('save-button', { disabled: !activeAdd })} onClick={activeAdd ? handleSave : undefined}>
         Lưu vé xe
       </div>
@@ -214,4 +255,4 @@ function TicketBus({ data, enableEdit = true }) {
     </div>
   )
 }
-export default TicketBus
+export default UpdateTicketBus

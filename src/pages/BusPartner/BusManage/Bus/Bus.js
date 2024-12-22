@@ -21,13 +21,14 @@ function Bus() {
       title: 'STT',
       dataIndex: '',
       align: 'center',
-      width: 70,
+      width: 80,
       render: (text, record, index) => index + 1,
     },
     {
       title: 'Biển số xe',
       dataIndex: 'licensePlateNumber',
       align: 'center',
+      width: 100,
       showSorterTooltip: {
         target: 'full-header',
       },
@@ -98,6 +99,7 @@ function Bus() {
       title: 'Xem',
       dataIndex: 'view',
       align: 'center',
+      width: 80,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
@@ -110,7 +112,7 @@ function Bus() {
       title: 'Sửa',
       dataIndex: 'update',
       align: 'center',
-
+      width: 100,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faEdit}
@@ -123,6 +125,7 @@ function Bus() {
       title: 'Xóa',
       dataIndex: 'delete',
       align: 'center',
+      width: 100,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faTrash}
@@ -242,7 +245,7 @@ function Bus() {
         onChange={onChange}
         bordered
         pagination={false}
-        scroll={{ y: 500 }}
+        scroll={{x:'auto', y: 500 }}
         // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{

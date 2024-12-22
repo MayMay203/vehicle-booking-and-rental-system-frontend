@@ -1,18 +1,13 @@
 import * as httpRequest from '~/utils/httpRequest'
 import { getAccessToken } from '~/utils/cookieUtils'
-export const statsRevenueBus = async (statsBy, year) => {
+export const getOrderOfBusTrip = async (id, date) => {
   try {
-    let url
-    if (statsBy==='ByMonth'){
-      url = `?year=${year}`
-    } else if (statsBy === 'ByYear') {
-      url = ''
-    }
-    const response = await httpRequest.get(`/v1/bus-trip-order/statistics/revenue${url}`, {
+    const response = await httpRequest.get(`/v1/orderBusTrips/customer?busTripScheduleId=${id}&orderDate=${date}`, {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     })
+    
     return response.data
   } catch (error) {
     console.log(error)

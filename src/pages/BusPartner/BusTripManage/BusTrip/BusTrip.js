@@ -107,6 +107,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllBusTrips } from '~/redux/slices/busPartnerSlice'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
+import { ConfigProvider } from 'antd'
+import viVN from 'antd/locale/vi_VN'
+
 const cx = classNames.bind(styles)
 function BusTrip() {
   const [showModalAdd, setShowModalAdd] = useState(false)
@@ -126,7 +129,7 @@ function BusTrip() {
       align: 'center',
       defaultSortOrder: 'descend',
       width: 250,
-      // sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.departure.localeCompare(b.departure),
     },
     {
       title: 'Điểm đến',
@@ -136,27 +139,7 @@ function BusTrip() {
       showSorterTooltip: {
         target: 'full-header',
       },
-      filters: [
-        {
-          text: 'Jim',
-          value: 'Jim',
-        },
-        {
-          text: 'Submenu',
-          value: 'Submenu',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-          ],
-        },
-      ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ['descend'],
+      sorter: (a, b) => a.destination.localeCompare(b.destination),
     },
     {
       title: 'Thời gian di chuyển',
@@ -233,7 +216,7 @@ function BusTrip() {
   }
   const navigate = useNavigate()
   const handleViewBus = (id) => {
-    navigate('/bus-trip/detail-bus-trip', { state: {id} })
+    navigate('/bus-trip/detail-bus-trip', { state: { id } })
   }
   const handleEditBus = () => {
     setShowModalUpdate(true)
@@ -250,20 +233,23 @@ function BusTrip() {
           </Button>
         </div>
       </Row>
-      <Table
-        columns={columns}
-        dataSource={data}
-        onChange={onChange}
-        bordered
-        // pagination={false}
-        scroll={{ x: 'max-content', y: 500 }}
-        pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-        rowClassName="table-row-center" // Thêm class để căn giữa dọc
-        showSorterTooltip={{
-          target: 'sorter-icon',
-        }}
-        className={cx('')}
-      />
+      <ConfigProvider locale={viVN}>
+        <Table
+          columns={columns}
+          dataSource={data}
+          onChange={onChange}
+          bordered
+          // pagination={false}
+          scroll={{ x: 'max-content', y: 500 }}
+          pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+          rowClassName="table-row-center" // Thêm class để căn giữa dọc
+          showSorterTooltip={{
+            target: 'sorter-icon',
+          }}
+          className={cx('')}
+        />
+      </ConfigProvider>
+
       <AddBusTrip show={showModalAdd} closeModal={() => setShowModalAdd(false)} onHide={() => setShowModalAdd(false)} />
       <UpdateBusTrip show={showModalUpdate} onHide={() => setShowModalUpdate(false)}></UpdateBusTrip>
     </div>
