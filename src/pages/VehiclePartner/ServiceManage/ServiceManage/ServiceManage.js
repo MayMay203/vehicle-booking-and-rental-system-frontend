@@ -8,12 +8,14 @@ import TableListRentalService from "~/components/TableListRentalService/TableLis
 import AddServiceRental from "../AddServiceRental"
 const cx = classNames.bind(styles)
 function ServiceManage(){
-    const typeService = 'SELF_DRIVING'
+    const [typeService, setTypeService] = useState(2)
     const [activeTypeFilter, setActiveTypeFilter] = useState('all')
     const [modalAddService, setModalAddService] = useState(false)
     const handleTypeFilterClick = (btnType) => {
       setActiveTypeFilter(btnType)
+      setTypeService(btnType === 'all' ? 2 : btnType === 'manned' ? 1 : 0)
     }
+    console.log("type service:", typeService)
     // const navigate = useNavigate()
     const handleAddService = () => {
       // navigate('add-service-rental')
@@ -39,25 +41,18 @@ function ServiceManage(){
 
               <Button
                 rounded
-                className={cx('type-filter', { active: activeTypeFilter === 'no' })}
-                onClick={() => handleTypeFilterClick('no')}
+                className={cx('type-filter', { active: activeTypeFilter === 'manned' })}
+                onClick={() => handleTypeFilterClick('manned')}
               >
-                Đang hoạt động
+                Thuê xe có người lái
               </Button>
 
               <Button
                 rounded
-                className={cx('type-filter', { active: activeTypeFilter === 'done' })}
-                onClick={() => handleTypeFilterClick('done')}
+                className={cx('type-filter', { active: activeTypeFilter === 'self-driving' })}
+                onClick={() => handleTypeFilterClick('self-driving')}
               >
-                Dừng hoạt động
-              </Button>
-              <Button
-                rounded
-                className={cx('type-filter', { active: activeTypeFilter === 'outOfStock' })}
-                onClick={() => handleTypeFilterClick('outOfStock')}
-              >
-                Hết hàng
+                Thuê xe tự lái
               </Button>
             </div>
           </Col>

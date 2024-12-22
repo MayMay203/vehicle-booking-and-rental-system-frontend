@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './AddBus.module.scss'
-import { Col, InputGroup, Row, Form, Image, Alert } from 'react-bootstrap'
+import { Col, InputGroup, Row, Form, Image, Alert, Spinner } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCouch,
@@ -16,12 +16,13 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchBusTypeByID } from '~/apiServices/busPartner/fetchBusTypeByID'
 import { toast } from 'react-toastify'
 import { addBus } from '~/apiServices/busPartner/addBus'
-import { fetchAllUtilities } from '~/redux/slices/busPartnerSlice'
+import { fetchAllBuses, fetchAllUtilities } from '~/redux/slices/busPartnerSlice'
 const cx = classNames.bind(styles)
 function AddBus() {
   const dispatch = useDispatch()
   const [allBusTypes, setAllBusTypes] = useState(null)
   const listUtilities = useSelector((state) => state.busPartner.utilityList)
+  const [loading, setLoading] = useState(false)
   const [updateUtilitiesOfBus, setUpdateUtilitiesOfBus] = useState([])
   // const listUtilities = [
   //   {
@@ -152,6 +153,7 @@ function AddBus() {
   const handleAdd = async (e) => {
     e.preventDefault()
     if (dispatch(checkLoginSession())) {
+      setLoading(true)
       try {
         const busInfor = {
           licensePlate: formData.licensePlateNumber,
@@ -176,6 +178,7 @@ function AddBus() {
         if (response) {
           toast.success('Thêm xe thành công!', { autoClose: 2000 })
           console.log('Thêm xe thành công!', response)
+          dispatch(fetchAllBuses())
           handleCancel()
         }
       } catch (error) {
@@ -186,6 +189,8 @@ function AddBus() {
         } else {
           toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
         }
+      } finally {
+        setLoading(false)
       }
     }
   }
@@ -220,6 +225,7 @@ function AddBus() {
   }
   return (
     <div className={cx('container mt-5 mb-5', 'wrap-container')}>
+      {loading && <Spinner animation="border" variant="primary" />}
       <Row className={cx('form-add-bus-trip', 'justify-content-center')}>
         <p className={cx('title-form')}>Thêm xe khách</p>
         <Col className={cx('col-sm-12 col-md-6', 'col-form')}>
@@ -234,7 +240,7 @@ function AddBus() {
               onChange={handleInputChange}
               value={formData.idBusType}
             >
-              <option key='-1' value="">
+              <option key="-1" value="">
                 Chọn loại xe
               </option>
               {allBusTypes &&

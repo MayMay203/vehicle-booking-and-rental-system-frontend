@@ -435,9 +435,14 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
             </div>
           </div>
           <p className={cx('txt', 'mb-2', 'mt-4')}>
-            Lịch khởi hành của xe: <span className={cx('txt-plate-number')}>{formData.licensePlateNumber}</span>
+            Lịch khởi hành của xe:{' '}
+            <span className={cx('txt-plate-number')}>
+              {Object.entries(listBusByBusType).find(
+                ([key, value]) => key === String(formData.licensePlateNumber),
+              )?.[1] || 'Không tìm thấy biển số'}
+            </span>
           </p>
-          <TableSchedulesOfBus></TableSchedulesOfBus>
+          <TableSchedulesOfBus idBus={formData?.licensePlateNumber}></TableSchedulesOfBus>
         </div>
       </Modal.Body>
       {/* <Modal.Footer>

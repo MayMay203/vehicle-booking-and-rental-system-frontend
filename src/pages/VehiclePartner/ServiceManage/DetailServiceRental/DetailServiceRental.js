@@ -3,13 +3,14 @@ import styles from './DetailServiceRental.module.scss'
 import { Button, Col, Image, Row, Tab, Tabs } from 'react-bootstrap'
 import RatingContentList from '~/components/RatingContent'
 import { useEffect, useState } from 'react'
-import {
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import TableListTenant from '~/components/TableListTenant/TableListTenant'
 import FormInforServiceRental from '~/components/FormInforServiceRental'
+import { useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 const cx = classNames.bind(styles)
 function DetailServiceRental() {
   const [formData, setFormData] = useState({
@@ -17,37 +18,56 @@ function DetailServiceRental() {
     type_vehicle: '',
     car_year: '',
     quantity: '',
-    type_service: 'Cả 2 dịch vụ',
+    type_service: '',
     price1: '',
     price2: '',
-    price_according: '',
+    car_deposit: '',
+    reservation_fees: '',
+    price_according: '1',
     location: '',
     reduce: '',
-    status: '',
+    status: 'available',
     description: '',
     utility: '',
+    policy: '',
+    imageVehicle: [''],
   })
-  const listImageVehicle = [
-    {
-      id: 1,
-      imgLink:
-        'https://images2.thanhnien.vn/zoom/686_429/528068263637045248/2024/1/21/2024-wmoto-sm125i-1-17058230156551946374049-39-0-1039-1600-crop-17058232068681412114897.jpg',
-    },
-    {
-      id: 3,
-      imgLink: 'https://media-cdn-v2.laodong.vn/storage/newsportal/2024/8/11/1379133/Xe-May-So-Duoi-50-Cc.jpg',
-    },
-    {
-      id: 4,
-      imgLink:
-        'https://images2.thanhnien.vn/zoom/686_429/528068263637045248/2024/1/21/2024-wmoto-sm125i-1-17058230156551946374049-39-0-1039-1600-crop-17058232068681412114897.jpg',
-    },
-    {
-      id: 5,
-      imgLink:
-        'https://images2.thanhnien.vn/zoom/686_429/528068263637045248/2024/1/21/2024-wmoto-sm125i-1-17058230156551946374049-39-0-1039-1600-crop-17058232068681412114897.jpg',
-    },
-  ]
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const { vehicleID } = location.state || {}
+  useEffect(() => {
+    const fetchVehicleRentalDetails = async () => {
+      if (dispatch(checkLoginSession())) {
+        const response = await getVehicleRentalByID(vehicleID)
+        setFormData({
+          car_company: response.manufacturer,
+          type_vehicle: response.vehicle_type_id,
+          car_year: response?.vehicleLife,
+          quantity: response?.amount,
+          type_service: response.type,
+          price1: response.price,
+          price2: response.price,
+          car_deposit: response.car_deposit,
+          reservation_fees: response.reservation_fees,
+          price_according: response.quantity,
+          location: response.location,
+          reduce: response.discount_percentage,
+          status: 'available',
+          description: response.description,
+          utility: response.ulties,
+          policy: response.policy,
+          imageVehicle: response.imagesVehicleRegister,
+        })
+      }
+    }
+    fetchVehicleRentalDetails()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vehicleID])
+  console.log('formData.imageVehicle---', formData.imageVehicle)
+  const [listImageVehicle, setListImageVehicle] = useState(
+    formData?.imageVehicle,
+  )
+  console.log('listImageVehicle---', listImageVehicle)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [imageVehiclePerPage, setImageVehiclePerPage] = useState(4)
 
@@ -69,7 +89,16 @@ function DetailServiceRental() {
   }, [])
   const [currentPage, setCurrentPage] = useState(0)
   const displayedImageVehicle = listImageVehicle.slice(currentIndex, currentIndex + imageVehiclePerPage)
-
+  console.log('displayedImageVehicle', displayedImageVehicle)
+  useEffect(() => {
+    setListImageVehicle([formData?.imageVehicle?.map((item, index) => ({ id: index, imgLink: item })) || ''])
+  }, [formData.imageVehicle])
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      policy: formData.policy,
+    }))
+  }, [formData.policy])
   const handleNext = () => {
     if (currentIndex + imageVehiclePerPage < listImageVehicle.length) {
       // resetImageVehicleStates()
@@ -85,7 +114,7 @@ function DetailServiceRental() {
     }
   }
   const handleInputChange = () => {
-    setFormData()
+    setFormData({})
   }
   return (
     <div className="container mb-5 mt-5">
@@ -114,8 +143,17 @@ function DetailServiceRental() {
               </Col>
               <Col xs="10">
                 <div className="d-flex justify-content-center">
-                  {displayedImageVehicle.map((item, index) => (
+                  {(displayedImageVehicle?.[0] || []).map((item, index) => (
                     <Image key={index} src={item.imgLink} rounded className={cx('image-vehicle')} />
+                  ))}
+
+                  {/* Thêm các Col giả nếu danh sách không đủ utilitiesPerPage */}
+                  {Array.from({ length: imageVehiclePerPage - displayedImageVehicle.length }, (_, index) => (
+                    <div
+                      className="utility-placeholder"
+                      key={`placeholder-${index}`}
+                      style={{ flex: '1 0 auto', visibility: 'hidden' }}
+                    ></div>
                   ))}
                 </div>
               </Col>
@@ -135,7 +173,7 @@ function DetailServiceRental() {
         <Tab eventKey="policy" title="Chính sách">
           <Row className={cx('content-tab')}>
             <p className={cx('content')}>
-              - Sử dụng xe đúng mục đích.
+              {/* - Sử dụng xe đúng mục đích.
               <br /> - Không sử dụng xe thuê vào mục đích phi pháp, trái pháp luật.
               <br /> - Không sử dụng xe thuê để cầm cố, thế chấp.
               <br /> - Không hút thuốc, nhả kẹo cao su, xả rác trong xe.
@@ -145,7 +183,15 @@ function DetailServiceRental() {
               thu phí vệ sinh xe.
               <br /> - Xe được giới hạn di chuyển ở mức 400km cho 24h, và lần lượt là 250km, 300km, 350 km cho gói 4h,
               8h, 12h.
-              <br /> Trân trọng cảm ơn, chúc quý khách hàng có những chuyến đi tuyệt vời !
+              <br /> Trân trọng cảm ơn, chúc quý khách hàng có những chuyến đi tuyệt vời ! */}
+              {formData?.policy
+                .split('@#$%&')
+                .filter(Boolean)
+                .map((value, index) => (
+                  <>
+                    <span key={index}>- {value.trim()}</span> <br/>
+                  </>
+                )) || ''}
             </p>
           </Row>
         </Tab>
