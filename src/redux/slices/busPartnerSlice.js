@@ -45,31 +45,26 @@ export const fetchAllBusesByBusType = createAsyncThunk('busPartner/getAllBusesBy
   return data || {}
 })
 export const fetchAllBusTrips = createAsyncThunk('busPartner/getAllBusTrips', async ({ dep, des }) => {
-  // const { dep, des } = params
   const data = await getAllBusTrips(dep, des)
   console.log('dataaaa:', data.result)
   return data.result || []
 })
 export const fetchAllSchedulesByBusID = createAsyncThunk('busPartner/getAllSchedulesByBusID', async ({ idBus }) => {
-  // const { dep, des } = params
   const data = await getAllSchedulesByIDBus(idBus)
   console.log('dataaaa:', data.result)
   return data.result || []
 })
 export const fetchScheduleListByBusTrip = createAsyncThunk('busPartner/getScheduleListByBusTrip', async ({ date, idBusTrip }) => {
-  // const { dep, des } = params
   const data = await getAllScheduleByBusTrip(date, idBusTrip)
   console.log('dataaaa:', data.result)
   return data.result || []
 })
 export const fetchBusTicketList = createAsyncThunk('busPartner/getBusTicketList', async ({ dep, des }) => {
-  // const { dep, des } = params
   const data = await getAllTicket(dep, des)
   console.log('dataaaa:', data.result)
   return data.result || []
 })
 export const fetchOrderListBusTrip = createAsyncThunk('busPartner/getOrderListBusTrip', async ({ id, date }) => {
-  // const { dep, des } = params
   const data = await getOrderOfBusTrip(id, date)
   console.log('dataaaa:', data.result)
   return data.result || []
@@ -77,7 +72,6 @@ export const fetchOrderListBusTrip = createAsyncThunk('busPartner/getOrderListBu
 export const fetchStatsBusTrip = createAsyncThunk(
   'busPartner/getStatsBusTrip',
   async ({ route, year, month, startDate, endDate, statsBy }) => {
-    // const { dep, des } = params
     const data = await statsBusTicket(route, year, month, startDate, endDate, statsBy)
     console.log('dataaaa:', data.result)
     return data.result || []
@@ -104,9 +98,6 @@ const busPartnerSlice = createSlice({
       .addCase(fetchAllBuses.fulfilled, (state, action) => {
         state.busList = action.payload
       })
-      // .addCase(busTypeByID.fulfilled, (state, action) => {
-      //   state.inforBusType = action.payload
-      // })
       .addCase(fetchAllUtilities.fulfilled, (state, action) => {
         state.utilityList = action.payload
       })

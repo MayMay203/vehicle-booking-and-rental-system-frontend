@@ -9,6 +9,8 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getAllRoutes } from '~/apiServices/busPartner/getAllRoutes'
 import dayjs from 'dayjs'
 import { fetchStatsBusTrip } from '~/redux/slices/busPartnerSlice'
+import { ConfigProvider } from 'antd'
+import viVN from 'antd/locale/vi_VN'
 const cx = classNames.bind(styles)
 function StatisticsTicket() {
   //   const [isCorrectDateStart, setIsCorrectDateStart] = useState(false)
@@ -157,9 +159,7 @@ function StatisticsTicket() {
       showSorterTooltip: {
         target: 'full-header',
       },
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ['descend'],
+      sorter: (a, b) => a.route.localeCompare(b.route),
     },
     {
       title: 'Vé đã bán',
@@ -305,19 +305,21 @@ function StatisticsTicket() {
       </Row>
 
       <Row>
-        <Table
-          columns={columns}
-          dataSource={data}
-          // onChange={onChange}
-          bordered
-          // pagination={false}
-          scroll={{ x:'auto', y: 500 }}
-          pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-          rowClassName="table-row-center" // Thêm class để căn giữa dọc
-          showSorterTooltip={{
-            target: 'sorter-icon',
-          }}
-        />
+        <ConfigProvider locale={viVN}>
+          <Table
+            columns={columns}
+            dataSource={data}
+            // onChange={onChange}
+            bordered
+            // pagination={false}
+            scroll={{ x: 'auto', y: 500 }}
+            pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+            rowClassName="table-row-center" // Thêm class để căn giữa dọc
+            showSorterTooltip={{
+              target: 'sorter-icon',
+            }}
+          />
+        </ConfigProvider>
       </Row>
     </div>
   )
