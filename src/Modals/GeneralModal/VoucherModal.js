@@ -86,7 +86,6 @@ function VoucherModal() {
 
   const handleUpdateVoucher = async (e) => {
     e.preventDefault()
-    console.log('VO DAY ROI')
      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
      const startDate = effectiveDate.toISOString().split('T')[0].split('-').reverse().join('-')
      const endDate = expiredDate.toISOString().split('T')[0].split('-').reverse().join('-')
