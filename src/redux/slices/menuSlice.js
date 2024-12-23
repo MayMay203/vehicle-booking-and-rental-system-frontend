@@ -17,7 +17,7 @@ const menus = {
     { content: 'Phí dịch vụ xe', to: config.routes.manageFeeService },
     { content: 'Tiện ích nhà xe', to: config.routes.manageUtilities },
     { content: 'Khuyến mãi', to: config.routes.vouchers },
-    { content: 'Thống kê', to: config.routes.statistics },
+    { content: 'Doanh thu', to: config.routes.adminStatistics},
   ],
   busPartnerMenu: [
     { content: 'Chuyến xe', to: config.routes.busTrip },
@@ -31,7 +31,7 @@ const menus = {
     { content: 'Đơn thuê xe', to: config.routes.orderManage },
     // { content: 'Xe', to: config.routes.bus },
     { content: 'Chính sách', to: config.routes.policyManage },
-    { content: 'Thống kê', to: config.routes.statisticsVehicleRental },
+    { content: 'Doanh thu', to: config.routes.statisticsVehicleRental },
   ],
 }
 

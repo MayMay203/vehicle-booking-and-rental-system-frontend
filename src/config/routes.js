@@ -17,7 +17,7 @@ export const routes = {
   authenticate: '/authenticate',
   manageAccounts: '/manage-accounts',
   services: '/manage-services',
-  statistics: '/statistics',
+  adminStatistics: '/admin-statistics',
   vouchers: '/manage-vouchers',
   busTrip: '/bus-trip',
   detailBusTrip: '/bus-trip/detail-bus-trip',

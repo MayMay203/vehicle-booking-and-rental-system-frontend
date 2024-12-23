@@ -136,7 +136,7 @@ const publicRoutes = [
     layout: HeaderOnly,
   },
   {
-    path: config.routes.statistics,
+    path: config.routes.adminStatistics,
     component: Statistics,
     layout: HeaderOnly,
   },

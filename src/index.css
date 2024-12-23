@@ -429,20 +429,10 @@ html *::-webkit-scrollbar-track {
     font-size: 1.6rem
 }
 
-/* .ant-select-item-option:hover {
-  background-color: #f5f5f5 !important; 
-} */
-
 .ant-select-item-option-selected {
   background-color: rgba(213,66,12,0.8) !important; 
   color: #ffffff !important;
 }
-
-/* .ant-select-focused .ant-select-selector {
-  border-color: var(--primary-bg) !important; 
-  box-shadow: none!important; 
-  transition: all 0.3s ease;
-} */
 
 .custom-picker .react-datepicker__input-container input{
   width: 100%!important;
@@ -456,4 +446,27 @@ html *::-webkit-scrollbar-track {
 .slick-track{
   margin-left: 0;
   margin-right: 0;
+}
+
+/* Ghi đè màu của DatePicker */
+.ant-picker {
+  box-shadow: none !important;
+  border-color: var(--primary-color) !important; 
+  color: var(--primary-color) !important;
+  font-weight: 600!important;
+}
+
+.ant-picker:hover,
+.ant-picker-focused {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px var(--primary-color)!important;
+}
+
+.ant-picker-cell-selected .ant-picker-cell-inner {
+  background-color: var(--primary-color) !important; 
+  color: white !important; 
+}
+
+.ant-picker-suffix {
+  color: var(--primary-color) !important; /* Đổi màu icon lịch */
 }
