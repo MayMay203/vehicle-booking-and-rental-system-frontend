@@ -21,32 +21,6 @@ function TableListTenant(){
         showSorterTooltip: {
           target: 'full-header',
         },
-        filters: [
-          {
-            text: 'Joe',
-            value: 'Joe',
-          },
-          {
-            text: 'Jim',
-            value: 'Jim',
-          },
-          {
-            text: 'Submenu',
-            value: 'Submenu',
-            children: [
-              {
-                text: 'Green',
-                value: 'Green',
-              },
-              {
-                text: 'Black',
-                value: 'Black',
-              },
-            ],
-          },
-        ],
-        // specify the condition of filtering result
-        // here is that finding the name started with `value`
         onFilter: (value, record) => record.name.indexOf(value) === 0,
         sorter: (a, b) => a.name.length - b.name.length,
         sortDirections: ['descend'],
@@ -120,33 +94,6 @@ function TableListTenant(){
       cancelAt: '12h, 12/11/2024',
       chat: '',
     },
-    {
-      key: '2',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberVehicle: '4',
-      totalCharge: '1.200.00đ',
-      cancelAt: '12h, 12/11/2024',
-    },
-    {
-      key: '3',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberVehicle: '4',
-      totalCharge: '1.200.00đ',
-      cancelAt: '12h, 12/11/2024',
-    },
-    {
-      key: '5',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberVehicle: '4',
-      totalCharge: '1.200.00đ',
-      cancelAt: '12h, 12/11/2024',
-    },
   ]
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
@@ -158,7 +105,7 @@ function TableListTenant(){
         onChange={onChange}
         bordered
         pagination={false}
-        scroll={{ y: 500 }}
+        scroll={{ x:'auto',y: 500 }}
         // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{

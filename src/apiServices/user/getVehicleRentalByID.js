@@ -3,7 +3,7 @@ import * as httpRequestV2 from '~/utils/httpRequestV2'
 export const getVehicleRentalByID = async (id) => {
   try {
     const response = await httpRequestV2.get(
-      `/user/vehicle-register/get-vehicle-register?vehicle_rental_service_id=${id}`,
+      `/user/vehicle-register/get-vehicle-rental-service?vehicle_rental_service_id=${id}`,
       // {
       //   headers: {
       //     Authorization: `Bearer ${getAccessToken()}`,

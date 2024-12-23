@@ -127,7 +127,7 @@ function BusTrip() {
       title: 'Điểm khởi hành',
       dataIndex: 'departure',
       align: 'center',
-      defaultSortOrder: 'descend',
+      // defaultSortOrder: 'descend',
       width: 250,
       sorter: (a, b) => a.departure.localeCompare(b.departure),
     },

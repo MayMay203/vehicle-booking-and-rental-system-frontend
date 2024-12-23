@@ -7,7 +7,10 @@ import { faArrowUpRightFromSquare, faMessage } from '@fortawesome/free-solid-svg
 import { faSquare } from '@fortawesome/free-regular-svg-icons'
 import TxtSearch from '~/components/TxtSearch'
 import ModalDetailOrderRental from '~/components/ModalDetailOrderRental'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { fetchAllOrder } from '~/redux/slices/rentalPartnerSlice'
 const cx = classNames.bind(styles)
 function OrderManage() {
   const columns = [
@@ -63,7 +66,7 @@ function OrderManage() {
       dataIndex: 'number',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 130,
+      width: 100,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -73,6 +76,9 @@ function OrderManage() {
       defaultSortOrder: 'descend',
       width: 100,
       // sorter: (a, b) => a.age - b.age,
+      render: (value) => {
+        return value ? `${value.toLocaleString('vi-VN')} đ` : '-' 
+      },
     },
     {
       title: 'Chi tiết',
@@ -110,51 +116,21 @@ function OrderManage() {
       ),
     },
   ]
-  const data = [
-    {
-      key: '1',
-      typeVehicle: 'Ô tô 16 chỗ',
-      number: '10',
-      charge: '1.000.000đ',
-      location: 'Quảng Nam',
-      nameRental: 'Nguyễn Trần Như Ngọc',
-      numberphone: '0842593668',
-      timeRental: '12:00, 12/12/2024',
-    },
-    {
-      key: '2',
-      nameCompany: 'Honda',
-      typeVehicle: 'Xe máy',
-      number: '10',
-      charge: '1.000.000đ',
-      location: 'Quảng Nam',
-      nameRental: 'Nguyễn Trần Như Ngọc',
-      numberphone: '0842593668',
-      timeRental: '12:00, 12/12/2024',
-    },
-    {
-      key: '3',
-      nameCompany: 'Honda',
-      typeVehicle: 'Xe máy',
-      number: '10',
-      charge: '1.000.000đ',
-      location: 'Quảng Nam',
-      nameRental: 'Nguyễn Trần Như Ngọc',
-      numberphone: '0842593668',
-      timeRental: '12:00, 12/12/2024',
-    },
-    {
-      key: '5',
-      nameCompany: 'Honda',
-      typeVehicle: 'Xe máy',
-      number: '10',
-      charge: '1.000.000đ',
-      location: 'Quảng Nam',
-      nameRental: 'Nguyễn Trần Như Ngọc',
-      numberphone: '0842593668',
-      timeRental: '12:00, 12/12/2024',
-    },
-  ]
+  const dispatch = useDispatch()
+  const listOrder = useSelector((state) => state.rentalPartner.orderList)
+  const [data, setData] = useState([])
+  // const data = [
+  //   {
+  //     key: '1',
+  //     typeVehicle: 'Ô tô 16 chỗ',
+  //     number: '10',
+  //     charge: '1.000.000đ',
+  //     location: 'Quảng Nam',
+  //     nameRental: 'Nguyễn Trần Như Ngọc',
+  //     numberphone: '0842593668',
+  //     timeRental: '12:00, 12/12/2024',
+  //   },
+  // ]
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
@@ -162,6 +138,25 @@ function OrderManage() {
   const handleViewDetail = (id) => {
     setModalDetailShow(true)
   }
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllOrder())
+    }
+  }, [dispatch])
+  useEffect(() => {
+    setData(
+      listOrder.map((item, index) => ({
+        key: index,
+        typeVehicle: 'Ô tô 16 chỗ',
+        number: item.rentalInfo.numberOfVehicles,
+        charge: item.pricingInfo.priceTotal,
+        location: item.rentalInfo.pickupLocation,
+        nameRental: item.customerInfo.name,
+        numberphone: item.customerInfo.phoneNumber,
+        timeRental: item.createAt,
+      })),
+    )
+  }, [listOrder])
   return (
     <div className="container">
       <Row className="mt-4 justify-content-center align-items-center">
@@ -179,7 +174,7 @@ function OrderManage() {
         onChange={onChange}
         bordered
         // pagination={false}
-        scroll={{x:'auto', y: 500 }}
+        scroll={{ x: 'auto', y: 500 }}
         pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{

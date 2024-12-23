@@ -21,14 +21,15 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
   const dispatch = useDispatch()
   const typeVehicles = useSelector((state) => state.rentalPartner.vehicleTypeList)
   const [listPolicies, setListPolicies] = useState(formData.policy)
+  console.log('formData.policy----', formData.policy)
+  console.log('listPolicies----', listPolicies)
   const [policies, setPolicies] = useState(
     listPolicies
       .split('@#$%&')
       // .filter(Boolean)
       .map((value, index) => ({ value: value.trim(), id: index })) || '',
   )
-  console.log('formData.policy----', formData.policy)
-  console.log('listPolicies----', listPolicies)
+
   const [policyCounter, setPolicyCounter] = useState(0)
   const typeServices = [
     { value: '', label: 'Chọn loại dịch vụ' },
@@ -46,12 +47,12 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
       dispatch(fetchAllVehicleTypes())
     }
   }, [dispatch])
-console.log("-----formData-------", formData)
+  console.log('-----formData-------', formData)
   useEffect(() => {
     const updatedListPolicies = policies.map((policy) => policy.value).join(' @#$%& ')
     setListPolicies(updatedListPolicies)
     handleInputChange({ target: { name: 'policy', value: updatedListPolicies } })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [policies])
 
   const handleAddPolicy = () => {

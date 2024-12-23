@@ -12,14 +12,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import Rating from '../Rating'
 import { useEffect, useState } from 'react'
 import { getVehicleTypeByID } from '~/apiServices/user/getVehicleTypeByID'
 const cx = classNames.bind(styles)
 function RentalCardItem({ typeService, role, item,startDateTime, endDateTime }) {
   const navigate = useNavigate()
   const [typeVehicle, setTypeVehicle] = useState([])
-   const newPrice = item.price - item.price * (item?.discount_percentage / 100)
+  console.log('----typeService-------', typeService)
+  const newPrice =
+    typeService === 'self_driving'
+      ? item.selfDriverPrice - item.selfDriverPrice * (item?.discount_percentage / 100)
+      : item.driverPrice - item.driverPrice * (item?.discount_percentage / 100)
   const handleClickVehicle = (type) => {
     if (role === 'user') {
       navigate('/rent-vehicle/rental-service/rental-service-detail', {
@@ -78,12 +81,17 @@ function RentalCardItem({ typeService, role, item,startDateTime, endDateTime }) 
       <div className={cx('line')}></div>
 
       <div className={cx('d-flex', 'pt-3', 'justify-content-between')}>
-        <Rating></Rating>
+        {/* <Rating></Rating> */}
         <div className={cx('price', 'd-flex', 'align-items-center')}>
           <FontAwesomeIcon icon={faMoneyBill} className={cx('icon', 'icon-money')} />
           {/* <span className={cx('txt')}>{item.price.toLocaleString('vi-VN')}đ/ngày</span> */}
           <div>
-            <p className={cx('txt', 'charge-old')}>{item.price.toLocaleString('vi-VN')}đ/ngày</p>
+            <p className={cx('txt', 'charge-old')}>
+              {typeService === 'self_driving'
+                ? item.selfDriverPrice.toLocaleString('vi-VN')
+                : item.driverPrice.toLocaleString('vi-VN')}
+              đ/ngày
+            </p>
             <p className={cx('txt', 'charge-new')}>{Math.floor(newPrice).toLocaleString('vi-VN')}đ/ngày</p>
           </div>
         </div>

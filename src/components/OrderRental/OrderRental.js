@@ -11,28 +11,32 @@ import { useDispatch, useSelector } from 'react-redux'
 import { orderVehicleRental } from '~/apiServices/user/orderVehicleRental'
 import { createPayment } from '~/apiServices/ticket/createPayment'
 import { toast } from 'react-toastify'
-import Voucher from '../Voucher'
 import { Empty } from 'antd'
 import { getAllSuitableVouchers } from '~/apiServices/vouchers/getAllSuitableVoucher'
+import SlideVoucherOrder from '../Voucher/SlideVoucherOrder'
 const cx = classNames.bind(styles)
 function OrderRental({ typeService, formData, setFormData }) {
   const dispatch = useDispatch()
   const [isVoucher, setIsVoucher] = useState(false)
   const [suitableVoucher, setSuitableVoucher] = useState([])
   const { isLogin } = useSelector((state) => state.user)
-  const [voucherDiscount, setVoucherDiscount] = useState('Áp dụng voucher')
+  const [voucherDiscount, setVoucherDiscount] = useState('')
   const [warningMessagePhone, setWarningMessagePhone] = useState(
     formData.customerName ? '' : 'Vui lòng nhập số điện thoại!',
   )
   const [warningMessageName, setWarningMessageName] = useState(
     formData.customerPhoneNumber ? '' : 'Vui lòng nhập tên người thuê xe!',
   )
-  const total =
-    Math.floor(formData.price) * formData.amount +
-    formData.reservation_fee +
-    formData.car_deposit -
-    formData.voucher_percentage * Math.floor(formData.price) * formData.amount -
-    formData.voucher_value
+  // const total =
+  //   Math.floor(formData.price) * formData.amount +
+  //   formData.reservation_fee +
+  //   formData.car_deposit -
+  //   formData.voucher_percentage * Math.floor(formData.price) * formData.amount -
+  //   formData.voucher_value
+   const total =
+     Math.floor(formData.price) * formData.amount +
+     formData.reservation_fee +
+     formData.car_deposit - voucherDiscount
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prevState) => ({
@@ -83,7 +87,10 @@ function OrderRental({ typeService, formData, setFormData }) {
     }
     if (isLogin) fetchAllSuitableVoucher()
   }, [formData, isLogin, dispatch])
-
+  // useEffect(() => { setFormData((prevState) => ({
+  //   ...prevState,
+  //   [name]: value,
+  // }))}, [voucherDiscount])
   const handleApplyVoucher = (id, percent, maxValue) => {
     console.log(id)
     const amount =
@@ -208,7 +215,7 @@ function OrderRental({ typeService, formData, setFormData }) {
           <span>Giảm giá voucher</span>
           {/* <span className={cx('align-right', 'txt-red')}>-0đ</span> */}
           <button onClick={() => setIsVoucher((prev) => !prev)} style={{ color: 'var(--primary-color)' }}>
-            {`-${voucherDiscount.toLocaleString().replace(',','.')} VNĐ`}
+            {voucherDiscount===''? 'Áp mã giảm giá':`-${voucherDiscount.toLocaleString().replace(',', '.')} VNĐ`}
             <FontAwesomeIcon
               icon={faCaretDown}
               style={{ rotate: isVoucher ? '-180deg' : '0deg', transition: 'rotate .2s ease', marginLeft: '6px' }}
@@ -216,13 +223,18 @@ function OrderRental({ typeService, formData, setFormData }) {
           </button>
         </div>
       </Row>
-      {isVoucher &&
+      {/* {isVoucher &&
         suitableVoucher.map((voucher) => (
           <div className="col mt-0" key={voucher.id}>
             <Voucher className="m-auto" data={voucher} type="order" handleApplyVoucher={handleApplyVoucher} />
           </div>
-        ))}
-      {isVoucher && suitableVoucher.length === 0 && <Empty description="Không có voucher nào hợp lệ để sử dùng" />}
+        ))} */}
+      <Row className="justify-content-center">
+        {isVoucher && suitableVoucher.length > 0 && (
+          <SlideVoucherOrder listVoucher={suitableVoucher} handleApplyVoucher={handleApplyVoucher}></SlideVoucherOrder>
+        )}
+        {isVoucher && suitableVoucher.length === 0 && <Empty description="Không có voucher nào hợp lệ để sử dùng" />}
+      </Row>
       {/* <Row>
         <div className={cx('wrap-infor')}>
           <span>Thuế VAT:</span>

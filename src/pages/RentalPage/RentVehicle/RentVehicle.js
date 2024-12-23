@@ -10,7 +10,8 @@ import AccordionQAList from '~/components/AccordionQA/AccordionQAList'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllVouchersForUser, fetchAllVouchersInSystem } from '~/redux/slices/voucherSlice'
-import Voucher from '~/components/Voucher'
+// import Voucher from '~/components/Voucher'
+import SlideVoucher from '~/components/Voucher/SlideVoucher';
 const cx = classNames.bind(styles)
 function RentVehicle() {
   const { voucherUser } = useSelector((state) => state.voucher)
@@ -96,11 +97,12 @@ function RentVehicle() {
       </Row>
       <Row className={cx(' pt-5 pb-5', 'background','align-items-center')}>
         <p className={cx('title', 'p-5')}>MÃ GIẢM GIÁ</p>
-        {voucherUser.map((voucher) => (
+        {/* {voucherUser.map((voucher) => (
           <Col className="col mt-0" key={voucher.id}>
             <Voucher className="m-auto" data={voucher} />
           </Col>
-        ))}
+        ))} */}
+        <SlideVoucher listVoucher={voucherUser}></SlideVoucher>
       </Row>
       <AccordionQAList questionsAndAnswers={questionsAndAnswers}></AccordionQAList>
     </div>
