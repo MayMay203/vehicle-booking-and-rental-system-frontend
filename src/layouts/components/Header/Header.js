@@ -13,7 +13,6 @@ import { faMessage } from '@fortawesome/free-regular-svg-icons'
 import Image from '~/components/Image'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
-import UserMenu from '~/UserMenu'
 import Notification from '~/components/Notification'
 import ModalChat from '~/components/ModalChat'
 import { faCaretDown, faCommentDots } from '@fortawesome/free-solid-svg-icons'
@@ -25,6 +24,7 @@ import { setMenu } from '~/redux/slices/menuSlice'
 import { getStatusRegisterPartner } from '~/apiServices/user/getStatusRegisterPartner'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllConversationsByAcc, fetchAllNotificationsByAcc } from '~/redux/slices/conversationSlice'
+import UserMenu from '~/components/UserMenu'
 
 const cx = classNames.bind(styles)
 function Header() {

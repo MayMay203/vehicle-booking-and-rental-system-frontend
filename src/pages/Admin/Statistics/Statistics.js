@@ -8,6 +8,8 @@ import { getRevenueAllYears } from '~/apiServices/adminStatistic/getRevenueAllYe
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 import { getRevenueBusAllYears } from '~/apiServices/adminStatistic/getRevenueBusAllYears'
 import { getRevenueRentalAllYears } from '~/apiServices/adminStatistic/getRevenueRentalAllYear'
+import { DatePicker } from 'antd'
+import dayjs from 'dayjs'
 
 // // Register the necessary components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
@@ -71,6 +73,7 @@ function Statistics() {
   const [yearData, setYearData] = useState({})
   const [totalRevenueAllYears, setTotalRevenueAllYears] = useState(0)
   const [totalYearData, setTotalYearData] = useState([])
+  const [year, setYear] = useState(dayjs().year())
 
   const totalData = useMemo(() => {
     return {
@@ -80,20 +83,17 @@ function Statistics() {
           label: 'Doanh thu',
           backgroundColor: '#fff6f3',
           borderColor: '#d34714',
-          data: [null, ...totalYearData.map((item) => item.revenue), null],
+          data:
+            type === 'allYears'
+              ? [null, ...totalYearData.map((item) => item.revenue), null]
+              : [...totalYearData.map((item) => item.revenue)],
           spanGaps: true,
         },
       ],
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalYearData])
 
-  console.log(
-    yearData.rentalData?.revenueStatistic?.map((item) => Number(item.revenue.replace(/\./g, '').replace(' VND', ''))),
-  )
-
-  console.log(
-    yearData.busData?.revenueStatistic?.map((item) => Number(item.revenue.replace(/\./g, '').replace(' VND', ''))),
-  )
   const data = useMemo(() => {
     const busData = yearData.busData?.revenueStatistic || []
     const rentalData = yearData.rentalData?.revenueStatistic || []
@@ -102,7 +102,10 @@ function Statistics() {
       datasets: [
         {
           label: 'Doanh thu đối tác nhà xe',
-          data: [null, ...busData.map((item) => Number(item.revenue.replace(/\./g, '').replace(' VND', ''))), null],
+          data:
+            type === 'allYears'
+              ? [null, ...busData.map((item) => Number(item.revenue.replace(/\./g, '').replace(' VND', ''))), null]
+              : [...busData.map((item) => Number(item.revenue.replace(/\./g, '').replace(' VND', '')))],
           backgroundColor: 'rgba(255, 99, 132, 0.2)', // Màu nền của cột
           borderColor: 'rgba(255, 99, 132, 1)', // Màu viền của cột
           borderWidth: 1,
@@ -136,10 +139,13 @@ function Statistics() {
     scales: {
       x: {
         type: 'category', // Loại trục danh mục
-        labels: ['', ...totalYearData.map((item) => item.year), ''],
+        labels:
+          type === 'allYears'
+            ? ['', ...totalYearData.map((item) => item.year), '']
+            : [...totalYearData.map((item) => item.year)],
         title: {
           display: true,
-          text: 'Năm',
+          text: type === 'allYears' ? 'Năm' : 'Tháng',
         },
       },
       y: {
@@ -154,33 +160,33 @@ function Statistics() {
 
   useEffect(() => {
     async function fetchData() {
-      if (type === 'allYears') {
-        if (totalYearData.length === 0) {
-          const data = await getRevenueAllYears()
-          if (data) {
-            setTotalRevenueAllYears(Number(data.totalRevenue.replace(/\./g, '').replace(' VND', '')))
-            setTotalYearData(
-              data.revenueStatistic.map((item) => ({
-                year: item.period,
-                revenue: Number(item.revenue.replace(/\./g, '').replace(' VND', '')),
-              })),
-            )
-          }
-        }
-        const busData = await getRevenueBusAllYears()
-        const rentalData = await getRevenueRentalAllYears()
-        if (busData || yearData) {
-          setYearData((prev) => ({
-            ...prev,
-            busData,
-            rentalData,
-          }))
-        }
+      const yearParam = type === 'allYears' ? undefined : year
+      const data = await getRevenueAllYears(yearParam)
+      if (data) {
+        setTotalRevenueAllYears(Number(data.totalRevenue.replace(/\./g, '').replace(' VND', '')))
+        setTotalYearData(
+          data.revenueStatistic.map((item) => ({
+            year: item.period,
+            revenue: Number(item.revenue.replace(/\./g, '').replace(' VND', '')),
+          })),
+        )
       }
+      const busData = await getRevenueBusAllYears(yearParam)
+      const rentalData = await getRevenueRentalAllYears(yearParam)
+      setYearData((prev) => ({
+        ...prev,
+        busData,
+        rentalData,
+      }))
     }
     if (type) fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type])
+  }, [type, year])
+
+  const handleOnChange = (date, dateString) => {
+    console.log(date)
+    setYear(dateString)
+  }
   return (
     <div className={cx('wrapper')}>
       <h1 className={cx('mb-5', 'title')}>THỐNG KÊ DOANH THU</h1>
@@ -192,19 +198,30 @@ function Statistics() {
           Theo các tháng trong năm
         </button>
       </div>
+      {type === 'allMonths' && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
+          <DatePicker placeholder="Chọn năm" onChange={handleOnChange} picker="year" defaultValue={dayjs()} />
+        </div>
+      )}
       {/* Biểu đồ từng loại đối tác*/}
       <div className="mt-5">
         <h2 className={cx('chart-title')}>Biểu đồ doanh thu các đối tác</h2>
         <div className={cx('total-revenue')}>
           Tổng doanh thu đối tác nhà xe:{' '}
-          <span style={{ fontWeight: 600, fontStyle: 'italic', color: 'var(--primary-color)' }}>
+          <span style={{ fontWeight: 600, fontStyle: 'italic', color: '#000' }}>
             {yearData.busData?.totalRevenue.replaceAll('.', ',').replace(' VND', ' VNĐ')}
           </span>
         </div>
         <div className={cx('total-revenue')}>
           Tổng doanh thu đối tác cho thuê xe:{' '}
-          <span style={{ fontWeight: 600, fontStyle: 'italic', color: 'var(--primary-color)' }}>
-            {totalRevenueAllYears.toLocaleString()} VNĐ
+          <span
+            style={{
+              fontWeight: 600,
+              fontStyle: 'italic',
+              color: '#000',
+            }}
+          >
+            {yearData.rentalData?.totalRevenue.replaceAll('.', ',').replace(' VND', ' VNĐ')}
           </span>
         </div>
         <Bar data={data} options={options}></Bar>

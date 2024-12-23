@@ -3,7 +3,7 @@ import * as httpRequest from '~/utils/httpRequest'
 
 export const getRevenueRentalAllYears = async (year) => {
   try {
-    let url = '/v1/vehicle-rental-statistic/get-monthly-venue-in-year'
+    let url = '/v1/vehicle-rental-statistic/revenue'
     if (year) url += `?year=${year}`
     const response = await httpRequest.get(url, {
       headers: {

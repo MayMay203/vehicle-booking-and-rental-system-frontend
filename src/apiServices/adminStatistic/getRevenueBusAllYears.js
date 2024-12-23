@@ -10,7 +10,6 @@ export const getRevenueBusAllYears = async (year) => {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     })
-    console.log(response)
     return response.data
   } catch (error) {
     console.log('Failed to get revenue bus all years', error)

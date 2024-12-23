@@ -10,7 +10,6 @@ export const getRevenueAllYears = async (year) => {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     })
-    console.log(response)
     return response.data
   } catch (error) {
     console.log('Failed to get all revenue all years', error)
