@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { addBusSchedule } from '~/apiServices/busPartner/addBusSchedule'
 const cx = classNames.bind(styles)
-function TicketBus({ data }) {
+function TicketBus({ data, enableEdit = true }) {
   const dispatch = useDispatch()
   const [activeAdd, setActiveAdd] = useState(false)
   const [startTime, setStartTime] = useState('')
@@ -102,10 +102,10 @@ function TicketBus({ data }) {
   }
   return (
     <div className={cx('row', 'wrap-ticket')}>
-      <Col className={cx('id-ticket')} lg={1}>
+      <Col className={cx('id-ticket')} sm={12} lg={1}>
         Vé xe
       </Col>
-      <Col lg={5} className={cx('p-3')}>
+      <Col sm={12} lg={5} className={cx('p-3')}>
         <Row>
           <Col>
             <Form.Group className={cx('txt', 'mb-3', 'mt-3')} controlId="formAdd.ControlInput5">
@@ -203,7 +203,8 @@ function TicketBus({ data }) {
           </Col>
         </Row>
       </Col>
-      <Col lg={6} className={cx('wrap-break-days')}>
+      <Col lg={1} className={cx('line-vertical')}></Col>
+      <Col sm={12} lg={5} className={cx('wrap-break-days')}>
         <AddManyBreakDay initialItems={[{ start: '', end: '', id: 1 }]} setBreakDays={setBreakDays}></AddManyBreakDay>
       </Col>
       <div className={cx('save-button', { disabled: !activeAdd })} onClick={activeAdd ? handleSave : undefined}>

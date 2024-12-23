@@ -25,6 +25,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
   const [filteredDestinations, setFilteredDestinations] = useState([])
   const listBusByBusType = useSelector((state) => state.busPartner.busListByBusType)
   const [provincesList, setProvincesList] = useState([])
+  
 
   const [formData, setFormData] = useState({
     idBusTrip: '',
@@ -178,10 +179,11 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
       if (provices) {
         const cleanedProvinces = provices
           .map((province) => {
-            return {
-              ...province,
-              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
-            }
+           const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+           return {
+             ...province,
+             name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+           }
           })
           .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
         setProvincesList(cleanedProvinces)
@@ -439,7 +441,8 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
             <span className={cx('txt-plate-number')}>
               {Object.entries(listBusByBusType).find(
                 ([key, value]) => key === String(formData.licensePlateNumber),
-              )?.[1] || 'Không tìm thấy biển số'}
+                // )?.[1] || 'Không tìm thấy biển số'}
+              )?.[1] || ''}
             </span>
           </p>
           <TableSchedulesOfBus idBus={formData?.licensePlateNumber}></TableSchedulesOfBus>
@@ -459,6 +462,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
           <Col></Col>
         </Row>
       </Modal.Footer> */}
+      
     </Modal>
   )
 }

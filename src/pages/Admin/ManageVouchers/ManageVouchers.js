@@ -50,7 +50,7 @@ function ManageVouchers() {
   }, [voucherList.result, type, sortOrder])
 
   const handleAddVoucher = () => {
-    dispatch(setAddVoucherVisible(true))
+    dispatch(setAddVoucherVisible({ isOpen: true, voucherId: '' }))
   }
 
   return (

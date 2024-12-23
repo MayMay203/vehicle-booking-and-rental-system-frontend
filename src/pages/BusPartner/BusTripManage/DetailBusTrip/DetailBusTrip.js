@@ -15,6 +15,7 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
 import { fetchScheduleListByBusTrip } from '~/redux/slices/busPartnerSlice'
 import dayjs from 'dayjs'
+import ModalUpdateBusSchedule from '../../BusSchedule/ModalUpdateBusSchedule'
 const cx = classNames.bind(styles)
 
 function DetailBusTrip() {
@@ -269,14 +270,17 @@ function DetailBusTrip() {
         data={data}
         functionModal={'add'}
         show={modalAddScheduleShow}
+        setShow={setModalAddScheduleShow}
         onHide={() => setModalAddScheduleShow(false)}
       ></ModalManageBusSchedule>
-      <ModalManageBusSchedule
+      <ModalUpdateBusSchedule
         enableEdit={true}
+        idBusTrip={idBusTrip}
+        data={data}
         functionModal={'update'}
         show={modalUpdateScheduleShow}
         onHide={() => setModalUpdateScheduleShow(false)}
-      ></ModalManageBusSchedule>
+      ></ModalUpdateBusSchedule>
     </div>
   )
 }

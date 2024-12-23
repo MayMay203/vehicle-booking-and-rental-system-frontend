@@ -197,19 +197,20 @@
 // }
 // export default StatsRevenueBus
 
-
 import React, { useEffect, useState } from 'react'
 import { DatePicker } from 'antd'
 // import { Line } from '@ant-design/charts'
-import { Col, Row } from 'react-bootstrap'
+import { Col, Form, Row } from 'react-bootstrap'
 import classNames from 'classnames/bind'
 import styles from './StatsRevenueBus.module.scss'
 import { statsRevenueBus } from '~/apiServices/busPartner/statsRevenueBus'
 import Button from '../Button'
+import { Line } from 'react-chartjs-2'
+import dayjs from 'dayjs'
 const cx = classNames.bind(styles)
 function StatsRevenueBus() {
-  const [time, setTime] = useState('')
-  const [data, setData] = useState({ revenueStatistic: [] }) // Initialize with a safe default value
+  const [time, setTime] = useState(dayjs())
+  const [data, setData] = useState({ revenueStatistic: [] })
   // const [revenueBy, setRevenueBy] = useState('')
   const [activeTypeFilter, setActiveTypeFilter] = useState('ByMonth')
   // const rawData = {
@@ -261,9 +262,9 @@ function StatsRevenueBus() {
   //   },
   // }
 
-  const getRevenueBus = async (time) => {
+  const getRevenueBus = async (type, time) => {
     try {
-      const response = await statsRevenueBus(time) // Fetch data
+      const response = await statsRevenueBus(type, time) // Fetch data
       return response
     } catch (error) {
       console.error('Error fetching revenue data:', error)
@@ -271,17 +272,23 @@ function StatsRevenueBus() {
     }
   }
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (time !== '') {
+  //       const revenueData = await getRevenueBus(time.format('YYYY'))
+  //       setData(revenueData)
+  //     }
+  //   }
+  //   fetchData()
+  // }, [time])
   useEffect(() => {
     const fetchData = async () => {
-      if (time !== '') {
-        const revenueData = await getRevenueBus(time)
-        setData(revenueData)
-      }
+      const revenueData = await getRevenueBus(activeTypeFilter, time.format('YYYY'))
+      setData(revenueData)
     }
     fetchData()
-  }, [time])
-
-  const handleOnChange = (date, dateString) => {
+  }, [activeTypeFilter, time])
+  const handleOnChange = (dateString) => {
     setTime(dateString)
     console.log('Selected year:', dateString)
   }
@@ -289,6 +296,7 @@ function StatsRevenueBus() {
   const handleTypeFilterClick = (btnType) => {
     setActiveTypeFilter(btnType)
   }
+  console.log('setActiveTypeFilter:', activeTypeFilter)
   return (
     <div className="mb-3 mt-3 container">
       <div>
@@ -305,23 +313,37 @@ function StatsRevenueBus() {
                 className={cx('type-filter', { active: activeTypeFilter === 'ByMonth' })}
                 onClick={() => handleTypeFilterClick('ByMonth')}
               >
-                Doanh thu theo tháng
+                Doanh thu mỗi tháng
               </Button>
               <Button
                 rounded
                 className={cx('type-filter', { active: activeTypeFilter === 'ByYear' })}
                 onClick={() => handleTypeFilterClick('ByYear')}
               >
-                Doanh thu theo năm
+                Doanh thu mỗi năm
               </Button>
             </div>
           </Col>
         </Row>
       </div>
-      <div className="row mb-4">
+      <div className="row mb-4 align-items-center">
         <Col>
           {activeTypeFilter === 'ByMonth' && (
-            <DatePicker placeholder="Chọn năm" onChange={handleOnChange} picker="year" />
+            // <DatePicker placeholder="Chọn năm" onChange={handleOnChange} picker="year" />
+            <>
+              <Form.Group className={cx('txt', 'mb-1')} controlId="formInfor.ControlInput3">
+                <Form.Label className="mb-3">
+                  Năm<span className={cx('text', 'text-danger', 'ms-1', 'me-4')}>*</span>
+                </Form.Label>
+                <DatePicker
+                  picker="year"
+                  onChange={handleOnChange}
+                  defaultValue={time}
+                  format="YYYY"
+                  className={cx('content-calendar')}
+                />
+              </Form.Group>
+            </>
           )}
         </Col>
         <Col className={cx('justify-content-end', 'wrap-total')}>
@@ -331,6 +353,85 @@ function StatsRevenueBus() {
       </div>
       <div style={{ flex: 1, marginLeft: '20px' }}>
         {/* <Line {...config} /> */}
+        <Line
+          data={{
+            labels:
+              activeTypeFilter === 'ByMonth'
+                ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                : data.revenueStatistic.map((item) => parseInt(item.period)),
+            datasets: [
+              {
+                data: data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim(), 10)), // Safely access data
+                label: 'Doanh thu mỗi tháng',
+                borderColor: '#FF7F50',
+                fill: false,
+              },
+            ],
+          }}
+          options={{
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: 'DOANH THU THEO NĂM',
+                color: '#A33A3A',
+                font: {
+                  size: 30,
+                },
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  color: '#A33A3A',
+                  generateLabels: (chart) => {
+                    const datasets = chart.data.datasets
+                    return datasets.map((dataset, index) => ({
+                      text: dataset.label,
+                      fillStyle: dataset.backgroundColor || dataset.borderColor,
+                      strokeStyle: dataset.borderColor,
+                      lineWidth: 3,
+                      hidden: !chart.isDatasetVisible(index),
+                      datasetIndex: index,
+                    }))
+                  },
+                },
+              },
+            },
+            scales: {
+              x: {
+                id: 'x',
+                type: 'category',
+                title: {
+                  display: true,
+                  text: 'Tháng',
+                  color: '#A33A3A',
+                  font: {
+                    size: 16,
+                  },
+                },
+                ticks: {
+                  color: '#A33A3A',
+                },
+              },
+              y: {
+                id: 'y',
+                type: 'linear',
+                title: {
+                  display: true,
+                  text: 'Doanh thu (VNĐ)',
+                  color: '#A33A3A',
+                  font: {
+                    size: 16,
+                  },
+                },
+                ticks: {
+                  color: '#A33A3A',
+                },
+              },
+            },
+          }}
+        />
       </div>
     </div>
   )

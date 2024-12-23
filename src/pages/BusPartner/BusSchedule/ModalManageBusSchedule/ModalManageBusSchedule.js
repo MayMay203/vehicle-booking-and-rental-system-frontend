@@ -50,7 +50,6 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
       }))
     }
   }, [data])
-
   // const [activeUpdate, setActiveUpdate] = useState(false)
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -74,9 +73,10 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
       if (provices) {
         const cleanedProvinces = provices
           .map((province) => {
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
             return {
               ...province,
-              name: province.name.replace(/^(Thành phố|Tỉnh)\s+/i, ''),
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
             }
           })
           .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
@@ -249,6 +249,9 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
                       {item.name}
                     </option>
                   ))}
+                  <option key="-2" value="-1">
+                    Thêm loại xe
+                  </option>
                 </Form.Select>
               </Form.Group>
 
@@ -297,14 +300,23 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
                 <span className="text-danger">*</span>
               </p>
             </div>
-              <div className={cx('d-flex')}>
-                <TicketBus initialItems={[]} content={''} data={formData}></TicketBus>
-              </div>
+            <div className={cx('d-flex')}>
+              <TicketBus initialItems={[]} content={''} data={formData}></TicketBus>
+            </div>
           </div>
-          <p className={cx('txt', 'mb-2', 'mt-4')}>
+          {/* <p className={cx('txt', 'mb-2', 'mt-4')}>
             Lịch khởi hành của xe: <span className={cx('txt-plate-number')}>{formData.licensePlateNumber}</span>
+          </p> */}
+          <p className={cx('txt', 'mb-2', 'mt-4')}>
+            Lịch khởi hành của xe:{' '}
+            <span className={cx('txt-plate-number')}>
+              {Object.entries(listBusByBusType).find(
+                ([key, value]) => key === String(formData.licensePlateNumber),
+                // )?.[1] || 'Không tìm thấy biển số'}
+              )?.[1] || ''}
+            </span>
           </p>
-          <TableSchedulesOfBus></TableSchedulesOfBus>
+          <TableSchedulesOfBus idBus={formData?.licensePlateNumber}></TableSchedulesOfBus>
         </div>
       </Modal.Body>
       {/* <Modal.Footer>
@@ -321,6 +333,7 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
           <Col></Col>
         </Row>
       </Modal.Footer> */}
+
     </Modal>
   )
 }

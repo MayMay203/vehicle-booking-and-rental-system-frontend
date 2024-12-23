@@ -57,4 +57,9 @@ export const images = {
   logoBill3: require('./logoBill3.png'),
   logoBill4: require('./logoBill4.png'),
   logoBill5: require('./logoBill5.png'),
+  rentalCar: require('./rentalCar.jpg'),
+  rentalCarTravel: require('./rentalCarTravel.jpg'),
+  busPartner: require('./busPartner.jpg'),
+  rentalPartner: require('./rentalPartner.jpg'),
+  driverPartner: require('./driverPartner.jpg'),
 }
