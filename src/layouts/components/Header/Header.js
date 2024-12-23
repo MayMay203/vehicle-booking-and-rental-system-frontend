@@ -25,7 +25,7 @@ import { setMenu } from '~/redux/slices/menuSlice'
 import { getStatusRegisterPartner } from '~/apiServices/user/getStatusRegisterPartner'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllConversationsByAcc, fetchAllNotificationsByAcc } from '~/redux/slices/conversationSlice'
-import UserMenu from '~/components/UserMenu'
+
 
 const cx = classNames.bind(styles)
 function Header() {
