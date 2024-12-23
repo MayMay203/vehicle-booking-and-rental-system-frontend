@@ -80,32 +80,34 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
               style={{ marginLeft: '-4px', marginRight: '-4px', marginBottom: '6px' }}
             >
               <p className={cx('voucher-name', 'flex-1')}>{data.name}</p>
-              <Tippy
-                offset={[-40, 0]}
-                visible={visibleMenu}
-                onClickOutside={() => setVisibleMenu(false)}
-                interactive
-                placement="bottom"
-                render={(attrs) => (
-                  <div {...attrs}>
-                    <PopperWrapper className={cx('custom')}>
-                      <button className={cx('voucher-menu')} onClick={handleEdit}>
-                        Chỉnh sửa
-                      </button>
-                      <button className={cx('voucher-menu')} onClick={handleDelete}>
-                        Xoá
-                      </button>
-                    </PopperWrapper>
-                  </div>
-                )}
-              >
-                <button
-                  style={{ fontSize: '2rem', color: 'var(--primary-color)' }}
-                  onClick={() => setVisibleMenu((prev) => !prev)}
+              {currentUser.roles?.includes('ADMIN') && (
+                <Tippy
+                  offset={[-40, 0]}
+                  visible={visibleMenu}
+                  onClickOutside={() => setVisibleMenu(false)}
+                  interactive
+                  placement="bottom"
+                  render={(attrs) => (
+                    <div {...attrs}>
+                      <PopperWrapper className={cx('custom')}>
+                        <button className={cx('voucher-menu')} onClick={handleEdit}>
+                          Chỉnh sửa
+                        </button>
+                        <button className={cx('voucher-menu')} onClick={handleDelete}>
+                          Xoá
+                        </button>
+                      </PopperWrapper>
+                    </div>
+                  )}
                 >
-                  <FontAwesomeIcon icon={faEllipsis} />
-                </button>
-              </Tippy>
+                  <button
+                    style={{ fontSize: '2rem', color: 'var(--primary-color)' }}
+                    onClick={() => setVisibleMenu((prev) => !prev)}
+                  >
+                    <FontAwesomeIcon icon={faEllipsis} />
+                  </button>
+                </Tippy>
+              )}
             </div>
           </Col>
           {!currentUser.roles?.includes('ADMIN') && (
