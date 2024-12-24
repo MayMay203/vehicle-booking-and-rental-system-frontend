@@ -1,171 +1,180 @@
-import classNames from "classnames/bind"
+import classNames from 'classnames/bind'
 import styles from './TableListTenant.module.scss'
-import { Table } from "antd"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faMessage } from "@fortawesome/free-solid-svg-icons"
-const cx = classNames.bind(styles)
-function TableListTenant(){
-    const columns = [
-      {
-        title: 'STT',
-        dataIndex: '',
-        align: 'center',
-        width: 70,
-        render: (text, record, index) => index + 1,
-      },
-      {
-        title: 'Họ tên',
-        dataIndex: 'name',
-        align: 'center',
-        width: 300,
-        showSorterTooltip: {
-          target: 'full-header',
-        },
-        filters: [
-          {
-            text: 'Joe',
-            value: 'Joe',
-          },
-          {
-            text: 'Jim',
-            value: 'Jim',
-          },
-          {
-            text: 'Submenu',
-            value: 'Submenu',
-            children: [
-              {
-                text: 'Green',
-                value: 'Green',
-              },
-              {
-                text: 'Black',
-                value: 'Black',
-              },
-            ],
-          },
-        ],
-        // specify the condition of filtering result
-        // here is that finding the name started with `value`
-        onFilter: (value, record) => record.name.indexOf(value) === 0,
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortDirections: ['descend'],
-      },
-      {
-        title: 'Số điện thoại',
-        dataIndex: 'numberphone',
-        align: 'center',
-        defaultSortOrder: 'descend',
-        width: 150,
-        // sorter: (a, b) => a.age - b.age,
-      },
-      {
-        title: 'Đặt lúc',
-        dataIndex: 'orderAt',
-        align: 'center',
-        defaultSortOrder: 'descend',
-        width: 150,
-        // sorter: (a, b) => a.age - b.age,
-      },
-      {
-        title: 'Số xe thuê',
-        dataIndex: 'numberVehicle',
-        align: 'center',
-        defaultSortOrder: 'descend',
-        width: 100,
-        // sorter: (a, b) => a.age - b.age,
-      },
-      {
-        title: 'Tổng tiền',
-        dataIndex: 'totalCharge',
-        align: 'center',
-        defaultSortOrder: 'descend',
-        width: 150,
-        // sorter: (a, b) => a.age - b.age,
-      },
-      {
-        title: 'Hủy lúc',
-        dataIndex: 'cancelAt',
-        align: 'center',
-        defaultSortOrder: 'descend',
-        width: 150,
-        // sorter: (a, b) => a.age - b.age,
-      },
-      {
-        title: 'Nhắn tin',
-        dataIndex: 'chat',
-        align: 'center',
-        width: 100,
-        render: (text, record) => (
-          <FontAwesomeIcon
-            icon={faMessage}
-            style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-            onClick={() => handleChat(record.key)}
-          />
-        ),
-      },
-    ]
-  const handleChat = () => {
+import { Table, ConfigProvider } from 'antd'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMessage } from '@fortawesome/free-solid-svg-icons'
+import { getIDServiceByIDRegister } from '~/apiServices/rentalPartner/getIDServiceByIDRegister'
+import { useEffect, useState } from 'react'
+import { Form } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { getAllOrderByServiceID } from '~/apiServices/rentalPartner/getAllOrderByServiceID'
+import viVN from 'antd/locale/vi_VN'
+import { createCoversation } from '~/apiServices/messageService/createConverstation'
+import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
 
-  }
-  
-  const data = [
+const cx = classNames.bind(styles)
+
+function TableListTenant({ idRegister }) {
+  const dispatch = useDispatch()
+  const [listIDService, setListIDService] = useState([{ id: '', type: -1 }])
+  const [selectedType, setSelectedType] = useState(0)
+  const [data, setData] = useState([])
+
+  const columns = [
     {
-      key: '1',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberVehicle: '4',
-      totalCharge: '1.200.00đ',
-      cancelAt: '12h, 12/11/2024',
-      chat: '',
+      title: 'STT',
+      dataIndex: '',
+      align: 'center',
+      width: 70,
+      render: (text, record, index) => index + 1,
     },
     {
-      key: '2',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberVehicle: '4',
-      totalCharge: '1.200.00đ',
-      cancelAt: '12h, 12/11/2024',
+      title: 'Họ tên',
+      dataIndex: 'customerInfo',
+      align: 'center',
+      width: 300,
+      render: (customerInfo) => customerInfo?.name || 'N/A',
+      sorter: (a, b) => (a.customerInfo?.name || '').localeCompare(b.customerInfo?.name || ''),
     },
     {
-      key: '3',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberVehicle: '4',
-      totalCharge: '1.200.00đ',
-      cancelAt: '12h, 12/11/2024',
+      title: 'Số điện thoại',
+      dataIndex: 'customerInfo',
+      align: 'center',
+      width: 150,
+      render: (customerInfo) => customerInfo?.phoneNumber || 'N/A',
     },
     {
-      key: '5',
-      name: 'Nguyễn Văn Đức',
-      numberphone: '0842005668',
-      orderAt: '12h, 12/11/2024',
-      numberVehicle: '4',
-      totalCharge: '1.200.00đ',
-      cancelAt: '12h, 12/11/2024',
+      title: 'Đặt lúc',
+      dataIndex: 'createAt',
+      align: 'center',
+      width: 150,
+    },
+    {
+      title: 'Số xe thuê',
+      dataIndex: 'rentalInfo',
+      align: 'center',
+      width: 100,
+      render: (rentalInfo) => rentalInfo?.numberOfVehicles || 'N/A',
+    },
+    {
+      title: 'Tổng tiền',
+      dataIndex: 'pricingInfo',
+      align: 'center',
+      width: 150,
+      render: (pricingInfo) => pricingInfo?.priceTotal?.toLocaleString('vi-VN') + 'đ' || '0đ',
+    },
+    {
+      title: 'Hủy lúc',
+      dataIndex: 'rentalInfo',
+      align: 'center',
+      width: 150,
+      render: (rentalInfo) => rentalInfo?.cancelAt || '--',
+    },
+    // {
+    //   title: 'Nhắn tin',
+    //   dataIndex: 'orderId',
+    //   align: 'center',
+    //   width: 100,
+    //   render: (orderId) => (
+    //     <FontAwesomeIcon
+    //       icon={faMessage}
+    //       style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
+    //       onClick={() => handleChat(orderId)}
+    //     />
+    //   ),
+    // },
+    {
+      title: 'Nhắn tin',
+      dataIndex: 'chat',
+      align: 'center',
+      width: 100,
+      render: (text, record) => (
+        <FontAwesomeIcon
+          icon={faMessage}
+          style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
+          onClick={() => handleChat(record.key)}
+        />
+      ),
     },
   ]
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra)
+  const { currentUser } = useSelector((state) => state.user)
+  const { currentRole } = useSelector((state) => state.menu)
+  const handleChat = async () => {
+    if (dispatch(checkLoginSession())) {
+      // Create new conversation
+      const idConversation = await createCoversation(currentUser.id, currentRole, data.customerInfo?.accountId, 'USER')
+      dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
+    }
   }
-    return (
-      <Table
-        columns={columns}
-        dataSource={data}
-        onChange={onChange}
-        bordered
-        pagination={false}
-        scroll={{ y: 500 }}
-        // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-        rowClassName="table-row-center" // Thêm class để căn giữa dọc
-        showSorterTooltip={{
-          target: 'sorter-icon',
-        }}
-        className={cx('')}
-      />
-    )
+  // const handleChat = (orderId) => {
+  //   console.log('Nhắn tin với order ID:', orderId)
+  // }
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const isLoggedIn = dispatch(checkLoginSession())
+        if (isLoggedIn) {
+          const response = await getIDServiceByIDRegister(idRegister)
+          if (response && response.length > 0) {
+            const services = response.map((item) => ({
+              id: item.vehicle_rental_service_id,
+              type: item.type,
+            }))
+            setListIDService(services)
+
+            const matchedItem = services.find((item) => item.type === selectedType)
+            if (matchedItem) {
+              const orders = await getAllOrderByServiceID(matchedItem.id)
+              setData(orders)
+            } else {
+              setData([])
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu đơn hàng:', error)
+        setListIDService([{ id: '', type: -1 }])
+      }
+    }
+
+    fetchOrders()
+  }, [idRegister, selectedType, dispatch])
+
+  const handleInputChange = (event) => {
+    setSelectedType(Number(event.target.value))
+  }
+
+  return (
+    <div>
+      <Form.Select
+        aria-label="Chọn loại dịch vụ"
+        value={selectedType}
+        onChange={handleInputChange}
+        className={cx('txt', 'width-30', 'infor-item', 'justify-content-end mb-3')}
+      >
+        {listIDService.map((item, index) => (
+          <option key={index} value={item.type}>
+            {item.type === 0 ? 'Thuê xe tự lái' : 'Thuê xe có người lái'}
+          </option>
+        ))}
+      </Form.Select>
+
+      <ConfigProvider locale={viVN}>
+        <Table
+          columns={columns}
+          dataSource={data}
+          rowKey={(record) => record.orderId}
+          bordered
+          pagination={false}
+          scroll={{ x: 'auto', y: 500 }}
+          onChange={(pagination, filters, sorter, extra) => console.log('params', pagination, filters, sorter, extra)}
+          className={cx('table-container')}
+        />
+      </ConfigProvider>
+    </div>
+  )
 }
+
 export default TableListTenant

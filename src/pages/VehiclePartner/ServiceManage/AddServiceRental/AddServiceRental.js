@@ -137,7 +137,9 @@ function AddServiceRental({ ...props }) {
            dispatch(fetchAllVehicle())
           toast.success('Thêm dịch vụ cho thuê xe thành công!', { autoClose: 2000 })
           console.log('Thêm dịch vụ cho thuê xe thành công!', response)
-          handleCancel()
+          // handleCancel()
+          props.onHide()
+          
         }
       } catch (error) {
         console.log('Thêm thất bại:')

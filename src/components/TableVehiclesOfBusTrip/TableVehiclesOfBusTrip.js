@@ -76,7 +76,6 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
       title: 'Thời gian khởi hành',
       dataIndex: 'timeDeparture',
       align: 'center',
-      defaultSortOrder: 'ascend', 
       width: 100,
       sorter: (a, b) => {
         const convertToMinutes = (time) => {

@@ -38,7 +38,7 @@ function RentalService() {
   const [startTime, setStartTime] = useState(calculateNearestTime()) // Gán giá trị mặc định
   const [endTime, setEndTime] = useState(calculateNearestTime())
   const [startDate, setStartDate] = useState(dayjs())
-  const [endDate, setEndDate] = useState(dayjs())
+  const [endDate, setEndDate] = useState(dayjs().add(1, 'day'))
   // const [activeTypeFilter, setActiveTypeFilter] = useState('all')
   const [activeTypeFilter, setActiveTypeFilter] = useState(['all'])
 
@@ -92,13 +92,14 @@ function RentalService() {
         startDateTime.startDT,
         endDateTime.endDT,
       )
-      if (data) {
+       console.log('data truyền cho listVehicleRentals--', data)
+      // if (data) {
         setListVehicleRentals(data)
-      }
+      // }
     } catch (error) {
       console.log('error--', error)
     } finally {
-      console.log('listVehicleRentals--', listVehicleRentals)
+     
     }
   }
   useEffect(() => {
@@ -132,6 +133,7 @@ function RentalService() {
     // setSelectedArea(0, 'Khu vực xe')
     // setSelectedTypeVehicle(0, 'Loại xe')
   }
+   console.log('listVehicleRentals--', listVehicleRentals)
   const handleSelectTypeVehicle = (id, title) => {
     setSelectedTypeVehicle({ id, title })
   }
@@ -159,7 +161,7 @@ function RentalService() {
       const start = dayjs(`${startDate?.format('YYYY-MM-DD')} ${startTime?.format('HH:mm')}`)
       const end = dayjs(`${endDate?.format('YYYY-MM-DD')} ${endTime?.format('HH:mm')}`)
 
-      if (start.isAfter(end)) {
+      if (start.isAfter(end) || start.isSame(end)) {
         toast.error('Ngày giờ bắt đầu phải sớm hơn ngày giờ kết thúc.', { autoClose: 1500, position: 'top-center' })
         return // Dừng nếu điều kiện không thỏa mãn
       }

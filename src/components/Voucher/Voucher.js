@@ -143,11 +143,11 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
         {/* <Row>
           <p className={cx('description')}>{data.description}</p>
         </Row> */}
-        <Row className={cx('voucher-number')}>
+        <Row className={cx('voucher-number', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
           <p>{`Còn lại ${data.remainingQuantity} mã`}</p>
         </Row>
         <Row className="d-flex">
-          <Col xs="auto" className={cx('time-content')}>
+          <Col xs="auto" className={cx('time-content', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p>Giảm tối đa:</p>
           </Col>
           <Col className={cx('time')}>
@@ -155,7 +155,7 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
           </Col>
         </Row>
         <Row className="d-flex">
-          <Col xs="auto" className={cx('time-content')}>
+          <Col xs="auto" className={cx('time-content', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p>Đơn tối thiểu:</p>
           </Col>
           <Col className={cx('time')}>
@@ -163,7 +163,7 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
           </Col>
         </Row>
         <Row className="d-flex">
-          <Col xs="auto" className={cx('time-content')}>
+          <Col xs="auto" className={cx('time-content', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p>Có hiệu lực từ:</p>
           </Col>
           <Col className={cx('time')}>
@@ -171,10 +171,10 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
           </Col>
         </Row>
         <Row className="d-flex">
-          <Col xs="auto" className={cx('time-content')}>
+          <Col xs="auto" className={cx('time-content', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p>Hạn sử dụng:</p>
           </Col>
-          <Col className={cx('time')}>
+          <Col className={cx('time', type === 'order' ? 'padding-top-1_2' : 'padding-top-1')}>
             <p className="ms-2">{`23h59 ${data.endDate}`}</p>
           </Col>
         </Row>

@@ -22,7 +22,7 @@ import Rating from '~/components/Rating'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import Table from 'react-bootstrap/Table'
-import RatingContentList from '~/components/RatingContent/RatingContentList'
+// import RatingContentList from '~/components/RatingContent/RatingContentList'
 import InforRental from '~/components/InforRental'
 import SurchargeFee from '~/components/InforRental/SurchargeFee'
 import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
@@ -37,19 +37,23 @@ function RentalServiceDetail() {
   const endDateTime = location.state?.endDateTime
   const manned = 'manned'
   const self_driving = 'self_driving'
-  const newPrice = inforVehicle?.price - inforVehicle?.price * (inforVehicle?.discount_percentage / 100)
+  const newPrice =
+    typeService === 'manned'
+      ? inforVehicle?.driverPrice - inforVehicle?.driverPrice * (inforVehicle?.discount_percentage / 100)
+      : inforVehicle?.selfDriverPrice - inforVehicle?.selfDriverPrice * (inforVehicle?.discount_percentage / 100)
   const [inforVehicleRental, setInforVehicleRental] = useState(null)
+  // console.log(' inforVehicle---3---', inforVehicle)
   useEffect(() => {
     const getInforVehicleRentalByID = async () => {
       try {
-        const response = await getVehicleRentalByID(inforVehicle?.id)
+        const response = await getVehicleRentalByID(inforVehicle?.vehicle_rental_service_id)
         setInforVehicleRental(response)
       } catch (error) {
         console.error('Failed to fetch vehicle rental info:', error)
       }
     }
     getInforVehicleRentalByID()
-  }, [inforVehicle?.id])
+  }, [inforVehicle?.vehicle_rental_service_id])
   console.log('endDatatime ---3---', endDateTime)
   console.log('startDatatime ---- 3----', startDateTime)
   // Chia mảng ảnh thành các cặp
@@ -329,7 +333,7 @@ function RentalServiceDetail() {
                 </Row>
               </Tab>
               <Tab eventKey="rating" title="Đánh giá">
-                <RatingContentList></RatingContentList>
+                {/* <RatingContent></RatingContent> */}
               </Tab>
             </Tabs>
           </Row>
@@ -340,7 +344,12 @@ function RentalServiceDetail() {
               <FontAwesomeIcon icon={faThumbTack} className={cx('icon', 'm-0')} />
               <span className={cx('txt', 'txt-price-list')}>Bảng giá:</span>
             </div>
-            <span className={cx('txt', 'charge-old')}>{inforVehicle?.price.toLocaleString('vi-VN')}đ/ngày</span>
+            <span className={cx('txt', 'charge-old')}>
+              {typeService === 'manned'
+                ? inforVehicle?.driverPrice.toLocaleString('vi-VN')
+                : inforVehicle?.selfDriverPrice.toLocaleString('vi-VN')}
+              đ/ngày
+            </span>
             <span className={cx('txt', 'charge-new')}>{Math.floor(newPrice).toLocaleString('vi-VN')}đ/ngày</span>
           </Row>
           <Row className={cx('order')}>

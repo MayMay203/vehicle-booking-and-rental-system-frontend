@@ -3,11 +3,13 @@ import styles from './TableListRentalService.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
-import { Table } from 'antd'
+import { ConfigProvider, Table } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllVehicle } from '~/redux/slices/rentalPartnerSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import viVN from 'antd/lib/locale/vi_VN'
+import 'moment/locale/vi'
 const cx = classNames.bind(styles)
 function TableListRentalService({ typeService }) {
   const columns = [
@@ -26,38 +28,14 @@ function TableListRentalService({ typeService }) {
       showSorterTooltip: {
         target: 'full-header',
       },
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Submenu',
-          value: 'Submenu',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
-      ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ['descend'],
+      sorter: (a, b) => a.nameCompany.localeCompare(b.nameCompany),
     },
     {
       title: 'Loại xe',
       dataIndex: 'typeVehicle',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 120,
+      width: 150,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -65,17 +43,33 @@ function TableListRentalService({ typeService }) {
       dataIndex: 'number',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 150,
+      width: 110,
       // sorter: (a, b) => a.age - b.age,
     },
-    {
-      title: 'Giá cho thuê',
-      dataIndex: 'charge',
-      align: 'center',
-      defaultSortOrder: 'descend',
-      width: 150,
-      // sorter: (a, b) => a.age - b.age,
-    },
+    ...(typeService === 2 || typeService === 0
+      ? [
+          {
+            title: 'Giá cho thuê tự lái',
+            dataIndex: 'selfDriverPrice',
+            align: 'center',
+            defaultSortOrder: 'descend',
+            width: 160,
+          },
+        ]
+      : []),
+    ...(typeService === 2 || typeService === 1
+      ? [
+          {
+            title: 'Giá cho thuê có người lái',
+            dataIndex: 'driverPrice',
+            align: 'center',
+            defaultSortOrder: 'descend',
+            width: 160,
+            // sorter: (a, b) => a.age - b.age,
+          },
+        ]
+      : []),
+
     {
       title: 'Địa chỉ',
       dataIndex: 'location',
@@ -101,7 +95,7 @@ function TableListRentalService({ typeService }) {
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
           style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-          onClick={() => handleViewVehicle(record.key)}
+          onClick={() => handleViewVehicle(record)}
         />
       ),
     },
@@ -147,9 +141,20 @@ function TableListRentalService({ typeService }) {
     console.log('params', pagination, filters, sorter, extra)
   }
   const navigate = useNavigate()
-  const handleViewVehicle = (id) => {
-    navigate('detail-service-rental', { state: { enableEdit: false, vehicleID: id } })
+  // const handleViewVehicle = (inforVehicle) => {
+  //   console.log('inforVehicle cha---', inforVehicle)
+  //   navigate('detail-service-rental', { state: { enableEdit: false, inforVehicle: inforVehicle } })
+  // }
+  // const [inforVehicle, setInforVehicle] = useState({})
+  const handleViewVehicle = (record) => {
+    const selectedVehicle = vehicleList.find((item) => item.vehicle_register_id === record.key)
+    if (selectedVehicle) {
+      // setInforVehicle(selectedVehicle)
+      console.log('selectedVehicle cha---', selectedVehicle)
+      navigate('detail-service-rental', { state: { enableEdit: false, inforVehicle: selectedVehicle } })
+    }
   }
+
   const handleEditVehicle = (id) => {
     navigate('edit-service-rental', { state: { enableEdit: true, vehicleID: id } })
   }
@@ -162,11 +167,12 @@ function TableListRentalService({ typeService }) {
     if (dispatch(checkLoginSession())) {
       try {
         const newData = vehicleList?.map((item) => ({
-          key: item.id,
+          key: item.vehicle_register_id,
           nameCompany: item.manufacturer,
           typeVehicle: item.vehicle_type,
           number: item.quantity,
-          charge: item.price,
+          selfDriverPrice: item.selfDriverPrice === 0 ? '_' : item.selfDriverPrice,
+          driverPrice: item.driverPrice === 0 ? '_' : item.driverPrice,
           location: item.location,
           status: 'Hoạt động',
         }))
@@ -179,20 +185,22 @@ function TableListRentalService({ typeService }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vehicleList])
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      onChange={onChange}
-      bordered
-      // pagination={false}
-      scroll={{ x: 'auto', y: 500 }}
-      pagination={{ position: ['bottomCenter'], pageSize: 6 }}
-      rowClassName="table-row-center"
-      showSorterTooltip={{
-        target: 'sorter-icon',
-      }}
-      className={cx('')}
-    />
+    <ConfigProvider locale={viVN}>
+      <Table
+        columns={columns}
+        dataSource={data}
+        onChange={onChange}
+        bordered
+        // pagination={false}
+        scroll={{ x: 'auto', y: 500 }}
+        pagination={{ position: ['bottomCenter'], pageSize: 6 }}
+        rowClassName="table-row-center"
+        showSorterTooltip={{
+          target: 'sorter-icon',
+        }}
+        className={cx('')}
+      />
+    </ConfigProvider>
   )
 }
 export default TableListRentalService

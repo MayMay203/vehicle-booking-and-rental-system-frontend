@@ -27,6 +27,9 @@
     //     -webkit-box-orient: vertical;
     // }
 }
+.voucher-long{
+    width: 45rem;
+}
 .voucher-small{
     width: 33rem;
     .voucher-value{
@@ -121,7 +124,8 @@
     color: #27AE60;
     font-size: 1.2rem;
     font-weight: 500;
-    padding-top: 1rem;
+    // padding-top: 1rem;
+    // padding-top: 0.2rem;
     text-align: right;
 
    @include abstracts.screen(xs){
@@ -129,12 +133,21 @@
     }
 
 }
-
+.padding-top-1{
+    padding-top: 1rem;
+}
+.padding-top-1_2{
+    padding-top: 0.5rem;
+}
+.padding-top-1_5{
+    padding-top: 0.2rem;
+}
 .time-content{
     color: #000000;
     font-size: 1.3rem;
     font-weight: 600;
-    padding-top: 1rem;
+    // padding-top: 1rem;
+    // padding-top: 0.5rem;
 
     @include abstracts.screen(xs){
         font-size: 1rem;
@@ -145,7 +158,8 @@
     color: #000000;
     font-size: 1.2rem;
     font-weight: 400;
-    padding-top: 1rem;
+    // padding-top: 1rem;
+    // padding-top: 0.5rem;
     text-align: right;
 
    @include abstracts.screen(xs){

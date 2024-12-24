@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './DetailServiceRental.module.scss'
 import { Button, Col, Image, Row, Tab, Tabs } from 'react-bootstrap'
-import RatingContentList from '~/components/RatingContent'
 import { useEffect, useState } from 'react'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,70 +9,89 @@ import FormInforServiceRental from '~/components/FormInforServiceRental'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 const cx = classNames.bind(styles)
 function DetailServiceRental() {
-  const [formData, setFormData] = useState({
-    car_company: '',
-    type_vehicle: '',
-    car_year: '',
-    quantity: '',
-    type_service: '',
-    price1: '',
-    price2: '',
-    car_deposit: '',
-    reservation_fees: '',
-    price_according: '1',
-    location: '',
-    reduce: '',
-    status: 'available',
-    description: '',
-    utility: '',
-    policy: '',
-    imageVehicle: [''],
-  })
+ 
   const location = useLocation()
   const dispatch = useDispatch()
-  const { vehicleID } = location.state || {}
+  const inforVehicle = location.state?.inforVehicle || {}
+   const [formData, setFormData] = useState(
+     inforVehicle,
+     // car_company: '',
+     // type_vehicle: '',
+     // car_year: '',
+     // quantity: '',
+     // type_service: '',
+     // price1: '',
+     // price2: '',
+     // car_deposit: '',
+     // reservation_fees: '',
+     // price_according: '1',
+     // location: '',
+     // reduce: '',
+     // status: 'available',
+     // description: '',
+     // utility: '',
+     // policy: '',
+     // imagesVehicleRegister: [''],
+   )
+  console.log('inforVehicle con---', inforVehicle)
+  console.log('inforVehicle.imagesVehicleRegister---', inforVehicle.imagesVehicleRegister)
+  const [listImageVehicle, setListImageVehicle] = useState(inforVehicle.imagesVehicleRegister)
+  console.log('listImageVehicle---', listImageVehicle)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [imageVehiclePerPage, setImageVehiclePerPage] = useState(3)
+
   useEffect(() => {
     const fetchVehicleRentalDetails = async () => {
       if (dispatch(checkLoginSession())) {
-        const response = await getVehicleRentalByID(vehicleID)
-        setFormData({
-          car_company: response.manufacturer,
-          type_vehicle: response.vehicle_type_id,
-          car_year: response?.vehicleLife,
-          quantity: response?.amount,
-          type_service: response.type,
-          price1: response.price,
-          price2: response.price,
-          car_deposit: response.car_deposit,
-          reservation_fees: response.reservation_fees,
-          price_according: response.quantity,
-          location: response.location,
-          reduce: response.discount_percentage,
-          status: 'available',
-          description: response.description,
-          utility: response.ulties,
-          policy: response.policy,
-          imageVehicle: response.imagesVehicleRegister,
-        })
+        if (inforVehicle) {
+          // const response = await getVehicleRentalByID(vehicleID)
+          setFormData({
+            // car_company: response.manufacturer,
+            // type_vehicle: response.vehicle_type_id,
+            // car_year: response?.vehicleLife,
+            // quantity: response?.amount,
+            // type_service: response.type,
+            // price1: response.price,
+            // price2: response.price,
+            // car_deposit: response.car_deposit,
+            // reservation_fees: response.reservation_fees,
+            // price_according: response.quantity,
+            // location: response.location,
+            // reduce: response.discount_percentage,
+            // status: 'available',
+            // description: response.description,
+            // utility: response.ulties,
+            // policy: response.policy,
+            // imagesVehicleRegister: response.imagesVehicleRegister,
+            car_company: inforVehicle.manufacturer,
+            type_vehicle: inforVehicle.vehicle_type_id,
+            car_year: inforVehicle.vehicleLife,
+            quantity: inforVehicle.amount,
+            type_service: inforVehicle.type,
+            price1: inforVehicle.selfDriverPrice,
+            price2: inforVehicle.driverPrice,
+            car_deposit: inforVehicle.car_deposit,
+            reservation_fees: inforVehicle.reservation_fees,
+            price_according: inforVehicle.quantity,
+            location: inforVehicle.location,
+            reduce: inforVehicle.discount_percentage,
+            status: 'available',
+            description: inforVehicle.description,
+            utility: inforVehicle.ulties,
+            policy: inforVehicle.policy,
+            imagesVehicleRegister: inforVehicle.imagesVehicleRegister,
+          })
+        }
       }
     }
     fetchVehicleRentalDetails()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vehicleID])
-  console.log('formData.imageVehicle---', formData.imageVehicle)
-  const [listImageVehicle, setListImageVehicle] = useState(
-    formData?.imageVehicle,
-  )
-  console.log('listImageVehicle---', listImageVehicle)
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [imageVehiclePerPage, setImageVehiclePerPage] = useState(4)
-
+  }, [inforVehicle])
   useEffect(() => {
     const updateImageVehiclePerPage = () => {
-      if (window.innerWidth >= 992) {
+      if (window.innerWidth >= 1392) {
         setImageVehiclePerPage(3) // Large screens (lg)
       } else if (window.innerWidth >= 768) {
         setImageVehiclePerPage(2) // Medium screens (md)
@@ -91,14 +109,14 @@ function DetailServiceRental() {
   const displayedImageVehicle = listImageVehicle.slice(currentIndex, currentIndex + imageVehiclePerPage)
   console.log('displayedImageVehicle', displayedImageVehicle)
   useEffect(() => {
-    setListImageVehicle([formData?.imageVehicle?.map((item, index) => ({ id: index, imgLink: item })) || ''])
-  }, [formData.imageVehicle])
-  useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      policy: formData.policy,
-    }))
-  }, [formData.policy])
+    setListImageVehicle(formData?.imagesVehicleRegister?.map((item, index) => ({ id: index, imgLink: item })) || '')
+  }, [formData.imagesVehicleRegister])
+  // useEffect(() => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     policy: formData.policy,
+  //   }))
+  // }, [formData.policy])
   const handleNext = () => {
     if (currentIndex + imageVehiclePerPage < listImageVehicle.length) {
       // resetImageVehicleStates()
@@ -113,9 +131,14 @@ function DetailServiceRental() {
       setCurrentPage(currentPage - 1)
     }
   }
-  const handleInputChange = () => {
-    setFormData({})
-  }
+  console.log('formData---', formData)
+const handleInputChange = (e) => {
+  setFormData((prev) => ({
+    ...prev,
+    [e.target.name]: e.target.value, // Cập nhật giá trị mới của policy
+  }))
+}
+
   return (
     <div className="container mb-5 mt-5">
       <div className={cx('header', 'd-flex')}>
@@ -143,9 +166,18 @@ function DetailServiceRental() {
               </Col>
               <Col xs="10">
                 <div className="d-flex justify-content-center">
-                  {(displayedImageVehicle?.[0] || []).map((item, index) => (
+                  {/* {(displayedImageVehicle?.[0] || []).map((item, index) => (
                     <Image key={index} src={item.imgLink} rounded className={cx('image-vehicle')} />
-                  ))}
+                  ))} */}
+                  <div className="d-flex justify-content-center">
+                    {displayedImageVehicle ? (
+                      displayedImageVehicle.map((item, index) => (
+                        <Image key={index} src={item.imgLink} rounded className={cx('image-vehicle')} />
+                      ))
+                    ) : (
+                      <p>No images available</p> // Hiển thị thông báo khi không có hình ảnh
+                    )}
+                  </div>
 
                   {/* Thêm các Col giả nếu danh sách không đủ utilitiesPerPage */}
                   {Array.from({ length: imageVehiclePerPage - displayedImageVehicle.length }, (_, index) => (
@@ -184,12 +216,12 @@ function DetailServiceRental() {
               <br /> - Xe được giới hạn di chuyển ở mức 400km cho 24h, và lần lượt là 250km, 300km, 350 km cho gói 4h,
               8h, 12h.
               <br /> Trân trọng cảm ơn, chúc quý khách hàng có những chuyến đi tuyệt vời ! */}
-              {formData?.policy
+              {inforVehicle?.policy
                 .split('@#$%&')
                 .filter(Boolean)
                 .map((value, index) => (
                   <>
-                    <span key={index}>- {value.trim()}</span> <br/>
+                    <span key={index}>- {value.trim()}</span> <br />
                   </>
                 )) || ''}
             </p>
@@ -197,12 +229,12 @@ function DetailServiceRental() {
         </Tab>
         <Tab eventKey="order" title="Đơn đặt">
           <Row className={cx('content-tab')}>
-            <TableListTenant></TableListTenant>
+            <TableListTenant idRegister={inforVehicle.vehicle_register_id}></TableListTenant>
           </Row>
         </Tab>
         <Tab eventKey="rating" title="Đánh giá">
           <Row className={cx('content-tab', 'rolling-content-tab')}>
-            <RatingContentList></RatingContentList>
+            {/* <RatingContentList></RatingContentList> */}
           </Row>
         </Tab>
       </Tabs>
