@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import Image from '../Image'
 import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faCircleXmark, faEdit } from '@fortawesome/free-solid-svg-icons'
+import Button from '../Button'
 const cx = classNames.bind(styles)
 
 function DetailMessage({ data, image, handleUpdateMessage }) {
@@ -19,16 +20,19 @@ function DetailMessage({ data, image, handleUpdateMessage }) {
     handleUpdateMessage(data.id, contentUpdate)
   }
 
-  const handleDoubleClick = () => {
-    if (!isSender) return
+  const checkEditable = () => {
+    if (!isSender) return false
     const [time, date] = data.sendAt.split(' ')
     const [day, month, year] = date.split('-')
     const formattedDate = `${year}-${month}-${day}T${time}:00`
     const timeDifference = (new Date() - new Date(formattedDate)) / 1000 / 60
     if (timeDifference <= 5) {
-      setIsEditing(true)
+      return true
     }
+    return false
   }
+
+  const handleDoubleClick = () => {}
   return (
     <div
       onClick={() => setIsShowDate((prev) => !prev)}
@@ -69,9 +73,16 @@ function DetailMessage({ data, image, handleUpdateMessage }) {
             </div>
           </div>
         ) : (
-          <p className={cx({ 'content-receive': !isSender }, { 'content-send': isSender }, 'content-message')}>
-            {data.content}
-          </p>
+          <div className={cx('d-flex', 'align-items-center', 'message-wrapper')}>
+            {checkEditable() && (
+              <button className={cx('btn-edit')} onClick={() => setIsEditing(true)}>
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+            )}
+            <p className={cx({ 'content-receive': !isSender }, { 'content-send': isSender }, 'content-message')}>
+              {data.content}
+            </p>
+          </div>
         )}
         <p className={cx('time', { 'align-right': isSender, 'time-visible': isShowDate })}>{data.sendAt}</p>
       </div>
