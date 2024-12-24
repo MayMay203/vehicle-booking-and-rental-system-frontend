@@ -59,6 +59,7 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
     customerName: currentUser.name,
     customerPhoneNumber: currentUser.phoneNumber,
     account_id: currentUser.id,
+    voucherId: null,
   })
   console.log('endDatatime ---4---', endDateTime)
   console.log('startDatatime ---- 4----', startDateTime)

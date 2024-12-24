@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './DetailServiceRental.module.scss'
-import { Button, Col, Image, Row, Tab, Tabs } from 'react-bootstrap'
+import { Button, Col, Form, Image, Row, Tab, Tabs } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,39 +9,91 @@ import FormInforServiceRental from '~/components/FormInforServiceRental'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import RatingContent from '~/components/RatingContent'
+import { Empty } from 'antd'
+import { getAllRatingOfRental } from '~/apiServices/ratingService/getAllRatingOfRental'
+import { getIDServiceByIDRegister } from '~/apiServices/rentalPartner/getIDServiceByIDRegister'
 const cx = classNames.bind(styles)
 function DetailServiceRental() {
- 
   const location = useLocation()
   const dispatch = useDispatch()
   const inforVehicle = location.state?.inforVehicle || {}
-   const [formData, setFormData] = useState(
-     inforVehicle,
-     // car_company: '',
-     // type_vehicle: '',
-     // car_year: '',
-     // quantity: '',
-     // type_service: '',
-     // price1: '',
-     // price2: '',
-     // car_deposit: '',
-     // reservation_fees: '',
-     // price_according: '1',
-     // location: '',
-     // reduce: '',
-     // status: 'available',
-     // description: '',
-     // utility: '',
-     // policy: '',
-     // imagesVehicleRegister: [''],
-   )
+  const [formData, setFormData] = useState(
+    inforVehicle,
+    // car_company: '',
+    // type_vehicle: '',
+    // car_year: '',
+    // quantity: '',
+    // type_service: '',
+    // price1: '',
+    // price2: '',
+    // car_deposit: '',
+    // reservation_fees: '',
+    // price_according: '1',
+    // location: '',
+    // reduce: '',
+    // status: 'available',
+    // description: '',
+    // utility: '',
+    // policy: '',
+    // imagesVehicleRegister: [''],
+  )
   console.log('inforVehicle con---', inforVehicle)
   console.log('inforVehicle.imagesVehicleRegister---', inforVehicle.imagesVehicleRegister)
   const [listImageVehicle, setListImageVehicle] = useState(inforVehicle.imagesVehicleRegister)
   console.log('listImageVehicle---', listImageVehicle)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [imageVehiclePerPage, setImageVehiclePerPage] = useState(3)
+  const [listRating, setListRating] = useState([])
+  const [selectedType, setSelectedType] = useState(0)
+  const [listIDService, setListIDService] = useState([{ id: '', type: -1 }])
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const isLoggedIn = dispatch(checkLoginSession())
+        if (isLoggedIn) {
+          const response = await getIDServiceByIDRegister(inforVehicle.vehicle_register_id)
+          if (response && response.length > 0) {
+            const services = response.map((item) => ({
+              id: item.vehicle_rental_service_id,
+              type: item.type,
+            }))
+            setListIDService(services)
 
+            const matchedItem = services.find((item) => item.type === selectedType)
+            if (matchedItem) {
+              const ratings = await getAllRatingOfRental(matchedItem.id)
+              setListRating(ratings.result.result)
+            } else {
+              setListRating([])
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu đơn hàng:', error)
+        setListIDService([{ id: '', type: -1 }])
+      }
+    }
+
+    fetchOrders()
+  }, [inforVehicle.vehicle_register_id, selectedType, dispatch])
+  const handleChangeType = (event) => {
+    setSelectedType(Number(event.target.value))
+  }
+  // useEffect(() => {
+  //   if (ticket.busTripScheduleId) {
+  //     const getListRating = async () => {
+  //       const response = await getAllRatingOfRental(ticket?.busTripScheduleId)
+  //       if (response && response.result.result) {
+  //         setListRating(response.result.result)
+  //       } else {
+  //         setListRating([])
+  //       }
+  //     }
+  //     getListRating()
+  //   }
+  // }, [ticket.busTripScheduleId])
+  console.log('lisst rating', listRating, '---id:', inforVehicle.vehicle_register_id)
   useEffect(() => {
     const fetchVehicleRentalDetails = async () => {
       if (dispatch(checkLoginSession())) {
@@ -132,12 +184,12 @@ function DetailServiceRental() {
     }
   }
   console.log('formData---', formData)
-const handleInputChange = (e) => {
-  setFormData((prev) => ({
-    ...prev,
-    [e.target.name]: e.target.value, // Cập nhật giá trị mới của policy
-  }))
-}
+  const handleInputChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value, // Cập nhật giá trị mới của policy
+    }))
+  }
 
   return (
     <div className="container mb-5 mt-5">
@@ -233,9 +285,45 @@ const handleInputChange = (e) => {
           </Row>
         </Tab>
         <Tab eventKey="rating" title="Đánh giá">
-          <Row className={cx('content-tab', 'rolling-content-tab')}>
+          <div className={cx('content-tab', 'rolling-content-tab')}>
             {/* <RatingContentList></RatingContentList> */}
-          </Row>
+            {listIDService.length === 2 && (
+              <div className="d-flex align-items-center">
+                <span
+                  className={cx('txt', 'mb-3 me-3', 'p-2')}
+                  style={{ backgroundColor: '#79E3E9', borderRadius: '3px' }}
+                >
+                  Loại dịch vụ
+                </span>
+                <Form.Select
+                  aria-label="Chọn loại dịch vụ"
+                  value={selectedType}
+                  onChange={handleChangeType}
+                  className={cx('txt', 'width-30', 'infor-item', 'justify-content-end mb-3')}
+                >
+                  {listIDService.map((item, index) => (
+                    <option key={index} value={item.type}>
+                      {item.type === 0 ? 'Thuê xe tự lái' : 'Thuê xe có người lái'}
+                    </option>
+                  ))}
+                </Form.Select>
+              </div>
+            )}
+            <div>
+              {Array.isArray(listRating) && listRating.map((rating, index) => <RatingContent data={rating} />)}
+
+              {listRating?.length === 0 && (
+                <div style={{ marginTop: '60px' }}>
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có đánh giá nào." />
+                </div>
+              )}
+              {(listRating === null || listRating === undefined) && (
+                <div style={{ marginTop: '60px' }}>
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có đánh giá nào." />
+                </div>
+              )}
+            </div>
+          </div>
         </Tab>
       </Tabs>
     </div>

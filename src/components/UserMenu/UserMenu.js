@@ -79,6 +79,7 @@ function UserMenu() {
               className={cx('mode-item')}
               onClick={() => {
                 dispatch(setMenu('carRentalPartnerMenu'))
+                navigate(config.routes.orderManage)
               }}
             >
               Đối tác cho thuê xe
