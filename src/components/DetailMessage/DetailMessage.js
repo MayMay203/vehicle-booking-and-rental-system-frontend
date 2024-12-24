@@ -5,7 +5,6 @@ import Image from '../Image'
 import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faCircleXmark, faEdit } from '@fortawesome/free-solid-svg-icons'
-import Button from '../Button'
 const cx = classNames.bind(styles)
 
 function DetailMessage({ data, image, handleUpdateMessage }) {
