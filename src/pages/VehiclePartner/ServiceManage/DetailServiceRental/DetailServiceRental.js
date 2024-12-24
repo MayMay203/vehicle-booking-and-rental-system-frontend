@@ -170,7 +170,7 @@ const handleInputChange = (e) => {
                     <Image key={index} src={item.imgLink} rounded className={cx('image-vehicle')} />
                   ))} */}
                   <div className="d-flex justify-content-center">
-                    {displayedImageVehicle? (
+                    {displayedImageVehicle ? (
                       displayedImageVehicle.map((item, index) => (
                         <Image key={index} src={item.imgLink} rounded className={cx('image-vehicle')} />
                       ))
@@ -229,8 +229,8 @@ const handleInputChange = (e) => {
         </Tab>
         <Tab eventKey="order" title="Đơn đặt">
           <Row className={cx('content-tab')}>
-            <TableListTenant></TableListTenant>
-            </Row>
+            <TableListTenant idRegister={inforVehicle.vehicle_register_id}></TableListTenant>
+          </Row>
         </Tab>
         <Tab eventKey="rating" title="Đánh giá">
           <Row className={cx('content-tab', 'rolling-content-tab')}>

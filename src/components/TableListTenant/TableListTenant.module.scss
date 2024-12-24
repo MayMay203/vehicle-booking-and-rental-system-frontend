@@ -1,0 +1,13 @@
+.txt {
+  font-size: 1.7rem;
+  // margin-bottom: 1rem;
+  font-weight: 500;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+}
+.width-30{
+  width: 30% !important;
+}
