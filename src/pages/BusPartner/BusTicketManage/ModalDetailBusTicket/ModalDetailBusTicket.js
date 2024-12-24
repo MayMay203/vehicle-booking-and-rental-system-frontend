@@ -41,7 +41,7 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
     price: '',
     operation: '',
     idBusSchedule: '',
-    availableSeat:'',
+    availableSeat: '',
   })
   const [ticket, setTicket] = useState({})
   const dispatch = useDispatch()
@@ -66,9 +66,9 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
     fetchBusSchedule()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idTicket, startDate])
-   
-  useEffect(() =>{
-    if(dispatch(checkLoginSession())){
+
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
       dispatch(fetchOrderListBusTrip({ id: idTicket, date: dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD') }))
     }
   }, [dispatch, idTicket, startDate])
@@ -136,7 +136,7 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
   //     setSelectedDate(dayjs(date))
   //   }
   // }
-  
+
   const handleStartDateChange = (date) => {
     setStartDate(date)
     // setStartDateTime((prev) => ({
@@ -145,20 +145,20 @@ function ModalDetailBusTicket({ enableEdit = true, functionModal, idTicket, ...p
     //   startDT: startTime?.format('HH:mm') + ' ' + date?.format('DD-MM-YYYY'),
     // }))
   }
-useEffect(() => {
-  if (ticket.busTripScheduleId) {
-    const getListRating = async () => {
-      const response = await getAllRatingOfTicket(ticket?.busTripScheduleId)
-      if (response && response.result.result) {
-        setListRating(response.result.result)
-      } else {
-        setListRating([])
+  useEffect(() => {
+    if (ticket.busTripScheduleId) {
+      const getListRating = async () => {
+        const response = await getAllRatingOfTicket(ticket?.busTripScheduleId)
+        if (response && response.result.result) {
+          setListRating(response.result.result)
+        } else {
+          setListRating([])
+        }
       }
+      getListRating()
     }
-    getListRating()
-  }
-}, [ticket.busTripScheduleId])
-  console.log("lisst rating", listRating, '---id ve:', ticket.busTripScheduleId)
+  }, [ticket.busTripScheduleId])
+  console.log('lisst rating', listRating, '---id ve:', ticket.busTripScheduleId)
   return (
     <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -331,7 +331,7 @@ useEffect(() => {
                         <Form.Control
                           name="operation"
                           aria-label="operation"
-                          value={formData.operation === true ? 'Đang hoạt động' : ''}
+                          value={formData.operation === true ? 'Đang hoạt động' : 'Ngày nghỉ'}
                           className={cx(
                             'txt',
                             'Controlbox',
@@ -457,18 +457,12 @@ useEffect(() => {
 
                 {listRating?.length === 0 && (
                   <div style={{ marginTop: '60px' }}>
-                    <Empty
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                      description="Chưa có đánh giá nào."
-                    />
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có đánh giá nào." />
                   </div>
                 )}
                 {(listRating === null || listRating === undefined) && (
                   <div style={{ marginTop: '60px' }}>
-                    <Empty
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                      description="Chưa có đánh giá nào."
-                    />
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có đánh giá nào." />
                   </div>
                 )}
               </div>
