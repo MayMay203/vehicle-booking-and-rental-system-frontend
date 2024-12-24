@@ -35,6 +35,21 @@
     font-weight: 400;
     display: inline-flex;
 }
+
+.btn-edit{
+  display: none;
+  color: #ccc;
+  padding: 8px;
+  font-size: 18px;
+}
+
+.message-wrapper{
+  column-gap: 8px;
+  &:hover .btn-edit{
+      display: block;
+  }
+}
+
 .content-receive{
     background-color: #FFEBE4;
 }

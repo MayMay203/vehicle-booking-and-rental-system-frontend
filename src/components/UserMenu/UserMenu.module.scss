@@ -40,7 +40,7 @@
 .mode-item{
     width: 100%;
     padding: 0 24px;
-    color: var(--dark-red-color)!important;
+    color: rgba($color: #a33a3a, $alpha: 0.8)!important;
     font-size: 1.4rem!important;
     font-weight: 400;
     justify-content: initial!important;
@@ -50,6 +50,11 @@
 
     & ~ .mode-item{
         margin-left: 0!important
+    }
+
+    &.active{
+        background-color: rgba($color: #a33a3a, $alpha: 0.09);
+        color: var(--dark-red-color)!important;
     }
 }
 
