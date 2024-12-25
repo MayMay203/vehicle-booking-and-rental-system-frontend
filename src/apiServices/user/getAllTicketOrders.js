@@ -4,7 +4,7 @@ import * as httpRequest from '~/utils/httpRequest'
 
 export const getAllTicketOrders = async (isCancel, page = 1, status) => {
   try {
-    let url = `/v1/orderBusTrips?page=${page}&size=${config.variables.pagesize}&filter=status:${isCancel}`
+    let url = `/v1/orderBusTrips?page=${page}&size=${config.constants.pagesize}&filter=status:${isCancel}`
     if (isCancel === 0) {
       url += `&isGone=${status}`
     }

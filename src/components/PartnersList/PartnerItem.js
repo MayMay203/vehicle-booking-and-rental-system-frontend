@@ -76,15 +76,16 @@ function PartnerItem({ data }) {
       </div>
       <div className="col-12 col-md-4 col-lg-3 align-content-end">
         <div className="d-flex flex-column column-gap-3">
-          {partnerData.approvalStatus === config.variables.current && (data.timeBecomePartner || partnerData.timeBecomePartner) && (
-            <div className={cx('checked')}>
-              <div className="d-flex column-gap-2 mb-2">
-                <FontAwesomeIcon icon={faCheck} />
-                <span>Xác nhận lúc </span>
+          {partnerData.approvalStatus === config.constants.current &&
+            (data.timeBecomePartner || partnerData.timeBecomePartner) && (
+              <div className={cx('checked')}>
+                <div className="d-flex column-gap-2 mb-2">
+                  <FontAwesomeIcon icon={faCheck} />
+                  <span>Xác nhận lúc </span>
+                </div>
+                <span>{data.timeBecomePartner || partnerData.timeBecomePartner}</span>
               </div>
-              <span>{data.timeBecomePartner || partnerData.timeBecomePartner}</span>
-            </div>
-          )}
+            )}
           {partnerData.approvalStatus === 'CANCEL' && (
             <div className={cx('checked', 'reason')}>
               <div className="d-flex column-gap-2 mb-2 justify-content-center">

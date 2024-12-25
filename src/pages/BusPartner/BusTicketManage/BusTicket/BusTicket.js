@@ -126,10 +126,7 @@ function BusTicket() {
       ))}
       {listBusTicket.length === 0 && (
         <div style={{ marginTop: '110px' }}>
-          <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description="Hiện chưa có vé xe trên tuyến đường này."
-          />
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Hiện chưa có vé xe trên tuyến đường này." />
         </div>
       )}
 
@@ -138,7 +135,7 @@ function BusTicket() {
           className="mt-5"
           align="center"
           current={currentPage}
-          pageSize={config.variables.pagesize}
+          pageSize={config.constants.pagesize}
           total={total}
           onChange={(page) => setCurrentPage(page)}
         />

@@ -2,7 +2,7 @@ import { config } from '~/config'
 import * as httpRequest from '~/utils/httpRequest'
 export const getAllTickets = async (currentPage = 1, departureLocation, arrivalLocation, busName, departureDate, sortType) => {
   try {
-    let url = `/v1/user/busTripSchedules?departureDate=${departureDate}&size=${config.variables.pagesize}&page=${currentPage}&departureLocation=${departureLocation}&arrivalProvince=${arrivalLocation}`
+    let url = `/v1/user/busTripSchedules?departureDate=${departureDate}&size=${config.constants.pagesize}&page=${currentPage}&departureLocation=${departureLocation}&arrivalProvince=${arrivalLocation}`
     if (busName !== 'all') {
       url += `&filter=busTrip.busPartner.businessPartner.businessName:'${busName}'`
     }

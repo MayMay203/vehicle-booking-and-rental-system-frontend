@@ -113,7 +113,9 @@ function Home() {
       </div>
       <div className={cx('container', 'content')}>
         <ContentItem title="CON SỐ NỔI BẬT" Component={<NumberList numberList={hightlightNumbers} />} />
-        <ContentItem title="CÁC TUYẾN ĐƯỜNG PHỔ BIẾN" Component={<OfferList dataList={popularRoutes} />} />
+        {popularRoutes.length > 0 && (
+          <ContentItem title="CÁC TUYẾN ĐƯỜNG PHỔ BIẾN" Component={<OfferList dataList={popularRoutes} />} />
+        )}
         {voucherUser.length > 0 && (
           <ContentItem title="CÁC ƯU ĐÃI NỔI BẬT" Component={<OfferList dataList={voucherUser} voucher />} />
         )}

@@ -185,13 +185,15 @@ function OrderManagement() {
         </Tippy>
       </div>
       <Tabs tabList={tabList} settings={settings} type={status} handleClickTab={handleClickTab}></Tabs>
-      {myTicketOrders.result?.length > 0 && <TicketList status={status} dataList={myTicketOrders.result} isDetailOrder={true} />}
+      {myTicketOrders.result?.length > 0 && (
+        <TicketList status={status} dataList={myTicketOrders.result} isDetailOrder={true} />
+      )}
       {myTicketOrders.result?.length > 0 && (
         <Pagination
           className="mt-5"
           align="center"
           current={currentPage}
-          pageSize={config.variables.pagesize}
+          pageSize={config.constants.pagesize}
           total={myTicketOrders.meta?.total}
           onChange={(page) => setCurrentPage(page)}
         />

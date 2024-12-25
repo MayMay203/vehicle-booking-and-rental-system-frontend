@@ -62,4 +62,7 @@ export const images = {
   busPartner: require('./busPartner.jpg'),
   rentalPartner: require('./rentalPartner.jpg'),
   driverPartner: require('./driverPartner.jpg'),
+  bookingComplete: require('./booking_complete.jpg'),
+  bookingCancelled: require('./booking_cancelled.jpg'),
+  newBooking: require('./new-booking.png'),
 }

@@ -141,7 +141,7 @@ function BuyTicket() {
           className="mt-5"
           align="center"
           current={currentPage}
-          pageSize={config.variables.pagesize}
+          pageSize={config.constants.pagesize}
           total={total}
           onChange={(page) => setCurrentPage(page)}
         />

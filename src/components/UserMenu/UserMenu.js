@@ -18,7 +18,7 @@ function UserMenu() {
   const navigate = useNavigate()
   const [showMode, setShowMode] = useState(false)
   const currentUser = useSelector((state) => state.user.currentUser)
-  const currentRole = useSelector((state) => state.user.currentRole)
+  const currentRole = useSelector((state) => state.menu.currentRole)
   console.log('currentRole', currentRole)
 
   const handleModeSetting = () => {
@@ -57,7 +57,7 @@ function UserMenu() {
       {showMode && (
         <div className="d-flex flex-column">
           <Button
-            className={cx('mode-item', { active: true})}
+            className={cx('mode-item', { active: currentRole === 'USER' })}
             onClick={() => {
               dispatch(setMenu('userMenu'))
               navigate(config.routes.home)
@@ -65,7 +65,7 @@ function UserMenu() {
           >
             Chế độ người dùng
           </Button>
-          {currentUser.roles.includes(config.variables.busPartner) && (
+          {currentUser.roles.includes(config.constants.busPartner) && (
             <Button
               className={cx('mode-item', { active: currentRole === 'BUS_PARTNER' })}
               onClick={() => {
@@ -76,7 +76,7 @@ function UserMenu() {
               Đối tác nhà xe
             </Button>
           )}
-          {currentUser.roles.includes(config.variables.carRentalPartner) && (
+          {currentUser.roles.includes(config.constants.carRentalPartner) && (
             <Button
               className={cx('mode-item', { active: currentRole === 'CAR_RENTAL_PARTNER' })}
               onClick={() => {

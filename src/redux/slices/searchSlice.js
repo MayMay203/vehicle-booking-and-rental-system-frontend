@@ -3,10 +3,10 @@ import { config } from '~/config'
 
 const initialState = {
   searchTicket: {
-    departureLocation: config.variables.departureLocation,
-    departureDate: config.variables.departureDate,
-    arrivalLocation: config.variables.arrivalLocation,
-    busName: config.variables.busName,
+    departureLocation: config.constants.departureLocation,
+    departureDate: config.constants.departureDate,
+    arrivalLocation: config.constants.arrivalLocation,
+    busName: config.constants.busName,
   },
   searchBusTrip: {
     departureLocation: '',

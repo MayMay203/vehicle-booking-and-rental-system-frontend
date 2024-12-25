@@ -4,7 +4,7 @@ import * as httpRequest from '~/utils/httpRequest'
 export const getAllPartners = async (partnerType, status, emailOfRepresentative, page = 1) => {
   try {
     const params = {
-      size: config.variables.pagesize,
+      size: config.constants.pagesize,
       page: page,
       filter: `partnerType:'${partnerType}' and approvalStatus:'${status}'${
         emailOfRepresentative ? ` and emailOfRepresentative~'${emailOfRepresentative}'` : ''
