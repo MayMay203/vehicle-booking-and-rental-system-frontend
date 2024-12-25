@@ -14,6 +14,7 @@ import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getVehicleTypeByID } from '~/apiServices/user/getVehicleTypeByID'
+import Rating from '../Rating'
 const cx = classNames.bind(styles)
 function RentalCardItem({ typeService, role, item,startDateTime, endDateTime }) {
   const navigate = useNavigate()
@@ -81,7 +82,7 @@ function RentalCardItem({ typeService, role, item,startDateTime, endDateTime }) 
       <div className={cx('line')}></div>
 
       <div className={cx('d-flex', 'pt-3', 'justify-content-between')}>
-        {/* <Rating></Rating> */}
+        <Rating rating={item.rating_total}></Rating>
         <div className={cx('price', 'd-flex', 'align-items-center')}>
           <FontAwesomeIcon icon={faMoneyBill} className={cx('icon', 'icon-money')} />
           {/* <span className={cx('txt')}>{item.price.toLocaleString('vi-VN')}đ/ngày</span> */}

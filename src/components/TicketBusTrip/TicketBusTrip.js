@@ -11,8 +11,8 @@ function TicketBusTrip({ handleShowDetail, ticket }) {
     <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4', 'wrap-ticket')}>
       <div className="col m-0">
         <div className={cx('image-wrapper')}>
-          {/* <img src={ticket.busInfo.imageRepresentative} alt="car" className={cx('image')}></img> */}
-          <img src={images.trip} alt="car" className={cx('image')}></img>
+          <img src={ticket.busInfo.imageRepresentative} alt="car" className={cx('image')}></img>
+          {/* <img src={images.trip} alt="car" className={cx('image')}></img> */}
           <button className={cx('btn-msg')}>
             {/* <FontAwesomeIcon icon={faMessage}></FontAwesomeIcon> */}
           </button>

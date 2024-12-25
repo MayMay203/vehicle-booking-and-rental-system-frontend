@@ -23,7 +23,7 @@ function Voucher({ className, data, type='', handleApplyVoucher }) {
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const [visibleMenu, setVisibleMenu] = useState(false)
-
+  console.log("data---voucher:", data)
   const hanldeClaimVoucher = async () => {
     if (!type) {
       if (!isLogin) {

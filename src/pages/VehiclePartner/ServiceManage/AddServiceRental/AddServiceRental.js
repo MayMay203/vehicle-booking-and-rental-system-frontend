@@ -11,6 +11,7 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { toast } from 'react-toastify'
 import { addRentalService } from '~/apiServices/rentalPartner/addRentalService'
 import { fetchAllVehicle } from '~/redux/slices/rentalPartnerSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function AddServiceRental({ ...props }) {
@@ -86,6 +87,7 @@ function AddServiceRental({ ...props }) {
     e.preventDefault()
     if (dispatch(checkLoginSession())) {
       setLoading(true)
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       try {
         const vehicleRegisterInfo = {
           location: formData.location,
@@ -134,10 +136,10 @@ function AddServiceRental({ ...props }) {
         })
         const response = await addRentalService(formDataAdd)
         if (response) {
-           dispatch(fetchAllVehicle())
+           dispatch(fetchAllVehicle({ typeService: '2', status: 'available' }))
           toast.success('Thêm dịch vụ cho thuê xe thành công!', { autoClose: 2000 })
           console.log('Thêm dịch vụ cho thuê xe thành công!', response)
-          // handleCancel()
+          handleCancel()
           props.onHide()
           
         }
@@ -148,9 +150,11 @@ function AddServiceRental({ ...props }) {
         //   toast.error('Biển số xe đã tồn tại!', { autoClose: 2000, position: 'top-center' })
         // } else {
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
         // }
       } finally {
         setLoading(false) 
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       }
     }
   }

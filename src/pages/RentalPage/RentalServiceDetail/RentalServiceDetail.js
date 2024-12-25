@@ -196,7 +196,7 @@ function RentalServiceDetail() {
           <Row className="mb-5">
             <div className={cx('d-flex', 'name-location-vehicle')}>
               <span className={cx('name-vehicle')}>{inforVehicle?.manufacturer + ' ' + inforVehicle?.vehicleLife}</span>
-              <Rating></Rating>
+              <Rating rating={inforVehicle?.rating_total}></Rating>
             </div>
             <div className={cx('icon-txt')}>
               <FontAwesomeIcon icon={faLocationDot} className={cx('icon', 'icon-location')} />

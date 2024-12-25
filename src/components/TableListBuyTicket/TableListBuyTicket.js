@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 const cx = classNames.bind(styles)
 function TableListBuyTicket({ listOrderOfBusTrip }) {
   const columns = [
@@ -97,6 +98,7 @@ function TableListBuyTicket({ listOrderOfBusTrip }) {
           data.businessPartnerInfo?.accountId,
           'USER',
         )
+        dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
         dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
       }}
   // const data = [
@@ -113,11 +115,11 @@ function TableListBuyTicket({ listOrderOfBusTrip }) {
   //     chat: '',
   //   },
   // ]
-  const [data, setData] = useState([])
+  const [data, setData] = useState([{}])
   useEffect(() => {
     setData(
       listOrderOfBusTrip
-        .sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime)) // Sắp xếp theo thời gian đặt vé giảm dần
+        // .sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime)) // Sắp xếp theo thời gian đặt vé giảm dần
         .map((item, index) => ({
           key: index,
           name: item.name,
@@ -129,7 +131,22 @@ function TableListBuyTicket({ listOrderOfBusTrip }) {
         })),
     )
   }, [listOrderOfBusTrip])
-  console.log('Order lisst:--', listOrderOfBusTrip, '------ data bang:', data)
+  console.log(
+    'Order lisst:--',
+    listOrderOfBusTrip,
+    '------ data bang:',
+    listOrderOfBusTrip
+      // .sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime)) // Sắp xếp theo thời gian đặt vé giảm dần
+      .map((item, index) => ({
+        key: index,
+        name: item.name,
+        numberphone: item.phoneNumber,
+        orderAt: item.orderTime,
+        numberTicket: item.numberOfTicker,
+        totalCharge: item.totalPrice,
+        cancelAt: item.cancelTime,
+      })),
+  )
   // useEffect(() => {setData(listOrderOfBusTrip)}, [listOrderOfBusTrip])
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)

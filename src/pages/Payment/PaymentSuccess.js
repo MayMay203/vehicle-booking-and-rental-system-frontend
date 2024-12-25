@@ -214,7 +214,9 @@ function PaymentSuccess() {
                       </div>
                       <div className="d-flex justify-content-between mb-4">
                         <span>Giảm giá voucher:</span>
-                        <span style={{ color: 'red' }}>{`-${detailData.orderInfo?.voucherValue?.replace('.',',') || '0 VND'}
+                        <span style={{ color: 'red' }}>{`-${
+                          detailData.orderInfo?.voucherValue?.replace('.', ',') || '0 VND'
+                        }
                         `}</span>
                       </div>
 
@@ -391,19 +393,19 @@ function PaymentSuccess() {
                       <div className="d-flex justify-content-between mb-4">
                         <span>Tiền thuê 1 chiếc xe:</span>
                         <span style={{ color: '#008E28', fontWeight: 600 }}>
-                          {detailVehicle?.price?.toLocaleString('vi-VN')} đ
+                          {Math.round(detailData?.pricingInfo?.price).toLocaleString('vi-VN')} đ
                         </span>
                       </div>
                       <div className="d-flex justify-content-between mb-4">
                         <span>Số lượng thuê:</span>
                         <span style={{ fontWeight: 600 }}>{detailData.rentalInfo?.numberOfVehicles}</span>
                       </div>
-                      <div className="d-flex justify-content-between mb-4">
+                      {/* <div className="d-flex justify-content-between mb-4">
                         <span>Giảm giá:</span>
                         <span style={{ color: 'red' }}>{`-${Math.round(
                           detailVehicle?.discount_percentage || 0,
                         )}%`}</span>
-                      </div>
+                      </div> */}
                       <div className="d-flex justify-content-between mb-4">
                         <span>Giảm giá voucher:</span>
                         {/* <span style={{ color: 'red' }}>{`-${Math.round(
@@ -412,9 +414,10 @@ function PaymentSuccess() {
                             0,
                         )}`}</span> */}
                         <span style={{ color: 'red' }}>
-                          {detailData.pricingInfo?.voucherPercentage + '%' ||
+                          {/* {detailData.pricingInfo?.voucherPercentage + '%' ||
                             detailData.pricingInfo?.voucherValue.toLocaleString('vi-VN') + 'đ' ||
-                            0}
+                            0} */}
+                          {detailData.pricingInfo?.voucherValue.toLocaleString('vi-VN') + 'đ' || 0}
                         </span>
                       </div>
                       <div className="d-flex justify-content-between mb-4">
