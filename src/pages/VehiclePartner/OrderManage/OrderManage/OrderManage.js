@@ -13,6 +13,7 @@ import { fetchAllOrder } from '~/redux/slices/rentalPartnerSlice'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
 import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 const cx = classNames.bind(styles)
 function OrderManage() {
   const columns = [
@@ -151,6 +152,7 @@ function OrderManage() {
     if (dispatch(checkLoginSession())) {
       // Create new conversation
       const idConversation = await createCoversation(parseInt(currentUser.id), currentRole, parseInt(id), 'USER')
+      dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
     }
   }
