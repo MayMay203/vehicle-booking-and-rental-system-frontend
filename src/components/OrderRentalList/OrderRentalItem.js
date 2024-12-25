@@ -33,6 +33,7 @@ import { Empty } from 'antd'
 import { createRating } from '~/apiServices/ratingService/createRating'
 import { deleteRating } from '~/apiServices/ratingService/deleteRating'
 import { updatRating } from '~/apiServices/ratingService/updateRating'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status, data = {} }) {
@@ -223,6 +224,7 @@ function TicketItem({ status, data = {} }) {
         data.businessPartnerInfo?.accountId,
         config.constants.busPartner,
       )
+      dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
     }
   }

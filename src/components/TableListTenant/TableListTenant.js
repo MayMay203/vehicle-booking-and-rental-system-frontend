@@ -12,6 +12,7 @@ import { getAllOrderByServiceID } from '~/apiServices/rentalPartner/getAllOrderB
 import viVN from 'antd/locale/vi_VN'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
 
@@ -109,6 +110,7 @@ function TableListTenant({ idRegister }) {
         record.customerInfo?.accountId,
         'USER',
       )
+      dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
     }
   }

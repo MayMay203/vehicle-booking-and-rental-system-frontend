@@ -106,11 +106,15 @@ function StatsRevenueRentalService() {
           data={{
             labels:
               activeTypeFilter === 'ByMonth'
-                ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                ? ['', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, '']
                 : data.revenueStatistic.map((item) => parseInt(item.period)),
             datasets: [
               {
-                data: data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim(), 10)), // Safely access data
+                data: [
+                  null,
+                  ...data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim(), 10)),
+                  null,
+                ], // Safely access data
                 label: 'Doanh thu mỗi tháng',
                 borderColor: '#FF7F50',
                 fill: false,
@@ -122,7 +126,7 @@ function StatsRevenueRentalService() {
             plugins: {
               title: {
                 display: true,
-                text: 'DOANH THU THEO NĂM',
+                text: activeTypeFilter === 'ByMonth' ? 'DOANH THU THEO THÁNG' : 'DOANH THU THEO NĂM',
                 color: '#A33A3A',
                 font: {
                   size: 30,
