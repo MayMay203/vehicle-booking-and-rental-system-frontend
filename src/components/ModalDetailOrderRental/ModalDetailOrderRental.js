@@ -10,18 +10,18 @@ import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getDetailTransaction } from '~/apiServices/order/getDetailTransaction'
 const cx = classNames.bind(styles)
-function ModalDetailOrderRental({ transactionCode, ...props }) {
+function ModalDetailOrderRental({ transactionCode, inforRentalVehicle, ...props }) {
   const dispatch = useDispatch()
   const [inforOrder, setInforOrder] = useState({})
-  useEffect(() =>{
-    if (dispatch(checkLoginSession())){
-      const getInforOrder = async() => {
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      const getInforOrder = async () => {
         const response = await getDetailTransaction(transactionCode, 'VEHICLE_RENTAL_ORDER')
         setInforOrder(response)
       }
       getInforOrder()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionCode])
   return (
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -33,7 +33,11 @@ function ModalDetailOrderRental({ transactionCode, ...props }) {
       <Modal.Body>
         <Row>
           <span className={cx('time-payment')}>Thanh toán lúc: {inforOrder?.createAt}</span>
-          <span className={cx('time-payment')}>Loại xe: xe máy -- Hãng xe: Honda -- Khu vực: Đà Nẵng</span>
+          <span className={cx('time-payment')}>
+            Thuê:{inforRentalVehicle?.vehicle_type} + ' ' + {inforRentalVehicle?.manufacturer}
+            {inforRentalVehicle?.type === 0 ? ' tự lái' : ' có người lái'}
+          </span>
+          <span className={cx('time-payment')}>Địa chỉ nhận xe: {inforRentalVehicle?.location}</span>
         </Row>
         <Row>
           <Row className={cx('txt-title')}>Người đặt</Row>
@@ -139,14 +143,14 @@ function ModalDetailOrderRental({ transactionCode, ...props }) {
             </span>
           </div>
         </Row>
-        <Row>
+        {/* <Row>
           <div className={cx('wrap-note')}>
             <span className={cx('note')}>Lưu ý:</span>
             <span className={cx('note-content')}>
               Mọi tiền bạn đã thanh toán sẽ được hoàn trả 100% nếu chủ xe hủy đơn và hệ thống sẽ đánh giá xe 1 sao.
             </span>
           </div>
-        </Row>
+        </Row> */}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">

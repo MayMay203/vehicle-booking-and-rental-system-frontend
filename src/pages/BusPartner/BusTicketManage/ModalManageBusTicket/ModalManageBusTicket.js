@@ -25,7 +25,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
   const [filteredDestinations, setFilteredDestinations] = useState([])
   const listBusByBusType = useSelector((state) => state.busPartner.busListByBusType)
   const [provincesList, setProvincesList] = useState([])
-  
 
   const [formData, setFormData] = useState({
     idBusTrip: '',
@@ -66,23 +65,29 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
   //     [name]: value,
   //   }))
   // }
-    useEffect(() => {
-      if (dispatch(checkLoginSession())) {
-        dispatch(fetchAllBusTypes())
-        dispatch(fetchAllBusesByBusType(formData.nameType))
-        dispatch(fetchAllBusTrips())
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllBusTypes())
+      dispatch(fetchAllBusesByBusType(formData.nameType))
+      dispatch(fetchAllBusTrips())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch])
+  // useEffect(() => {
+  //   if (dispatch(checkLoginSession())) {
+  //     dispatch(fetchAllBusTypes())
+  //     dispatch(fetchAllBusesByBusType(formData.nameType))
+  //     dispatch(fetchAllBusTrips())
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
   console.log('listBusTrips---', listBusTrips)
   const fetchInforBusTrip = async (id) => {
     try {
       const response = await detailBusTrip(id)
       console.log('Bus trip response:', response) // Kiểm tra toàn bộ dữ liệu trả về
 
-      const price = response?.dropOffLocationInfos?.find(
-        (item) => item.province === formData.destination,
-      )?.priceTicket
+      const price = response?.dropOffLocationInfos?.find((item) => item.province === formData.destination)?.priceTicket
 
       setFormData((prevState) => ({
         ...prevState,
@@ -93,55 +98,54 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
     }
   }
 
-   useEffect(() => {
-     if (formData?.idBusTrip) {
-       if (dispatch(checkLoginSession())) {
-         fetchInforBusTrip(formData?.idBusTrip)
-       }
-     } else {
-       console.log('No Bus Trip ID available')
-     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [formData?.idBusTrip])
+  useEffect(() => {
+    if (formData?.idBusTrip) {
+      if (dispatch(checkLoginSession())) {
+        fetchInforBusTrip(formData?.idBusTrip)
+      }
+    } else {
+      console.log('No Bus Trip ID available')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData?.idBusTrip])
 
- const handleInputChange = (e) => {
-   const { name, value } = e.target
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
 
-   if (name === 'departure') {
-     const matches = listBusTrips.filter((trip) => trip.departureLocation === value)
-     const uniqueDestinations = [...new Set(matches.map((trip) => trip.arrivalLocation))]
-     console.log('Matches:', matches) // Log các chuyến khởi hành
-     console.log('Unique Destinations:', uniqueDestinations) // Log danh sách điểm đến
-     setFilteredDestinations(uniqueDestinations)
-   }
+    if (name === 'departure') {
+      const matches = listBusTrips.filter((trip) => trip.departureLocation === value)
+      const uniqueDestinations = [...new Set(matches.map((trip) => trip.arrivalLocation))]
+      console.log('Matches:', matches) // Log các chuyến khởi hành
+      console.log('Unique Destinations:', uniqueDestinations) // Log danh sách điểm đến
+      setFilteredDestinations(uniqueDestinations)
+    }
 
-   // Nếu đủ cả departure và destination, tìm duration
-   const updatedFormData = {
-     ...formData,
-     [name]: value,
-   }
+    // Nếu đủ cả departure và destination, tìm duration
+    const updatedFormData = {
+      ...formData,
+      [name]: value,
+    }
 
-   if (updatedFormData.departure && updatedFormData.destination) {
-     const matchingTrip = listBusTrips.find(
-       (trip) =>
-         trip.departureLocation === updatedFormData.departure && trip.arrivalLocation === updatedFormData.destination,
-     )
+    if (updatedFormData.departure && updatedFormData.destination) {
+      const matchingTrip = listBusTrips.find(
+        (trip) =>
+          trip.departureLocation === updatedFormData.departure && trip.arrivalLocation === updatedFormData.destination,
+      )
 
-     if (matchingTrip) {
-       setFormData((prevState) => ({
-         ...prevState,
-         extendTime: matchingTrip.journeyDuration, 
-         idBusTrip: matchingTrip.id,
-       }))
-     }
-   }
+      if (matchingTrip) {
+        setFormData((prevState) => ({
+          ...prevState,
+          extendTime: matchingTrip.journeyDuration,
+          idBusTrip: matchingTrip.id,
+        }))
+      }
+    }
 
-   setFormData((prevState) => ({
-     ...prevState,
-     [name]: value,
-   }))
- }
-
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+  }
 
   // const handleInputChange = (e) => {
   //   const { name, value } = e.target
@@ -179,11 +183,11 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
       if (provices) {
         const cleanedProvinces = provices
           .map((province) => {
-           const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
-           return {
-             ...province,
-             name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
-           }
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+            return {
+              ...province,
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+            }
           })
           .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
         setProvincesList(cleanedProvinces)
@@ -462,7 +466,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
           <Col></Col>
         </Row>
       </Modal.Footer> */}
-      
     </Modal>
   )
 }

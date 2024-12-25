@@ -12,6 +12,7 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllOrder } from '~/redux/slices/rentalPartnerSlice'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
+import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 const cx = classNames.bind(styles)
 function OrderManage() {
   const columns = [
@@ -90,7 +91,7 @@ function OrderManage() {
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
           style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-          onClick={() => handleViewDetail(record.transactionCode)}
+          onClick={() => handleViewDetail(record.transactionCode, record.inforRentalVehicle)}
         />
       ),
     },
@@ -129,6 +130,7 @@ function OrderManage() {
   const [data, setData] = useState([])
   const { currentUser } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
+  const [inforRentalVehicle, setInforRentalVehicle] = useState({})
   // const data = [
   //   {
   //     key: '1',
@@ -141,6 +143,10 @@ function OrderManage() {
   //     timeRental: '12:00, 12/12/2024',
   //   },
   // ]
+  const getInforRentalVehicle = async (id) => {
+    const response = await getVehicleRentalByID(id)
+    return response
+  }
   const handleChat = async (id) => {
     if (dispatch(checkLoginSession())) {
       // Create new conversation
@@ -153,8 +159,8 @@ function OrderManage() {
   }
   const [modalDetailShow, setModalDetailShow] = useState(false)
   const [transactionCode, setTransactionCode] = useState('')
-  const handleViewDetail = (transactionCode) => {
-    console.log('transactionCode-trong-cha:', transactionCode)
+  const handleViewDetail = (transactionCode, inforRentalVehicle) => {
+    console.log('transactionCode-trong-cha:', transactionCode, '--inforRentalVehicle:', inforRentalVehicle)
     setModalDetailShow(true)
     setTransactionCode(transactionCode)
   }
@@ -164,22 +170,37 @@ function OrderManage() {
       dispatch(fetchAllOrder())
     }
   }, [dispatch])
+
   useEffect(() => {
-    setData(
-      listOrder.map((item, index) => ({
-        key: index,
-        typeVehicle: 'Ô tô 16 chỗ',
-        number: item.rentalInfo.numberOfVehicles,
-        charge: item.pricingInfo.priceTotal,
-        location: item.rentalInfo.pickupLocation,
-        nameRental: item.customerInfo.name,
-        numberphone: item.customerInfo.phoneNumber,
-        timeRental: item.createAt,
-        accountID: item.customerInfo.accountId,
-        transactionCode: item.transactionCode,
-      })),
-    )
+    const fetchRentalInfo = async () => {
+      try {
+        const updatedData = await Promise.all(
+          listOrder.map(async (item, index) => {
+            const rentalInfo = await getInforRentalVehicle(item.rentalInfo.carRentalServiceId)
+            setInforRentalVehicle(rentalInfo)
+            return {
+              key: index,
+              typeVehicle: rentalInfo.vehicle_type,
+              number: item.rentalInfo.numberOfVehicles,
+              charge: item.pricingInfo.priceTotal,
+              location: item.rentalInfo.pickupLocation,
+              nameRental: item.customerInfo.name,
+              numberphone: item.customerInfo.phoneNumber,
+              timeRental: item.createAt,
+              accountID: item.customerInfo.accountId,
+              transactionCode: item.transactionCode,
+              inforRentalVehicle: rentalInfo,
+            }
+          }),
+        )
+        setData(updatedData)
+      } catch (error) {
+        console.error('Error fetching rental info:', error)
+      }
+    }
+    fetchRentalInfo()
   }, [listOrder])
+
   return (
     <div className="container">
       <Row className="mt-4 justify-content-center align-items-center">
@@ -209,6 +230,7 @@ function OrderManage() {
       <ModalDetailOrderRental
         show={modalDetailShow}
         transactionCode={transactionCode}
+        inforRentalVehicle={inforRentalVehicle}
         onHide={() => setModalDetailShow(false)}
       />
     </div>

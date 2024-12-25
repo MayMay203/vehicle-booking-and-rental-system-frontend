@@ -8,12 +8,14 @@ import { DatePicker } from 'antd'
 import moment from 'moment'
 const cx = classNames.bind(styles)
 
-function AddManyBreakDay({ initialItems, content, setBreakDays, price=null }) {
+function AddManyBreakDay({ initialItems, content, setBreakDays, price = null }) {
   const [items, setItems] = useState(initialItems)
   const [itemCounter, setItemCounter] = useState(items.length)
-
+  const disablePastDates = (current) => {
+    return current && current < moment().startOf('day') // Disable all past dates
+  }
   const handleAddItem = () => {
-    setItems((prevState) => [...prevState, { start: '', end: '', id: itemCounter + 1 }])
+    setItems((prevState) => [...prevState, { startDay: '', endDay: '', id: itemCounter + 1 }])
     setItemCounter((prev) => prev + 1)
   }
 
@@ -27,7 +29,7 @@ function AddManyBreakDay({ initialItems, content, setBreakDays, price=null }) {
         item.id === id
           ? {
               ...item,
-              start: date?.format('DD-MM-YYYY') || '',
+              startDay: date?.format('DD-MM-YYYY') || '',
             }
           : item,
       ),
@@ -40,7 +42,7 @@ function AddManyBreakDay({ initialItems, content, setBreakDays, price=null }) {
         item.id === id
           ? {
               ...item,
-              end: date?.format('DD-MM-YYYY') || '',
+              endDay: date?.format('DD-MM-YYYY') || '',
             }
           : item,
       ),
@@ -49,10 +51,10 @@ function AddManyBreakDay({ initialItems, content, setBreakDays, price=null }) {
 
   useEffect(() => {
     const validDays = items
-      .filter((item) => item.start !== '' && item.end !== '') // Filter items with non-empty start and end
-      .map(({ start, end }) => ({ start, end })) // Extract only start and end fields
+      .filter((item) => item.startDay !== '' && item.endDay !== '') // Filter items with non-empty start and end
+      .map(({ startDay, endDay }) => ({ startDay, endDay })) // Extract only start and end fields
     setBreakDays(validDays) // Send to the parent
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items])
 
   return (
@@ -69,9 +71,10 @@ function AddManyBreakDay({ initialItems, content, setBreakDays, price=null }) {
               <DatePicker
                 placeholder="Chọn ngày"
                 onChange={(date) => handleStartDateChange(date, item.id)}
-                value={item.start ? moment(item.start, 'DD-MM-YYYY') : null}
+                value={item.startDay ? moment(item.startDay, 'DD-MM-YYYY') : null}
                 format="DD-MM-YYYY"
                 className="content-calendar w-100"
+                disabledDate={disablePastDates}
               />
             </Form.Group>
             <Form.Group className={cx('txt', 'd-flex')} controlId={`formAddEnd_${item.id}`}>
@@ -79,9 +82,10 @@ function AddManyBreakDay({ initialItems, content, setBreakDays, price=null }) {
               <DatePicker
                 placeholder="Chọn ngày"
                 onChange={(date) => handleEndDateChange(date, item.id)}
-                value={item.end ? moment(item.end, 'DD-MM-YYYY') : null}
+                value={item.endDay ? moment(item.endDay, 'DD-MM-YYYY') : null}
                 format="DD-MM-YYYY"
                 className="content-calendar w-100"
+                disabledDate={disablePastDates}
               />
             </Form.Group>
             <FontAwesomeIcon
