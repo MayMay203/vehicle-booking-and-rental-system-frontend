@@ -93,17 +93,22 @@ function TableListTenant({ idRegister }) {
         <FontAwesomeIcon
           icon={faMessage}
           style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-          onClick={() => handleChat(record.key)}
+          onClick={() => handleChat(record)}
         />
       ),
     },
   ]
   const { currentUser } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
-  const handleChat = async () => {
+  const handleChat = async (record) => {
     if (dispatch(checkLoginSession())) {
       // Create new conversation
-      const idConversation = await createCoversation(currentUser.id, currentRole, data.customerInfo?.accountId, 'USER')
+      const idConversation = await createCoversation(
+        currentUser.id,
+        currentRole,
+        record.customerInfo?.accountId,
+        'USER',
+      )
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
     }
   }
@@ -148,18 +153,25 @@ function TableListTenant({ idRegister }) {
 
   return (
     <div>
-      <Form.Select
-        aria-label="Chọn loại dịch vụ"
-        value={selectedType}
-        onChange={handleInputChange}
-        className={cx('txt', 'width-30', 'infor-item', 'justify-content-end mb-3')}
-      >
-        {listIDService.map((item, index) => (
-          <option key={index} value={item.type}>
-            {item.type === 0 ? 'Thuê xe tự lái' : 'Thuê xe có người lái'}
-          </option>
-        ))}
-      </Form.Select>
+      {listIDService.length === 2 && (
+        <div className="d-flex align-items-center">
+          <span className={cx('txt', 'mb-3 me-3', 'p-2')} style={{ backgroundColor: '#79E3E9', borderRadius: '3px' }}>
+            Loại dịch vụ
+          </span>
+          <Form.Select
+            aria-label="Chọn loại dịch vụ"
+            value={selectedType}
+            onChange={handleInputChange}
+            className={cx('txt', 'width-30', 'infor-item', 'justify-content-end mb-3')}
+          >
+            {listIDService.map((item, index) => (
+              <option key={index} value={item.type}>
+                {item.type === 0 ? 'Thuê xe tự lái' : 'Thuê xe có người lái'}
+              </option>
+            ))}
+          </Form.Select>
+        </div>
+      )}
 
       <ConfigProvider locale={viVN}>
         <Table

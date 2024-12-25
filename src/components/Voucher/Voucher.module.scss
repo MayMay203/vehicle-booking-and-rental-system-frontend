@@ -10,7 +10,7 @@
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
-    padding: 1rem;
+    // padding: 1rem;
 
     @include abstracts.screen(xs){
         width: 30rem;

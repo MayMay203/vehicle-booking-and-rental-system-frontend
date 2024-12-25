@@ -5,7 +5,6 @@ import { MessageIcon, StarIcon } from '../Icon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
-import Voucher from '../Voucher'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import UtilitiesList from '../UtilitiesList'
 import ImageList from '../ImageList'
@@ -34,6 +33,7 @@ import { createRating } from '~/apiServices/ratingService/createRating'
 import { deleteRating } from '~/apiServices/ratingService/deleteRating'
 import { updatRating } from '~/apiServices/ratingService/updateRating'
 import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
+import SlideVoucher from '../Voucher/SlideVoucher'
 
 const cx = classNames.bind(styles)
 function TicketItem({ status, data = {}, isDetailOrder = false }) {
@@ -376,12 +376,14 @@ function TicketItem({ status, data = {}, isDetailOrder = false }) {
         <div className="mt-5">
           <Tabs tabList={tabList} settings={settings} type={type} handleClickTab={handleClickTab}></Tabs>
           {type === 'discount' && !isDetailOrder && (
-            <div className="mt-5 row row-cols-1 justify-content-center row-cols-lg-2 gy-5">
-              {voucherUser.map((voucher) => (
+            // <div className="mt-5 row row-cols-1 justify-content-center row-cols-lg-2 gy-5">
+            <div className="mt-5 row justify-content-center">
+              {/* {voucherUser.map((voucher) => (
                 <div className="col mt-0" key={voucher.id}>
                   <Voucher className="m-auto" data={voucher} />
                 </div>
-              ))}
+              ))} */}
+              <SlideVoucher listVoucher={voucherUser}></SlideVoucher>
             </div>
           )}
           {type === 'pickReturn' && detailInfor['pickReturn'] && (

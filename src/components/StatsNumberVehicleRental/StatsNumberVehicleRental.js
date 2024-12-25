@@ -213,7 +213,7 @@ function StatsNumberVehicleRental() {
             className={cx('txt', 'selectbox', 'infor-item')}
             // onChange={handleInputChange}
           >
-            <option key={-1}>Tất cả</option>
+            <option key={-1} value={'all'}>Tất cả</option>
             {provincesList.map((province, index) => (
               <option key={index} value={province.name}>
                 {province.name}
@@ -231,7 +231,7 @@ function StatsNumberVehicleRental() {
             className={cx('txt', 'selectbox', 'infor-item')}
             // onChange={handleInputChange}
           >
-            <option key={-1} value={''}>
+            <option key={-1} value={'all'}>
               Tất cả
             </option>
             {typeVehicles.map((type, index) => (

@@ -8,9 +8,9 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import PaginationDots from '~/components/PaginationDots'
 
 const cx = classNames.bind(styles)
-function SlideVoucher({ listVoucher }) {
+function SlideVoucher({ listVoucher, maxPerpage=3 }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [voucherPerPage, setVoucherPerPage] = useState(3)
+  const [voucherPerPage, setVoucherPerPage] = useState(maxPerpage)
   const [currentPage, setCurrentPage] = useState(0)
   //   const totalPages = Math.ceil(listVoucher.length / [voucherPerPage, setVoucherPerPage])
   const totalPages = Math.ceil(listVoucher.length / voucherPerPage)
@@ -69,7 +69,7 @@ const handlePrevious = () => {
 
   return (
     <div>
-      <div className="d-flex">
+      <div className="d-flex justify-content-center">
         <Button className={cx('nav-button-page')} onClick={handlePrevious} disabled={currentIndex === 0} variant="none">
           <FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>
         </Button>
