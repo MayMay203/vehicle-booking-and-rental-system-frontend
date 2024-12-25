@@ -4,7 +4,7 @@ import * as httpRequest from '~/utils/httpRequest'
 export const getAllAccounts = async (email, active, page = 1) => {
   try {
     const params = {
-      size: config.variables.pagesize,
+      size: config.constants.pagesize,
       page: page,
       filter: `active:${active}${email ? ` and email~'${email}'` : ''} and accountRole.role.name~'USER'`, // Kết hợp filter
     }

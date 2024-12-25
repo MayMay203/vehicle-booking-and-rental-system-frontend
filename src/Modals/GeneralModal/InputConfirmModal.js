@@ -57,7 +57,7 @@ function InputConfirmModal() {
           const data = await cancelPartner(id, reason)
           if (data) {
             toast.success('Huỷ quan hệ đối tác thành công!', { autoClose: 800, position: 'top-center' })
-            dispatch(fetchAllRegisterPartners({ partnerType: type, status: config.variables.current }))
+            dispatch(fetchAllRegisterPartners({ partnerType: type, status: config.constants.current }))
             handleClose()
           }
         }
@@ -73,7 +73,7 @@ function InputConfirmModal() {
           const data = await cancelDriverPartner(id, reason)
           if (data) {
             toast.success('Huỷ quan hệ đối tác tài xế thành công!', { autoClose: 800, position: 'top-center' })
-            dispatch(fetchAllDriverPartners({ status: config.variables.current }))
+            dispatch(fetchAllDriverPartners({ status: config.constants.current }))
             handleClose()
           }
         }
@@ -90,7 +90,7 @@ function InputConfirmModal() {
           const data = await refusePartner(id, reason)
           if (data) {
             toast.success('Từ chối đăng ký đối tác thành công!', { autoClose: 800, position: 'top-center' })
-            dispatch(fetchAllRegisterPartners({ partnerType: type, status: config.variables.notConfirmed }))
+            dispatch(fetchAllRegisterPartners({ partnerType: type, status: config.constants.notConfirmed }))
             handleClose()
           }
         }
@@ -110,7 +110,7 @@ function InputConfirmModal() {
               autoClose: 800,
               position: 'top-center',
             })
-            dispatch(fetchAllDriverPartners({ status: config.variables.current }))
+            dispatch(fetchAllDriverPartners({ status: config.constants.current }))
             handleClose()
           }
         }

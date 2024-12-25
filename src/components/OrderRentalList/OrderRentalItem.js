@@ -221,7 +221,7 @@ function TicketItem({ status, data = {} }) {
         currentUser.id,
         currentRole,
         data.businessPartnerInfo?.accountId,
-        config.variables.busPartner,
+        config.constants.busPartner,
       )
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
     }

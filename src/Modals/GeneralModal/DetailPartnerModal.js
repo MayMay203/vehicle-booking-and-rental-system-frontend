@@ -56,7 +56,7 @@ function DetailPartner() {
 
   const handleConfirm = async () => {
     let data
-    if (status === config.variables.current) {
+    if (status === config.constants.current) {
       dispatch(
         setConfirmModalVisible({
           name: generalModalNames.CANCEL_PARTNER,
@@ -76,7 +76,7 @@ function DetailPartner() {
         data = await verifyRegisterPartner(id, type)
         if (data) {
           toast.success(
-            status === config.variables.notConfirmed
+            status === config.constants.notConfirmed
               ? 'Xác nhận đăng ký thành công!'
               : 'Khôi phục chế độ đối tác thành công!',
             { autoClose: 1200, position: 'top-center' },
@@ -85,7 +85,7 @@ function DetailPartner() {
             fetchAllRegisterPartners({
               partnerType: type,
               status:
-                status === config.variables.notConfirmed ? config.variables.notConfirmed : config.variables.cancelled,
+                status === config.constants.notConfirmed ? config.constants.notConfirmed : config.constants.cancelled,
             }),
           )
           dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
@@ -223,7 +223,7 @@ function DetailPartner() {
                 </span>
               </div>
             </div>
-            {detailData?.businessInfo.approvalStatus !== config.variables.notConfirmed && (
+            {detailData?.businessInfo.approvalStatus !== config.constants.notConfirmed && (
               <div className="d-flex-column row-gap-3 mt-4">
                 <LinkItem title="Thông tin chi tiết đối tác" Icon={<PartnerIcon />} className={cx('custom')} />
                 <div className="d-flex flex-column row-gap-2">
@@ -231,13 +231,13 @@ function DetailPartner() {
                     Thời gian trở thành đối tác -
                     <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeBecomePartner}</span>
                   </div>
-                  {detailData?.businessInfo.approvalStatus === config.variables.current && detailData?.timeUpdate && (
+                  {detailData?.businessInfo.approvalStatus === config.constants.current && detailData?.timeUpdate && (
                     <div className="mt-3 fs-4 ps-5 fst-italic">
                       Thời gian khôi phục đối tác -
                       <span style={{ color: '#5DAE70', marginLeft: '8px' }}>{detailData?.timeUpdate}</span>
                     </div>
                   )}
-                  {detailData?.businessInfo.approvalStatus === config.variables.cancelled && (
+                  {detailData?.businessInfo.approvalStatus === config.constants.cancelled && (
                     <div className="mt-3 fs-4 ps-5 fst-italic d-flex flex-column row-gap-4">
                       <div>
                         Thời gian huỷ đối tác -
@@ -252,7 +252,7 @@ function DetailPartner() {
               </div>
             )}
             <div className="d-flex justify-content-center gap-5" style={{ marginTop: '40px' }}>
-              {status === config.variables.notConfirmed ? (
+              {status === config.constants.notConfirmed ? (
                 <Button outline onClick={handleRefuse}>
                   Từ chối
                 </Button>
@@ -262,9 +262,9 @@ function DetailPartner() {
                 </Button>
               )}
               <Button primary onClick={handleConfirm}>
-                {status === config.variables.current
+                {status === config.constants.current
                   ? 'Huỷ đối tác'
-                  : status === config.variables.notConfirmed
+                  : status === config.constants.notConfirmed
                   ? 'Xác nhận'
                   : 'Khôi phục đối tác'}
               </Button>

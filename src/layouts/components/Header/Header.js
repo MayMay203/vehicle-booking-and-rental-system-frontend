@@ -105,13 +105,13 @@ function Header() {
 
       if (type === 'DRIVER') {
         const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-        navigate(`${route}?type=${config.variables.driverPartner}&status=${statusValue}`)
+        navigate(`${route}?type=${config.constants.driverPartner}&status=${statusValue}`)
       } else if (type === 'BUS_PARTNER') {
         const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-        navigate(`${route}?type=${config.variables.busPartner}&status=${statusValue}`)
+        navigate(`${route}?type=${config.constants.busPartner}&status=${statusValue}`)
       } else if (type === 'CAR_RENTAL_PARTNER') {
         const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-        navigate(`${route}?type=${config.variables.carRentalPartner}&status=${statusValue}`)
+        navigate(`${route}?type=${config.constants.carRentalPartner}&status=${statusValue}`)
       }
     } catch (error) {
       console.error('Lỗi khi gọi API:', error)
@@ -354,7 +354,7 @@ function Header() {
                     render={(attrs) => (
                       <div {...attrs}>
                         <PopperWrapper>
-                          <Notification />
+                          <Notification handleClose={ () => setIsShowNoti(false)} />
                         </PopperWrapper>
                       </div>
                     )}

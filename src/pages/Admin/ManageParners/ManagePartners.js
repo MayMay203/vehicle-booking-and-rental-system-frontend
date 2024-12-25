@@ -17,7 +17,7 @@ const cx = classNames.bind(styles)
 function ManagePartners() {
   console.log('re-render managePartners')
   const partnerList = useSelector((state) => state.partners.partnerList)
-  const [type, setType] = useState(config.variables.notConfirmed)
+  const [type, setType] = useState(config.constants.notConfirmed)
   const [partnerType, setPartnerType] = useState('')
   const location = useLocation()
   const dispatch = useDispatch()
@@ -35,11 +35,11 @@ function ManagePartners() {
 
   // Partner type change call API method
   useEffect(() => {
-    if (partnerType === config.variables.busPartner || partnerType === config.variables.carRentalPartner) {
+    if (partnerType === config.constants.busPartner || partnerType === config.constants.carRentalPartner) {
       if (dispatch(checkLoginSession())) {
         dispatch(fetchAllRegisterPartners({ partnerType, status: type, page: currentPage }))
       }
-    } else if (partnerType === config.variables.driverPartner) {
+    } else if (partnerType === config.constants.driverPartner) {
       console.log('VO DRIVER')
       if (dispatch(checkLoginSession())) {
         dispatch(fetchAllDriverPartners({ status: type, page: currentPage }))
@@ -50,15 +50,15 @@ function ManagePartners() {
   const tabList = [
     {
       label: 'Chờ xác nhận',
-      value: config.variables.notConfirmed,
+      value: config.constants.notConfirmed,
     },
     {
       label: 'Hiện tại',
-      value: config.variables.current,
+      value: config.constants.current,
     },
     {
       label: 'Đã huỷ',
-      value: config.variables.cancelled,
+      value: config.constants.cancelled,
     },
   ]
 
@@ -74,7 +74,7 @@ function ManagePartners() {
   }
 
   useEffect(() => {
-    if (partnerType === config.variables.busPartner || partnerType === config.variables.carRentalPartner) {
+    if (partnerType === config.constants.busPartner || partnerType === config.constants.carRentalPartner) {
       dispatch(
         fetchAllRegisterPartners({
           partnerType,
@@ -83,7 +83,7 @@ function ManagePartners() {
           // page: currentPage,
         }),
       )
-    } else if (partnerType === config.variables.driverPartner) {
+    } else if (partnerType === config.constants.driverPartner) {
       dispatch(fetchAllDriverPartners({ status: type, email: searchDebounce }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,9 +99,9 @@ function ManagePartners() {
         <BreadcrumbItem href="#">Trang chủ</BreadcrumbItem>
         <BreadcrumbItem href="#">Đối tác</BreadcrumbItem>
         <BreadcrumbItem active>
-          {partnerType === config.variables.busPartner
+          {partnerType === config.constants.busPartner
             ? 'Đối tác nhà xe'
-            : partnerType === config.variables.carRentalPartner
+            : partnerType === config.constants.carRentalPartner
             ? 'Đối tác cho thuê xe'
             : 'Đối tác tài xế'}
         </BreadcrumbItem>
@@ -122,7 +122,7 @@ function ManagePartners() {
           className="mt-5"
           align="center"
           current={currentPage}
-          pageSize={config.variables.pagesize}
+          pageSize={config.constants.pagesize}
           total={total}
           onChange={(page) => setCurrentPage(page)}
         />

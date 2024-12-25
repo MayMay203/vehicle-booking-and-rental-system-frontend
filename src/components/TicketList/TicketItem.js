@@ -221,7 +221,7 @@ function TicketItem({ status, data = {}, isDetailOrder = false }) {
         currentUser.id,
         currentRole,
         data.businessPartnerInfo?.accountId,
-        config.variables.busPartner,
+        config.constants.busPartner,
       )
       dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))

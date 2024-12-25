@@ -27,11 +27,13 @@ import { getDetailTransaction } from '~/apiServices/order/getDetailTransaction'
 import { getAllSuitableVouchers } from '~/apiServices/vouchers/getAllSuitableVoucher'
 import Voucher from '~/components/Voucher'
 import { Empty } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import { config } from '~/config'
 
 const cx = classNames.bind(styles)
 function TicketModal() {
   console.log('re-render ticket modal')
-  const { currentUser} = useSelector((state) => state.user)
+  const { currentUser } = useSelector((state) => state.user)
   const showTicketModal = useSelector((state) => state.generalModal.buyTicket)
   const { departureDate, arrivalLocation } = useSelector((state) => state.search.searchTicket)
   const { id, type, transactionCode } = showTicketModal
@@ -49,6 +51,7 @@ function TicketModal() {
   const [idVoucher, setIdVoucher] = useState('')
   const [title, setTitle] = useState('Áp dụng voucher')
   const { isLogin } = useSelector((state) => state.user)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (ticketDetail.orderInfor?.pricePerTicket) {
@@ -130,9 +133,13 @@ function TicketModal() {
         )
         if (order) {
           const key = order.keyOrder
-          const paymentUrl = await createPayment(key)
-          if (paymentUrl) {
-            window.location.href = paymentUrl
+          if (key) {
+            const paymentUrl = await createPayment(key)
+            if (paymentUrl) {
+              window.location.href = paymentUrl
+            }
+          } else {
+            navigate(config.routes.paymentFailure)
           }
         }
       }
@@ -162,7 +169,7 @@ function TicketModal() {
     } else {
       value = (total * percent) / 100
     }
-    setTitle(`- ${value?.toLocaleString().replace(',','.')} VNĐ`)
+    setTitle(`- ${value?.toLocaleString().replace(',', '.')} VNĐ`)
     setVoucherValue(value % 1 === 0 ? value : value.toFixed(3))
     setIdVoucher(id)
     setIsVoucher(false)
@@ -430,8 +437,9 @@ function TicketModal() {
                 <span className={cx('sale-off')}>
                   {type !== 'detailOrder'
                     ? `- ${voucherValue?.toLocaleString().replace(',', '.')} VNĐ`
-                    : ticketDetail.orderInfo?.voucherValue ? `${ticketDetail.orderInfo?.voucherValue.toLocaleString().replace(',', '.')}` : ` - 0 VNĐ`
-                  }
+                    : ticketDetail.orderInfo?.voucherValue
+                    ? `${ticketDetail.orderInfo?.voucherValue.toLocaleString().replace(',', '.')}`
+                    : ` - 0 VNĐ`}
                 </span>
               </div>
             </div>

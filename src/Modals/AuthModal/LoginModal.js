@@ -81,9 +81,9 @@ function LoginModal() {
 
   const handleGoogleLogin = (e) => {
     e.preventDefault()
-    const redirectUri = config.variables.redirectUrl
-    const authUrl = config.variables.authGoogleUrl
-    const googleClientId = config.variables.googleClientId
+    const redirectUri = config.constants.redirectUrl
+    const authUrl = config.constants.authGoogleUrl
+    const googleClientId = config.constants.googleClientId
 
     const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
       redirectUri,

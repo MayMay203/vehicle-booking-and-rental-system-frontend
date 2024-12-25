@@ -9,11 +9,12 @@ import {fetchAllNotificationsByAcc } from '~/redux/slices/conversationSlice'
 import { Empty} from 'antd'
 
 const cx = classNames.bind(styles)
-function Notification() {
+function Notification({ handleClose }) {
   const [active, setActive] = useState('All')
   const { currentUser } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
   const { notificationList } = useSelector((state) => state.conversation)
+  console.log('notificationList', notificationList)
   const [filterList, setFilterList] = useState([])
   const dispatch = useDispatch()
 
@@ -28,13 +29,12 @@ function Notification() {
 
   useEffect(() => {
     if (active === 'All') {
-       setFilterList(notificationList)
+      setFilterList(notificationList)
+    } else {
+      setFilterList(notificationList.filter((notification) => notification.seen === false))
     }
-    else {
-      setFilterList(notificationList.filter(notification => notification.seen === false))
-    }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [notificationList, active])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notificationList, active])
 
   useEffect(() => {}, [])
   const handleChooseAll = () => {
@@ -59,15 +59,10 @@ function Notification() {
           Chưa đọc
         </Button>
       </div>
-      <div style={{ border: '1px solid rgba(0, 0, 0, 0.175)'}}></div>
+      <div style={{ border: '1px solid rgba(0, 0, 0, 0.175)' }}></div>
       <div className={cx('mt-4', 'list')}>
         {filterList.length > 0 ? (
-          filterList.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              data={notification}
-            />
-          ))
+          filterList.map((notification) => <NotificationItem key={notification.id} data={notification} handleClose={handleClose} />)
         ) : (
           <Empty style={{ marginTop: '40px' }} description="Không có thông báo nào gần đây" />
         )}
