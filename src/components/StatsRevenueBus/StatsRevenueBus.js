@@ -357,11 +357,11 @@ function StatsRevenueBus() {
           data={{
             labels:
               activeTypeFilter === 'ByMonth'
-                ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                ? ['', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, '']
                 : data.revenueStatistic.map((item) => parseInt(item.period)),
             datasets: [
               {
-                data: data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim(), 10)), // Safely access data
+                data: [null, ...data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim(), 10)),null],
                 label: 'Doanh thu mỗi tháng',
                 borderColor: '#FF7F50',
                 fill: false,

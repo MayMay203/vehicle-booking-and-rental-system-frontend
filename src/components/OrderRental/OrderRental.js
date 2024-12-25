@@ -56,6 +56,13 @@ function OrderRental({ typeService, formData, setFormData }) {
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [total])
+  useEffect(() => {
+    setFormData((prevState) => ({
+      ...prevState,
+      voucher_value: voucherDiscount,
+    }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [voucherDiscount])
   //  const handleOrder = (type) => {
   //   navigate('/rent-vehicle/rental-service/rental-service-detail/rental-order', { state: { typeService: type } })
   // }
@@ -106,7 +113,7 @@ function OrderRental({ typeService, formData, setFormData }) {
       (formData.amount * formData.price * percent) / 100 > Number(maxValue.replace(/\./g, '').replace(' VND', ''))
         ? Number(maxValue.replace(/\./g, '').replace(' VND', ''))
         : (formData.amount * formData.price * percent) / 100
-    setVoucherDiscount(amount)
+    setVoucherDiscount(Math.round(amount))
     setIsVoucher(false)
   }
   return (
@@ -224,7 +231,7 @@ function OrderRental({ typeService, formData, setFormData }) {
           <span>Giảm giá voucher</span>
           {/* <span className={cx('align-right', 'txt-red')}>-0đ</span> */}
           <button onClick={() => setIsVoucher((prev) => !prev)} style={{ color: 'var(--primary-color)' }}>
-            {voucherDiscount===''? 'Áp mã giảm giá':`-${voucherDiscount.toLocaleString().replace(',', '.')} VNĐ`}
+            {voucherDiscount===''? 'Áp mã giảm giá':`-${voucherDiscount.toLocaleString('vi-VN')} đ`}
             <FontAwesomeIcon
               icon={faCaretDown}
               style={{ rotate: isVoucher ? '-180deg' : '0deg', transition: 'rotate .2s ease', marginLeft: '6px' }}

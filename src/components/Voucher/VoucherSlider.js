@@ -15,7 +15,7 @@ function VoucherSlider({ listVoucher }) {
   const totalPages = Math.ceil(listVoucher.length / voucherPerPage)
 
   const displayedVoucher = listVoucher.slice(currentIndex, currentIndex + voucherPerPage)
-
+  console.log('listVoucher:--', listVoucher)
   const handleNext = () => {
     if (currentIndex + voucherPerPage < listVoucher.length) {
       setCurrentIndex(currentIndex + voucherPerPage)
@@ -43,7 +43,7 @@ function VoucherSlider({ listVoucher }) {
         </Button>
         <Row className="justify-content-center">
           {displayedVoucher.map((voucher, index) => (
-            <Voucher className={cx('voucher-small')} key={index} data={voucher} ></Voucher>
+            <Voucher className={cx('voucher-small')} key={index} data={voucher}></Voucher>
           ))}
         </Row>
         <Button

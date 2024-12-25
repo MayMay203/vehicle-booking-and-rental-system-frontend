@@ -16,9 +16,9 @@ function PaymentFailure() {
           <Button outline onClick={() => navigate(config.routes.home)} style={{width: '160px'}}>
             Trở về trang chủ
           </Button>,
-          <Button primary onClick={() => navigate(config.routes.ticket)} style={{width: '160px'}}>
+          {/* <Button primary onClick={() => navigate(config.routes.ticket)} style={{width: '160px'}}>
             Đặt vé lại
-          </Button>,
+          </Button>, */}
        </div>
       }
     ></Result>
