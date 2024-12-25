@@ -8,6 +8,8 @@ import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { addBusSchedule } from '~/apiServices/busPartner/addBusSchedule'
+import { fetchAllBusTrips, fetchAllSchedulesByBusID } from '~/redux/slices/busPartnerSlice'
+import moment from 'moment'
 const cx = classNames.bind(styles)
 function TicketBus({ data, enableEdit = true }) {
   const dispatch = useDispatch()
@@ -51,6 +53,10 @@ function TicketBus({ data, enableEdit = true }) {
       breakDays: days,
     }))
   }
+  const disablePastDates = (current) => {
+    return current && current < moment().startOf('day') 
+  }
+
   useEffect(() => {
     // eslint-disable-next-line no-unused-vars
     const { breakDays = [], ...restOfDataBusTicket } = dataBusTicket
@@ -89,14 +95,29 @@ function TicketBus({ data, enableEdit = true }) {
           toast.success('Thêm vé xe thành công!', { autoClose: 2000 })
           console.log('Thêm vé xe thành công!', response)
           handleReset()
+          dispatch(fetchAllBusTrips())
+          dispatch(fetchAllSchedulesByBusID({ idBus: dataPost.busId }))
         }
       } catch (error) {
         console.log('Thêm thất bại:')
         console.log(error)
-        // if (error === 'Bus sche is available') {
-        //   toast.error('Biển số xe đã tồn tại!', { autoClose: 2000, position: 'top-center' })
-        // } else {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+        if (error === 'Conflict schedules of the bus - conflict departure time') {
+          toast.error('Thời gian khởi hành bị xung đột. Vui lòng chọn thời gian khác!', {
+            autoClose: 2000,
+            position: 'top-center',
+          })
+        }else  if (error === 'Conflict schedules of the bus - conflict arrival time') {
+          toast.error('Thời gian khởi hành bị xung đột. Vui lòng chọn thời gian khác!', {
+            autoClose: 2000,
+            position: 'top-center',
+          })
+        }
+        // else if(error==="Conflict schedules of the bus - conflict departure time"){
+
+        // }
+        else {
+          toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+        }
       }
     }
   }
@@ -152,6 +173,7 @@ function TicketBus({ data, enableEdit = true }) {
                 value={startDate}
                 format="DD-MM-YYYY"
                 className="content-calendar w-100"
+                disabledDate={disablePastDates}
               />
             </Form.Group>
           </Col>
@@ -205,7 +227,10 @@ function TicketBus({ data, enableEdit = true }) {
       </Col>
       <Col lg={1} className={cx('line-vertical')}></Col>
       <Col sm={12} lg={5} className={cx('wrap-break-days')}>
-        <AddManyBreakDay initialItems={[{ start: '', end: '', id: 1 }]} setBreakDays={setBreakDays}></AddManyBreakDay>
+        <AddManyBreakDay
+          initialItems={[{ startDay: '', endDay: '', id: 1 }]}
+          setBreakDays={setBreakDays}
+        ></AddManyBreakDay>
       </Col>
       <div className={cx('save-button', { disabled: !activeAdd })} onClick={activeAdd ? handleSave : undefined}>
         Lưu vé xe
