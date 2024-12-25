@@ -37,11 +37,11 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
     { value: '1', label: 'Thuê xe có người lái' },
     { value: '2', label: 'Cả 2 dịch vụ' },
   ]
-  const statuses = [
-    { value: 'available', label: 'Đang hoạt động' },
-    { value: 'Tạm dừng hoạt động', label: 'Tạm dừng hoạt động' },
-    { value: 'Dừng hoạt động', label: 'Dừng hoạt động' },
-  ]
+  // const statuses = [
+  //   { value: 'available', label: 'Đang hoạt động' },
+  //   { value: 'Tạm dừng hoạt động', label: 'Tạm dừng hoạt động' },
+  //   { value: 'Dừng hoạt động', label: 'Dừng hoạt động' },
+  // ]
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
       dispatch(fetchAllVehicleTypes())
@@ -139,42 +139,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             ))}
           </Form.Select>
         </Form.Group>
-        <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput4">
-          <Form.Label className="mb-3">
-            Giá tính theo <span className="text-danger">*</span>
-          </Form.Label>
-          <Form.Select
-            name="price_according"
-            aria-label="price_according"
-            className={cx('txt', 'selectbox', 'infor-item')}
-            value={formData.price_according}
-            readOnly={view}
-            // disabled={view}
-            onChange={handleInputChange}
-          >
-            <option key={1} value="1">
-              1 ngày
-            </option>
-            <option key={2} value="2">
-              2 ngày
-            </option>
-            <option key={3} value="3">
-              3 ngày
-            </option>
-            <option key={4} value="4">
-              4 ngày
-            </option>
-            <option key={5} value="5">
-              5 ngày
-            </option>
-            <option key={6} value="6">
-              6 ngày
-            </option>
-            <option key={7} value="7">
-              7 ngày
-            </option>
-          </Form.Select>
-        </Form.Group>
+        
         <Form.Group className={cx('txt', 'padding-s', 'mb-5')} controlId="formInfor.ControlInput7">
           <Form.Label className="mb-3">
             Phí đặt cọc<span className="text-danger">*</span>
@@ -357,26 +322,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             </InputGroup.Text>
           </InputGroup>
         </Form.Group>
-        <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput10">
-          <Form.Label className="mb-3">
-            Trạng thái<span className="text-danger">*</span>
-          </Form.Label>
-          <Form.Select
-            name="status"
-            aria-label="status"
-            className={cx('txt', 'selectbox', 'infor-item')}
-            value={formData.status}
-            onChange={handleInputChange}
-            readOnly={view}
-            // disabled={view}
-          >
-            {statuses.map((status, index) => (
-              <option key={index} value={status.value}>
-                {status.label}
-              </option>
-            ))}
-          </Form.Select>
-        </Form.Group>
+        
       </Col>
       <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput9">
         <Form.Label className="mb-3">

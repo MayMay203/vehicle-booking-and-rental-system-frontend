@@ -62,7 +62,7 @@ function OrderRental({ typeService, formData, setFormData }) {
   const handleOrder = async () => {
     try {
       if (dispatch(checkLoginSession())) {
-         if (formData.voucherId === null) {
+         if (formData.voucherId === '') {
            const { voucherId, ...newFormData } = formData
            formData = newFormData
          }

@@ -69,7 +69,8 @@ const voucherPerPage = 1
   }
 
   return (
-    <div>
+    // <div>
+    <>
       <div className="d-flex justify-content-center">
         <Button className={cx('nav-button-page')} onClick={handlePrevious} disabled={currentIndex === 0} variant="none">
           <FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>
@@ -107,7 +108,8 @@ const voucherPerPage = 1
         onPageChange={handlePageChange}
         className={cx('pagination-dots')}
       ></PaginationDots>
-    </div>
+    {/* // </div> */}
+    </>
   )
 }
 export default SlideVoucherOrder
