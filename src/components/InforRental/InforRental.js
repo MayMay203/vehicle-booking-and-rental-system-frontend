@@ -59,6 +59,7 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
     customerName: currentUser.name,
     customerPhoneNumber: currentUser.phoneNumber,
     account_id: currentUser.id,
+    voucherId: '',
   })
   console.log('endDatatime ---4---', endDateTime)
   console.log('startDatatime ---- 4----', startDateTime)
@@ -101,7 +102,7 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
         car_deposit: inforVehicleRental.car_deposit,
         reservation_fee: inforVehicleRental.reservation_fees,
         // price: inforVehicleRental.amount,
-        vehicle_rental_service_id: inforVehicleRental?.id,
+        vehicle_rental_service_id: inforVehicleRental?.vehicle_rental_service_id,
       }))
     }
   }, [inforVehicleRental])

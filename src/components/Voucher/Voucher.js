@@ -19,7 +19,7 @@ import { generalModalNames, setAddVoucherVisible, setConfirmModalVisible } from 
 const cx = classNames.bind(styles)
 const now = 60
 
-function Voucher({ className, data, type, handleApplyVoucher }) {
+function Voucher({ className, data, type='', handleApplyVoucher }) {
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const [visibleMenu, setVisibleMenu] = useState(false)
@@ -150,7 +150,7 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
           <Col xs="auto" className={cx('time-content', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p>Giảm tối đa:</p>
           </Col>
-          <Col className={cx('time')}>
+          <Col className={cx('time', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p className="">{data.maxDiscountValue}</p>
           </Col>
         </Row>
@@ -158,7 +158,7 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
           <Col xs="auto" className={cx('time-content', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p>Đơn tối thiểu:</p>
           </Col>
-          <Col className={cx('time')}>
+          <Col className={cx('time', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p className="">{data.minOrderValue}</p>
           </Col>
         </Row>
@@ -166,7 +166,7 @@ function Voucher({ className, data, type, handleApplyVoucher }) {
           <Col xs="auto" className={cx('time-content', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p>Có hiệu lực từ:</p>
           </Col>
-          <Col className={cx('time')}>
+          <Col className={cx('time', type === 'order' ? 'padding-top-1_5' : 'padding-top-1')}>
             <p className="">{`0h00 ${data.startDate}`}</p>
           </Col>
         </Row>

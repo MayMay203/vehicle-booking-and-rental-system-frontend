@@ -6,7 +6,7 @@ import { DatePicker, Table } from 'antd'
 import Button from '../Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { fetchAllVehicleTypes } from '~/redux/slices/rentalPartnerSlice'
+import { fetchAllVehicleTypes, fetchStatsRental } from '~/redux/slices/rentalPartnerSlice'
 import dayjs from 'dayjs'
 import { getLocations } from '~/apiServices/getLocations'
 const cx = classNames.bind(styles)
@@ -17,29 +17,33 @@ function StatsNumberVehicleRental() {
     { value: 'month', label: 'Theo tháng' },
     { value: 'date', label: 'Theo ngày' },
   ]
-  // const [selectedRoute, setSelectedRoute] = useState('')
+  const [selectedLocation, setSelectedLocation] = useState('all')
+  const [selectedVehicleType, setSelectedVehicleType] = useState('all')
   const [statisticsBy, setStatisticsBy] = useState('year')
   const [selectedMonth, setSelectedMonth] = useState(dayjs())
   const [selectedYear, setSelectedYear] = useState(dayjs())
   const [selectedStartDate, setSelectedStartDate] = useState(dayjs())
   const [selectedEndDate, setSelectedEndDate] = useState(dayjs())
   const dispatch = useDispatch()
-  // const listData = useSelector((state) => state.busPartner.statsBusTrip)
-  // const [data, setData] = useState([])
+  const listData = useSelector((state) => state.busPartner.statsBusTrip)
+  const [data, setData] = useState([])
 
-  const data = [
-    {
-      key: '1',
-      location: 'Hà Nội',
-      typeVehicle: 'Xe máy',
-      rentaled: '12',
-      canceled: '1',
-    },
-  ]
+  // const data = [
+  //   {
+  //     key: '1',
+  //     location: 'Hà Nội',
+  //     typeVehicle: 'Xe máy',
+  //     rentaled: '12',
+  //     canceled: '1',
+  //   },
+  // ]
   const [provincesList, setProvincesList] = useState([])
-  // const handleRouteChange = (event) => {
-  //   setSelectedRoute(event.target.value)
-  // }
+  const handleLocationChange = (event) => {
+    setSelectedLocation(event.target.value)
+  }
+  const handleVehicleTypeChange = (event) => {
+    setSelectedVehicleType(event.target.value)
+  }
   const handleMonthChange = (month) => {
     setSelectedMonth(month)
     console.log('Month changed to:', month)
@@ -66,39 +70,46 @@ function StatsNumberVehicleRental() {
   }, [dispatch])
   const handleStats = () => {
     if (dispatch(checkLoginSession())) {
-      // dispatch(
-      //   fetchStatsBusTrip({
-      //     route: selectedRoute,
-      //     year: selectedYear.format('YYYY'),
-      //     month: selectedMonth.format('MM'),
-      //     startDate: selectedStartDate.format('YYYY-MM-DD'),
-      //     endDate: selectedEndDate.format('YYYY-MM-DD'),
-      //     statsBy: statisticsBy,
-      //   }),
-      // )
+      dispatch(
+        fetchStatsRental({
+          location: selectedLocation,
+          vehicleType: selectedVehicleType,
+          year: selectedYear.format('YYYY'),
+          month: selectedMonth.format('MM'),
+          startDate: selectedStartDate.format('YYYY-MM-DD'),
+          endDate: selectedEndDate.format('YYYY-MM-DD'),
+          statsBy: statisticsBy,
+        }),
+      )
     }
   }
   useEffect(() => {
-    if (dispatch(checkLoginSession())) {
-      // const getRoutes = async () => {
-      //   const response = await getAllRoutes()
-      //   if (response) {
-      //     const formattedRoutes = [
-      //       { value: '', label: 'Chọn tuyến đường' },
-      //       ...response
-      //         .sort((a, b) => a.localeCompare(b))
-      //         .map((route) => ({
-      //           value: route,
-      //           label: route,
-      //         })),
-      //     ]
-      //     setRoutes(formattedRoutes)
-      //   }
-      // }
-      // getRoutes()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+      if (dispatch(checkLoginSession())) {
+        dispatch(
+          fetchStatsRental({
+            location: selectedLocation,
+            vehicleType: selectedVehicleType,
+            year: selectedYear.format('YYYY'),
+            month: selectedMonth.format('MM'),
+            startDate: selectedStartDate.format('YYYY-MM-DD'),
+            endDate: selectedEndDate.format('YYYY-MM-DD'),
+            statsBy: statisticsBy,
+          }),
+        )
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch])
+  useEffect(() => {
+    setData(
+      listData.map((item, index) => ({
+        key: index,
+        location: item.location,
+        typeVehicle: item.vehicle_type,
+        rentaled: item.vehicleRentalAmount,
+        canceled: item.canceledVehicleAmount,
+      })),
+    )
+  }, [listData])
   useEffect(() => {
     async function fetchApi() {
       const provices = await getLocations(1)
@@ -211,9 +222,11 @@ function StatsNumberVehicleRental() {
             aria-label="location"
             name="location"
             className={cx('txt', 'selectbox', 'infor-item')}
-            // onChange={handleInputChange}
+            onChange={handleLocationChange}
           >
-            <option key={-1}>Tất cả</option>
+            <option key={-1} value={'all'}>
+              Tất cả
+            </option>
             {provincesList.map((province, index) => (
               <option key={index} value={province.name}>
                 {province.name}
@@ -226,12 +239,12 @@ function StatsNumberVehicleRental() {
             Loại xe<span className="text-danger">*</span>
           </Form.Label>
           <Form.Select
-            aria-label="typeVehicle"
-            name="typeVehicle"
+            aria-label="vehicleType"
+            name="vehicleType"
             className={cx('txt', 'selectbox', 'infor-item')}
-            // onChange={handleInputChange}
+            onChange={handleVehicleTypeChange}
           >
-            <option key={-1} value={''}>
+            <option key={-1} value={'all'}>
               Tất cả
             </option>
             {typeVehicles.map((type, index) => (

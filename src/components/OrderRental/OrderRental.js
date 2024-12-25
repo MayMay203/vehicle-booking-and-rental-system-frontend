@@ -62,7 +62,12 @@ function OrderRental({ typeService, formData, setFormData }) {
   const handleOrder = async () => {
     try {
       if (dispatch(checkLoginSession())) {
-        console.log('--formData:-----', formData)
+         if (formData.voucherId === '') {
+           const { voucherId, ...newFormData } = formData
+           formData = newFormData
+         }
+         
+        console.log('--formData:-----idvoucher:---', formData)
         const order = await orderVehicleRental(formData)
         if (order) {
           const key = order.keyOrder
@@ -93,6 +98,10 @@ function OrderRental({ typeService, formData, setFormData }) {
   // }))}, [voucherDiscount])
   const handleApplyVoucher = (id, percent, maxValue) => {
     console.log(id)
+    setFormData((prevState) => ({
+      ...prevState,
+      voucherId: id,
+    }))
     const amount =
       (formData.amount * formData.price * percent) / 100 > Number(maxValue.replace(/\./g, '').replace(' VND', ''))
         ? Number(maxValue.replace(/\./g, '').replace(' VND', ''))

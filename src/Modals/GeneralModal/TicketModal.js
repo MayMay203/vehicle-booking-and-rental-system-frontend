@@ -25,8 +25,8 @@ import { createPayment } from '~/apiServices/ticket/createPayment'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getDetailTransaction } from '~/apiServices/order/getDetailTransaction'
 import { getAllSuitableVouchers } from '~/apiServices/vouchers/getAllSuitableVoucher'
-import Voucher from '~/components/Voucher'
 import { Empty } from 'antd'
+import SlideVoucherOrder from '~/components/Voucher/SlideVoucherOrder'
 import { useNavigate } from 'react-router-dom'
 import { config } from '~/config'
 
@@ -396,13 +396,25 @@ function TicketModal() {
             </div>
           )}
 
-          {isVoucher &&
+          {/* {isVoucher &&
             suitableVoucher.map((voucher) => (
               <div className="col mt-0" key={voucher.id}>
                 <Voucher className="m-auto" data={voucher} type="order" handleApplyVoucher={handleApplyVoucher} />
               </div>
-            ))}
-          {isVoucher && suitableVoucher.length === 0 && <Empty description="Không có voucher nào hợp lệ để sử dùng" />}
+            ))} */}
+          <div className="justify-content-center mb-3">
+            {isVoucher && suitableVoucher.length > 0 && (
+              <SlideVoucherOrder
+                listVoucher={suitableVoucher}
+                // type="order"
+                handleApplyVoucher={handleApplyVoucher}
+              ></SlideVoucherOrder>
+            )}
+            {isVoucher && suitableVoucher.length === 0 && (
+              <Empty description="Không có voucher nào hợp lệ để sử dùng" />
+            )}
+          </div>
+
           <div className="mt-3">
             <span className={cx('title')}>Chi tiết thanh toán</span>
             <div className="p-4 pb-2">

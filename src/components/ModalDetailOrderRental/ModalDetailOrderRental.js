@@ -5,8 +5,24 @@ import Modal from 'react-bootstrap/Modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendar, faLocationDot, faPhone, faUserLarge } from '@fortawesome/free-solid-svg-icons'
 import { Col, Row } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { getDetailTransaction } from '~/apiServices/order/getDetailTransaction'
 const cx = classNames.bind(styles)
-function ModalDetailOrderRental(props) {
+function ModalDetailOrderRental({ transactionCode, inforRentalVehicle, ...props }) {
+  const dispatch = useDispatch()
+  const [inforOrder, setInforOrder] = useState({})
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      const getInforOrder = async () => {
+        const response = await getDetailTransaction(transactionCode, 'VEHICLE_RENTAL_ORDER')
+        setInforOrder(response)
+      }
+      getInforOrder()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactionCode])
   return (
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -16,9 +32,12 @@ function ModalDetailOrderRental(props) {
       </Modal.Header>
       <Modal.Body>
         <Row>
-          <span className={cx('time-rental')}>Thuê lúc: 8:00, 12/12/2023</span>
-          <span className={cx('time-payment')}>Thanh toán lúc: 8:00, 12/12/2023</span>
-          <span className={cx('time-payment')}>Loại xe: xe máy -- Hãng xe: Honda -- Khu vực: Đà Nẵng</span>
+          <span className={cx('time-payment')}>Thanh toán lúc: {inforOrder?.createAt}</span>
+          <span className={cx('time-payment')}>
+            Thuê:{inforRentalVehicle?.vehicle_type} + ' ' + {inforRentalVehicle?.manufacturer}
+            {inforRentalVehicle?.type === 0 ? ' tự lái' : ' có người lái'}
+          </span>
+          <span className={cx('time-payment')}>Địa chỉ nhận xe: {inforRentalVehicle?.location}</span>
         </Row>
         <Row>
           <Row className={cx('txt-title')}>Người đặt</Row>
@@ -28,7 +47,7 @@ function ModalDetailOrderRental(props) {
                 <FontAwesomeIcon icon={faUserLarge} className={cx('icon')}></FontAwesomeIcon>
                 <div>
                   <p className={cx('name')}>Họ và tên</p>
-                  <p className={cx('input-name')}>Ngô Thị Lan Hương</p>
+                  <p className={cx('input-name')}>{inforOrder?.customerInfo?.name}</p>
                 </div>
               </div>
             </Col>
@@ -37,7 +56,7 @@ function ModalDetailOrderRental(props) {
                 <FontAwesomeIcon icon={faPhone} className={cx('icon')}></FontAwesomeIcon>
                 <div>
                   <p className={cx('phone')}>Số điện thoại</p>
-                  <p className={cx('input-phone')}>08420598765</p>
+                  <p className={cx('input-phone')}>{inforOrder?.customerInfo?.phoneNumber}</p>
                 </div>
               </div>
             </Col>
@@ -51,7 +70,7 @@ function ModalDetailOrderRental(props) {
                 <FontAwesomeIcon icon={faCalendar} className={cx('icon')}></FontAwesomeIcon>
                 <div>
                   <span className={cx('txt-title')}>Từ:</span>
-                  <span className={cx('txt-content')}>13h00, 12/08/2024</span>
+                  <span className={cx('txt-content')}>{inforOrder?.rentalInfo?.startRentalTime}</span>
                 </div>
               </div>
             </Col>
@@ -59,7 +78,7 @@ function ModalDetailOrderRental(props) {
               <div className={cx('d-flex', 'align-items-center')}>
                 <div>
                   <span className={cx('txt-title')}>Đến:</span>
-                  <span className={cx('txt-content')}>17h00, 21/08/2024</span>
+                  <span className={cx('txt-content')}>{inforOrder?.rentalInfo?.endRentalTime}</span>
                 </div>
               </div>
             </Col>
@@ -72,7 +91,7 @@ function ModalDetailOrderRental(props) {
               <div className={cx('d-flex', 'align-items-center')}>
                 <FontAwesomeIcon icon={faLocationDot} className={cx('icon')}></FontAwesomeIcon>
                 <div>
-                  <span className={cx('txt-content', 'm-0')}>728 Lê Đại Hành, thành phố Đà Nẵng</span>
+                  <span className={cx('txt-content', 'm-0')}>{inforOrder?.rentalInfo?.pickupLocation}</span>
                 </div>
               </div>
             </Col>
@@ -87,7 +106,7 @@ function ModalDetailOrderRental(props) {
         <Row>
           <div className={cx('wrap-infor')}>
             <span>Phí thuê 1 chiếc</span>
-            <span className={cx('align-right')}>500.000đ</span>
+            <span className={cx('align-right')}>{inforOrder?.pricingInfo?.price.toLocaleString('vi-VN')} đ</span>
           </div>
         </Row>
         <Row>
@@ -97,41 +116,45 @@ function ModalDetailOrderRental(props) {
           </div>
         </Row>
         <Row>
-          <div className={cx('wrap-infor')}>
+          {/* <div className={cx('wrap-infor')}>
             <span>Thuế VAT:</span>
-            <span className={cx('align-right')}>200.000đ</span>
-          </div>
+            <span className={cx('align-right')}>{inforOrder?.pricingInfo?.priceTotal.toLocaleString('vi-VN')} đ</span>
+          </div> */}
         </Row>
         <Row>
           <div className={cx('wrap-infor')}>
             <span>Tiền cọc xe:</span>
-            <span className={cx('align-right')}>6.000.000đ</span>
+            <span className={cx('align-right')}>{inforOrder?.pricingInfo?.carDeposit.toLocaleString('vi-VN')} đ</span>
           </div>
         </Row>
         <Row>
           <div className={cx('wrap-infor', 'line')}>
             <span>Phí giữ chỗ:</span>
-            <span className={cx('align-right')}>200.000đ</span>
+            <span className={cx('align-right')}>
+              {inforOrder?.pricingInfo?.reservationFee.toLocaleString('vi-VN')} đ
+            </span>
           </div>
         </Row>
         <Row>
           <div className={cx('wrap-infor', 'no-line')}>
             <span>Tổng tiền:</span>
-            <span className={cx('align-right', 'txt-bold')}>7.900.000đ</span>
+            <span className={cx('align-right', 'txt-bold')}>
+              {inforOrder?.pricingInfo?.priceTotal.toLocaleString('vi-VN')} đ
+            </span>
           </div>
         </Row>
-        <Row>
+        {/* <Row>
           <div className={cx('wrap-note')}>
             <span className={cx('note')}>Lưu ý:</span>
             <span className={cx('note-content')}>
               Mọi tiền bạn đã thanh toán sẽ được hoàn trả 100% nếu chủ xe hủy đơn và hệ thống sẽ đánh giá xe 1 sao.
             </span>
           </div>
-        </Row>
+        </Row> */}
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide} className={cx('btn-confirm')} variant='none'>
-          Xác nhận đã trả xe
+        <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
+          Xem đánh giá
         </Button>
       </Modal.Footer>
     </Modal>

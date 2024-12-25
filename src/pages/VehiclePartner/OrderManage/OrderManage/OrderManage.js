@@ -4,13 +4,15 @@ import { Table } from 'antd'
 import { Row } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faMessage } from '@fortawesome/free-solid-svg-icons'
-import { faSquare } from '@fortawesome/free-regular-svg-icons'
 import TxtSearch from '~/components/TxtSearch'
 import ModalDetailOrderRental from '~/components/ModalDetailOrderRental'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllOrder } from '~/redux/slices/rentalPartnerSlice'
+import { createCoversation } from '~/apiServices/messageService/createConverstation'
+import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
+import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 const cx = classNames.bind(styles)
 function OrderManage() {
   const columns = [
@@ -77,7 +79,7 @@ function OrderManage() {
       width: 100,
       // sorter: (a, b) => a.age - b.age,
       render: (value) => {
-        return value ? `${value.toLocaleString('vi-VN')} đ` : '-' 
+        return value ? `${value.toLocaleString('vi-VN')} đ` : '-'
       },
     },
     {
@@ -89,36 +91,46 @@ function OrderManage() {
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
           style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-          onClick={() => handleViewDetail(record.key)}
+          onClick={() => handleViewDetail(record.transactionCode, record.inforRentalVehicle)}
         />
       ),
     },
-    {
-      title: 'Đã trả xe',
-      dataIndex: 'update',
-      align: 'center',
-      width: 70,
-      render: (text, record) => (
-        <FontAwesomeIcon
-          icon={faSquare}
-          style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
-          //   onClick={() => handleEditBus(record.key)}
-        />
-      ),
-    },
+    // {
+    //   title: 'Đã trả xe',
+    //   dataIndex: 'update',
+    //   align: 'center',
+    //   width: 70,
+    //   render: (text, record) => (
+    //     <FontAwesomeIcon
+    //       icon={faSquare}
+    //       style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
+    //       onClick={() => handleReturned(record.key)}
+    //     />
+    //   ),
+    // },
     {
       title: 'Nhắn tin',
       dataIndex: 'delete',
       align: 'center',
       width: 70,
-      render: (record) => (
-        <FontAwesomeIcon icon={faMessage} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
+      // render: (record) => (
+      //   <FontAwesomeIcon icon={faMessage} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
+      // ),
+      render: (text, record) => (
+        <FontAwesomeIcon
+          icon={faMessage}
+          style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
+          onClick={() => handleChat(record.accountID)}
+        />
       ),
     },
   ]
   const dispatch = useDispatch()
   const listOrder = useSelector((state) => state.rentalPartner.orderList)
   const [data, setData] = useState([])
+  const { currentUser } = useSelector((state) => state.user)
+  const { currentRole } = useSelector((state) => state.menu)
+  const [inforRentalVehicle, setInforRentalVehicle] = useState({})
   // const data = [
   //   {
   //     key: '1',
@@ -131,32 +143,64 @@ function OrderManage() {
   //     timeRental: '12:00, 12/12/2024',
   //   },
   // ]
+  const getInforRentalVehicle = async (id) => {
+    const response = await getVehicleRentalByID(id)
+    return response
+  }
+  const handleChat = async (id) => {
+    if (dispatch(checkLoginSession())) {
+      // Create new conversation
+      const idConversation = await createCoversation(parseInt(currentUser.id), currentRole, parseInt(id), 'USER')
+      dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
+    }
+  }
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
   const [modalDetailShow, setModalDetailShow] = useState(false)
-  const handleViewDetail = (id) => {
+  const [transactionCode, setTransactionCode] = useState('')
+  const handleViewDetail = (transactionCode, inforRentalVehicle) => {
+    console.log('transactionCode-trong-cha:', transactionCode, '--inforRentalVehicle:', inforRentalVehicle)
     setModalDetailShow(true)
+    setTransactionCode(transactionCode)
   }
+  console.log('transactionCode--cha:', transactionCode)
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
       dispatch(fetchAllOrder())
     }
   }, [dispatch])
+
   useEffect(() => {
-    setData(
-      listOrder.map((item, index) => ({
-        key: index,
-        typeVehicle: 'Ô tô 16 chỗ',
-        number: item.rentalInfo.numberOfVehicles,
-        charge: item.pricingInfo.priceTotal,
-        location: item.rentalInfo.pickupLocation,
-        nameRental: item.customerInfo.name,
-        numberphone: item.customerInfo.phoneNumber,
-        timeRental: item.createAt,
-      })),
-    )
+    const fetchRentalInfo = async () => {
+      try {
+        const updatedData = await Promise.all(
+          listOrder.map(async (item, index) => {
+            const rentalInfo = await getInforRentalVehicle(item.rentalInfo.carRentalServiceId)
+            setInforRentalVehicle(rentalInfo)
+            return {
+              key: index,
+              typeVehicle: rentalInfo.vehicle_type,
+              number: item.rentalInfo.numberOfVehicles,
+              charge: item.pricingInfo.priceTotal,
+              location: item.rentalInfo.pickupLocation,
+              nameRental: item.customerInfo.name,
+              numberphone: item.customerInfo.phoneNumber,
+              timeRental: item.createAt,
+              accountID: item.customerInfo.accountId,
+              transactionCode: item.transactionCode,
+              inforRentalVehicle: rentalInfo,
+            }
+          }),
+        )
+        setData(updatedData)
+      } catch (error) {
+        console.error('Error fetching rental info:', error)
+      }
+    }
+    fetchRentalInfo()
   }, [listOrder])
+
   return (
     <div className="container">
       <Row className="mt-4 justify-content-center align-items-center">
@@ -183,7 +227,12 @@ function OrderManage() {
         className={cx('')}
       />
       <div className="mb-5 mt-5"></div>
-      <ModalDetailOrderRental show={modalDetailShow} onHide={() => setModalDetailShow(false)} />
+      <ModalDetailOrderRental
+        show={modalDetailShow}
+        transactionCode={transactionCode}
+        inforRentalVehicle={inforRentalVehicle}
+        onHide={() => setModalDetailShow(false)}
+      />
     </div>
   )
 }

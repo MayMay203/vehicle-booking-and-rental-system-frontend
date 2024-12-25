@@ -23,20 +23,33 @@ function VoucherModal() {
 
   const [title, setTitle] = useState('')
   const [value, setValue] = useState('')
-  const [effectiveDate, setEffectiveDate] = useState(new Date())
-  const [expiredDate, setExpiredDate] = useState(new Date())
-  const [quantity, setQuantity] = useState(1)
+  const now = new Date()
+  const [effectiveDate, setEffectiveDate] = useState(now)
+  const [expiredDate, setExpiredDate] = useState(now)
+  const [quantity, setQuantity] = useState(0)
   const [isValid, setIsValid] = useState(false)
   const [minOrderValue, setMinOrderValue] = useState(0)
   const [maxDiscountValue, setMaxDiscountValue] = useState(0)
 
   const formRef = useRef(null)
 
-  useEffect(() => {
-    if (formRef.current) {
-      setIsValid(formRef.current.checkValidity())
+useEffect(() => {
+  if (formRef.current) {
+    setIsValid(formRef.current.checkValidity())
+  }
+
+  const expiredTime = new Date(expiredDate).getTime()
+  const effectiveTime = new Date(effectiveDate).getTime()
+
+  if (!isNaN(expiredTime) && !isNaN(effectiveTime)) {
+    console.log('expiredTime:', expiredTime, 'effectiveTime:', effectiveTime)
+
+    if (expiredTime < effectiveTime) {
+      console.log('Invalid: expiredDate is earlier than effectiveDate')
+      setIsValid(false)
     }
-  }, [title, quantity, expiredDate, effectiveDate, value])
+  }
+}, [title, quantity, expiredDate, effectiveDate, value])
 
   useEffect(() => {
     async function getVoucher() {
@@ -60,6 +73,8 @@ function VoucherModal() {
     setMaxDiscountValue('')
     setQuantity('')
     setMinOrderValue(0)
+    setEffectiveDate(new Date())
+    setExpiredDate(new Date())
     dispatch(setAddVoucherVisible({ isOpen: false }))
   }
 
@@ -86,30 +101,29 @@ function VoucherModal() {
 
   const handleUpdateVoucher = async (e) => {
     e.preventDefault()
-     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
-     const startDate = effectiveDate.toISOString().split('T')[0].split('-').reverse().join('-')
-     const endDate = expiredDate.toISOString().split('T')[0].split('-').reverse().join('-')
-     if (dispatch(checkLoginSession())) {
-       const data = await updateVoucher({
-         id: voucherId,
-         name: title,
-         startDate,
-         endDate,
-         voucherPercentage: value,
-         maxDiscountValue,
-         minOrderValue,
-         remainingQuantity: quantity,
-       })
-       if (data) {
-         handleClose()
-         toast.success('Cập nhật mã khuyến mãi thành công!', { autoClose: 1000, position: 'top-center' })
-          dispatch(fetchAllVouchers({ page: 1 }))
-       }
-       else {
-         toast.error('Mã khuyến mãi đã được sử dụng. Không thể cập nhật!',{autoClose: 1200, position: 'top-center'})
-       }
-     }
-     dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+    const startDate = effectiveDate.toISOString().split('T')[0].split('-').reverse().join('-')
+    const endDate = expiredDate.toISOString().split('T')[0].split('-').reverse().join('-')
+    if (dispatch(checkLoginSession())) {
+      const data = await updateVoucher({
+        id: voucherId,
+        name: title,
+        startDate,
+        endDate,
+        voucherPercentage: value,
+        maxDiscountValue,
+        minOrderValue,
+        remainingQuantity: quantity,
+      })
+      if (data) {
+        handleClose()
+        toast.success('Cập nhật mã khuyến mãi thành công!', { autoClose: 1000, position: 'top-center' })
+        dispatch(fetchAllVouchers({ page: 1 }))
+      } else {
+        toast.error('Mã khuyến mãi đã được sử dụng. Không thể cập nhật!', { autoClose: 1200, position: 'top-center' })
+      }
+    }
+    dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
   }
 
   return (
@@ -135,18 +149,6 @@ function VoucherModal() {
             required
             star
           ></FormInput>
-          {/* <FormInput
-            title="Mô tả"
-            error="Vui lòng nhập mô tả"
-            id="description"
-            type="text"
-            placeholder="Nhập mô tả khuyến mãi"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            isValid={isValid}
-            required
-            star
-          ></FormInput> */}
           <div className="row row-cols-1 row-cols-lg-2">
             <FormInput
               title="Phần trăm khuyến mãi (%)"
@@ -164,10 +166,10 @@ function VoucherModal() {
             ></FormInput>
             <FormInput
               title="Giá trị giảm tối đa (VNĐ)"
-              error={maxDiscountValue === '' ? 'Vui lòng nhập giá trị tối đa' : 'Giá trị tối đa không hợp lệ'}
+              error={maxDiscountValue === '' ? 'Vui lòng nhập giá trị tối đa' : 'Giá trị tối đa phải lớn hơn 0'}
               id="value"
               type="number"
-              min={0}
+              min={1}
               placeholder="Nhập giá trị giảm tối đa"
               value={maxDiscountValue}
               onChange={(e) => setMaxDiscountValue(e.target.value)}
@@ -185,15 +187,10 @@ function VoucherModal() {
               className={cx('custom-date-picker')}
               selected={effectiveDate}
               dateFormat="dd/MM/yyyy"
-              minDate={new Date()}
-              maxDate={new Date('2025-12-31')}
-              onKeyDown={(e) => e.preventDefault()}
-              onChange={(date) => {
-                if (date > expiredDate) {
-                  setIsValid(false)
-                }
-                setEffectiveDate(date)
-              }}
+              minDate={new Date()} // Ngày hiện tại
+              maxDate={new Date('2025-12-31')} // Giới hạn đến 31/12/2025
+              onKeyDown={(e) => e.preventDefault()} // Ngăn nhập bằng phím
+              onChange={(date) => setEffectiveDate(date)}
             />
           </div>
           <div className={cx('date-wrapper')}>
@@ -205,17 +202,11 @@ function VoucherModal() {
               className={cx('custom-date-picker')}
               selected={expiredDate}
               dateFormat="dd/MM/yyyy"
-              k
               minDate={new Date()}
               maxDate={new Date('2025-12-31')}
               onKeyDown={(e) => e.preventDefault()}
               onChange={(date) => {
-                if (date && date >= effectiveDate) {
-                  setExpiredDate(date)
-                  if (!isValid) setIsValid(true)
-                } else {
-                  setIsValid(false)
-                }
+                setExpiredDate(date)
               }}
             />
           </div>

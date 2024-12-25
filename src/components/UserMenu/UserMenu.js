@@ -81,6 +81,7 @@ function UserMenu() {
               className={cx('mode-item', { active: currentRole === 'CAR_RENTAL_PARTNER' })}
               onClick={() => {
                 dispatch(setMenu('carRentalPartnerMenu'))
+                navigate(config.routes.serviceManage)
               }}
             >
               Đối tác cho thuê xe
