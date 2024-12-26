@@ -25,7 +25,7 @@ function StatsNumberVehicleRental() {
   const [selectedStartDate, setSelectedStartDate] = useState(dayjs())
   const [selectedEndDate, setSelectedEndDate] = useState(dayjs())
   const dispatch = useDispatch()
-  const listData = useSelector((state) => state.busPartner.statsBusTrip)
+  // const listData = useSelector((state) => state.busPartner.statsBusTrip)
   const [data, setData] = useState([])
 
   // const data = [
@@ -68,48 +68,66 @@ function StatsNumberVehicleRental() {
       dispatch(fetchAllVehicleTypes())
     }
   }, [dispatch])
-  const handleStats = () => {
+  // const handleStats = () => {
+  //   if (dispatch(checkLoginSession())) {
+  //     dispatch(
+  //       fetchStatsRental({
+  //         location: selectedLocation,
+  //         vehicleType: selectedVehicleType,
+  //         year: selectedYear.format('YYYY'),
+  //         month: selectedMonth.format('MM'),
+  //         startDate: selectedStartDate.format('YYYY-MM-DD'),
+  //         endDate: selectedEndDate.format('YYYY-MM-DD'),
+  //         statsBy: statisticsBy,
+  //       }),
+  //     )
+  //   }
+  // }
+  useEffect(() => {
+     handleStats()
+      
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+  const handleStats = async () => {
     if (dispatch(checkLoginSession())) {
-      dispatch(
+      const result = await dispatch(
         fetchStatsRental({
           location: selectedLocation,
           vehicleType: selectedVehicleType,
           year: selectedYear.format('YYYY'),
           month: selectedMonth.format('MM'),
-          startDate: selectedStartDate.format('YYYY-MM-DD'),
-          endDate: selectedEndDate.format('YYYY-MM-DD'),
+          startDate: selectedStartDate.format('00:00 DD-MM-YYYY'),
+          endDate: selectedEndDate.format('00:00 DD-MM-YYYY'),
           statsBy: statisticsBy,
         }),
       )
+      if (fetchStatsRental.fulfilled.match(result)) {
+        setData(
+          result.payload.map((item, index) => ({
+            key: index,
+            location: item.location,
+            typeVehicle: item.vehicle_type,
+            rentaled: item.vehicleRentalAmount,
+            canceled: item.canceledVehicleAmount,
+          })),
+        )
+        console.log('----data number rental:', result.payload)
+      }
     }
   }
-  useEffect(() => {
-      if (dispatch(checkLoginSession())) {
-        dispatch(
-          fetchStatsRental({
-            location: selectedLocation,
-            vehicleType: selectedVehicleType,
-            year: selectedYear.format('YYYY'),
-            month: selectedMonth.format('MM'),
-            startDate: selectedStartDate.format('YYYY-MM-DD'),
-            endDate: selectedEndDate.format('YYYY-MM-DD'),
-            statsBy: statisticsBy,
-          }),
-        )
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch])
-  useEffect(() => {
-    setData(
-      listData.map((item, index) => ({
-        key: index,
-        location: item.location,
-        typeVehicle: item.vehicle_type,
-        rentaled: item.vehicleRentalAmount,
-        canceled: item.canceledVehicleAmount,
-      })),
-    )
-  }, [listData])
+
+  // useEffect(() => {
+  //   setData(
+  //     listData.map((item, index) => ({
+  //       key: index,
+  //       location: item.location,
+  //       typeVehicle: item.vehicle_type,
+  //       rentaled: item.vehicleRentalAmount,
+  //       canceled: item.canceledVehicleAmount,
+  //     })),
+  //   )
+  // }, [listData])
+  console.log("----data number rental:", data)
   useEffect(() => {
     async function fetchApi() {
       const provices = await getLocations(1)
@@ -154,35 +172,6 @@ function StatsNumberVehicleRental() {
       showSorterTooltip: {
         target: 'full-header',
       },
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Jim',
-          value: 'Jim',
-        },
-        {
-          text: 'Submenu',
-          value: 'Submenu',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
-      ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ['descend'],
     },
     {
       title: 'Số xe cho thuê',
@@ -197,17 +186,6 @@ function StatsNumberVehicleRental() {
       dataIndex: 'canceled',
       align: 'center',
       width: 200,
-      filters: [
-        {
-          text: 'London',
-          value: 'London',
-        },
-        {
-          text: 'New York',
-          value: 'New York',
-        },
-      ],
-      onFilter: (value, record) => record.address.indexOf(value) === 0,
     },
   ]
 

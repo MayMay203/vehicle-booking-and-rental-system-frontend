@@ -19,12 +19,14 @@ const cx = classNames.bind(styles)
 function FormInforServiceRental({ mode, formData, handleInputChange }) {
   const view = mode === 'view'
   const dispatch = useDispatch()
+
+  console.log('-----formData-------', formData)
   const typeVehicles = useSelector((state) => state.rentalPartner.vehicleTypeList)
-  const [listPolicies, setListPolicies] = useState(formData.policy)
+  // const [listPolicies, setListPolicies] = useState(formData?.policy)
   console.log('formData.policy----', formData.policy)
-  console.log('listPolicies----', listPolicies)
+  // console.log('listPolicies----', listPolicies)
   const [policies, setPolicies] = useState(
-    listPolicies
+    formData?.policy
       .split('@#$%&')
       // .filter(Boolean)
       .map((value, index) => ({ value: value.trim(), id: index })) || '',
@@ -47,14 +49,12 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
       dispatch(fetchAllVehicleTypes())
     }
   }, [dispatch])
-  console.log('-----formData-------', formData)
   useEffect(() => {
     const updatedListPolicies = policies.map((policy) => policy.value).join(' @#$%& ')
-    setListPolicies(updatedListPolicies)
+    // setListPolicies(updatedListPolicies)
     handleInputChange({ target: { name: 'policy', value: updatedListPolicies } })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [policies])
-
   const handleAddPolicy = () => {
     setPolicies((prevState) => {
       const updatedPolicies = [...prevState, { value: '', id: policyCounter + 1 }]
@@ -62,6 +62,17 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
       return updatedPolicies
     })
   }
+
+  useEffect(() => {
+    if (formData?.policy) {
+      setPolicies(
+        formData?.policy
+          .split('@#$%&')
+          // .filter(Boolean)
+          .map((value, index) => ({ value: value.trim(), id: index })) || '',
+      )
+    }
+  }, [formData.policy]) // Chạy khi formData.policy thay đổi
 
   const handleRemovePolicy = (id) => {
     setPolicies((prevState) => {
@@ -139,7 +150,6 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             ))}
           </Form.Select>
         </Form.Group>
-        
         <Form.Group className={cx('txt', 'padding-s', 'mb-5')} controlId="formInfor.ControlInput7">
           <Form.Label className="mb-3">
             Phí đặt cọc<span className="text-danger">*</span>
@@ -197,7 +207,11 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             Loại xe<span className="text-danger">*</span>
           </Form.Label>
           <Form.Select
-            value={formData.type_vehicle}
+            value={
+              mode === 'edit'
+                ? typeVehicles.find((type) => type.name === formData.type_vehicle)?.id || ''
+                : formData.type_vehicle
+            }
             aria-label="type_vehicle"
             name="type_vehicle"
             className={cx('txt', 'selectbox', 'infor-item')}
@@ -322,7 +336,6 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
             </InputGroup.Text>
           </InputGroup>
         </Form.Group>
-        
       </Col>
       <Form.Group className={cx('txt', 'padding', 'mb-5')} controlId="formInfor.ControlInput9">
         <Form.Label className="mb-3">

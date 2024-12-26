@@ -8,7 +8,9 @@ import { faCircleXmark, faSquarePlus } from '@fortawesome/free-regular-svg-icons
 // import Button from '../Button'
 const cx = classNames.bind(styles)
 function CRUDImage({ initialNumberPhoto, imagePerRow, handleSave, obligatory, urlImages }) {
+  console.log('initialNumberPhoto', initialNumberPhoto)
   const [numberPhoto, setNumberPhoto] = useState(initialNumberPhoto)
+  console.log('numberPhoto', numberPhoto)
   const fileInputRefs = useRef(Array(numberPhoto).fill(null))
   console.log('urlImages', urlImages)
   // const [selectedFiles, setSelectedFiles] = useState(Array(numberPhoto).fill(null))
@@ -43,6 +45,10 @@ function CRUDImage({ initialNumberPhoto, imagePerRow, handleSave, obligatory, ur
     }
   }
 
+  useEffect(() => {setSelectedFiles(urlImages)}, [urlImages])
+  useEffect(() => {
+    setNumberPhoto(initialNumberPhoto)
+  }, [initialNumberPhoto])
   const handleAddImage = () => {
     setNumberPhoto((prevNumber) => prevNumber + 1)
     setSelectedFiles((prevFiles) => [...prevFiles, null]) 

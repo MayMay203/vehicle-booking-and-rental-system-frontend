@@ -107,7 +107,7 @@ function StatsRevenueRentalService() {
             labels:
               activeTypeFilter === 'ByMonth'
                 ? ['', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, '']
-                : data.revenueStatistic.map((item) => parseInt(item.period)),
+                : [null, ...data.revenueStatistic.map((item) => parseInt(item.period)), null],
             datasets: [
               {
                 data: [

@@ -12,7 +12,17 @@
   text-align: center;
   margin: 0;
 }
-
+.txt-title {
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #ff7f50;
+}
+.padding {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
 .content {
   padding: 0.5rem 2rem;
   //   margin-left: 2rem;
@@ -38,7 +48,7 @@
   @include abstracts.screen(sm) {
     width: 100%;
   }
-  align-items: center;
+  // align-items: center;
   justify-content: center;
   margin: 0 auto;
 }
@@ -96,10 +106,10 @@
     background-color: rgba($color: #d34714, $alpha: 1);
   }
 }
-.btn{
+.btn {
   flex: 1;
   max-width: 10rem;
   justify-content: center;
   align-items: center;
-  margin: 5rem 0;
+  margin: 0 5rem;
 }
