@@ -78,6 +78,7 @@ function TicketBus({ data, enableEdit = true }) {
   }, [dataBusTicket, data])
   const handleSave = async () => {
     if (dispatch(checkLoginSession())) {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       try {
         const dataPost = {
           busTripId: data.idBusTrip,
@@ -118,6 +119,10 @@ function TicketBus({ data, enableEdit = true }) {
         else {
           toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
         }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      }finally {
+        setLoading(false) 
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       }
     }
   }
