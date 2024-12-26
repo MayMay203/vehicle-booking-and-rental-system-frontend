@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { addBusSchedule } from '~/apiServices/busPartner/addBusSchedule'
 import { fetchAllBusTrips, fetchAllSchedulesByBusID } from '~/redux/slices/busPartnerSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import moment from 'moment'
 const cx = classNames.bind(styles)
 function TicketBus({ data, enableEdit = true }) {
@@ -121,7 +122,6 @@ function TicketBus({ data, enableEdit = true }) {
         }
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       }finally {
-        setLoading(false) 
         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       }
     }
