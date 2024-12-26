@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { addBusSchedule } from '~/apiServices/busPartner/addBusSchedule'
 import { fetchAllBusTrips, fetchAllSchedulesByBusID } from '~/redux/slices/busPartnerSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import moment from 'moment'
 const cx = classNames.bind(styles)
 function TicketBus({ data, enableEdit = true }) {
@@ -78,6 +79,7 @@ function TicketBus({ data, enableEdit = true }) {
   }, [dataBusTicket, data])
   const handleSave = async () => {
     if (dispatch(checkLoginSession())) {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       try {
         const dataPost = {
           busTripId: data.idBusTrip,
@@ -118,6 +120,9 @@ function TicketBus({ data, enableEdit = true }) {
         else {
           toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
         }
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+      }finally {
+        dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       }
     }
   }
