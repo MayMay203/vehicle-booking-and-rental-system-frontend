@@ -110,6 +110,7 @@ function TableListTenant({ idRegister }) {
         record.customerInfo?.accountId,
         'USER',
       )
+      console.log('currentUser:', currentUser, currentRole, record.customerInfo) //id là id user hay sao? currentRole là role partne à?
       dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
     }
@@ -134,6 +135,7 @@ function TableListTenant({ idRegister }) {
             const matchedItem = services.find((item) => item.type === selectedType)
             if (matchedItem) {
               const orders = await getAllOrderByServiceID(matchedItem.id)
+              console.log("id-service ne:",matchedItem.id)
               setData(orders)
             } else {
               setData([])

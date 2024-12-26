@@ -10,8 +10,11 @@ import { fetchAllVehicle } from '~/redux/slices/rentalPartnerSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import viVN from 'antd/lib/locale/vi_VN'
 import 'moment/locale/vi'
+import EditServiceRental from '~/pages/VehiclePartner/ServiceManage/EditServiceRental'
 const cx = classNames.bind(styles)
 function TableListRentalService({ typeService }) {
+  const [modalEditService, setModalEditService] = useState(false)
+  const [selectedVehicle, setSelectedVehicle] = useState('')
   const columns = [
     {
       title: 'STT',
@@ -156,7 +159,9 @@ function TableListRentalService({ typeService }) {
   }
 
   const handleEditVehicle = (id) => {
-    navigate('edit-service-rental', { state: { enableEdit: true, vehicleID: id } })
+    // navigate('edit-service-rental', { state: { enableEdit: true, vehicleID: id } })
+    setModalEditService(true)
+    setSelectedVehicle(id)
   }
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
@@ -200,6 +205,13 @@ function TableListRentalService({ typeService }) {
         }}
         className={cx('')}
       />
+      <EditServiceRental
+        // enableEdit={true}
+        // functionModal={'EditServiceRental'}
+        idRegister={selectedVehicle}
+        show={modalEditService}
+        onHide={() => setModalEditService(false)}
+      ></EditServiceRental>
     </ConfigProvider>
   )
 }

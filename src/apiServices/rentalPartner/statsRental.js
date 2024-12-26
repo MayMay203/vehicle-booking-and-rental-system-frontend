@@ -5,11 +5,11 @@ export const statsRental = async (location, vehicleType, year, month, startDate,
     console.log('statsBy stats rental:', statsBy)
     let url
     if (statsBy === 'month') {
-      url = `/v1/vehicle-rental-statistic/statistic-from-location-or-vehicleType-by-year?location=${location}&vehicle_type=${vehicleType}&month=${month}&year=${year}`
+      url = `/v1/vehicle-rental-statistic/statistic-from-location-or-vehicleType-by-month-and-year?location=${location}&vehicle_type=${vehicleType}&month=${month}&year=${year}`
     } else if (statsBy === 'year') {
       url = `/v1/vehicle-rental-statistic/statistic-from-location-or-vehicleType-by-year?location=${location}&vehicle_type=${vehicleType}&year=${year}`
     } else if (statsBy === 'date') {
-      url = `/v1/vehicle-rental-statistic/statistic-from-location-or-vehicleType-by-year?location=${location}&vehicle_type=${vehicleType}&&start_date=${startDate}&end_date=${endDate}`
+      url = `/v1/vehicle-rental-statistic/statistic-from-location-or-vehicleType-by-date?location=${location}&vehicle_type=${vehicleType}&&start_date=${startDate}&end_date=${endDate}`
     }
     const response = await httpRequest.get(url, {
       headers: {

@@ -4,7 +4,7 @@ import * as httpRequest from '~/utils/httpRequest'
 export const getAllFeeServices = async (name) => {
   try {
     const params = name ? { filter: `name~'${name}'` } : {}
-    const response = await httpRequest.get('/v1/vehicle-types-all', {
+    const response = await httpRequest.get('/v1/vehicle-types', {
       params,
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,

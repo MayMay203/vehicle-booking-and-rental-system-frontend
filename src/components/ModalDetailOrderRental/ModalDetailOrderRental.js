@@ -34,7 +34,8 @@ function ModalDetailOrderRental({ transactionCode, inforRentalVehicle, ...props 
         <Row>
           <span className={cx('time-payment')}>Thanh toán lúc: {inforOrder?.createAt}</span>
           <span className={cx('time-payment')}>
-            Thuê:{inforRentalVehicle?.vehicle_type} + ' ' + {inforRentalVehicle?.manufacturer}
+            Thuê:{inforRentalVehicle?.vehicle_type + ' '}
+            {inforRentalVehicle?.manufacturer}
             {inforRentalVehicle?.type === 0 ? ' tự lái' : ' có người lái'}
           </span>
           <span className={cx('time-payment')}>Địa chỉ nhận xe: {inforRentalVehicle?.location}</span>

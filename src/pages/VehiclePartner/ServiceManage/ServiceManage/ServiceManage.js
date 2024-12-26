@@ -11,6 +11,7 @@ function ServiceManage(){
     const [typeService, setTypeService] = useState(2)
     const [activeTypeFilter, setActiveTypeFilter] = useState('all')
     const [modalAddService, setModalAddService] = useState(false)
+    
     const handleTypeFilterClick = (btnType) => {
       setActiveTypeFilter(btnType)
       setTypeService(btnType === 'all' ? 2 : btnType === 'manned' ? 1 : 0)
@@ -70,6 +71,7 @@ function ServiceManage(){
           show={modalAddService}
           onHide={() => setModalAddService(false)}
         ></AddServiceRental>
+       
       </div>
     )
 }
