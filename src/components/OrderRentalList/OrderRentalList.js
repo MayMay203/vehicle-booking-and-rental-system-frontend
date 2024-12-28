@@ -1,18 +1,18 @@
-import TicketItem from './TicketItem'
+import OrderRentalItem from './OrderRentalItem'
 import PropTypes from 'prop-types'
-function TicketList({ status, dataList }) {
+function OrderRentalList({ status, dataList }) {
   return (
     <div>
-      {dataList.map((ticket, index) => (
-        <TicketItem key={index} status={status} data={ticket} />
+      {dataList?.map((ticket, index) => (
+        <OrderRentalItem key={index} status={status} data={ticket} />
       ))}
     </div>
   )
 }
 
-TicketList.propTypes = {
+OrderRentalList.propTypes = {
   status: PropTypes.string,
   dataList: PropTypes.array.isRequired,
 }
 
-export default TicketList
+export default OrderRentalList

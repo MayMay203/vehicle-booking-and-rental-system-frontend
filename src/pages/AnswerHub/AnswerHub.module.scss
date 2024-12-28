@@ -1,0 +1,26 @@
+.wrap-content {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+.txt {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  font-weight: 500;
+  color: black;
+  line-height: 2.5rem;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+}
+.txt-content{
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  color: black;
+  font-weight: 400;
+  line-height: 3rem;
+}

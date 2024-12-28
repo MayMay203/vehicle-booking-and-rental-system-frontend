@@ -231,7 +231,7 @@ function OrderRental({ typeService, formData, setFormData }) {
           <span>Giảm giá voucher</span>
           {/* <span className={cx('align-right', 'txt-red')}>-0đ</span> */}
           <button onClick={() => setIsVoucher((prev) => !prev)} style={{ color: 'var(--primary-color)' }}>
-            {voucherDiscount===''? 'Áp mã giảm giá':`-${voucherDiscount.toLocaleString('vi-VN')} đ`}
+            {voucherDiscount === '' ? 'Áp mã giảm giá' : `-${voucherDiscount.toLocaleString('vi-VN')} đ`}
             <FontAwesomeIcon
               icon={faCaretDown}
               style={{ rotate: isVoucher ? '-180deg' : '0deg', transition: 'rotate .2s ease', marginLeft: '6px' }}
@@ -305,9 +305,13 @@ function OrderRental({ typeService, formData, setFormData }) {
       <Row>
         <div className={cx('txt-center')}>Bằng việc thuê xe, bạn đồng ý với </div>
         <div className={cx('d-flex justify-content-center')}>
-          <Link className={cx('link-policy')}>quy chế hoạt động</Link>
-          <span>và</span>
-          <Link className={cx('link-policy')}>chính sách bảo mật</Link>
+          <Link to="/regulation" className={cx('link-policy')}>
+            quy chế hoạt động
+          </Link>
+          <span>&nbsp;và&nbsp;</span>
+          <Link to="/policy-security" className={cx('link-policy')}>
+            chính sách bảo mật
+          </Link>
         </div>
       </Row>
     </Row>
