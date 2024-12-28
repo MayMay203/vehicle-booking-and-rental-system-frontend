@@ -32,7 +32,8 @@ import { verifyRegisterPartner } from '~/apiServices/verifyRegisterPartner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { Form } from 'react-bootstrap'
-import { editBankAccount } from '~/apiServices/editBankAccount'
+import { editBankAccount } from '~/apiServices/bankAccount/editBankAccount'
+import { getAllBankAccounts } from '~/apiServices/bankAccount/getAllBankAccount'
 
 const cx = classNames.bind(styles)
 function DetailPartner() {
@@ -44,28 +45,21 @@ function DetailPartner() {
   const [bankInfo, setBankInfo] = useState({})
   const dispatch = useDispatch()
 
-  const banks = [
-    { value: '', label: 'Chọn ngân hàng' },
-    { value: 'vietcombank', label: 'Ngân hàng TMCP Ngoại Thương Việt Nam (Vietcombank)' },
-    { value: 'vietinbank', label: 'Ngân hàng TMCP Công Thương Việt Nam (Vietinbank)' },
-    { value: 'bidv', label: 'Ngân hàng TMCP Đầu Tư và Phát Triển Việt Nam (BIDV)' },
-    { value: 'agribank', label: 'Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam (Agribank)' },
-    { value: 'techcombank', label: 'Ngân hàng TMCP Kỹ Thương Việt Nam (Techcombank)' },
-    { value: 'mbbank', label: 'Ngân hàng TMCP Quân Đội (MB Bank)' },
-    { value: 'acb', label: 'Ngân hàng TMCP Á Châu (ACB)' },
-    { value: 'sacombank', label: 'Ngân hàng TMCP Sài Gòn Thương Tín (Sacombank)' },
-    { value: 'vpbank', label: 'Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank)' },
-    { value: 'hdbank', label: 'Ngân hàng TMCP Phát triển Nhà Thành phố Hồ Chí Minh (HDBank)' },
-    { value: 'shinhanbank', label: 'Ngân hàng TNHH MTV Shinhan Việt Nam (Shinhan Bank)' },
-    { value: 'tpbank', label: 'Ngân hàng TMCP Tiên Phong (TPBank)' },
-    { value: 'vib', label: 'Ngân hàng TMCP Quốc tế Việt Nam (VIB)' },
-    { value: 'scb', label: 'Ngân hàng TMCP Sài Gòn (SCB)' },
-    { value: 'ocb', label: 'Ngân hàng TMCP Phương Đông (OCB)' },
-    { value: 'seabank', label: 'Ngân hàng TMCP Đông Nam Á (SeaBank)' },
-    { value: 'eximbank', label: 'Ngân hàng TMCP Xuất Nhập Khẩu Việt Nam (Eximbank)' },
-    { value: 'pvcombank', label: 'Ngân hàng TMCP Đại Chúng Việt Nam (PVcomBank)' },
-  ]
-  const sortedBanks = banks.sort((a, b) => a.label.localeCompare(b.label))
+  const [banks, setBanks] = useState([])
+  useEffect(() => {
+    async function fetchAllBanks() {
+      const data = await getAllBankAccounts()
+      if (data) {
+        console.log(data)
+        setBanks(
+          data
+            .map((item) => ({ value: item.shortName, label: item.name }))
+            .sort((a, b) => a.label.localeCompare(b.label)),
+        )
+      }
+    }
+    fetchAllBanks()
+  }, [])
 
   useEffect(() => {
     async function fetchDetailParterRegister() {
@@ -408,15 +402,18 @@ function DetailPartner() {
                 onChange={handleChangeBankInfo}
                 value={bankInfo.nameBank || ''}
               >
-                {sortedBanks.map((bank, index) => (
+                {banks.map((bank, index) => (
                   <option key={index} value={bank.value}>
-                    {bank.label}
+                    {bank.label + '(' + bank.value + ')'}
                   </option>
                 ))}
               </Form.Select>
             </Form.Group>
             <div className="d-flex justify-content-center">
-              <Button outline onClick={() => setIsEditBank(false)}>
+              <Button outline onClick={(e) => {
+                e.preventDefault()
+                setIsEditBank(false)
+              }}>
                 Thoát
               </Button>
               <Button
