@@ -29,7 +29,6 @@ const cx = classNames.bind(styles)
 function AccountSetting() {
   console.log('re-render account settings')
   const { currentUser, isLoading } = useSelector((state) => state.user)
-  console.log(currentUser)
   const dispatch = useDispatch()
   const formRef = useRef(null)
   const inputFile = useRef(null)
@@ -154,16 +153,14 @@ function AccountSetting() {
 
   const handleShowPartnerInfo = (type) => {
     if (type === 'bus') {
-       dispatch(
-              setDetailModalVisible({
-                id: currentUser.formRegisterCarRentalPartnerId,
-                isOpen: true,
-                isReadonly: true
-              }),
-            )
-    }
-    else {
-      
+      dispatch(
+        setDetailModalVisible({
+          id: currentUser.formRegisterCarRentalPartnerId,
+          isOpen: true,
+          isReadonly: true,
+        }),
+      )
+    } else {
     }
   }
 
@@ -298,7 +295,9 @@ function AccountSetting() {
                 </button>
               )}
               {currentUser.roles?.includes(constants.carRentalPartner) && (
-                <button className={cx('btn-info')} onClick={()=>handleShowPartnerInfo('carRental')}>Thông tin đối tác cho thuê xe</button>
+                <button className={cx('btn-info')} onClick={() => handleShowPartnerInfo('carRental')}>
+                  Thông tin đối tác cho thuê xe
+                </button>
               )}
             </div>
           </div>
