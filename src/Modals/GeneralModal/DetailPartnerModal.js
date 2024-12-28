@@ -50,7 +50,6 @@ function DetailPartner() {
     async function fetchAllBanks() {
       const data = await getAllBankAccounts()
       if (data) {
-        console.log(data)
         setBanks(
           data
             .map((item) => ({ value: item.shortName, label: item.name }))
