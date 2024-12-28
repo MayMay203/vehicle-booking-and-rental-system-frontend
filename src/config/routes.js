@@ -42,4 +42,6 @@ export const routes = {
   paymentSuccess: '/payment-success',
   paymentFailure: '/payment-failure',
   fetchBlob: '/fetch-blob',
+  policySecurity: '/policy-security',
+  regulation: '/regulation',
 }

@@ -1,5 +1,5 @@
 import { images } from '~/assets/images'
-import styles from './Ticket.module.scss'
+import styles from './OrderRentalItem.module.scss'
 import classNames from 'classnames/bind'
 import { MessageIcon, StarIcon } from '../Icon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -36,7 +36,7 @@ import { updatRating } from '~/apiServices/ratingService/updateRating'
 import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 
 const cx = classNames.bind(styles)
-function TicketItem({ status, data = {} }) {
+function OrderRentalItem({ status, data = {} }) {
   const dispatch = useDispatch()
   const { busTripScheduleId } = data
   const [type, setType] = useState(status ? 'feedback' : 'discount')
@@ -581,4 +581,4 @@ function TicketItem({ status, data = {} }) {
   )
 }
 
-export default TicketItem
+export default OrderRentalItem

@@ -24,18 +24,18 @@ function Footer() {
                   </Link>
                 </li>
                 <li className={cx('item')}>
-                  <Link className={cx('link')} to={config.routes.booking}>
+                  <Link className={cx('link')} to={config.routes.ticket}>
                     Mua vé xe
                   </Link>
                 </li>
                 <li className={cx('item')}>
-                  <Link className={cx('link')} to={config.routes.booking}>
-                    Thuê xe tự lái
+                  <Link className={cx('link')} to={config.routes.renting}>
+                    Thuê xe
                   </Link>
                 </li>
                 <li className={cx('item')}>
-                  <Link className={cx('link')} to={config.routes.booking}>
-                    Thuê xe du lịch
+                  <Link className={cx('link')} to={config.routes.rentalService}>
+                    Đăng ký làm đối tác
                   </Link>
                 </li>
               </ul>

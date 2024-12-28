@@ -13,6 +13,7 @@ import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
 import PopperItem from '~/components/PopperWrapper/PopperItem'
 import { FilterIcon } from '~/components/Icon'
+import OrderRentalList from '~/components/OrderRentalList'
 
 const cx = classNames.bind(styles)
 function OrderManagement() {
@@ -185,21 +186,31 @@ function OrderManagement() {
         </Tippy>
       </div>
       <Tabs tabList={tabList} settings={settings} type={status} handleClickTab={handleClickTab}></Tabs>
-      {myTicketOrders.result?.length > 0 && (
-        <TicketList status={status} dataList={myTicketOrders.result} isDetailOrder={true} />
+      {filterType === 'ticketOrder' && (
+        <>
+          {myTicketOrders.result?.length > 0 && (
+            <TicketList status={status} dataList={myTicketOrders.result} isDetailOrder={true} />
+          )}
+          {myTicketOrders.result?.length > 0 && (
+            <Pagination
+              className="mt-5"
+              align="center"
+              current={currentPage}
+              pageSize={config.constants.pagesize}
+              total={myTicketOrders.meta?.total}
+              onChange={(page) => setCurrentPage(page)}
+            />
+          )}
+          {myTicketOrders.result?.length === 0 && (
+            <Empty style={{ marginTop: '70px' }} description="Không có đơn hàng nào" />
+          )}
+        </>
       )}
-      {myTicketOrders.result?.length > 0 && (
-        <Pagination
-          className="mt-5"
-          align="center"
-          current={currentPage}
-          pageSize={config.constants.pagesize}
-          total={myTicketOrders.meta?.total}
-          onChange={(page) => setCurrentPage(page)}
-        />
-      )}
-      {myTicketOrders.result?.length === 0 && (
-        <Empty style={{ marginTop: '70px' }} description="Không có đơn hàng nào" />
+      {filterType === 'carRentalOrder' && (
+        <>
+          <OrderRentalList></OrderRentalList>
+          {/* <Empty style={{ marginTop: '70px' }} description="Không có đơn hàng nào" /> */}
+        </>
       )}
     </div>
   )

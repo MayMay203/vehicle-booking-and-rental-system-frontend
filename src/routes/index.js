@@ -45,6 +45,8 @@ import PaymentSuccess from '~/pages/Payment/PaymentSuccess'
 import PaymentFailure from '~/pages/Payment/PaymentFairlure'
 import BusTypeManage from '~/pages/BusPartner/BusType/BusTypeManage'
 import FetchBlob from '~/pages/FetchBlob'
+import PolicySecurity from '~/pages/PolicySecurity'
+import OperatingRegulation from '~/pages/OperatingRegulation'
 
 const publicRoutes = [
   {
@@ -233,6 +235,16 @@ const publicRoutes = [
     path: config.routes.fetchBlob,
     component: FetchBlob,
     layout: null,
+  },
+  {
+    path: config.routes.policySecurity,
+    component: PolicySecurity,
+    // layout: null,
+  },
+  {
+    path: config.routes.regulation,
+    component: OperatingRegulation,
+    // layout: null,
   },
 ]
 
