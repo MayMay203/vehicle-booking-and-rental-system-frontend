@@ -1,9 +1,9 @@
 import { getAccessToken } from '~/utils/cookieUtils'
-import * as httpRequestV2 from '~/utils/httpRequestV2'
+import * as httpRequest from '~/utils/httpRequest'
 
 export const getIDServiceByIDRegister = async (id) => {
   try {
-    const response = await httpRequestV2.get(
+    const response = await httpRequest.get(
       `/user/vehicle-register/get-vehicle-rental-service-by-vehicle-register?vehicleRegisterId=${id}`,
       {
         headers: {

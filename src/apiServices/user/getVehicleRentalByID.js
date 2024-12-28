@@ -1,8 +1,8 @@
 // import { getAccessToken } from '~/utils/cookieUtils'
-import * as httpRequestV2 from '~/utils/httpRequestV2'
+import * as httpRequest from '~/utils/httpRequest'
 export const getVehicleRentalByID = async (id) => {
   try {
-    const response = await httpRequestV2.get(
+    const response = await httpRequest.get(
       `/user/vehicle-register/get-vehicle-rental-service?vehicle_rental_service_id=${id}`,
       // {
       //   headers: {
@@ -10,9 +10,10 @@ export const getVehicleRentalByID = async (id) => {
       //   },
       // },
     )
+    console.log("--repsonse infor rental by id service:", response.data)
     return response.data
   } catch (error) {
     console.log(error)
-    throw httpRequestV2.getMessage(error)
+    throw httpRequest.getMessage(error)
   }
 }

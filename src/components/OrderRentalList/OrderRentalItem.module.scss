@@ -36,8 +36,13 @@
     object-fit: cover;
 }
 
-.location-img{
-    height: 92px;
+.icon-start-time{
+    font-size: 2rem;
+    color: #FFD333;
+}
+.icon-end-time{
+    font-size: 2rem;
+    color: #c2230a;
 }
 
 .name{
@@ -98,9 +103,9 @@
 }
 
 .amount{
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 700;
-    color: #BA6B2B;
+    color: #bb0019;
 }
 
 .sale-off{
@@ -125,7 +130,7 @@
 }
 
 .status{
-    margin: 16px 0;
+    // margin: 16px 0;
     text-align: right;
     @include abstracts.screen(md){
         margin: 0;
@@ -145,7 +150,8 @@
     padding: 4px 12px;
     opacity: .9;
     transition: scale .3s ease;
-
+    border-radius: 50%;
+    background-color: #BA6B2B;
     &:hover{
         scale: 1.2;
     }
@@ -220,6 +226,8 @@
 }
 
 .detail-btn{
+    font-size: 1.7rem;
+    font-weight: 500;
     @include abstracts.screen(lg){
         margin-left: auto;
     }

@@ -18,6 +18,7 @@ export const generalModalNames = {
   FEE_SERVICE_MODAL: 'feeServiceModal',
   DEL_BUS_TYPE: 'deleteBusType',
   DEL_VOUCHER: 'deleteVoucher',
+  INFOR_RENTAL_ORDER: 'inforRentalOrder',
 }
 
 const initialState = {
@@ -74,6 +75,10 @@ const initialState = {
     isOpen: false,
     voucherId: '',
   },
+  inforRentalOrder:{
+    inforVehicle: {},
+    transactionCode: '',
+  }
 }
 
 const generalModalSlice = createSlice({
@@ -146,6 +151,14 @@ const generalModalSlice = createSlice({
         conversationId,
       }
     },
+    setInforRentalOrderModalVisible: (state, action) => {
+      const { inforRentalOrder, transactionCode = '' } = action.payload
+      state.inforRentalOrder = {
+        ...state.inforRentalOrder,
+        inforRentalOrder,
+        transactionCode,
+      }
+    },
   },
 })
 
@@ -160,6 +173,7 @@ export const {
   setFeeServiceModal,
   setMessageModalVisible,
   setVoucherModalVisible,
+  setInforRentalOrderModalVisible,
 } = generalModalSlice.actions
 
 export default generalModalSlice.reducer

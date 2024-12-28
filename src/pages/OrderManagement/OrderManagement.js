@@ -7,7 +7,7 @@ import classNames from 'classnames/bind'
 import styles from './OrderManagement.module.scss'
 import { Empty, Pagination } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
+import { fetchAllMyRentalOrders, fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import Tippy from '@tippyjs/react/headless'
 import PopperWrapper from '~/components/PopperWrapper'
@@ -20,10 +20,11 @@ function OrderManagement() {
   const [status, setStatus] = useState('current')
   const [currentPage, setCurrentPage] = useState(1)
   const myTicketOrders = useSelector((state) => state.orders.myTicketOrders)
+  const myRentalOrders = useSelector((state) => state.orders.myRentalOrders)
   const dispatch = useDispatch()
   const [isVisible, setIsVisible] = useState(false)
   const [filterType, setfilterType] = useState('ticketOrder')
-
+  console.log('myRentalOrders:', myRentalOrders)
   useEffect(() => {
     async function fetchAllOrderList() {
       if (dispatch(checkLoginSession())) {
@@ -38,7 +39,11 @@ function OrderManagement() {
               }),
             )
           } else if (filterType === 'carRentalOrder') {
-            //  dispatch canceled rental api
+            dispatch(
+              fetchAllMyRentalOrders({
+                status: status
+              }),
+            )
           } else {
             // dispatch canceled booking api
           }
@@ -52,7 +57,11 @@ function OrderManagement() {
               }),
             )
           } else if (filterType === 'carRentalOrder') {
-            // dispatch current rental order api
+            dispatch(
+              fetchAllMyRentalOrders({
+                status: status,
+              }),
+            )
           } else {
             // dispatch current booking order api
           }
@@ -66,7 +75,11 @@ function OrderManagement() {
               }),
             )
           } else if (filterType === 'carRentalOrder') {
-            // dispatch gone rental order api
+             dispatch(
+               fetchAllMyRentalOrders({
+                 status: status,
+               }),
+             )
           } else {
             // dispatch gone booking order api
           }
@@ -208,8 +221,10 @@ function OrderManagement() {
       )}
       {filterType === 'carRentalOrder' && (
         <>
-          <OrderRentalList></OrderRentalList>
+          {myRentalOrders?.length > 0 && <OrderRentalList status={status} dataList={myRentalOrders}></OrderRentalList>}
+
           {/* <Empty style={{ marginTop: '70px' }} description="Không có đơn hàng nào" /> */}
+          {myRentalOrders?.length === 0 && <Empty style={{ marginTop: '70px' }} description="Không có đơn hàng nào" />}
         </>
       )}
     </div>
