@@ -39,6 +39,8 @@ function Header() {
   const [isShowMessage, setIsShowMessage] = useState(false)
   const [isShowDetailPartner, setShowDetailPartner] = useState(false)
   const [isSmall, setIsSmall] = useState(window.innerWidth < 768)
+
+  console.log(currentUser)
   // Menu
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.currentMenu)

@@ -470,3 +470,7 @@ html *::-webkit-scrollbar-track {
 .ant-picker-suffix {
   color: var(--primary-color) !important; /* Đổi màu icon lịch */
 }
+
+.react-date-wrapper .react-datepicker-wrapper{
+  flex: 1;
+}

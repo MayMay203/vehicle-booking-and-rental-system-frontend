@@ -20,24 +20,23 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { updateAccount } from '~/apiServices/updateAccount'
 import { useDispatch, useSelector } from 'react-redux'
-import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { generalModalNames, setDetailModalVisible, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
+import { constants } from '~/config/constants'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {
   console.log('re-render account settings')
-  const { currentUser, isLoading } = useSelector((state) => {
-    console.log(state.user)
-    return state.user
-  })
+  const { currentUser, isLoading } = useSelector((state) => state.user)
+  console.log(currentUser)
   const dispatch = useDispatch()
   const formRef = useRef(null)
   const inputFile = useRef(null)
   const [fullName, setFullName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isValid, setIsValid] = useState(false)
-  const [birthday, setBirthday] = useState('')
+  const [birthday, setBirthday] = useState(null)
   const [gender, setGender] = useState('')
   const [selectedImage, setSelectedImage] = useState(null)
   const [isModified, setIsModified] = useState(false)
@@ -153,6 +152,21 @@ function AccountSetting() {
     dispatch(setAuthModalVisible({ modalName: modalNames.CHANGE_PASSWORD, isVisible: true }))
   }
 
+  const handleShowPartnerInfo = (type) => {
+    if (type === 'bus') {
+       dispatch(
+              setDetailModalVisible({
+                id: currentUser.formRegisterCarRentalPartnerId,
+                isOpen: true,
+                isReadonly: true
+              }),
+            )
+    }
+    else {
+      
+    }
+  }
+
   return (
     <div className="container">
       <Breadcrumb>
@@ -227,10 +241,10 @@ function AccountSetting() {
                 <div className="mb-3">
                   <label className="mb-4">Ngày sinh</label>
                   <span className={cx('star')}>*</span>
-                  <div className={cx('date-wrapper', 'd-flex', 'align-items-center')}>
+                  <div className={cx('date-wrapper', 'react-date-wrapper', 'd-flex', 'align-items-center')}>
                     <DatePicker
                       className={cx('date-input')} // Sử dụng class để áp dụng style cho input
-                      selected={birthday}
+                      selected={birthday || null}
                       onChange={(date) => handleChange(date, setBirthday)}
                       dateFormat="dd-MM-yyyy"
                       maxDate={new Date()}
@@ -240,7 +254,7 @@ function AccountSetting() {
                     <FontAwesomeIcon icon={faCalendar} className={cx('calendar-icon')} />
                   </div>
                 </div>
-                <FormGender handleGender={handleGender} gender={gender} star />
+                <FormGender handleGender={handleGender} gender={gender || ''} star />
                 <div className="d-flex column-gap-5 justify-content-center mt-5">
                   <Button
                     type="button"
@@ -263,14 +277,29 @@ function AccountSetting() {
                     Lưu thông tin
                   </Button>
                 </div>
-                <Button
-                  leftIcon={<FontAwesomeIcon icon={faUserLock} />}
-                  className={cx('btn-change')}
-                  onClick={handleChangePassword}
-                >
-                  Đổi mật khẩu
-                </Button>
               </form>
+            </div>
+          </div>
+          <div
+            className="d-flex flex-wrap gap-5 align-items-center justify-content-between"
+            style={{ marginTop: '50px' }}
+          >
+            <Button
+              leftIcon={<FontAwesomeIcon icon={faUserLock} />}
+              className={cx('btn-change')}
+              onClick={handleChangePassword}
+            >
+              Đổi mật khẩu
+            </Button>
+            <div className={cx('info-wrapper', 'd-flex', 'flex-wrap', 'gap-4', 'align-items-center')}>
+              {currentUser.roles?.includes(constants.busPartner) && (
+                <button className={cx('btn-info')} onClick={() => handleShowPartnerInfo('bus')}>
+                  Thông tin đối tác nhà xe
+                </button>
+              )}
+              {currentUser.roles?.includes(constants.carRentalPartner) && (
+                <button className={cx('btn-info')} onClick={()=>handleShowPartnerInfo('carRental')}>Thông tin đối tác cho thuê xe</button>
+              )}
             </div>
           </div>
         </div>
