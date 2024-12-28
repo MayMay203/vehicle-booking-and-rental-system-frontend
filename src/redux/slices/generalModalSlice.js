@@ -47,6 +47,7 @@ const initialState = {
     isOpen: false,
     id: '',
     status: '',
+    isReadonly: false,
   },
   DetailDriverPartner: {
     isOpen: false,

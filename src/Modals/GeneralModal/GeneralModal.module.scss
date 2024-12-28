@@ -187,3 +187,22 @@
   line-height: 1.5;
   color: #ff4d4f;
 }
+
+.form-bank {
+  margin-top: 8px;
+}
+
+.txt {
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  color: black;
+  &:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+  }
+}
+
+.select-box {
+  width: 100%;
+}

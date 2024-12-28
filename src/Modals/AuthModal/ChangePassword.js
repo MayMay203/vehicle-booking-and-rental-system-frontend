@@ -80,6 +80,7 @@ function ChangePassword() {
             required
             isValid={isValid}
             autoComplete="new-password"
+            star
           ></FormInput>
           <FormInput
             title="Mật khẩu mới"
@@ -93,6 +94,7 @@ function ChangePassword() {
             required
             isValid={isValid}
             autoComplete="new-password"
+            star
           ></FormInput>
           <FormInput
             title="Nhập lại mật khẩu"
@@ -107,6 +109,7 @@ function ChangePassword() {
             isValid={isValid}
             required
             autoComplete="new-password"
+            star
           ></FormInput>
           <Button className={cx('btn-submit', 'm-0')} onClick={handleChangePassword} disabled={!isValid} type="submit">
             Đổi mật khẩu

@@ -1,3 +1,5 @@
+@use '../../abstracts' as abstracts;
+
 .wrapper{
     padding: 40px 0;
 }
@@ -67,15 +69,34 @@
 }
 
 .btn-change{
-  margin-top: 80px;
+  width: 300px;
   float: right;
   background-color: var(--primary-bg);
   padding: 24px 50px;
   font-weight: 600;
-  color: var(--orange-color)
+  color: var(--orange-color);
+  @include abstracts.screen(md){
+    width: 100%;
+  }
+}
+
+.btn-info{
+  padding: 16px 50px;
+  background-color: var(--primary-bg);
+  color: var(--orange-color);
+  @include abstracts.screen(md){
+    width: 100%;
+    flex: 1
+  }
 }
 
 .star{
   color: red;
   margin-left: 2px;
+}
+
+.info-wrapper{
+  @include abstracts.screen(md){
+    width: 100%;
+  }
 }

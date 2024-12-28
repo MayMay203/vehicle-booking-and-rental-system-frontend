@@ -14,6 +14,7 @@ import { setCurrentUser } from '~/redux/slices/userSlice'
 import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
 import { setMenu } from '~/redux/slices/menuSlice'
 import { useNavigate } from 'react-router-dom'
+import { getMyAccount } from '~/apiServices/getMyAccount'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
@@ -63,7 +64,8 @@ function LoginModal() {
       else dispatch(setMenu('userMenu'))
       // add localstorage
       localStorage.setItem('accessToken', data.access_token)
-      dispatch(setCurrentUser({ currentUser: data.accountLogin }))
+      const currentAccount = await getMyAccount()
+      dispatch(setCurrentUser({ currentUser: currentAccount.accountInfo }))
       dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: false }))
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       reset()
