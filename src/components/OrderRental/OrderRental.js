@@ -33,10 +33,8 @@ function OrderRental({ typeService, formData, setFormData }) {
   //   formData.car_deposit -
   //   formData.voucher_percentage * Math.floor(formData.price) * formData.amount -
   //   formData.voucher_value
-   const total =
-     Math.floor(formData.price) * formData.amount +
-     formData.reservation_fee +
-     formData.car_deposit - voucherDiscount
+  const total =
+    Math.floor(formData.price) * formData.amount + formData.reservation_fee + formData.car_deposit - voucherDiscount
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prevState) => ({
@@ -69,18 +67,24 @@ function OrderRental({ typeService, formData, setFormData }) {
   const handleOrder = async () => {
     try {
       if (dispatch(checkLoginSession())) {
-         if (formData.voucherId === '') {
-           const { voucherId, ...newFormData } = formData
-           formData = newFormData
-         }
-         
+        if (formData.voucherId === '') {
+          const { voucherId, ...newFormData } = formData
+          formData = newFormData
+        }
+
         console.log('--formData:-----idvoucher:---', formData)
         const order = await orderVehicleRental(formData)
         if (order) {
           const key = order.keyOrder
-          const paymentUrl = await createPayment(key)
-          if (paymentUrl) {
-            window.location.href = paymentUrl
+          if (key) {
+            const paymentUrl = await createPayment(key)
+            if (paymentUrl) {
+              window.location.href = paymentUrl
+            } else {
+              toast.error('Thanh toán thất bại. Vui lòng thử lại!')
+            }
+          } else {
+            toast.error('Thanh toán thất bại. Vui lòng thử lại!')
           }
         }
       }

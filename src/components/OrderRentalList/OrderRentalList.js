@@ -1,18 +1,14 @@
 import OrderRentalItem from './OrderRentalItem'
-import PropTypes from 'prop-types'
 function OrderRentalList({ status, dataList }) {
+  console.log('list order rental in user--dataList--:', dataList)
   return (
     <div>
-      {dataList?.map((ticket, index) => (
-        <OrderRentalItem key={index} status={status} data={ticket} />
+      {dataList?.map((item, index) => (
+        <OrderRentalItem key={index} status={status} data={item} />
       ))}
     </div>
   )
 }
 
-OrderRentalList.propTypes = {
-  status: PropTypes.string,
-  dataList: PropTypes.array.isRequired,
-}
 
 export default OrderRentalList

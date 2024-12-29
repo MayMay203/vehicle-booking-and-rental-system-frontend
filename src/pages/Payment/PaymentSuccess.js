@@ -31,11 +31,16 @@ function PaymentSuccess() {
   }, [transactionCode, orderType])
   useEffect(() => {
     async function getInforVehicleRental() {
-      const data = await getVehicleRentalByID(detailData?.rentalInfo?.carRentalServiceId)
-      if (data) {
-        setDetailVehicle(data)
+      try {
+        const data = await getVehicleRentalByID(detailData?.rentalInfo?.carRentalServiceId)
+        if (data) {
+          setDetailVehicle(data)
+        }
+      } catch (error) {
+        console.error('Error fetching vehicle rental info:', error)
       }
     }
+
 
     getInforVehicleRental()
   }, [detailData?.rentalInfo?.carRentalServiceId])

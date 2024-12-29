@@ -90,12 +90,12 @@ function TableListBuyTicket({ listOrderOfBusTrip }) {
   const dispatch = useDispatch()
   const { currentUser } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
-  const handleChat = async() => { if (dispatch(checkLoginSession())) {
+  const handleChat = async(key) => { if (dispatch(checkLoginSession())) {
         // Create new conversation
         const idConversation = await createCoversation(
           currentUser.id,
           currentRole,
-          data.businessPartnerInfo?.accountId,
+          key,
           'USER',
         )
         dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
@@ -120,8 +120,8 @@ function TableListBuyTicket({ listOrderOfBusTrip }) {
     setData(
       listOrderOfBusTrip
         // .sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime)) // Sắp xếp theo thời gian đặt vé giảm dần
-        .map((item, index) => ({
-          key: index,
+        .map((item) => ({
+          key: item.accountId,
           name: item.name,
           numberphone: item.phoneNumber,
           orderAt: item.orderTime,
@@ -137,8 +137,8 @@ function TableListBuyTicket({ listOrderOfBusTrip }) {
     '------ data bang:',
     listOrderOfBusTrip
       // .sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime)) // Sắp xếp theo thời gian đặt vé giảm dần
-      .map((item, index) => ({
-        key: index,
+      .map((item) => ({
+        key: item.accountId,
         name: item.name,
         numberphone: item.phoneNumber,
         orderAt: item.orderTime,

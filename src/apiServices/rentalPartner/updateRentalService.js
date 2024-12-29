@@ -1,8 +1,8 @@
-import * as httpRequestV2 from '~/utils/httpRequestV2'
+import * as httpRequest from '~/utils/httpRequest'
 import { getAccessToken } from '~/utils/cookieUtils'
 export const updateRentalService = async (formData) => {
   try {
-    const response = await httpRequestV2.patch('user/vehicle-register/update-vehicle-rental-service', formData, {
+    const response = await httpRequest.patch('user/vehicle-register/update-vehicle-rental-service', formData, {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
@@ -10,6 +10,6 @@ export const updateRentalService = async (formData) => {
     return response.data
   } catch (error) {
     console.log(error)
-    throw httpRequestV2.getMessage(error)
+    throw httpRequest.getMessage(error)
   }
 }

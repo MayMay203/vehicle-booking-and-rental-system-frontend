@@ -36,8 +36,13 @@
     object-fit: cover;
 }
 
-.location-img{
-    height: 92px;
+.icon-start-time{
+    font-size: 2rem;
+    color: #FFD333;
+}
+.icon-end-time{
+    font-size: 2rem;
+    color: #c2230a;
 }
 
 .name{
@@ -98,9 +103,9 @@
 }
 
 .amount{
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 700;
-    color: #BA6B2B;
+    color: #bb0019;
 }
 
 .sale-off{
@@ -125,7 +130,7 @@
 }
 
 .status{
-    margin: 16px 0;
+    // margin: 16px 0;
     text-align: right;
     @include abstracts.screen(md){
         margin: 0;
@@ -145,7 +150,8 @@
     padding: 4px 12px;
     opacity: .9;
     transition: scale .3s ease;
-
+    border-radius: 50%;
+    background-color: #BA6B2B;
     &:hover{
         scale: 1.2;
     }
@@ -220,6 +226,8 @@
 }
 
 .detail-btn{
+    font-size: 1.7rem;
+    font-weight: 500;
     @include abstracts.screen(lg){
         margin-left: auto;
     }
@@ -228,3 +236,39 @@
     }
 }
 
+
+.image-vehicle {
+  width: 32rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin: 0 2rem;
+  // height: 20rem;
+}
+.padding {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+.nav-button-page {
+  font-size: 2rem;
+  padding: 1rem;
+  color: #e20d0d;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+.nav-button-page:hover,
+.nav-button-page:active,
+.nav-button-page:focus {
+  background-color: #fcd4c6;
+  color: #e20d0d;
+  outline: none;
+  box-shadow: none;
+}
+.nav-button-page:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  background-color: white;
+}
