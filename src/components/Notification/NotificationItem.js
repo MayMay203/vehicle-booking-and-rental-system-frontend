@@ -43,6 +43,17 @@ function NotificationItem({ data, handleClose }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.type])
 
+  useEffect(() => {
+    if (data.type === NEW_BOOKING) setSrc(images.newBooking)
+    else if (data.type === BOOKING_CANCELLED) setSrc(images.bookingCancelled)
+    else if (data.type === BOOKING_COMPLETED) setSrc(images.bookingComplete)
+    else if (data.type === CANCELED_REGISTER_PARTNER) setSrc(images.deletePartner)
+    else if (data.type === APPROVAL_REGISTER_PARTNER) setSrc(images.approvalPartner)
+    else if (data.type === REFUSED_REGISTER_PARTNER) setSrc(images.refusePartner)
+    else if (data.type === RECEIVED_REGISTER_PARTNER) setSrc(images.receivedPartner)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.type])
+
   const handleReaded = async () => {
     if (!data.seen) {
       await updateStatusNotification(currentUser.id, currentRole, data.id)
