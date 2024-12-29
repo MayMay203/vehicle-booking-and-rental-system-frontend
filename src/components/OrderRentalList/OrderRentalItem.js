@@ -17,7 +17,6 @@ import {
   // setTicketModalVisible,
 } from '~/redux/slices/generalModalSlice'
 // import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { config } from '~/config'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { Empty } from 'antd'
