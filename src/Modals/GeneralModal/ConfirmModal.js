@@ -16,12 +16,13 @@ import { deleteUtility } from '~/apiServices/manageUtilities/deleteUtility'
 import { fetchAllFeeServices, fetchAllUtilities } from '~/redux/slices/generalAdminSlice'
 import { deleteFeeService } from '~/apiServices/manageFeeService/deleteFeeService'
 import { cancelTicket } from '~/apiServices/ticket/cancelTicket'
-import { fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
+import { fetchAllMyRentalOrders, fetchAllMyTicketOrders } from '~/redux/slices/orderSlice'
 import { deleteBusType } from '~/apiServices/busPartner/deleteBusType'
 import { fetchAllBuses, fetchAllBusTypes } from '~/redux/slices/busPartnerSlice'
 import { deleteBus } from '~/apiServices/busPartner/deleteBus'
 import { deleteVoucher } from '~/apiServices/vouchers/deleteVoucher'
 import { fetchAllVouchers } from '~/redux/slices/voucherSlice'
+import { cancelRentalOrder } from '~/apiServices/user/cancelRentalOrder'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -145,8 +146,26 @@ function ConfirmModal() {
         }
         toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau!', { autoClose: 800, position: 'top-center' })
       }
-    }
-    else if (showConfirmModal.name === generalModalNames.DEL_VOUCHER) {
+    } else if (showConfirmModal.name === generalModalNames.CANCEL_RENTAL_ORDER) {
+      try {
+        if (dispatch(checkLoginSession())) {
+          await cancelRentalOrder(showConfirmModal.id)
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          toast.success('Đơn thuê xe của bạn đã được hủy thành công!', { autoClose: 800, position: 'top-center' })
+          dispatch(
+            fetchAllMyRentalOrders({
+              status: 'current',
+            }),
+          )
+        }
+      } catch (message) {
+        if (message.includes("You can't cancel this order because it has exceed the time limit")) {
+          toast.error('Đơn thuê xe không thể hủy vì đã quá thời hạn.!', { autoClose: 1000, position: 'top-center' })
+          return
+        }
+        toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau!', { autoClose: 800, position: 'top-center' })
+      }
+    } else if (showConfirmModal.name === generalModalNames.DEL_VOUCHER) {
       if (dispatch(checkLoginSession())) {
         const id = showConfirmModal.id
         console.log(showConfirmModal)
@@ -156,9 +175,8 @@ function ConfirmModal() {
           toast.success('Xoá mã khuyến mãi thành công!', { autoClose: 1000, position: 'top-center' })
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
           dispatch(fetchAllVouchers({ page: 1 }))
-        }
-        else {
-          toast.error('Mã khuyến mãi đã được sử dụng. Không thể xoá!', { autoClose: 1200, position: 'top-center'})
+        } else {
+          toast.error('Mã khuyến mãi đã được sử dụng. Không thể xoá!', { autoClose: 1200, position: 'top-center' })
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
         }
       }

@@ -107,7 +107,9 @@ function ModalDetailOrderRental({ transactionCode, inforRentalVehicle, ...props 
         <Row>
           <div className={cx('wrap-infor')}>
             <span>Phí thuê 1 chiếc</span>
-            <span className={cx('align-right')}>{inforOrder?.pricingInfo?.price.toLocaleString('vi-VN')} đ</span>
+            <span className={cx('align-right')}>
+              {Math.round(inforOrder?.pricingInfo?.price).toLocaleString('vi-VN')} đ
+            </span>
           </div>
         </Row>
         <Row>

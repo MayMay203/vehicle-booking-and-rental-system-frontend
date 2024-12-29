@@ -114,7 +114,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
   // const [imageVehiclePerPage, setImageVehiclePerPage] = useState(3)
   const imageVehiclePerPage = 2
   const displayedImageVehicle = listImageVehicle?.slice(currentIndex, currentIndex + imageVehiclePerPage)
-  // console.log('displayedImageVehicle', displayedImageVehicle)
+  const [enableCancel, setEnableCancle] = useState(false)
   const handleNext = () => {
     if (currentIndex + imageVehiclePerPage < listImageVehicle.length) {
       // resetImageVehicleStates()
@@ -153,6 +153,16 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.rentalInfo.endRentalTime])
+  useEffect(() => {
+    if (data?.rentalInfo) {
+      const [time, date] = data.rentalInfo.startRentalTime.split(' ')
+      const [day, month, year] = date.split('-')
+      const isoDate = `${year}-${month}-${day}T${time}:00`
+      setEnableCancle(new Date(isoDate) > new Date())
+      console.error('Thời gian hủy:--', isoDate)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.rentalInfo?.startRentalTime])
   useEffect(() => {
     setListImageVehicle(inforRentalVehicle?.imagesVehicleRegister)
   }, [inforRentalVehicle])
@@ -234,10 +244,11 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
       setConfirmModalVisible({
         modalType: 'confirm',
         isOpen: true,
-        title: 'Xác nhận huỷ vé',
-        description: 'Vui lòng hủy vé ít nhất 12 tiếng trước giờ khởi hành. Bạn có chắc chắn muốn hủy vé xe này không?',
-        name: generalModalNames.CANCEL_TICKET,
-        id: data.orderInfo.orderId,
+        title: 'Xác nhận huỷ xe',
+        description:
+          'Vui lòng xem kĩ chính sách hủy chuyến, nếu hủy sau thanh toán 1 giờ, bạn sẽ mất toàn bộ tiền đặt trước. Bạn có chắc chắn muốn hủy đơn này không?',
+        name: generalModalNames.CANCEL_RENTAL_ORDER,
+        id: data.orderId,
       }),
     )
   }
@@ -248,7 +259,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
       const idConversation = await createCoversation(
         currentUser.id,
         currentRole,
-        inforRentalVehicle?.partnerId,
+        inforRentalVehicle?.partnerAccountId,
         'CAR_RENTAL_PARTNER',
       )
       dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
@@ -348,7 +359,9 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
         </div>
         <div className=" col col-md-12 d-flex flex-column justify-content-between align-items-start align-items-lg-end justify-content-md-end justify-content-lg-between">
           <div className="d-flex justify-content-md-end w-100 flex-lg-column gap-5 gap-lg-4 align-items-center align-items-lg-end">
-            <span className={cx('price', { amount: status })}>{data?.pricingInfo.price.toLocaleString('vi-VN')} đ</span>
+            <span className={cx('price', { amount: status })}>
+              {Math.round(data?.pricingInfo.price).toLocaleString('vi-VN')} đ
+            </span>
           </div>
           <span className={cx('status', 'w-100')}>Số lượng thuê: {data?.rentalInfo?.numberOfVehicles}</span>
 
@@ -371,7 +384,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
                 style={{ rotate: isDetail ? '-180deg' : '0deg', transition: 'rotate .2s ease' }}
               />
             </button>
-            {status === 'current' ? (
+            {status === 'current' && enableCancel ? (
               <Button rounded onClick={handleCancelTicket}>
                 Huỷ
               </Button>

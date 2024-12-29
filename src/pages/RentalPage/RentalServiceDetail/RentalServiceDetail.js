@@ -26,15 +26,27 @@ import Table from 'react-bootstrap/Table'
 import InforRental from '~/components/InforRental'
 import SurchargeFee from '~/components/InforRental/SurchargeFee'
 import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
+import { getRatingsRentalByIDService } from '~/apiServices/user/getRatingsRentalByIDService'
+import { Empty } from 'antd'
+import RatingContent from '~/components/RatingContent'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { createCoversation } from '~/apiServices/messageService/createConverstation'
+import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
+import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
+import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 
 const cx = classNames.bind(styles)
 function RentalServiceDetail() {
   const location = useLocation()
+  const dispatch = useDispatch()
   const typeService = location.state?.typeService
   const typeVehicle = location.state.typeVehicle
   const inforVehicle = location.state?.infor
   const startDateTime = location.state?.startDateTime
   const endDateTime = location.state?.endDateTime
+  const { currentUser, isLogin } = useSelector((state) => state.user)
+  const { currentRole } = useSelector((state) => state.menu)
   const manned = 'manned'
   const self_driving = 'self_driving'
   const newPrice =
@@ -42,6 +54,28 @@ function RentalServiceDetail() {
       ? inforVehicle?.driverPrice - inforVehicle?.driverPrice * (inforVehicle?.discount_percentage / 100)
       : inforVehicle?.selfDriverPrice - inforVehicle?.selfDriverPrice * (inforVehicle?.discount_percentage / 100)
   const [inforVehicleRental, setInforVehicleRental] = useState(null)
+  const [listRating, setListRating] = useState([])
+  const chunkArray = (array, size) => {
+    const result = []
+    for (let i = 0; i < array?.length; i += size) {
+      result.push(array.slice(i, i + size))
+    }
+    return result
+  }
+  // Chia mảng ảnh thành các cặp (2 ảnh mỗi nhóm)
+  const imagePairs = chunkArray(inforVehicleRental?.imagesVehicleRegister, 2)
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const response = await getRatingsRentalByIDService(inforVehicle?.vehicle_rental_service_id)
+        setListRating(response)
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu đơn hàng:', error)
+      }
+    }
+
+    fetchRatings()
+  }, [inforVehicle?.vehicle_rental_service_id])
   // console.log(' inforVehicle---3---', inforVehicle)
   useEffect(() => {
     const getInforVehicleRentalByID = async () => {
@@ -57,16 +91,24 @@ function RentalServiceDetail() {
   console.log('endDatatime ---3---', endDateTime)
   console.log('startDatatime ---- 3----', startDateTime)
   // Chia mảng ảnh thành các cặp
-  const chunkArray = (array, size) => {
-    const result = []
-    for (let i = 0; i < array?.length; i += size) {
-      result.push(array.slice(i, i + size))
+
+  const handleSendMessage = async () => {
+    if (dispatch(checkLoginSession()) && isLogin) {
+      // Create new conversation
+      const idConversation = await createCoversation(
+        currentUser.id,
+        currentRole,
+        inforVehicleRental?.partnerAccountId,
+        'CAR_RENTAL_PARTNER',
+      )
+      dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
+      dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
+    } else {
+      //gọi modal đăng nhập
+      dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
     }
-    return result
   }
 
-  // Chia mảng ảnh thành các cặp (2 ảnh mỗi nhóm)
-  const imagePairs = chunkArray(inforVehicleRental?.imagesVehicleRegister, 2)
   return (
     <div className={cx('wrapper', 'container')}>
       <Breadcrumb className="mb-5">
@@ -210,11 +252,15 @@ function RentalServiceDetail() {
                   <Row>
                     <span className={cx('title')}>Liên hệ</span>
                   </Row>
+
                   <Col>
                     <div className={cx('icon-txt')}>
                       <FontAwesomeIcon icon={faHomeUser} className={cx('icon', 'icon-agency')} />
                       {/* <span className={cx('txt')}>Chủ xe:</span> */}
                       <span className={cx('txt')}>{inforVehicleRental?.partnerName}</span>
+                      <span className={cx('txt-chat')} onClick={handleSendMessage}>
+                        Nhắn tin ngay
+                      </span>
                     </div>
                     <div className={cx('icon-txt')}>
                       <FontAwesomeIcon icon={faUser} className={cx('icon', 'icon-owner')} />
@@ -274,14 +320,18 @@ function RentalServiceDetail() {
               <Tab eventKey="policy" title="Điều khoản">
                 <Row>
                   <span className={cx('title')}>Quy định</span>
-                  <span className={cx('content')}>
-                    - Sử dụng xe đúng mục đích. - Không sử dụng xe thuê vào mục đích phi pháp, trái pháp luật. - Không
-                    sử dụng xe thuê để cầm cố, thế chấp. - Không hút thuốc, nhả kẹo cao su, xả rác trong xe. - Không chở
-                    hàng quốc cấm dễ cháy nổ. - Không chở hoa quả, thực phẩm nặng mùi trong xe. - Khi trả xe, nếu xe bẩn
-                    hoặc có mùi trong xe, khách hàng vui lòng vệ sinh xe sạch sẽ hoặc gửi phụ thu phí vệ sinh xe. - Xe
-                    được giới hạn di chuyển ở mức 400km cho 24h, và lần lượt là 250km, 300km, 350 km cho gói 4h, 8h,
-                    12h. Trân trọng cảm ơn, chúc quý khách hàng có những chuyến đi tuyệt vời !
-                  </span>
+
+                  {inforVehicle?.policy
+                    .split('@#$%&')
+                    .filter(Boolean)
+                    .map((value, index) => (
+                      <>
+                        <span className={cx('content')} key={index}>
+                          - {value.trim()}
+                        </span>{' '}
+                        <br />
+                      </>
+                    )) || ''}
                 </Row>
                 <Row>
                   <span className={cx('title')}>Chính sách hủy chuyến</span>
@@ -333,7 +383,25 @@ function RentalServiceDetail() {
                 </Row>
               </Tab>
               <Tab eventKey="rating" title="Đánh giá">
-                {/* <RatingContent></RatingContent> */}
+                <div className={cx('content-tab', 'rolling-content-tab')}>
+                  {/* <RatingContentList></RatingContentList> */}
+
+                  <div>
+                    {Array.isArray(listRating?.result?.result) &&
+                      listRating.result.result.map((rating, index) => <RatingContent data={rating} />)}
+
+                    {listRating?.result?.result?.length === 0 && (
+                      <div style={{ marginTop: '60px' }}>
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có đánh giá nào." />
+                      </div>
+                    )}
+                    {(listRating === null || listRating === undefined) && (
+                      <div style={{ marginTop: '60px' }}>
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có đánh giá nào." />
+                      </div>
+                    )}
+                  </div>
+                </div>
               </Tab>
             </Tabs>
           </Row>

@@ -22,7 +22,7 @@ function EditServiceRental({ idRegister, ...props }) {
   const [formData, setFormData] = useState({
     car_company: '',
     type_vehicle: '',
-    car_year: '',
+    vehicleLife: '',
     quantity: '',
     type_service: 'Cả 2 dịch vụ',
     price1: '',
@@ -46,7 +46,7 @@ function EditServiceRental({ idRegister, ...props }) {
     setFormData({
       car_company: response?.manufacturer,
       type_vehicle: response?.vehicle_type,
-      car_year: response?.vehicleLife,
+      vehicleLife: response?.vehicleLife,
       quantity: response?.amount,
       type_service: response?.type,
       // response?.type === 2 ? 'Cả 2 dịch vụ' : response?.type === 1 ? 'Thuê xe có người lái' : 'Thuê xe tự lái',
@@ -117,7 +117,7 @@ function EditServiceRental({ idRegister, ...props }) {
           type: formData.type_service,
           driverPrice: formData.price2,
           selfDriverPrice: formData.price1,
-          vehicle_life: formData.car_year,
+          vehicleLife: formData.vehicleLife,
           location: formData.location,
           manufacturer: formData.car_company,
           description: formData.description,
@@ -137,7 +137,7 @@ function EditServiceRental({ idRegister, ...props }) {
         // {
         //   vehicle_register_id: idRegister,
         //   location: formData.location,
-        //   vehicle_life: formData.car_year,
+        //   vehicleLife: formData.vehicleLife,
         //   manufacturer: formData.car_company,
         //   description: formData.description,
         //   quantity: parseInt(formData.quantity, 10),
