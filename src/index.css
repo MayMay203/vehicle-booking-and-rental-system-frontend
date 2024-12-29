@@ -495,3 +495,36 @@ html *::-webkit-scrollbar-track {
 .ant-image-mask{
   background-color: transparent!important;
 }
+
+.month-year-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #888;
+  pointer-events: none; 
+}
+
+.month-year-wrapper .react-datepicker__input-container{
+  width: 150px;
+}
+
+.month-year-wrapper .react-datepicker__input-container input{
+  width: 100%;
+  padding: 6px 12px;
+}
+
+.react-datepicker__header.react-datepicker-year-header{
+  font-size: 15px;
+}
+
+.react-datepicker__month-container{
+  font-size: 14px;
+}
+

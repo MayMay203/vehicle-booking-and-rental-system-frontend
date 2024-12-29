@@ -29,6 +29,8 @@ import {
   ManageVouchers,
   Statistics,
   ManageFeeService,
+  Transaction,
+  DetailTransaction,
 } from '~/pages/Admin'
 import UpdateBus from '~/pages/BusPartner/BusManage/UpdateBus/index.js'
 import PolicyManage from '~/pages/BusPartner/PolicyManage'
@@ -140,6 +142,16 @@ const publicRoutes = [
   {
     path: config.routes.adminStatistics,
     component: Statistics,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.manageTransaction,
+    component: Transaction,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.detailTransaction,
+    component: DetailTransaction,
     layout: HeaderOnly,
   },
   {

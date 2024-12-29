@@ -3,70 +3,12 @@ import styles from './Statistics.module.scss'
 import { useEffect, useMemo, useState } from 'react'
 import { Bar, Line } from 'react-chartjs-2'
 import { getRevenueAllYears } from '~/apiServices/adminStatistic/getRevenueAllYears'
-// import { Chart } from 'react-chartjs-2'
-// import { Bar, Line} from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 import { getRevenueBusAllYears } from '~/apiServices/adminStatistic/getRevenueBusAllYears'
 import { getRevenueRentalAllYears } from '~/apiServices/adminStatistic/getRevenueRentalAllYear'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
-
-// // Register the necessary components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
-
-// const data = {
-//   labels: ['A', 'B', 'C', 'D'], // Các nhãn của trục X
-//   datasets: [
-//     // {
-//     //   label: 'Dataset 1',
-//     //   data: [12, 19, 3, 5], // Dữ liệu cho cột đầu tiên
-//     //   backgroundColor: 'rgba(255, 99, 132, 0.2)', // Màu nền của cột
-//     //   borderColor: 'rgba(255, 99, 132, 1)', // Màu viền của cột
-//     //   borderWidth: 1,
-//     //   barPercentage: 0.4, // Điều chỉnh tỷ lệ của mỗi cột
-//     // },
-//     {
-//       label: 'Doanh thu',
-//       data: [8, 15, 5, 10], // Dữ liệu cho cột thứ hai
-//       backgroundColor: 'rgba(54, 162, 235, 0.2)', // Màu nền của cột
-//       borderColor: 'rgba(54, 162, 235, 1)', // Màu viền của cột
-//       borderWidth: 1,
-//       barPercentage: 0.4, // Điều chỉnh tỷ lệ của mỗi cột
-//     },
-//   ],
-// }
-
-// const options = {
-//   responsive: true,
-//   plugins: {
-//     legend: {
-//       position: 'top',
-//     },
-//     title: {
-//       display: true,
-//       text: 'Biểu đồ Cột Kép',
-//     },
-//   },
-//   scales: {
-//     x: {
-//       stacked: false, // Cột không chồng lên nhau
-//     },
-//     y: {
-//       beginAtZero: true,
-//     },
-//   },
-// }
-
-// // function Statistics() {
-// //   <div></div>
-// // }
-
-// // export default Statistics;
-
-// const Statistic = () => <Line data={data} options={options} />
-
-// export default Statistic
-
 const cx = classNames.bind(styles)
 function Statistics() {
   const [type, setType] = useState('allYears')

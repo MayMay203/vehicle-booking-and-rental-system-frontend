@@ -1,0 +1,26 @@
+@use '../../../abstracts' as abstracts;
+
+.wrapper{
+    margin-top: 50px;
+    padding-bottom: 60px;
+
+    .btn-type{
+        padding: 16px 20px;
+        border-radius: 999px;
+        color: var(--orange-color);
+        border: 1px solid var(--orange-color);
+        
+        @include abstracts.screen(sm){
+            padding: 12px 9px;
+        }
+
+        &:hover:not(.active){
+            background-color: var(--primary-bg);
+        }
+        &.active{
+            color: #fff;
+            background-color: var(--orange-color);
+        }
+
+    }
+}
