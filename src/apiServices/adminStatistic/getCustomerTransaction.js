@@ -4,7 +4,7 @@ import * as httpRequest from '~/utils/httpRequest'
 export const getCustomerTransaction = async (month, year, businessPartnerId) => {
   try {
     const response = await httpRequest.get(
-      `/v1/statistic/customer-of-partner?month=${month}&year=${year}&businessPartnerId=${year}`,
+      `/v1/statistic/customer-of-partner?month=${month}&year=${year}&businessPartnerId=${businessPartnerId}`,
       {
         headers: {
           Authorization: 'Bearer ' + getAccessToken(),

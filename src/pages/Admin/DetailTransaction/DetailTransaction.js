@@ -1,18 +1,17 @@
+import { useParams } from 'react-router-dom'
+import styles from './DetailTransaction.module.scss'
 import classNames from 'classnames/bind'
-import styles from './Transaction.module.scss'
-import { config } from '~/config'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBus, faCar } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useRef, useState } from 'react'
+import { getCustomerTransaction } from '~/apiServices/adminStatistic/getCustomerTransaction'
 import DatePicker from 'react-datepicker'
-import React, { useEffect, useRef, useState } from 'react'
-import { SearchOutlined } from '@ant-design/icons'
 import { Button, Input, Space, Table } from 'antd'
 import Highlighter from 'react-highlight-words'
-import { Link } from 'react-router-dom'
-import { getRevenueByPartnerType } from '~/apiServices/adminStatistic/getRevenueByPartnerType'
+import { SearchOutlined } from '@ant-design/icons'
+import { head } from '@antv/util'
+
 const cx = classNames.bind(styles)
-function Transaction() {
-  const [type, setType] = useState(config.constants.busPartner)
+function DetailTransaction() {
+  const partnerId = useParams()
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [data, setData] = useState([])
   const [searchText, setSearchText] = useState('')
@@ -21,13 +20,17 @@ function Transaction() {
 
   useEffect(() => {
     async function fetchData() {
-      const dataRes = await getRevenueByPartnerType(selectedDate.getMonth() + 1, selectedDate.getFullYear(), type)
+      const dataRes = await getCustomerTransaction(
+        selectedDate.getMonth() + 1,
+        selectedDate.getFullYear(),
+        partnerId.id,
+      )
       if (dataRes?.result) {
         setData(dataRes?.result)
       }
     }
     fetchData()
-  }, [selectedDate, type])
+  }, [selectedDate, partnerId.id])
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm()
@@ -135,55 +138,35 @@ function Transaction() {
   })
   const columns = [
     {
-      title: 'Tên đối tác',
-      dataIndex: 'businessName',
-      key: 'businessName',
-      ...getColumnSearchProps('businessName'),
+      title: 'Tên khách hàng',
+      dataIndex: 'customerName',
+      key: 'customerName',
+      ...getColumnSearchProps('customerName'),
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-      ...getColumnSearchProps('email'),
+      title: 'Số điện thoại',
+      dataIndex: 'customerPhoneNumber',
+      key: 'customerPhoneNumber',
+      ...getColumnSearchProps('customerPhoneNumber'),
     },
     {
-      title: 'Số tài khoản',
-      dataIndex: 'bankAccountNumber',
-      key: 'bankAccountNumber',
-    },
-    {
-      title: 'Ngân hàng',
-      dataIndex: 'bankName',
-      key: 'bankName',
-      ...getColumnSearchProps('bankName'),
-    },
-    {
-      title: 'Tổng tiền (VNĐ)',
-      dataIndex: 'revenue',
-      key: 'revenue',
+      title: 'Tổng hoá đơn (VNĐ)',
+      dataIndex: 'totalPrice',
+      key: 'totalPrice',
       render: (a, _) => {
         return a.replaceAll('.', ',').replace('VND', '')
       },
       sorter: (a, b) => {
-        const numA = Number(a.revenue.replace(/\./g, '').replace(',', '.').replace('VND', '').trim())
-        const numB = Number(b.revenue.replace(/\./g, '').replace(',', '.').replace('VND', '').trim())
+        const numA = Number(a.totalPrice.replace(/\./g, '').replace(',', '.').replace('VND', '').trim())
+        const numB = Number(b.totalPrice.replace(/\./g, '').replace(',', '.').replace('VND', '').trim())
         return numA - numB
       },
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Chi tiết giao dịch',
-      key: 'detail-transaction',
-      //  _ : giá trị cột hiện tại, b: dòng dữ liệu
-      render: (_, b) => (
-        <Link
-          key={b.businessPartnerId}
-          to={`/detail-transaction/${b.businessPartnerId}`}
-          style={{ textDecoration: 'underline', color: 'var(--primary-color)' }}
-        >
-          Xem chi tiết
-        </Link>
-      ),
+      title: 'Thời gian thanh toán',
+      dataIndex: 'orderDate',
+      key: 'orderDate',
     },
   ]
 
@@ -199,37 +182,19 @@ function Transaction() {
           lineHeight: 1.3,
         }}
       >
-        DOANH THU CỦA MỖI ĐỐI TÁC THEO THÁNG
+        CHI TIẾT GIAO DỊCH KHÁCH HÀNG CỦA MỖI ĐỐI TÁC
       </h1>
-      <div className="d-flex justify-content-between align-items-center flex-wrap gap-5">
-        <div className="d-flex gap-3 gap-md-4 gap-lg-5 flex-wrap">
-          <button
-            className={cx('btn-type', { active: type === config.constants.busPartner })}
-            onClick={() => setType(config.constants.busPartner)}
-          >
-            <FontAwesomeIcon icon={faBus} className="me-2"></FontAwesomeIcon>
-            Đối tác nhà xe
-          </button>
-          <button
-            className={cx('btn-type', { active: type === config.constants.carRentalPartner })}
-            onClick={() => setType(config.constants.carRentalPartner)}
-          >
-            <FontAwesomeIcon icon={faCar} className="me-2"></FontAwesomeIcon>
-            Đối tác cho thuê xe
-          </button>
-        </div>
-        <div className="month-year-wrapper">
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat="MM/yyyy"
-            showMonthYearPicker
-            placeholderText="Select time"
-          />
-          <span className="calendar-icon">📅</span>
-        </div>
+      <div className="month-year-wrapper d-flex justify-content-end">
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          dateFormat="MM/yyyy"
+          showMonthYearPicker
+          placeholderText="Select time"
+        />
+        <span className="calendar-icon">📅</span>
       </div>
-      <div style={{marginTop: '40px'}}>
+      <div style={{ marginTop: '40px' }}>
         <Table
           columns={columns}
           dataSource={data}
@@ -240,5 +205,4 @@ function Transaction() {
     </div>
   )
 }
-
-export default Transaction
+export default DetailTransaction

@@ -45,4 +45,5 @@ export const routes = {
   policySecurity: '/policy-security',
   regulation: '/regulation',
   manageTransaction: '/manage-transaction',
+  detailTransaction: '/detail-transaction/:id',
 }
