@@ -434,6 +434,14 @@ html *::-webkit-scrollbar-track {
   color: #ffffff !important;
 }
 
+.custom-picker .react-datepicker-wrapper{
+  width: 100%!important;
+}
+
+.custom-picker .react-datepicker__input-container{
+ width: 100% !important;
+}
+
 .custom-picker .react-datepicker__input-container input{
   width: 100%!important;
   height: 34px;
@@ -473,4 +481,17 @@ html *::-webkit-scrollbar-track {
 
 .react-date-wrapper .react-datepicker-wrapper{
   flex: 1;
+}
+
+.ant-image{
+  width: 100%!important;
+  height: 100%!important;
+}
+
+.ant-image-img{
+  height: 100%!important
+}
+
+.ant-image-mask{
+  background-color: transparent!important;
 }

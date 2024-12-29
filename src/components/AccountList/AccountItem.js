@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch } from 'react-redux'
 import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 import { images } from '~/assets/images'
+import { Image } from 'antd'
 
 const cx = classNames.bind(styles)
 function AccountItem({ data }) {
@@ -46,7 +47,7 @@ function AccountItem({ data }) {
         <div className="row align-items-center row-gap-5">
           <div className="col-12 col-md-6 col-lg-5">
             <div className={cx('avatar-wrapper')}>
-              <img src={data.avatar || images.noImage} alt={data.name} className={cx('avatar')} />
+              <Image src={data.avatar || images.noImage} alt={data.name} className={cx('avatar')} />
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-7">

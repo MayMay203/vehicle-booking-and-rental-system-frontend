@@ -41,6 +41,7 @@ const initialState = {
     type: '',
     id: '',
     transactionCode: '',
+    isNoti: false,
   },
   loading: false,
   detailPartner: {

@@ -24,6 +24,7 @@ import { generalModalNames, setDetailModalVisible, setLoadingModalVisible } from
 import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import { constants } from '~/config/constants'
+import { Image } from 'antd'
 
 const cx = classNames.bind(styles)
 function AccountSetting() {
@@ -150,9 +151,16 @@ function AccountSetting() {
     e.preventDefault()
     dispatch(setAuthModalVisible({ modalName: modalNames.CHANGE_PASSWORD, isVisible: true }))
   }
-
   const handleShowPartnerInfo = (type) => {
     if (type === 'bus') {
+      dispatch(
+        setDetailModalVisible({
+          id: currentUser.formRegisterBusPartnerId,
+          isOpen: true,
+          isReadonly: true,
+        }),
+      )
+    } else {
       dispatch(
         setDetailModalVisible({
           id: currentUser.formRegisterCarRentalPartnerId,
@@ -160,7 +168,6 @@ function AccountSetting() {
           isReadonly: true,
         }),
       )
-    } else {
     }
   }
 
@@ -185,7 +192,7 @@ function AccountSetting() {
                   onChange={handleChooseImage}
                   ref={inputFile}
                 />
-                <img src={selectedImage ? selectedImage : images.addAvatar} alt="avatar" className={cx('avatar')}></img>
+                <Image src={selectedImage ? selectedImage : images.addAvatar} alt="avatar" className={cx('avatar')}/>
               </div>
               <div className="d-flex column-gap-3 mt-3">
                 <Button

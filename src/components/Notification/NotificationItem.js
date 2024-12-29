@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllNotificationsByAcc } from "~/redux/slices/conversationSlice";
 import { config } from '~/config'
 import { useNavigate } from 'react-router-dom'
+import { generalModalNames, setTicketModalVisible } from '~/redux/slices/generalModalSlice'
+import { constants } from '~/config/constants'
 
 const cx = classNames.bind(styles)
 function NotificationItem({ data, handleClose }) {
@@ -22,8 +24,25 @@ function NotificationItem({ data, handleClose }) {
     if (
       currentRole === 'USER' &&
       (data.type === config.constants.BOOKING_CANCELLED || config.constants.BOOKING_COMPLETED)
-    )
-    navigate(config.routes.order)
+    ) {
+      navigate(config.routes.order)
+    } else if (data.type === config.constants.NEW_BOOKING) {
+      const { transactionCode, orderType } = JSON.parse(data.metadata)
+      if (orderType === constants.BUS_TRIP_ORDER) {
+        dispatch(
+          setTicketModalVisible({
+            name: generalModalNames.BUY_TICKET,
+            type: 'detailOrder',
+            isNoti: true,
+            transactionCode: transactionCode,
+            isOpen: true,
+          }),
+        )
+      }
+    }
+    else if (data.type === config.constants.RECEIVED_REGISTER_PARTNER) {
+      navigate(config.routes.managePartners)
+    }
     handleClose()
   }
 
