@@ -114,6 +114,7 @@ function NotificationItem({ data, handleClose }) {
         show={modalDetailShow}
         transactionCode={transactionCodeState}
         onHide={() => setModalDetailShow(false)}
+        isNoti={true}
       />
     </div>
   )

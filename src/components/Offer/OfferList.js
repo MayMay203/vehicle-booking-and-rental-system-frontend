@@ -61,53 +61,6 @@ function OfferList({ dataList, voucher, className }) {
             voucher={voucher}
           />
         ))}
-      {/* <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
-        className={cx('offer-item')}
-        title={title}
-        price={price}
-        link={link}
-        src={src}
-        voucher={voucher}
-      />
-      <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
-        className={cx('offer-item')}
-        title={title}
-        price={price}
-        link={link}
-        src={src}
-        voucher={voucher}
-      />
-      <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
-        className={cx('offer-item')}
-        title={title}
-        price={price}
-        link={link}
-        src={src}
-        voucher={voucher}
-      />
-
-      <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
-        className={cx('offer-item')}
-        title={title}
-        price={price}
-        link={link}
-        src={src}
-        voucher={voucher}
-      />
-      <OfferItem
-        style={index !== 0 ? { transform: `translateX(calc(${index * 100}% - calc(${-index * 12}px)))` } : undefined}
-        className={cx('offer-item')}
-        title={title}
-        price={price}
-        link={link}
-        src={src}
-        voucher={voucher}
-      /> */}
-
       {dataList.length > 3 && index < 0 && (
         <button className={cx('btn', 'btn-back')} onClick={handleBack}>
           <MenuBack />
