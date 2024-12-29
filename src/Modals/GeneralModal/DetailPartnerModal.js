@@ -247,10 +247,10 @@ function DetailPartner() {
               </div>
               <div className="flex flex-column row-gap-3">
                 <LinkItem title="Giấy phép kinh doanh" Icon={<LicenceIcon />} className={cx('custom')} />
-                <div className="d-flex justify-content-center column-gap-5">
+                <div className="d-flex justify-content-center column-gap-5" style={{width: '100%'}}>
                   {(detailData?.busPartnerInfo?.urlLicenses || detailData?.carRentalPartnerInfo?.urlLicenses)?.map(
                     (url, index) => (
-                      <img key={index} src={url} alt={`license-${index}`} className="object-fit-contain" />
+                      <img key={index} src={url} alt={`license-${index}`} className="object-fit-contain" style={{maxWidth: '100%'}}/>
                     ),
                   )}
                 </div>

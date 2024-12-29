@@ -65,4 +65,8 @@ export const images = {
   bookingComplete: require('./booking_complete.jpg'),
   bookingCancelled: require('./booking_cancelled.jpg'),
   newBooking: require('./new-booking.png'),
+  deletePartner: require('./deletePartner.jpg'),
+  refusePartner: require('./refusePartner.png'),
+  receivedPartner: require('./receivePartner.png'),
+  approvalPartner: require('./acceptPartner.png')
 }
