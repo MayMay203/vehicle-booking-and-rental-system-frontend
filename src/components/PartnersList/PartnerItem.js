@@ -9,6 +9,7 @@ import Button from '../Button'
 import { useDispatch } from 'react-redux'
 import { setDetailDriverModalVisible, setDetailModalVisible } from '~/redux/slices/generalModalSlice'
 import { config } from '~/config'
+import { Image } from 'antd'
 
 const cx = classNames.bind(styles)
 function PartnerItem({ data }) {
@@ -41,7 +42,7 @@ function PartnerItem({ data }) {
         <div className="row align-items-center row-gap-5">
           <div className="col-12 col-md-6 col-lg-5">
             <div className={cx('avatar-wrapper')}>
-              <img src={partnerData.avatar || images.noImage} alt="repre-iamge" className={cx('avatar')} />
+              <Image src={partnerData.avatar || images.noImage} alt="repre-iamge" className={cx('avatar')} />
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-7">

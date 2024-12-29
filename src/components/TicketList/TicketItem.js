@@ -28,7 +28,7 @@ import { config } from '~/config'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getAllRatingOfTicket } from '~/apiServices/ratingService/getAllRatingOfTicket'
-import { Empty } from 'antd'
+import { Empty, Image } from 'antd'
 import { createRating } from '~/apiServices/ratingService/createRating'
 import { deleteRating } from '~/apiServices/ratingService/deleteRating'
 import { updatRating } from '~/apiServices/ratingService/updateRating'
@@ -216,7 +216,6 @@ function TicketItem({ status, data = {}, isDetailOrder = false }) {
 
   const handleSendMessage = async () => {
     if (dispatch(checkLoginSession())) {
-      // Create new conversation
       const idConversation = await createCoversation(
         currentUser.id,
         currentRole,
@@ -231,7 +230,6 @@ function TicketItem({ status, data = {}, isDetailOrder = false }) {
   const reGetAllRating = async () => {
     const dataRating = await getAllRatingOfTicket(data.busTripScheduleId || data.tripInfo?.busTripScheduleId)
     setDetaiInfor((prev) => ({ ...prev, [type]: dataRating || {} }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }
 
   const handleComment = async (id, ratingValue, comment, action) => {
@@ -262,7 +260,7 @@ function TicketItem({ status, data = {}, isDetailOrder = false }) {
       <div className={cx('row', 'row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'gx-4', 'gy-4')}>
         <div className="col">
           <div className={cx('image-wrapper')}>
-            <img src={data.busInfo?.imageRepresentative} alt="car" className={cx('image')}></img>
+            <Image src={data.busInfo?.imageRepresentative} alt="car" className={cx('image')}/>
             {currentUser.id !== data.businessPartnerInfo?.id && (
               <button className={cx('btn-msg')} onClick={handleSendMessage}>
                 <MessageIcon />
@@ -273,14 +271,9 @@ function TicketItem({ status, data = {}, isDetailOrder = false }) {
         <div className="col d-flex flex-column gap-2 gap-lg-4">
           <div className="d-flex gap-4 align-items-center">
             <span className={cx('name')}>{data.businessPartnerInfo?.name || data.businessPartner?.name}</span>
-            {/* {status && <span className={cx('amount')}>2 x 150.000đ</span>} */}
           </div>
           <div className="d-flex flex-wrap align-items-center gap-3">
             <span className={cx('type')}>{data.busInfo?.nameVehicleType || data.busInfo?.nameBusType}</span>
-            {/* <div className={cx('rating')}>
-              <StarIcon className={cx('icon')} width="2.6rem" />
-              <span>{`${detailInfor}`}</span>
-            </div> */}
           </div>
           <div className="d-flex gap-3 align-items-center">
             <img className={cx('location-img')} alt="location" src={images.location} />
