@@ -9,14 +9,21 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getDetailTransaction } from '~/apiServices/order/getDetailTransaction'
+import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 const cx = classNames.bind(styles)
-function ModalDetailOrderRental({ transactionCode, inforRentalVehicle, ...props }) {
+function ModalDetailOrderRental({ transactionCode, inforRentalVehicle: inforRentalVehicleProp, ...props }) {
   const dispatch = useDispatch()
+  const [inforRentalVehicle, setInforRentalVehicle] = useState(inforRentalVehicleProp)
   const [inforOrder, setInforOrder] = useState({})
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
       const getInforOrder = async () => {
         const response = await getDetailTransaction(transactionCode, 'VEHICLE_RENTAL_ORDER')
+        console.log(response)
+        if (!inforRentalVehicle) {
+          const rentalInfo = await getVehicleRentalByID(response?.rentalInfo?.carRentalServiceId)
+          setInforRentalVehicle(rentalInfo)
+        }
         setInforOrder(response)
       }
       getInforOrder()

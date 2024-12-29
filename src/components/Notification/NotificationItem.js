@@ -11,11 +11,14 @@ import { constants } from '~/config/constants'
 import { useEffect, useState } from 'react'
 import { checkLoginSession, setCurrentUser } from '~/redux/slices/userSlice'
 import { getMyAccount } from '~/apiServices/getMyAccount'
+import ModalDetailOrderRental from '../ModalDetailOrderRental'
 
 const cx = classNames.bind(styles)
 function NotificationItem({ data, handleClose }) {
   const { currentUser } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
+  const [modalDetailShow, setModalDetailShow] = useState(false)
+  const [transactionCodeState, setTransactionCodeState] = useState('')
   const [src, setSrc] = useState('')
   const {
     NEW_BOOKING,
@@ -50,6 +53,7 @@ function NotificationItem({ data, handleClose }) {
       handleClose()
     } else if (data.type === NEW_BOOKING) {
       const { transactionCode, orderType } = JSON.parse(data.metadata)
+      
       if (orderType === constants.BUS_TRIP_ORDER) {
         dispatch(
           setTicketModalVisible({
@@ -60,6 +64,9 @@ function NotificationItem({ data, handleClose }) {
             isOpen: true,
           }),
         )
+      } else {
+        setTransactionCodeState(transactionCode)
+        setModalDetailShow(true)
       }
       handleClose()
     } else if (data.type === RECEIVED_REGISTER_PARTNER) {
@@ -80,16 +87,23 @@ function NotificationItem({ data, handleClose }) {
   }
 
   return (
-    <div className={cx('d-flex', 'column-gap-3', 'item', { status: !data.seen })} onClick={handleReaded}>
-      <div className={cx('image-wrapper')}>
-        <img src={src} alt="avatar" className={cx('image')}></img>
+    <div>
+      <div className={cx('d-flex', 'column-gap-3', 'item', { status: !data.seen })} onClick={handleReaded}>
+        <div className={cx('image-wrapper')}>
+          <img src={src} alt="avatar" className={cx('image')}></img>
+        </div>
+        <div className={cx('d-flex', 'flex-column', 'row-gap-2', 'info')}>
+          <p className={cx('title')}>{data.title}</p>
+          <p className={cx('content')}>{data.message}</p>
+          <span className={cx('time')}>{data.create_at}</span>
+        </div>
+        {!data.seen && <span className={cx('unread')}></span>}
       </div>
-      <div className={cx('d-flex', 'flex-column', 'row-gap-2', 'info')}>
-        <p className={cx('title')}>{data.title}</p>
-        <p className={cx('content')}>{data.message}</p>
-        <span className={cx('time')}>{data.create_at}</span>
-      </div>
-      {!data.seen && <span className={cx('unread')}></span>}
+      <ModalDetailOrderRental
+        show={modalDetailShow}
+        transactionCode={transactionCodeState}
+        onHide={() => setModalDetailShow(false)}
+      />
     </div>
   )
 }
