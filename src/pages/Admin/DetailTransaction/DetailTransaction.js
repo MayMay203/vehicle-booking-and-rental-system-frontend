@@ -7,7 +7,6 @@ import DatePicker from 'react-datepicker'
 import { Button, Input, Space, Table } from 'antd'
 import Highlighter from 'react-highlight-words'
 import { SearchOutlined } from '@ant-design/icons'
-import { head } from '@antv/util'
 
 const cx = classNames.bind(styles)
 function DetailTransaction() {
