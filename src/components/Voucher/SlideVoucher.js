@@ -8,11 +8,10 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import PaginationDots from '~/components/PaginationDots'
 
 const cx = classNames.bind(styles)
-function SlideVoucher({ listVoucher, maxPerpage=3 }) {
+function SlideVoucher({ listVoucher, maxPerpage = 3, type, handleApplyVoucher }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [voucherPerPage, setVoucherPerPage] = useState(maxPerpage)
   const [currentPage, setCurrentPage] = useState(0)
-  //   const totalPages = Math.ceil(listVoucher.length / [voucherPerPage, setVoucherPerPage])
   const totalPages = Math.ceil(listVoucher.length / voucherPerPage)
 
   const displayedVoucher = listVoucher.slice(currentIndex, currentIndex + voucherPerPage)
@@ -33,33 +32,21 @@ function SlideVoucher({ listVoucher, maxPerpage=3 }) {
     return () => window.removeEventListener('resize', updateUtilitiesPerPage)
   }, [voucherPerPage])
 
-//   const handleNext = () => {
-//     if (currentIndex + voucherPerPage < listVoucher.length) {
-//       setCurrentIndex(currentIndex + voucherPerPage)
-//       setCurrentPage(currentPage + 1)
-//     }
-//   }
-//   const handlePrevious = () => {
-//     if (currentIndex - voucherPerPage >= 0) {
-//       setCurrentIndex(currentIndex - voucherPerPage)
-//       setCurrentPage(currentPage - 1)
-//     }
-//   }
-const handleNext = () => {
-  const nextIndex = currentIndex + voucherPerPage
-  if (nextIndex < listVoucher.length) {
-    setCurrentIndex(nextIndex)
-    setCurrentPage((prev) => prev + 1)
+  const handleNext = () => {
+    const nextIndex = currentIndex + voucherPerPage
+    if (nextIndex < listVoucher.length) {
+      setCurrentIndex(nextIndex)
+      setCurrentPage((prev) => prev + 1)
+    }
   }
-}
 
-const handlePrevious = () => {
-  const prevIndex = currentIndex - voucherPerPage
-  if (prevIndex >= 0) {
-    setCurrentIndex(prevIndex)
-    setCurrentPage((prev) => prev - 1)
+  const handlePrevious = () => {
+    const prevIndex = currentIndex - voucherPerPage
+    if (prevIndex >= 0) {
+      setCurrentIndex(prevIndex)
+      setCurrentPage((prev) => prev - 1)
+    }
   }
-}
 
   const handlePageChange = (newPage) => {
     const newIndex = newPage * voucherPerPage
@@ -75,7 +62,13 @@ const handlePrevious = () => {
         </Button>
         <Row className="justify-content-center">
           {displayedVoucher.map((voucher, index) => (
-            <Voucher className={cx('voucher', 'ms-4 me-4')} key={index} data={voucher} ></Voucher>
+            <Voucher
+              className={cx('voucher', 'ms-4 me-4')}
+              key={index}
+              data={voucher}
+              type={type}
+              handleApplyVoucher={handleApplyVoucher}
+            ></Voucher>
           ))}
           {Array.from({ length: voucherPerPage - displayedVoucher.length }, (_, index) => (
             <div

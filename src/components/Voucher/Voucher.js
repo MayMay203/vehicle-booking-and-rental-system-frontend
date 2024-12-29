@@ -19,11 +19,11 @@ import { generalModalNames, setAddVoucherVisible, setConfirmModalVisible } from 
 const cx = classNames.bind(styles)
 const now = 60
 
-function Voucher({ className, data, type='', handleApplyVoucher }) {
+function Voucher({ className, data, type = '', handleApplyVoucher=()=>{}}) {
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const [visibleMenu, setVisibleMenu] = useState(false)
-  console.log("data---voucher:", data)
+  console.log('data---voucher:', data)
   const hanldeClaimVoucher = async () => {
     if (!type) {
       if (!isLogin) {
@@ -59,7 +59,7 @@ function Voucher({ className, data, type='', handleApplyVoucher }) {
           title: 'Xác nhận xoá mã khuyến mãi',
           description: 'Bạn chắc chắn muốn xoá mã khuyến mãi này?',
           name: generalModalNames.DEL_VOUCHER,
-          id: data.id
+          id: data.id,
         }),
       )
       setVisibleMenu(false)

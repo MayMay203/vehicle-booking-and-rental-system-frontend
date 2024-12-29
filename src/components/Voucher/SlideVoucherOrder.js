@@ -10,42 +10,11 @@ import PaginationDots from '~/components/PaginationDots'
 const cx = classNames.bind(styles)
 function SlideVoucherOrder({ listVoucher, handleApplyVoucher }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-//   const [voucherPerPage, setVoucherPerPage] = useState(1)
 const voucherPerPage = 1
   const [currentPage, setCurrentPage] = useState(0)
-  //   const totalPages = Math.ceil(listVoucher.length / [voucherPerPage, setVoucherPerPage])
   const totalPages = Math.ceil(listVoucher.length / voucherPerPage)
 
   const displayedVoucher = listVoucher.slice(currentIndex, currentIndex + voucherPerPage)
-//   useEffect(() => {
-//     const updateUtilitiesPerPage = () => {
-//       let newPerPage = 1
-//       if (window.innerWidth >= 1300) newPerPage = 3
-//       else if (window.innerWidth >= 968) newPerPage = 2
-
-//       if (voucherPerPage !== newPerPage) {
-//         setVoucherPerPage(newPerPage)
-//         setCurrentIndex(0)
-//         setCurrentPage(0)
-//       }
-//     }
-//     updateUtilitiesPerPage()
-//     window.addEventListener('resize', updateUtilitiesPerPage)
-//     return () => window.removeEventListener('resize', updateUtilitiesPerPage)
-//   }, [voucherPerPage])
-
-  //   const handleNext = () => {
-  //     if (currentIndex + voucherPerPage < listVoucher.length) {
-  //       setCurrentIndex(currentIndex + voucherPerPage)
-  //       setCurrentPage(currentPage + 1)
-  //     }
-  //   }
-  //   const handlePrevious = () => {
-  //     if (currentIndex - voucherPerPage >= 0) {
-  //       setCurrentIndex(currentIndex - voucherPerPage)
-  //       setCurrentPage(currentPage - 1)
-  //     }
-  //   }
   const handleNext = () => {
     const nextIndex = currentIndex + voucherPerPage
     if (nextIndex < listVoucher.length) {

@@ -26,9 +26,9 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getDetailTransaction } from '~/apiServices/order/getDetailTransaction'
 import { getAllSuitableVouchers } from '~/apiServices/vouchers/getAllSuitableVoucher'
 import { Empty } from 'antd'
-import SlideVoucherOrder from '~/components/Voucher/SlideVoucherOrder'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { config } from '~/config'
+import SlideVoucher from '~/components/Voucher/SlideVoucher'
 
 const cx = classNames.bind(styles)
 function TicketModal() {
@@ -36,7 +36,7 @@ function TicketModal() {
   const { currentUser } = useSelector((state) => state.user)
   const showTicketModal = useSelector((state) => state.generalModal.buyTicket)
   const { departureDate, arrivalLocation } = useSelector((state) => state.search.searchTicket)
-  const { id, type, transactionCode } = showTicketModal
+  const { id, type, transactionCode, isNoti } = showTicketModal
   const [ticketDetail, setTicketDetail] = useState({})
   const dispatch = useDispatch()
   const [fullName, setFullName] = useState('')
@@ -86,7 +86,7 @@ function TicketModal() {
       if (data) setSuitableVoucher(data)
     }
     if (isLogin) fetchAllSuitableVoucher()
-  }, [quantity, isLogin])
+  }, [quantity, isLogin, total])
 
   useEffect(() => {
     setFullName(currentUser.name || '')
@@ -179,7 +179,7 @@ function TicketModal() {
     <Modal className={cx('custom-modal')} show={showTicketModal.isOpen} onHide={handleClose} centered size="lg">
       <Modal.Header closeButton>
         <div className={cx('header')}>
-          <Modal.Title className={cx('title-header')}>{!type ? 'THÔNG TIN ĐƠN HÀNG' : 'CHI TIẾT HOÁ ĐƠN'}</Modal.Title>
+          <Modal.Title className={cx('title-header')}>{!type ? 'THÔNG TIN ĐƠN HÀNG' : 'CHI TIẾT ĐƠN HÀNG'}</Modal.Title>
         </div>
       </Modal.Header>
       <Modal.Body>
@@ -396,19 +396,13 @@ function TicketModal() {
             </div>
           )}
 
-          {/* {isVoucher &&
-            suitableVoucher.map((voucher) => (
-              <div className="col mt-0" key={voucher.id}>
-                <Voucher className="m-auto" data={voucher} type="order" handleApplyVoucher={handleApplyVoucher} />
-              </div>
-            ))} */}
           <div className="justify-content-center mb-3">
             {isVoucher && suitableVoucher.length > 0 && (
-              <SlideVoucherOrder
+              <SlideVoucher
+                type="ticketOrder"
                 listVoucher={suitableVoucher}
-                // type="order"
                 handleApplyVoucher={handleApplyVoucher}
-              ></SlideVoucherOrder>
+              ></SlideVoucher>
             )}
             {isVoucher && suitableVoucher.length === 0 && (
               <Empty description="Không có voucher nào hợp lệ để sử dùng" />
@@ -506,7 +500,13 @@ function TicketModal() {
                 </div>
               </div>
             )}
-            <span></span>
+            {isNoti && (
+              <div className='mt-5 d-flex justify-content-center'>
+                <Link to={config.routes.busTicket} onClick={handleClose} style={{ color: 'var(--primary-color)', fontSize: '1.8rem'}}>
+                  Chi tiết chuyến xe
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </Modal.Body>

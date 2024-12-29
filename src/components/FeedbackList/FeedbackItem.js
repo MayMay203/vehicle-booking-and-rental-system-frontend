@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Image from '../Image'
 import styles from './Feedback.module.scss'
 import classNames from 'classnames/bind'
 import { faEdit, faStar, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
-import { Button, Modal } from 'antd'
+import { Button, Image, Modal } from 'antd'
 import { useRef } from 'react'
+import { images } from '~/assets/images'
 
 const cx = classNames.bind(styles)
 function FeedbackItem({ className, data, handleComment }) {
@@ -39,7 +39,7 @@ function FeedbackItem({ className, data, handleComment }) {
     <div className="col">
       <div className={cx('item', [className])}>
         <div className={cx('info-wrapper')}>
-          <Image src={data.avatar} alt="avatar" className={cx('avatar')} />
+         <div className={cx('avatar-wrapper')}> <Image src={data.avatar || images.noImage} alt="avatar" className={cx('avatar')} /></div>
           <div className={cx('info')}>
             <span className={cx('name')}>{data.customerName}</span>
             <div className={cx('star-list')}>

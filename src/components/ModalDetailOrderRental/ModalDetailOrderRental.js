@@ -9,17 +9,35 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { getDetailTransaction } from '~/apiServices/order/getDetailTransaction'
+import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
+import { Link } from 'react-router-dom'
+import { config } from '~/config'
 const cx = classNames.bind(styles)
-function ModalDetailOrderRental({ transactionCode, inforRentalVehicle, ...props }) {
+function ModalDetailOrderRental({
+  transactionCode,
+  inforRentalVehicle: inforRentalVehicleProp,
+  isNoti = false,
+  ...props
+}) {
   const dispatch = useDispatch()
+  const [inforRentalVehicle, setInforRentalVehicle] = useState(inforRentalVehicleProp)
   const [inforOrder, setInforOrder] = useState({})
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
       const getInforOrder = async () => {
+        console.log(transactionCode)
         const response = await getDetailTransaction(transactionCode, 'VEHICLE_RENTAL_ORDER')
+        console.log(response)
+        console.log(inforRentalVehicle)
+        if (!inforRentalVehicle) {
+          console.log('Vô đây')
+          const rentalInfo = await getVehicleRentalByID(response?.rentalInfo?.carRentalServiceId)
+          console.log('Rental Infor: ', rentalInfo)
+          setInforRentalVehicle(rentalInfo)
+        }
         setInforOrder(response)
       }
-      getInforOrder()
+      if (transactionCode) getInforOrder()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionCode])
@@ -154,9 +172,20 @@ function ModalDetailOrderRental({ transactionCode, inforRentalVehicle, ...props 
         </Row> */}
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
-          Xem đánh giá
-        </Button>
+        {!isNoti && (
+          <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
+            Xem đánh giá
+          </Button>
+        )}
+        {isNoti && (
+          <Link
+            to={config.routes.orderManage}
+            onClick={() => props.onHide()}
+            style={{ color: 'var(--primary-color)', fontStyle: 'italic', fontSize: '1.8rem', marginTop: '20px' }}
+          >
+            Tất cả đơn thuê xe
+          </Link>
+        )}
       </Modal.Footer>
     </Modal>
   )

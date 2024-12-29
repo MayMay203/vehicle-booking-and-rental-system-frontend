@@ -105,15 +105,18 @@ function Header() {
         setStatus(statusValue)
       }
 
-      if (type === 'DRIVER') {
-        const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-        navigate(`${route}?type=${config.constants.driverPartner}&status=${statusValue}`)
-      } else if (type === 'BUS_PARTNER') {
-        const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-        navigate(`${route}?type=${config.constants.busPartner}&status=${statusValue}`)
-      } else if (type === 'CAR_RENTAL_PARTNER') {
-        const route = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
-        navigate(`${route}?type=${config.constants.carRentalPartner}&status=${statusValue}`)
+      const partnerTypeMap = {
+        DRIVER: config.constants.driverPartner,
+        BUS_PARTNER: config.constants.busPartner,
+        CAR_RENTAL_PARTNER: config.constants.carRentalPartner,
+      }
+      if (partnerTypeMap[type]) {
+        const baseRoute = currentUser.roles?.includes('ADMIN') ? config.routes.managePartners : config.routes.partner
+
+        const query = currentUser.roles?.includes('ADMIN')
+          ? `?type=${partnerTypeMap[type]}`
+          : `?type=${partnerTypeMap[type]}&status=${statusValue}`
+        navigate(`${baseRoute}${query}`)
       }
     } catch (error) {
       console.error('Lỗi khi gọi API:', error)
