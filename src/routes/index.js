@@ -47,6 +47,7 @@ import BusTypeManage from '~/pages/BusPartner/BusType/BusTypeManage'
 import FetchBlob from '~/pages/FetchBlob'
 import PolicySecurity from '~/pages/PolicySecurity'
 import OperatingRegulation from '~/pages/OperatingRegulation'
+import Transaction from '~/pages/Admin/Transaction'
 
 const publicRoutes = [
   {
@@ -140,6 +141,11 @@ const publicRoutes = [
   {
     path: config.routes.adminStatistics,
     component: Statistics,
+    layout: HeaderOnly,
+  },
+  {
+    path: config.routes.manageTransaction,
+    component: Transaction,
     layout: HeaderOnly,
   },
   {

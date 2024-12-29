@@ -44,4 +44,5 @@ export const routes = {
   fetchBlob: '/fetch-blob',
   policySecurity: '/policy-security',
   regulation: '/regulation',
+  manageTransaction: '/manage-transaction',
 }
