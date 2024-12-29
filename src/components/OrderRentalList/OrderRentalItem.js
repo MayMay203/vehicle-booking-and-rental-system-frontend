@@ -2,11 +2,9 @@ import styles from './OrderRentalItem.module.scss'
 import classNames from 'classnames/bind'
 import { MessageIcon, StarIcon } from '../Icon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import UtilitiesList from '../UtilitiesList'
-import ImageList from '../ImageList'
 import FeedbackSlider from '../FeedbackSlider'
 import Tabs from '../Tabs'
 import { faReadme } from '@fortawesome/free-brands-svg-icons'
@@ -19,14 +17,9 @@ import {
   // setTicketModalVisible,
 } from '~/redux/slices/generalModalSlice'
 // import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { getBusUtilities } from '~/apiServices/ticket/getBusUtilities'
-import { getPoliciesTicket } from '~/apiServices/ticket/getPoliciesTicket'
-import { getBusImage } from '~/apiServices/ticket/getBusImage'
-import { getPickReturnLocations } from '~/apiServices/ticket/getPickReturnLocations'
 import { config } from '~/config'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { getAllRatingOfTicket } from '~/apiServices/ratingService/getAllRatingOfTicket'
 import { Empty } from 'antd'
 import { createRating } from '~/apiServices/ratingService/createRating'
 import { deleteRating } from '~/apiServices/ratingService/deleteRating'
@@ -37,12 +30,14 @@ import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import { convertDateTimeFormat } from '~/utils/convertDateTimeFormat'
 import ModalDetailOrderRental from '../ModalDetailOrderRental'
+import { getRatingsRentalByIDService } from '~/apiServices/user/getRatingsRentalByIDService'
+import { Col, Image, Row } from 'react-bootstrap'
 
 const cx = classNames.bind(styles)
 function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
   const dispatch = useDispatch()
   const { voucherUser } = useSelector((state) => state.voucher)
-  const { busTripScheduleId } = data
+  // const { busTripScheduleId } = data
   const [type, setType] = useState(status ? 'feedback' : 'discount')
   const [isDetail, setIsDetail] = useState(false)
   const [detailInfor, setDetaiInfor] = useState({})
@@ -58,29 +53,6 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
     return response
   }
   console.log('data?.rentalInfo?.carRentalServiceId:', data?.rentalInfo?.carRentalServiceId)
-  useEffect(() => {
-    const fetchRentalInfo = async () => {
-      console.log('---vô-0---')
-      try {
-        console.log('---vô----')
-        const rentalInfo = await getInforRentalVehicle(data?.rentalInfo?.carRentalServiceId)
-        setInforRentalVehicle(rentalInfo)
-      } catch (error) {
-        console.error('Error fetching rental info:', error)
-      }
-    }
-    fetchRentalInfo()
-  }, [data.rentalInfo.carRentalServiceId])
-  useEffect(() => {
-    if (data.tripInfo) {
-      const [time, date] = data.tripInfo.arrivalDateTime.split(' ')
-      const [day, month, year] = date.split('-')
-      const isoDate = `${year}-${month}-${day}T${time}:00`
-      setIsCommentable(new Date() - new Date(isoDate) <= 24 * 60 * 60 * 1000 * 5)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
-
   const tabList = useMemo(() => {
     const tabs = [
       {
@@ -136,31 +108,84 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
     }),
     [isDetailOrder],
   )
+  const [listImageVehicle, setListImageVehicle] = useState(inforRentalVehicle?.imagesVehicleRegister)
+  // console.log('listImageVehicle---', listImageVehicle)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  // const [imageVehiclePerPage, setImageVehiclePerPage] = useState(3)
+  const imageVehiclePerPage = 2
+  const displayedImageVehicle = listImageVehicle?.slice(currentIndex, currentIndex + imageVehiclePerPage)
+  // console.log('displayedImageVehicle', displayedImageVehicle)
+  const handleNext = () => {
+    if (currentIndex + imageVehiclePerPage < listImageVehicle.length) {
+      // resetImageVehicleStates()
+      setCurrentIndex(currentIndex + imageVehiclePerPage)
+      setCurrentPage(currentPage + 1)
+    }
+  }
+  const handlePrevious = () => {
+    if (currentIndex - imageVehiclePerPage >= 0) {
+      // resetimageVehicleStates()
+      setCurrentIndex(currentIndex - imageVehiclePerPage)
+      setCurrentPage(currentPage - 1)
+    }
+  }
+  useEffect(() => {
+    const fetchRentalInfo = async () => {
+      console.log('---vô-0---')
+      try {
+        console.log('---vô----')
+        const rentalInfo = await getInforRentalVehicle(data?.rentalInfo?.carRentalServiceId)
+        setInforRentalVehicle(rentalInfo)
+      } catch (error) {
+        console.error('Error fetching rental info:', error)
+      }
+    }
+    fetchRentalInfo()
+  }, [data.rentalInfo.carRentalServiceId])
+  useEffect(() => {
+    if (data.rentalInfo) {
+      const [time, date] = data.rentalInfo.endRentalTime.split(' ')
+      const [day, month, year] = date.split('-')
+      const isoDate = `${year}-${month}-${day}T${time}:00`
+      setIsCommentable(new Date() - new Date(isoDate) <= 24 * 60 * 60 * 1000 * 5)
+      console.error('Thời gian:--', isoDate)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.rentalInfo.endRentalTime])
+  useEffect(() => {
+    setListImageVehicle(inforRentalVehicle?.imagesVehicleRegister)
+  }, [inforRentalVehicle])
   useEffect(() => {
     async function getDetail() {
       const actions = {
         utility: async () => {
-          const utilitiesList = await getBusUtilities(data.busInfo?.busType?.id || data.busInfo?.busId)
+          const utilitiesList =
+            inforRentalVehicle?.ulties
+              .split(',')
+              .filter(Boolean)
+              .map((value, index) => <span key={index}>{value.trim()}</span>) || ''
           setDetaiInfor((prev) => ({ ...prev, [type]: utilitiesList }))
         },
         policy: async () => {
-          const policiesList = await getPoliciesTicket(data.businessPartnerInfo?.id || data.businessPartner.id)
+          const policiesList =
+            inforRentalVehicle?.policy
+              .split('@#$%&')
+              .filter(Boolean)
+              .map((value, index) => <span key={index}>{value.trim()}</span>) || ''
+
           setDetaiInfor((prev) => ({ ...prev, [type]: policiesList }))
         },
+
         image: async () => {
-          const imagesList = await getBusImage(data.busInfo?.busType?.id || data.busInfo?.busId)
-          setDetaiInfor((prev) => ({ ...prev, [type]: imagesList }))
+          // const imagesList = await getBusImage(data.busInfo?.busType?.id || data.busInfo?.busId)
+          // setDetaiInfor((prev) => ({ ...prev, [type]: imagesList }))
         },
         feedback: async () => {
-          const dataRating = await getAllRatingOfTicket(data.busTripScheduleId || data.tripInfo?.busTripScheduleId)
+          const dataRating = await getRatingsRentalByIDService(data?.rentalInfo?.carRentalServiceId)
           setDetaiInfor((prev) => ({ ...prev, [type]: dataRating || {} }))
-        },
-        pickReturn: async () => {
-          const locations = await getPickReturnLocations(
-            data.busTripScheduleId || data.tripInfo?.busTripScheduleId,
-            data.busTripInfo?.arrivalLocation || data.tripInfo?.arrivalLocation,
-          )
-          setDetaiInfor((prev) => ({ ...prev, [type]: locations }))
+          console.log('dataRating:', dataRating)
         },
       }
 
@@ -176,7 +201,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
       getDetail()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDetail, type, busTripScheduleId])
+  }, [isDetail, type, data?.rentalInfo?.carRentalServiceId])
 
   const handleShowDetail = () => {
     setIsDetail((prev) => !prev)
@@ -224,8 +249,8 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
       const idConversation = await createCoversation(
         currentUser.id,
         currentRole,
-        data.businessPartnerInfo?.accountId,
-        config.constants.busPartner,
+        inforRentalVehicle?.partnerId,
+        'CAR_RENTAL_PARTNER',
       )
       dispatch(fetchAllConversationsByAcc({ accountId: currentUser.id, roleAccount: currentRole }))
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
@@ -233,7 +258,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
   }
 
   const reGetAllRating = async () => {
-    const dataRating = await getAllRatingOfTicket(data.busTripScheduleId || data.tripInfo?.busTripScheduleId)
+    const dataRating = await getRatingsRentalByIDService(data?.rentalInfo?.carRentalServiceId)
     setDetaiInfor((prev) => ({ ...prev, [type]: dataRating || {} }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }
@@ -241,7 +266,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
   const handleComment = async (id, ratingValue, comment, action) => {
     switch (action) {
       case 'create':
-        await createRating(data.orderInfo.orderId, ratingValue, comment)
+        await createRating(data.orderId, ratingValue, comment)
         break
       case 'update':
         await updatRating(id, ratingValue, comment)
@@ -310,7 +335,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
               <div className="d-flex gap-4">
                 <p style={{ fontWeight: 400 }}>
                   <span style={{ fontWeight: 600 }}>• Thuê đến</span>
-                  <p className="mt-3 mb-2 ps-3">{convertDateTimeFormat(data?.rentalInfo?.startRentalTime)}</p>
+                  <p className="mt-3 mb-2 ps-3">{convertDateTimeFormat(data?.rentalInfo?.endRentalTime)}</p>
                 </p>
                 {/* {status && (
                   <p className={cx('date')}>
@@ -441,7 +466,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
                   textAlign: 'center',
                 }}
               >
-                Chính sách nhà xe
+                Chính sách xe
               </p>
               <div className={cx('policies')} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {detailInfor['policy'].map((policy, index) => (
@@ -465,15 +490,107 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
               </div>
             </div>
           )}
-          {type === 'utility' && detailInfor['utility'] && <UtilitiesList dataList={detailInfor['utility']} />}
-          {type === 'image' && detailInfor['image'] && (
-            <div className="mt-5">
-              <span
-                className="d-block text-center fst-italic"
-                style={{ fontWeight: 500 }}
-              >{`Biển kiểm số: ${data.busInfo.licensePlate}`}</span>
-              <ImageList dataList={detailInfor['image']} />
+          {type === 'utility' && detailInfor['utility'] && (
+            <div
+              className={cx('utility-wrapper', 'mt-5')}
+              style={{
+                marginTop: '40px',
+                padding: '20px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <p
+                className={cx('title')}
+                style={{
+                  fontSize: '2rem',
+                  fontWeight: 'bold',
+                  color: '#333',
+                  marginBottom: '20px',
+                  textAlign: 'center',
+                }}
+              >
+                Tiện ích xe
+              </p>
+              <div className={cx('policies')} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {detailInfor['utility'].map((utility, index) => (
+                  <span
+                    key={index}
+                    className={cx('utility')}
+                    style={{
+                      fontSize: '1.4rem',
+                      color: '#555',
+                      padding: '10px 15px',
+                      backgroundColor: '#e9ecef',
+                      borderRadius: '5px',
+                      // transition: 'background-color 0.3s ease, transform 0.2s ease',
+                    }}
+                    // onMouseEnter={(e) => (e.target.style.backgroundColor = '#dbe2e6')}
+                    // onMouseLeave={(e) => (e.target.style.backgroundColor = '#e9ecef')}
+                  >
+                    {utility}
+                  </span>
+                ))}
+              </div>
             </div>
+          )}
+          {/* {type === 'utility' && detailInfor['utility'] && <UtilitiesList dataList={detailInfor['utility']} />} */}
+          {type === 'image' && (
+            // <div className="mt-5">
+            //   <span
+            //     className="d-block text-center fst-italic"
+            //     style={{ fontWeight: 500 }}
+            //   >{`Biển kiểm số: ${data.busInfo.licensePlate}`}</span>
+            //   <ImageList dataList={detailInfor['image']} />
+            // </div>
+            <Row className="justify-content-center align-items-center pt-3 pb-3">
+              <Col xs="1" className="d-flex justify-content-start">
+                <Button
+                  className={cx('nav-button-page')}
+                  onClick={handlePrevious}
+                  disabled={currentIndex === 0}
+                  variant="none"
+                >
+                  <FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>
+                </Button>
+              </Col>
+              <Col xs="10">
+                <div className="d-flex justify-content-center">
+                  {/* {(displayedImageVehicle?.[0] || []).map((item, index) => (
+                    <Image key={index} src={item.imgLink} rounded className={cx('image-vehicle')} />
+                  ))} */}
+                  <div className="d-flex justify-content-center">
+                    {displayedImageVehicle ? (
+                      displayedImageVehicle.map((item, index) => (
+                        <Image key={index} src={item} rounded className={cx('image-vehicle')} />
+                      ))
+                    ) : (
+                      <p>No images available</p> // Hiển thị thông báo khi không có hình ảnh
+                    )}
+                  </div>
+
+                  {/* Thêm các Col giả nếu danh sách không đủ utilitiesPerPage */}
+                  {Array.from({ length: imageVehiclePerPage - displayedImageVehicle.length }, (_, index) => (
+                    <div
+                      className="utility-placeholder"
+                      key={`placeholder-${index}`}
+                      style={{ flex: '1 0 auto', visibility: 'hidden' }}
+                    ></div>
+                  ))}
+                </div>
+              </Col>
+              <Col xs="1" className="d-flex justify-content-end">
+                <Button
+                  className={cx('nav-button-page')}
+                  onClick={handleNext}
+                  disabled={currentIndex + imageVehiclePerPage >= listImageVehicle.length}
+                  variant="none"
+                >
+                  <FontAwesomeIcon icon={faChevronRight}></FontAwesomeIcon>
+                </Button>
+              </Col>
+            </Row>
           )}
         </div>
       )}

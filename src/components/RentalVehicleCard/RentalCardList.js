@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import classNames from 'classnames/bind'
 import styles from './RentalCard.module.scss'
 import RentalCardItem from './RentalCardItem'
@@ -6,11 +6,36 @@ import PropTypes from 'prop-types'
 import { Empty } from 'antd'
 
 const cx = classNames.bind(styles)
-function RentalCardList({ maxColumns = 4, typeService, role, listVehicleRentals, startDateTime, endDateTime }) {
+function RentalCardList({ typeService, role, listVehicleRentals, startDateTime, endDateTime }) {
   //  console.log('endDatatime ---1---', endDateTime)
   //  console.log('startDatatime ---- 1----', startDateTime)
+  const [maxColumns, setMaxColumns] = useState(4)
+  useEffect(() => {
+    const updateUtilitiesPerPage = () => {
+      if (window.innerWidth >= 1300) {
+        setMaxColumns(4) // Large screens (lg)
+      } else if (window.innerWidth >= 1000) {
+        setMaxColumns(3) // Medium screens (md)
+      } else if (window.innerWidth >= 750) {
+        setMaxColumns(2)
+      } else {
+        setMaxColumns(1) // Extra small screens (xs)
+      }
+    }
+    updateUtilitiesPerPage()
+    window.addEventListener('resize', updateUtilitiesPerPage)
+    return () => window.removeEventListener('resize', updateUtilitiesPerPage)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.innerWidth])
   const cards = listVehicleRentals.map((item, index) => (
-    <RentalCardItem key={index} typeService={typeService} role={role} item={item} startDateTime={startDateTime} endDateTime={endDateTime} />
+    <RentalCardItem
+      key={index}
+      typeService={typeService}
+      role={role}
+      item={item}
+      startDateTime={startDateTime}
+      endDateTime={endDateTime}
+    />
   ))
 
   const numGhostColumns = maxColumns - (cards.length % maxColumns || maxColumns)
