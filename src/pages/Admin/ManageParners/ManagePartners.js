@@ -116,7 +116,7 @@ function ManagePartners() {
       ></Tabs>
       <SearchInput handleChange={handleChange} className={cx('custom-margin')} />
 
-      {partnerList.result && <PartnersList dataList={partnerList.result} />}
+      {partnerList.result && <PartnersList dataList={[...partnerList.result].reverse()} />}
       {partnerList.result?.length > 0 && (
         <Pagination
           className="mt-5"
