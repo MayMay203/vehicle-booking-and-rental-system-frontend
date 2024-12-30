@@ -95,8 +95,8 @@
   margin-top: 2rem;
   color: #e20d0d;
 }
-.icon-agency{
-  color: #A33A3A;
+.icon-agency {
+  color: #a33a3a;
 }
 .icon-owner,
 .icon-type {
@@ -195,4 +195,15 @@
 .surcharge {
   background-color: #fff6f3;
   padding: 0.3rem;
+}
+.txt-chat {
+  color: crimson;
+  font-style: italic;
+  margin-left: 3rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.txt-chat:hover {
+  transform: scale(1.1);  
+  cursor: pointer;
+  color: darkred;  
 }

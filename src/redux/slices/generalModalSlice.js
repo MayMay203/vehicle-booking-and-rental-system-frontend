@@ -6,6 +6,7 @@ export const generalModalNames = {
   LOCK_ACCOUNT: 'lock-account',
   UNLOCK_ACCOUNT: 'unlock-account',
   CANCEL_PARTNER: 'cancelPartner',
+  CANCEL_RENTAL_ORDER: 'cancelRentalOrder',
   CANCEL_TICKET: 'cancelTicket',
   LOADING: 'loading',
   BUY_TICKET: 'buyTicket',

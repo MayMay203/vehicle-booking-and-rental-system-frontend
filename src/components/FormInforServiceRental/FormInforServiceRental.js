@@ -117,9 +117,9 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           <InputGroup className={cx('txt', 'infor-item')}>
             <Form.Control
               type="text"
-              value={formData.car_year}
-              name="car_year"
-              aria-label="car_year"
+              value={formData.vehicleLife}
+              name="vehicleLife"
+              aria-label="vehicleLife"
               className={cx('txt')}
               readOnly={view}
               // disabled={view}
