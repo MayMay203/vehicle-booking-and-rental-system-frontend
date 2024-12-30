@@ -1,52 +1,51 @@
 import classNames from 'classnames/bind'
 import styles from './UpdateBusTrip.module.scss'
-import Button from '~/components/Button'
 import { Col, Form, Modal, Row } from 'react-bootstrap'
 import AddManyItems from '~/components/AddManyItems'
 import { useEffect, useState } from 'react'
-import { getLocations } from '~/apiServices/getLocations'
+import { useDispatch } from 'react-redux'
+import { checkLoginSession } from '~/redux/slices/userSlice'
+import { detailBusTrip } from '~/apiServices/busPartner/detailBusTrip'
+import { convertTimeFormat } from '~/utils/convertTimeFormat'
+import AddManyDropOffLocation from '~/components/AddManyDropOffLocation'
 // import AddManyDropOffLocation from '~/components/AddManyDropOffLocation'
 const cx = classNames.bind(styles)
-function UpdateBusTrip(props) {
-  const handleInputChange = (e) => {
-    // const {name, value} = e.target
-    // setFormData((prevState) => ({
-    //   ...prevState,
-    //   [name]: value,
-    // }))
-    // console.log(formData)
-  }
-  const initialDepartures = [
-    { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 1 },
-    { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 2 },
-    { value: '300 Lê Thánh Tông, Nghệ An', id: 3 },
-    { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 4 },
-  ]
-  // const initialDestination = [
-  //   { value: '54 Nguyễn Lương Bằng, Đà Nẵng', id: 0 },
-  //   { value: 'Nguyễn Văn Trỗi, Bình Thạnh, Quảng Bình', id: 1 },
-  //   { value: '300 Lê Thánh Tông, Nghệ An', id: 2 },
-  //   { value: '234 Minh Mạng, Phố Hàng Mã, Hà Nội', id: 3 },
-  // ]
-  const [provincesList, setProvincesList] = useState([])
+function UpdateBusTrip({ idBusTrip, ...props }) {
+  const [formData, setFormData] = useState({})
+  const dispatch = useDispatch()
+  const [initialDepartures, setInitialDepartures] = useState([{ value: '', id: 1 }])
+  const [initialItemDropOffs, setInitialItemDropOffs] = useState([{
+    value: formData.destination || '',
+    duration: formData.duration || '',
+    price: '',
+    dropOffs: [''],
+    idDropOffs: '',
+    id: 1,
+  }])
   useEffect(() => {
-    async function fetchApi() {
-      const provices = await getLocations(1)
-      if (provices) {
-        const cleanedProvinces = provices
-          .map((province) => {
-            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
-            return {
-              ...province,
-              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
-            }
-          })
-          .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
-        setProvincesList(cleanedProvinces)
+    const getInforBusTrip = async () => {
+      if (dispatch(checkLoginSession())) {
+        if (idBusTrip) {
+          const response = await detailBusTrip(idBusTrip)
+          setFormData(response)
+          setInitialDepartures(response?.pickupLocations.map((item, index) => ({ value: item, id: index + 1 })))
+          setInitialItemDropOffs(
+            response?.dropOffLocationInfos.map((item, index) => ({
+              value: item.province || '',
+              duration: item.journeyDuration || '',
+              price: item.priceTicket,
+              dropOffs: item.dropOffLocations,
+              idDropOffs: item.id,
+              id: index + 1,
+            })),
+          )
+        }
       }
     }
-    fetchApi()
-  }, [])
+    getInforBusTrip()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idBusTrip, props.show])
+  console.log('idBusTrip---formData:', idBusTrip, '--', formData)
   return (
     <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -61,21 +60,15 @@ function UpdateBusTrip(props) {
               <Form.Label className="mb-3">
                 Địa điểm xuất phát<span className="text-danger">*</span>
               </Form.Label>
-              <Form.Select
-                aria-label="departure"
-                name="departure"
-                // value={formData.departure}
-                onChange={handleInputChange}
+              <Form.Control
+                type="text"
+                aria-label="departureLocation"
+                name="departureLocation"
+                value={formData?.busTripInfo?.departureLocation}
                 className={cx('txt', 'selectbox', 'add-item')}
                 readOnly
                 disabled
-              >
-                {provincesList.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
-                  </option>
-                ))}
-              </Form.Select>
+              ></Form.Control>
             </Form.Group>
           </Col>
           <Col>
@@ -83,21 +76,15 @@ function UpdateBusTrip(props) {
               <Form.Label className="mb-3">
                 Địa điểm đến<span className="text-danger">*</span>
               </Form.Label>
-              <Form.Select
-                aria-label="destination"
-                name="destination"
-                // value={formData.departure}
-                onChange={handleInputChange}
+              <Form.Control
+                type="text"
+                aria-label="arrivalLocation"
+                name="arrivalLocation"
+                value={formData?.busTripInfo?.arrivalLocation}
                 className={cx('txt', 'selectbox', 'add-item')}
                 readOnly
                 disabled
-              >
-                {provincesList.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
-                  </option>
-                ))}
-              </Form.Select>
+              ></Form.Control>
             </Form.Group>
           </Col>
           <Col>
@@ -105,33 +92,37 @@ function UpdateBusTrip(props) {
               <Form.Label className="mb-3">
                 Thời gian di chuyển<span className="text-danger">*</span>
               </Form.Label>
-              <Form.Select
-                aria-label="duration"
-                name="duration"
-                // value={formData.departure}
-                onChange={handleInputChange}
+              <Form.Control
+                type="text"
+                aria-label="journeyDuration"
+                name="journeyDuration"
+                value={
+                  formData?.busTripInfo?.journeyDuration ? convertTimeFormat(formData.busTripInfo.journeyDuration) : ''
+                }
                 className={cx('txt', 'selectbox', 'add-item')}
                 readOnly
                 disabled
-              >
-                {/* {provinces.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
-                  </option>
-                ))} */}
-              </Form.Select>
+              ></Form.Control>
             </Form.Group>
           </Col>
         </Row>
-        <AddManyItems initialItems={initialDepartures} content={'Địa điểm đón khách'}></AddManyItems>
+        <AddManyItems
+          formData={formData}
+          idBusTrip={idBusTrip}
+          mode="update"
+          initialItems={initialDepartures}
+          content={'Địa điểm đón khách'}
+        ></AddManyItems>
         <div className={cx('line')}></div>
-        {/* <AddManyDropOffLocation
-          initialItems={initialDestination}
-          provincesList={provincesList}
-          content={'Địa điểm trả khách'}
-        ></AddManyDropOffLocation> */}
+        <AddManyDropOffLocation
+          mode="update"
+          // setListDropOffs={setListDropOffs}
+          idBusTrip={idBusTrip}
+          departure={formData?.busTripInfo?.arrivalLocation}
+          initialItems={initialItemDropOffs}
+        ></AddManyDropOffLocation>
       </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-center align-items-center">
+      {/* <Modal.Footer className="d-flex justify-content-center align-items-center">
         <div className="row w-100">
           <Col></Col>
           <div className="col d-flex justify-content-center">
@@ -146,7 +137,7 @@ function UpdateBusTrip(props) {
           </div>
           <Col></Col>
         </div>
-      </Modal.Footer>
+      </Modal.Footer> */}
     </Modal>
   )
 }

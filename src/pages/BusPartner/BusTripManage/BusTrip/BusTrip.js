@@ -112,9 +112,6 @@ import viVN from 'antd/locale/vi_VN'
 
 const cx = classNames.bind(styles)
 function BusTrip() {
-  const [showModalAdd, setShowModalAdd] = useState(false)
-  const [showModalUpdate, setShowModalUpdate] = useState(false)
-  const dispatch = useDispatch()
   const columns = [
     {
       title: 'STT',
@@ -185,6 +182,10 @@ function BusTrip() {
       ),
     },
   ]
+   const [showModalAdd, setShowModalAdd] = useState(false)
+  const [showModalUpdate, setShowModalUpdate] = useState(false)
+  const dispatch = useDispatch()
+  const [selectedBusTrip, setSelectedBusTrip] = useState('')
   const allBusTrips = useSelector((state) => state.busPartner.busTrips)
   const [data, setData] = useState([])
   useEffect(() => {
@@ -218,8 +219,9 @@ function BusTrip() {
   const handleViewBus = (id) => {
     navigate('/bus-trip/detail-bus-trip', { state: { id } })
   }
-  const handleEditBus = () => {
+  const handleEditBus = (id) => {
     setShowModalUpdate(true)
+    setSelectedBusTrip(id)
   }
   return (
     <div className={cx('container', 'mb-5 mt-5')}>
@@ -251,7 +253,7 @@ function BusTrip() {
       </ConfigProvider>
 
       <AddBusTrip show={showModalAdd} closeModal={() => setShowModalAdd(false)} onHide={() => setShowModalAdd(false)} />
-      <UpdateBusTrip show={showModalUpdate} onHide={() => setShowModalUpdate(false)}></UpdateBusTrip>
+      <UpdateBusTrip idBusTrip={selectedBusTrip} show={showModalUpdate} onHide={() => setShowModalUpdate(false)}></UpdateBusTrip>
     </div>
   )
 }
