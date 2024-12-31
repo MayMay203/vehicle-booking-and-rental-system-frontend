@@ -153,6 +153,7 @@ function BusTicket() {
         show={modalDetailTicketShow}
         ticket={busTicket}
         idTicket={busTicket?.busTripScheduleId}
+        showModal={() => setModalDetailTicketShow(true)}
         onHide={() => setModalDetailTicketShow(false)}
       ></ModalDetailBusTicket>
     </div>

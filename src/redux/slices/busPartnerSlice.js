@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { detailBusSchedule } from '~/apiServices/busPartner/detailBusSchedule'
 import { fetchAllBus } from '~/apiServices/busPartner/fetchAllBuses'
 import { getAllBusByBusType } from '~/apiServices/busPartner/getAllBusByBusType'
 import { getAllBusTrips } from '~/apiServices/busPartner/getAllBusTrips'
@@ -23,6 +24,7 @@ const initialState = {
   busTicketList: [],
   orderListBusTrip: [],
   statsBusTrip: [],
+  ticketInfor: {},
 }
 export const fetchAllBusTypes = createAsyncThunk('busPartner/getAllBusTypes', async () => {
   const data = await getAllBusTypes()
@@ -54,11 +56,14 @@ export const fetchAllSchedulesByBusID = createAsyncThunk('busPartner/getAllSched
   console.log('dataaaa:', data.result)
   return data.result || []
 })
-export const fetchScheduleListByBusTrip = createAsyncThunk('busPartner/getScheduleListByBusTrip', async ({ date, idBusTrip }) => {
-  const data = await getAllScheduleByBusTrip(date, idBusTrip)
-  console.log('dataaaa:', data.result)
-  return data.result || []
-})
+export const fetchScheduleListByBusTrip = createAsyncThunk(
+  'busPartner/getScheduleListByBusTrip',
+  async ({ date, idBusTrip }) => {
+    const data = await getAllScheduleByBusTrip(date, idBusTrip)
+    console.log('dataaaa:', data.result)
+    return data.result || []
+  },
+)
 export const fetchBusTicketList = createAsyncThunk('busPartner/getBusTicketList', async ({ dep, des }) => {
   const data = await getAllTicket(dep, des)
   console.log('dataaaa:', data.result)
@@ -77,10 +82,10 @@ export const fetchStatsBusTrip = createAsyncThunk(
     return data.result || []
   },
 )
-// export const busTypeByID = createAsyncThunk('busPartner/getInforBusTypeByID', async ({ id }) => {
-//   const data = await fetchBusTypeByID(id)
-//   return data || {}
-// })
+export const fetchTicketInfor = createAsyncThunk('busPartner/getInforBusTicket', async ({ id, date }) => {
+  const data = await detailBusSchedule(id, date)
+  return data || {}
+})
 // export const busByID = createAsyncThunk('busPartner/getInforBusByID', async ({ id }) => {
 //   const data = await detailBusByID(id)
 //   console.log('dataaaa:', data)
@@ -122,9 +127,12 @@ const busPartnerSlice = createSlice({
       .addCase(fetchStatsBusTrip.fulfilled, (state, action) => {
         state.statsBusTrip = action.payload
       })
-      // .addCase(busByID.fulfilled, (state, action) => {
-      //   state.inforBus = action.payload
-      // })
+      .addCase(fetchTicketInfor.fulfilled, (state, action) => {
+        state.ticketInfor = action.payload
+      })
+    // .addCase(busByID.fulfilled, (state, action) => {
+    //   state.inforBus = action.payload
+    // })
   },
 })
 export default busPartnerSlice.reducer

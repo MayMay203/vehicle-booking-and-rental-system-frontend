@@ -128,10 +128,10 @@ function TicketBus({ data, enableEdit = true }) {
   }
   return (
     <div className={cx('row', 'wrap-ticket')}>
-      <Col className={cx('id-ticket')} sm={12} lg={1}>
+      <Col className={cx('id-ticket', 'me-5')} sm={1} lg={1}>
         Vé xe
       </Col>
-      <Col sm={12} lg={5} className={cx('p-3')}>
+      <Col sm={6} lg={5} className={cx('p-3')}>
         <Row>
           <Col>
             <Form.Group className={cx('txt', 'mb-3', 'mt-3')} controlId="formAdd.ControlInput5">
@@ -230,8 +230,8 @@ function TicketBus({ data, enableEdit = true }) {
           </Col>
         </Row>
       </Col>
-      <Col lg={1} className={cx('line-vertical')}></Col>
-      <Col sm={12} lg={5} className={cx('wrap-break-days')}>
+      <Col lg={1} className={cx('line-vertical', 'd-sm-none')}></Col>
+      <Col sm={5} lg={5} className={cx('wrap-break-days')}>
         <AddManyBreakDay
           initialItems={[{ startDay: '', endDay: '', id: 1 }]}
           setBreakDays={setBreakDays}

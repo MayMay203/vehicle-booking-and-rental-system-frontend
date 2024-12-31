@@ -17,6 +17,9 @@ import { getLocations } from '~/apiServices/getLocations'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
 // import TicketBus from '~/components/TicketBus'
 import UpdateTicketBus from '~/components/TicketBus/UpdateTicket'
+// import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+// import { updateBusSchedule } from '~/apiServices/busPartner/updateBusSchedule'
+// import { detailBusSchedule } from '~/apiServices/busPartner/detailBusSchedule'
 const cx = classNames.bind(styles)
 function ModalUpdateBusSchedule({ enableEdit = true, idBusTrip, data, functionModal, ...props }) {
   const dispatch = useDispatch()
@@ -125,6 +128,31 @@ function ModalUpdateBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
   //     typeSeat: 'Giường nằm',
   //   })
   // }
+
+
+  //  const handleUpdate = async (id) => {
+  //     if (dispatch(checkLoginSession())) {
+  //       try {
+  //         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
+  //         const inforBusSchedule = await detailBusSchedule(id, new Date())
+  //         const dataUpdate = {
+  //           busTripScheduleId: id,
+  //           discountPercentage: 10,
+  //           breakDays: [
+  //             {
+  //               startDay: '23-01-2024',
+  //               endDay: '23-01-2024',
+  //             },
+  //           ],
+  //         }
+  //         const response = await updateBusSchedule()
+  //       } catch (error) {
+  //         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+  //       } finally {
+  //         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+  //       }
+  //     }
+  //   }
   return (
     <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>

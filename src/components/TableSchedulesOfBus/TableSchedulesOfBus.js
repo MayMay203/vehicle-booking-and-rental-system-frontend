@@ -6,12 +6,85 @@ import ModalBusInfor from '~/pages/BusPartner/BusManage/ModalBusInfor'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllSchedulesByBusID } from '~/redux/slices/busPartnerSlice'
+import { getAllBreakDaysOfBusSchedule } from '~/apiServices/busPartner/getAllBreakDaysOfBusSchedule'
+import dayjs from 'dayjs'
+import dayjsGenerateConfig from 'rc-picker/es/generate/dayjs'
+import { ConfigProvider } from 'antd'
+import { DatePicker } from 'antd'
+const { RangePicker } = DatePicker
 const cx = classNames.bind(styles)
 function TableSchedulesOfBus({ handleUpdateSchedule, idBus }) {
-  const [isHovered, setIsHovered] = useState(null)
   const [modalBusInforShow, setModalBusInforShow] = useState(false)
   const dispatch = useDispatch()
   const listSchedules = useSelector((state) => state.busPartner.scheduleListByBusID)
+  const [isHovered, setIsHovered] = useState(null)
+  const [breakDays, setBreakDays] = useState([]) // Danh sách ngày nghỉ từ API
+  const [openPicker, setOpenPicker] = useState(false) // Điều khiển mở DatePicker
+  const [selectedSchedule, setSelectedSchedule] = useState('')
+  const [selectedDays, setSelectedDays] = useState([]) // Lưu các ngày được chọn
+  const [data, setData] = useState([])
+
+  // Gọi API lấy ngày nghỉ khi component load
+  useEffect(() => {
+    const fetchBreakDays = async () => {
+     if(dispatch(checkLoginSession())){
+      if(selectedSchedule){
+         const response = await getAllBreakDaysOfBusSchedule(selectedSchedule)
+         if (response) {
+           const mappedDays = response.map((item) => ({
+             start: dayjs(item.startDay, 'DD-MM-YYYY'),
+             end: dayjs(item.endDay, 'DD-MM-YYYY'),
+           }))
+           setBreakDays(mappedDays)
+         }
+      }
+     }
+    }
+    fetchBreakDays()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSchedule])
+
+  // // Hàm disable các ngày nghỉ
+  // const disabledDate = (current) => {
+  //   return breakDays.some(({ start, end }) => {
+  //     return current.isBetween(start, end, 'day', '[]')
+  //   })
+  // }
+// const disabledDate = (current) => {
+//   const currentDay = dayjs(current) // Chuyển current sang dayjs
+
+
+//   // Chỉ cho phép chọn nếu ngày nằm trong khoảng nghỉ
+//   const isInBreak = breakDays.some(({ start, end }) => {
+//     return currentDay.isBetween(start, end, 'day', '[]') // Kiểm tra ngày trong khoảng
+//   })
+
+//   return !isInBreak // Chỉ cho phép chọn ngày nghỉ
+// }
+const handleDetailClick = (id) => {
+  setSelectedSchedule(id)
+  setOpenPicker(true)
+}
+
+const disabledDate = (current) => {
+  const currentDay = dayjs(current)
+  return !breakDays.some(({ start, end }) => currentDay.isBetween(start, end, 'day', '[]'))
+}
+
+
+
+
+  // // Xử lý khi click vào "Chi tiết"
+  // const handleDetailClick = (id) => {
+  //   setOpenPicker(true)
+  //   setSelectedSchedule(id)
+  // }
+
+  // Xử lý khi chọn ngày
+  const handleDateChange = (dates) => {
+    setSelectedDays(dates)
+    setOpenPicker(false) // Đóng DatePicker sau khi chọn
+  }
   const columns = [
     {
       title: 'Giờ xuất phát',
@@ -55,25 +128,30 @@ function TableSchedulesOfBus({ handleUpdateSchedule, idBus }) {
       title: 'Ngày nghỉ',
       dataIndex: 'status',
       align: 'center',
-      defaultSortOrder: 'descend',
-      width: 120,
-      render: (licensePlateNumber, record) => (
+      render: (text, record) => (
         <div>
-          <div>{licensePlateNumber}</div>
           <p
             style={{
               color: isHovered === record.key ? '#2474E5' : 'rgba(36, 116, 229, 0.5)',
               cursor: 'pointer',
-              margin: 0,
-              fontStyle: 'italic',
               textDecoration: isHovered === record.key ? 'underline' : '',
             }}
             onMouseEnter={() => setIsHovered(record.key)}
             onMouseLeave={() => setIsHovered(null)}
-            onClick={() => setModalBusInforShow(true)}
+            onClick={() => handleDetailClick(record.key)}
           >
             Chi tiết
           </p>
+          {openPicker && selectedSchedule === record.key && (
+            <RangePicker
+              open={openPicker}
+              onOpenChange={(open) => setOpenPicker(open)}
+              disabledDate={disabledDate}
+              onChange={handleDateChange}
+              value={selectedDays}
+              format="DD-MM-YYYY"
+            />
+          )}
         </div>
       ),
     },
@@ -88,11 +166,13 @@ function TableSchedulesOfBus({ handleUpdateSchedule, idBus }) {
   //     destination: 'TP.Hồ Chí Minh',
   //   },
   // ]
-const [data, setData] = useState([])
+
 
 useEffect(() => {
   if (dispatch(checkLoginSession())) {
-    dispatch(fetchAllSchedulesByBusID({ idBus: idBus }))
+   if(idBus){
+     dispatch(fetchAllSchedulesByBusID({ idBus: idBus }))
+   } else { setData([])}
   }
 }, [dispatch, idBus])
 
@@ -120,20 +200,23 @@ useEffect(() => {
   // }
   return (
     <>
-      <Table
-        columns={columns}
-        dataSource={data}
-        onChange={onChange}
-        bordered
-        pagination={false}
-        scroll={{ x: 'auto', y: 500 }}
-        // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-        rowClassName="table-row-center" // Thêm class để căn giữa dọc
-        showSorterTooltip={{
-          target: 'sorter-icon',
-        }}
-        className={cx('')}
-      />
+      <ConfigProvider picker={dayjsGenerateConfig}>
+        <Table
+          columns={columns}
+          dataSource={data}
+          onChange={onChange}
+          bordered
+          pagination={false}
+          scroll={{ x: 'auto', y: 500 }}
+          // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
+          rowClassName="table-row-center" // Thêm class để căn giữa dọc
+          showSorterTooltip={{
+            target: 'sorter-icon',
+          }}
+          className={cx('')}
+        />
+      </ConfigProvider>
+
       <ModalBusInfor enableEdit={false} show={modalBusInforShow} onHide={() => setModalBusInforShow(false)} />
     </>
   )

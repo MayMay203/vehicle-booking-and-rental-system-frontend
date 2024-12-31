@@ -18,7 +18,10 @@ export const generalModalNames = {
   UTILITY_MODAL: 'utilityModal',
   FEE_SERVICE_MODAL: 'feeServiceModal',
   DEL_BUS_TYPE: 'deleteBusType',
+  DEL_BUS_TRIP: 'deleteBusTrip',
+  DEL_BUS_TRIP_SCHEDULE_ONE_DAY: 'deleteScheduleOneDay',
   DEL_VOUCHER: 'deleteVoucher',
+  SUSPENDED_BUS_SCHEDULE: 'suspendedBusSchedule',
   INFOR_RENTAL_ORDER: 'inforRentalOrder',
 }
 
@@ -29,6 +32,9 @@ const initialState = {
     description: '',
     name: '',
     id: '',
+    date: '',
+    status: '',
+    startDate: '',
   },
   inputConfirm: {
     isOpen: false,
@@ -78,10 +84,10 @@ const initialState = {
     isOpen: false,
     voucherId: '',
   },
-  inforRentalOrder:{
+  inforRentalOrder: {
     inforVehicle: {},
     transactionCode: '',
-  }
+  },
 }
 
 const generalModalSlice = createSlice({

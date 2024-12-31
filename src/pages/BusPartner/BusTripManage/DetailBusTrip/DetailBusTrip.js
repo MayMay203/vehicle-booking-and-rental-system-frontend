@@ -15,7 +15,6 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
 import { fetchScheduleListByBusTrip } from '~/redux/slices/busPartnerSlice'
 import dayjs from 'dayjs'
-import ModalUpdateBusSchedule from '../../BusSchedule/ModalUpdateBusSchedule'
 const cx = classNames.bind(styles)
 
 function DetailBusTrip() {
@@ -149,10 +148,10 @@ function DetailBusTrip() {
   const handleAddSchedule = () => {
     setModalAddScheduleShow(true)
   }
-  const [modalUpdateScheduleShow, setModalUpdateScheduleShow] = useState(false)
-  const handleUpdateSchedule = () => {
-    setModalUpdateScheduleShow(true)
-  }
+  // const [modalUpdateScheduleShow, setModalUpdateScheduleShow] = useState(false)
+  // const handleUpdateSchedule = () => {
+  //   setModalUpdateScheduleShow(true)
+  // }
   console.log('----ngay thang: cha---', dayjs(dateSearch, 'DD/MM/YYYY').format('YYYY-MM-DD'))
   return (
     <div className="container">
@@ -258,7 +257,9 @@ function DetailBusTrip() {
           <SlideDayOfMonth setDateSearch={setDateSearch}></SlideDayOfMonth>
           <div className="mt-3 mb-3"></div>
           <TableVehiclesOfBusTrip
-            handleUpdateSchedule={handleUpdateSchedule}
+            date={dateSearch}
+            idBusTrip={idBusTrip}
+            // handleUpdateSchedule={handleUpdateSchedule}
             dataTable={dataTable}
           ></TableVehiclesOfBusTrip>
         </div>
@@ -273,14 +274,14 @@ function DetailBusTrip() {
         setShow={setModalAddScheduleShow}
         onHide={() => setModalAddScheduleShow(false)}
       ></ModalManageBusSchedule>
-      <ModalUpdateBusSchedule
+      {/* <ModalUpdateBusSchedule
         enableEdit={true}
         idBusTrip={idBusTrip}
         data={data}
         functionModal={'update'}
         show={modalUpdateScheduleShow}
         onHide={() => setModalUpdateScheduleShow(false)}
-      ></ModalUpdateBusSchedule>
+      ></ModalUpdateBusSchedule> */}
     </div>
   )
 }

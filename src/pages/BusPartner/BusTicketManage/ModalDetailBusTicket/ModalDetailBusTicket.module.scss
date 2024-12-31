@@ -6,7 +6,7 @@
   font-size: 2rem;
   color: #ff7f50;
 }
-.wrap-container{
+.wrap-container {
   min-height: 45rem;
 }
 .wrap-form-infor {
@@ -22,19 +22,19 @@
 }
 .content-tab {
   // display: flex;
-//   width: 80%;
+  //   width: 80%;
   @include abstracts.screen(sm) {
     width: 100%;
   }
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-//   max-height: 50rem;
+  //   max-height: 50rem;
   overflow-y: auto;
 }
 .content {
   padding: 0.5rem 2rem;
-//   margin-left: 2rem;
+  //   margin-left: 2rem;
   font-weight: 500;
   font-size: 1.6rem;
   text-align: justify;
@@ -189,11 +189,52 @@
   color: #ff7f50;
   font-size: 2.4rem;
 }
-.line-shadow{
+.line-shadow {
   border-top: #ff7f50;
   box-shadow: 1px 0px 0px 0px #d34714;
 }
-.line-top{
+.line-top {
   border-top: #ff7f50;
   box-shadow: 1px 0px 0px 0px #d34714;
+}
+.btn-update {
+  font-size: 1.6rem;
+  font-weight: 400;
+  background-color: rgba($color: #27ae60, $alpha: 65%);
+  color: white;
+  border: none;
+  &:hover {
+    background-color: #27ae60;
+    color: white;
+  }
+  &:active {
+    background-color: #27ae60;
+    color: white;
+  }
+  &:focus {
+    background-color: #27ae60;
+    color: white;
+  }
+}
+.btn-inActive {
+  font-size: 1.6rem;
+  font-weight: 400;
+  background-color: rgba($color: #d34714, $alpha: 65%);
+  color: white;
+  border: none;
+  &:hover {
+    background-color: #d34714;
+    color: white;
+  }
+  &:active {
+    background-color: #d34714;
+    color: white;
+  }
+  &:focus {
+    background-color: #d34714;
+    color: white;
+  }
+}
+.txt-red{
+  color: rgb(255, 0, 68);
 }

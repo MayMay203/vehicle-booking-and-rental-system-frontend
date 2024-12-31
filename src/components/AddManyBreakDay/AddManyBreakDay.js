@@ -8,7 +8,7 @@ import { DatePicker } from 'antd'
 import moment from 'moment'
 const cx = classNames.bind(styles)
 
-function AddManyBreakDay({ initialItems, content, setBreakDays, price = null }) {
+function AddManyBreakDay({ initialItems, content = 'Ngày nghỉ', setBreakDays, price = null }) {
   const [items, setItems] = useState(initialItems)
   const [itemCounter, setItemCounter] = useState(items.length)
   const disablePastDates = (current) => {
@@ -61,7 +61,7 @@ function AddManyBreakDay({ initialItems, content, setBreakDays, price = null }) 
     <Row className="align-items-start">
       <div className="d-flex align-items-center">
         <FontAwesomeIcon icon={faSquarePlus} className={cx('add-item')} onClick={handleAddItem} />
-        <p className={cx('me-3', 'txt', 'p-2', 'background')}>Ngày nghỉ</p>
+        <p className={cx('me-3', 'txt', 'p-2', 'background')}>{content}</p>
       </div>
       <div>
         {items.map((item) => (

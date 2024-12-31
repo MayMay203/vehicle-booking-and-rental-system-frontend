@@ -9,7 +9,8 @@
     font-size: 1.4rem;
   }
 }
-.time-payment, .time-rental {
+.time-payment,
+.time-rental {
   color: rgba($color: #000000, $alpha: 65%);
   font-weight: 500;
   font-size: 1.6rem;
@@ -165,27 +166,27 @@
   margin: 0 0.3rem;
   text-align: center;
 }
-.txt-question{
-    font-size: 2rem;
-    color: #27ae60;
-    font-weight: 500;
+.txt-question {
+  font-size: 2rem;
+  color: #27ae60;
+  font-weight: 500;
 }
-.btn-confirm{
-    font-size: 1.6rem;
-    font-weight: 400;
-    background-color: rgba($color: #27ae60, $alpha: 65%);
+.btn-confirm {
+  font-size: 1.6rem;
+  font-weight: 400;
+  background-color: rgba($color: #27ae60, $alpha: 65%);
+  color: white;
+  border: none;
+  &:hover {
+    background-color: #27ae60;
     color: white;
-    border: none;
-    &:hover{
-        background-color: #27ae60;
-        color: white;
-    }
-    &:active{
-        background-color: #27ae60;
-        color: white;
-    }
-    &:focus{
-        background-color: #27ae60;
-        color: white;
-    }
+  }
+  &:active {
+    background-color: #27ae60;
+    color: white;
+  }
+  &:focus {
+    background-color: #27ae60;
+    color: white;
+  }
 }

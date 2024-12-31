@@ -69,7 +69,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
     if (dispatch(checkLoginSession())) {
       dispatch(fetchAllBusTypes())
       dispatch(fetchAllBusesByBusType(formData.nameType))
-      dispatch(fetchAllBusTrips())
+      dispatch(fetchAllBusTrips({ dep: '', des: '' }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
@@ -197,7 +197,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
   }, [])
   const getInforBusType = async () => {
     if (dispatch(checkLoginSession())) {
-      if (formData.idBusType != null) {
+      if (formData.idBusType) {
         try {
           const data = await fetchBusTypeByID(formData.idBusType)
           setFormData({
