@@ -10,7 +10,7 @@ export const constants = {
   current: 'APPROVED',
   notConfirmed: 'PENDING_APPROVAL',
   cancelled: 'CANCEL',
-  pagesize: 3,
+  pagesize: 5,
   busName: 'all',
   departureLocation: 'Thừa Thiên Huế',
   arrivalLocation: 'Đà Nẵng',
