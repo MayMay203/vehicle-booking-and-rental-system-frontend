@@ -30,7 +30,7 @@ function ModalDetailOrderRental({
         console.log(response)
         console.log(inforRentalVehicle)
         if (!inforRentalVehicle) {
-          console.log('Vô đây')
+          console.log('Vô đây---inforRentalVehicle', inforRentalVehicle)
           const rentalInfo = await getVehicleRentalByID(response?.rentalInfo?.carRentalServiceId)
           console.log('Rental Infor: ', rentalInfo)
           setInforRentalVehicle(rentalInfo)

@@ -207,6 +207,7 @@ import { statsRevenueBus } from '~/apiServices/busPartner/statsRevenueBus'
 import Button from '../Button'
 import { Line } from 'react-chartjs-2'
 import dayjs from 'dayjs'
+import { convertMoneyIntoDigits } from '~/utils/convertMoneyIntoDigits'
 const cx = classNames.bind(styles)
 function StatsRevenueBus() {
   const [time, setTime] = useState(dayjs())
@@ -313,14 +314,14 @@ function StatsRevenueBus() {
                 className={cx('type-filter', { active: activeTypeFilter === 'ByMonth' })}
                 onClick={() => handleTypeFilterClick('ByMonth')}
               >
-                Doanh thu mỗi tháng
+                Doanh thu các tháng trong năm
               </Button>
               <Button
                 rounded
                 className={cx('type-filter', { active: activeTypeFilter === 'ByYear' })}
                 onClick={() => handleTypeFilterClick('ByYear')}
               >
-                Doanh thu mỗi năm
+                Doanh thu tất cả các năm
               </Button>
             </div>
           </Col>
@@ -361,12 +362,8 @@ function StatsRevenueBus() {
                 : [null, ...data.revenueStatistic.map((item) => parseInt(item.period)), null],
             datasets: [
               {
-                data: [
-                  null,
-                  ...data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim(), 10)),
-                  null,
-                ],
-                label: 'Doanh thu mỗi tháng',
+                data: [null, ...data.revenueStatistic.map((item) => convertMoneyIntoDigits(item.revenue)), null],
+                label: activeTypeFilter === 'ByMonth' ? 'Doanh thu tháng' : 'Doanh thu năm',
                 borderColor: '#FF7F50',
                 fill: false,
               },
@@ -377,7 +374,7 @@ function StatsRevenueBus() {
             plugins: {
               title: {
                 display: true,
-                text: activeTypeFilter === 'ByMonth' ? 'DOANH THU THEO THÁNG' : 'DOANH THU THEO NĂM',
+                text: activeTypeFilter === 'ByMonth' ? 'DOANH THU CÁC THÁNG TRONG NĂM' : 'DOANH THU TẤT CẢ CÁC NĂM',
                 color: '#A33A3A',
                 font: {
                   size: 30,

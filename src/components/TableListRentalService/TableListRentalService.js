@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import styles from './TableListRentalService.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUpRightFromSquare, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpRightFromSquare, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { ConfigProvider, Table } from 'antd'
 import { useEffect, useState } from 'react'
@@ -20,14 +20,14 @@ function TableListRentalService({ typeService }) {
       title: 'STT',
       dataIndex: '',
       align: 'center',
-      width: 80,
+      width: 70,
       render: (text, record, index) => index + 1,
     },
     {
       title: 'Hãng xe',
       dataIndex: 'nameCompany',
       align: 'center',
-      width: 150,
+      width: 130,
       showSorterTooltip: {
         target: 'full-header',
       },
@@ -46,7 +46,7 @@ function TableListRentalService({ typeService }) {
       dataIndex: 'number',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 110,
+      width: 100,
       // sorter: (a, b) => a.age - b.age,
     },
     ...(typeService === 2 || typeService === 0
@@ -86,14 +86,14 @@ function TableListRentalService({ typeService }) {
       dataIndex: 'status',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 150,
+      width: 120,
       // sorter: (a, b) => a.age - b.age,
     },
     {
       title: 'Xem',
       dataIndex: 'view',
       align: 'center',
-      width: 90,
+      width: 80,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
@@ -106,7 +106,7 @@ function TableListRentalService({ typeService }) {
       title: 'Sửa',
       dataIndex: 'update',
       align: 'center',
-      width: 90,
+      width: 80,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faEdit}
@@ -115,15 +115,15 @@ function TableListRentalService({ typeService }) {
         />
       ),
     },
-    {
-      title: 'Xóa',
-      width: 90,
-      dataIndex: 'delete',
-      align: 'center',
-      render: (record) => (
-        <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
-      ),
-    },
+    // {
+    //   title: 'Xóa',
+    //   width: 90,
+    //   dataIndex: 'delete',
+    //   align: 'center',
+    //   render: (record) => (
+    //     <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
+    //   ),
+    // },
   ]
   // const data = [
   //   {

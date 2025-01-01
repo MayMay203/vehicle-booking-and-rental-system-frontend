@@ -247,7 +247,7 @@ function EditServiceRental({ idRegister, ...props }) {
           </Row>
         </div>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className="justify-content-center">
         <Row className="justify-content-center">
           <Col></Col>
           <Col className="d-flex justify-content-center">
