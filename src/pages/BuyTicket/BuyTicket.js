@@ -104,15 +104,14 @@ function BuyTicket() {
                   onClick={() => handleChangeFilter('departureTime,desc')}
                   checked={sortType === 'departureTime,desc'}
                 />
-                <PopperItem id="4" title="Lượt đánh giá cao nhất" />
                 <PopperItem
-                  id="5"
+                  id="4"
                   title="Giá tăng dần"
                   onClick={() => handleChangeFilter('priceTicket,asc')}
                   checked={sortType === 'priceTicket,asc'}
                 />
                 <PopperItem
-                  id="6"
+                  id="5"
                   title="Giá giảm dần"
                   onClick={() => handleChangeFilter('priceTicket,desc')}
                   checked={sortType === 'priceTicket,desc'}

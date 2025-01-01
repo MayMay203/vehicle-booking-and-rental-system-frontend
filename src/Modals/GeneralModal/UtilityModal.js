@@ -17,7 +17,6 @@ import { getUtility } from '~/apiServices/manageUtilities/getUtility'
 
 const cx = classNames.bind(styles)
 function UtilityModal() {
-  console.log('re-render addUtility modal')
   const dispatch = useDispatch()
   const showUtilityModal = useSelector((state) => state.generalModal.utilityModal)
   const { id, isOpen } = showUtilityModal

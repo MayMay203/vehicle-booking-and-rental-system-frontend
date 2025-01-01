@@ -20,20 +20,19 @@ function ModalDetailOrderRental({
   ...props
 }) {
   const dispatch = useDispatch()
-  const [inforRentalVehicle, setInforRentalVehicle] = useState(inforRentalVehicleProp)
+  const [inforRentalVehicle, setInforRentalVehicle] = useState({})
   const [inforOrder, setInforOrder] = useState({})
+
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
       const getInforOrder = async () => {
-        console.log(transactionCode)
         const response = await getDetailTransaction(transactionCode, 'VEHICLE_RENTAL_ORDER')
-        console.log(response)
-        console.log(inforRentalVehicle)
-        if (!inforRentalVehicle) {
-          console.log('Vô đây---inforRentalVehicle', inforRentalVehicle)
+
+        if (!inforRentalVehicleProp) {
           const rentalInfo = await getVehicleRentalByID(response?.rentalInfo?.carRentalServiceId)
-          console.log('Rental Infor: ', rentalInfo)
           setInforRentalVehicle(rentalInfo)
+        } else {
+          setInforRentalVehicle(inforRentalVehicleProp)
         }
         setInforOrder(response)
       }

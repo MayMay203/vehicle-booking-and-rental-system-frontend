@@ -12,7 +12,6 @@ import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/genera
 
 const cx = classNames.bind(styles)
 function ForgetPasswordModal() {
-  console.log('re-render forget password modal')
   const showForgotModal = useSelector((state) => state.authModal.forgot)
   const dispatch = useDispatch()
 

@@ -160,7 +160,13 @@
 
     @include abstracts.screen(md){
         padding: 16px 20px;
+        height: initial;
     }
+}
+
+.dropdown-active{
+    background-color: var(--primary-color);
+    color: #fff
 }
 
 .custom-border{

@@ -19,13 +19,12 @@ import ModalChat from '~/components/ModalChat'
 import { faCaretDown, faCommentDots } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { config } from '~/config'
 import { setMenu } from '~/redux/slices/menuSlice'
 import { getStatusRegisterPartner } from '~/apiServices/user/getStatusRegisterPartner'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllConversationsByAcc, fetchAllNotificationsByAcc } from '~/redux/slices/conversationSlice'
-
 
 const cx = classNames.bind(styles)
 function Header() {
@@ -39,8 +38,16 @@ function Header() {
   const [isShowMessage, setIsShowMessage] = useState(false)
   const [isShowDetailPartner, setShowDetailPartner] = useState(false)
   const [isSmall, setIsSmall] = useState(window.innerWidth < 768)
+  const [isActive, setIsActive] = useState(false)
+  const { pathname } = useLocation()
 
-  console.log(currentUser)
+  useEffect(() => {
+    if (pathname.includes('register-partner') || pathname.includes('manage-partners')) {
+      setIsActive(true)
+    } else {
+      setIsActive(false)
+    }
+  }, [pathname])
   // Menu
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.currentMenu)
@@ -71,7 +78,7 @@ function Header() {
     }
   }, [])
 
-  const hanldeBack = () => {
+  const handleBack = () => {
     contentRef.current.style.transform = 'translateX(100%)'
     overlayRef.current.style.visibility = 'hidden'
     overlayRef.current.style.opacity = '0'
@@ -92,7 +99,6 @@ function Header() {
   const getStatusParter = async (type) => {
     try {
       const response = await getStatusRegisterPartner(type)
-      console.log(response)
       let statusValue = ''
       if (response.info === 'PENDING_APPROVAL') {
         statusValue = 'pending_approval'
@@ -126,10 +132,10 @@ function Header() {
     <header className={cx('wrapper')}>
       {/* Mobile header */}
       <div className={cx('mobile-header', 'd-lg-none')}>
-        <div className={cx('overlay')} ref={overlayRef} onClick={hanldeBack}></div>
+        <div className={cx('overlay')} ref={overlayRef} onClick={handleBack}></div>
         <div className={cx('content')} ref={contentRef}>
           <div className={cx('content-actions')}>
-            <button className={cx('btn-back')} onClick={hanldeBack}>
+            <button className={cx('btn-back')} onClick={handleBack}>
               <BackIcon />
             </button>
             {!isLogin ? (
@@ -147,20 +153,39 @@ function Header() {
                     <Tippy
                       offset={[0, 15]}
                       visible={isShowMessage && !window.location.href.includes('/message')}
-                      onClickOutside={() => setIsShowMessage(false)}
+                      onClickOutside={() => {
+                        setIsShowMessage(false)
+                      }}
                       interactive
                       placement="bottom"
                       render={(attrs) => (
                         <div {...attrs}>
                           <PopperWrapper>
-                            <ModalChat handleClose={handleCloseMessage} />
+                            <ModalChat
+                              handleClose={() => {
+                                handleCloseMessage()
+                                handleBack()
+                              }}
+                            />
                           </PopperWrapper>
                         </div>
                       )}
                     >
                       <button
                         className={cx('btn-action', 'd-md-none')}
+                        data-count={
+                          Array.isArray(conversationList)
+                            ? conversationList.filter(
+                                (convers) =>
+                                  convers.seen === false &&
+                                  convers.lastMessage &&
+                                  !convers.lastMessage.includes('null') &&
+                                  !convers.lastMessage.includes('Bạn'),
+                              ).length
+                            : 0
+                        }
                         onClick={() => {
+                          setIsShowNoti(false)
                           setIsShowMessage((prev) => !prev)
                         }}
                       >
@@ -179,7 +204,12 @@ function Header() {
                       render={(attrs) => (
                         <div {...attrs}>
                           <PopperWrapper>
-                            <Notification />
+                            <Notification
+                              handleClose={() => {
+                                setIsShowNoti(false)
+                                handleBack()
+                              }}
+                            />
                           </PopperWrapper>
                         </div>
                       )}
@@ -189,6 +219,7 @@ function Header() {
                         onClick={() => {
                           setIsShowNoti((prev) => !prev)
                         }}
+                        data-count={notificationList.filter((notification) => notification.seen === false).length}
                       >
                         <FontAwesomeIcon icon={faBell} />
                       </button>
@@ -223,18 +254,29 @@ function Header() {
             {menus.map((menu, index) =>
               menu.content.toLowerCase().includes('đối tác') ? (
                 <div key={index}>
-                  <button className={cx('drop-down')} onClick={() => setShowDetailPartner((prev) => !prev)}>
+                  <button
+                    style={{ width: '100%' }}
+                    className={cx('drop-down', { 'dropdown-active': isActive })}
+                    onClick={() => {
+                      isLogin
+                        ? setShowDetailPartner((prev) => !prev)
+                        : dispatch(setAuthModalVisible({ modalName: modalNames.LOGIN, isVisible: true }))
+                    }}
+                  >
                     {currentUser.roles?.includes('ADMIN') ? 'Đối tác' : 'Trở thành đối tác'}
                     <FontAwesomeIcon icon={faCaretDown} />
                   </button>
                   {isLogin && (
-                    <div className={cx('d-flex', 'flex-column', { hidden: !isShowDetailPartner })}>
+                    <div className={cx('d-flex', 'flex-column', { hidden: !isShowDetailPartner && isSmall })}>
                       <div className={cx('wrap-link')}>
                         <NavLink
+                          style={{ paddingLeft: '34px' }}
                           className={cx('link')}
+                          to="#!"
                           onClick={() => {
                             setShowDetailPartner(false)
                             getStatusParter('BUS_PARTNER')
+                            handleBack()
                           }}
                         >
                           Đối tác nhà xe
@@ -242,10 +284,13 @@ function Header() {
                       </div>
                       <div className={cx('wrap-link')}>
                         <NavLink
+                          style={{ paddingLeft: '34px' }}
                           className={cx('link')}
+                          to="#!"
                           onClick={() => {
                             setShowDetailPartner(false)
                             getStatusParter('CAR_RENTAL_PARTNER')
+                            handleBack()
                           }}
                         >
                           Đối tác cho thuê xe
@@ -253,10 +298,12 @@ function Header() {
                       </div>
                       <div className={cx('wrap-link')}>
                         <NavLink
+                          style={{ paddingLeft: '34px' }}
                           className={cx('link')}
                           onClick={() => {
                             setShowDetailPartner(false)
                             getStatusParter('DRIVER')
+                            handleBack()
                           }}
                         >
                           Đối tác tài xế
@@ -359,7 +406,7 @@ function Header() {
                     render={(attrs) => (
                       <div {...attrs}>
                         <PopperWrapper>
-                          <Notification handleClose={ () => setIsShowNoti(false)} />
+                          <Notification handleClose={() => setIsShowNoti(false)} />
                         </PopperWrapper>
                       </div>
                     )}
@@ -414,7 +461,7 @@ function Header() {
             <div key={index}>
               <Tippy
                 offset={[-1, 0]}
-                visible={isShowDetailPartner && isLogin}
+                visible={isShowDetailPartner && isLogin && !isSmall}
                 interactive
                 placement="bottom"
                 render={(attrs) => (
@@ -461,7 +508,7 @@ function Header() {
                 onClickOutside={() => setShowDetailPartner(false)}
               >
                 <button
-                  className={cx('drop-down')}
+                  className={cx('drop-down', { 'dropdown-active': isActive })}
                   onClick={() => {
                     isLogin
                       ? setShowDetailPartner((prev) => !prev)

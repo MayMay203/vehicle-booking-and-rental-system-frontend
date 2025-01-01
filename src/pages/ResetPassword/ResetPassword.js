@@ -67,7 +67,12 @@ function ResetPassword() {
             <FormInput
               value={password}
               title="Mật khẩu mới"
-              error="Mật khẩu có ít nhất 8 kí tự"
+              error={
+                password
+                  ? 'Mật khẩu có ít nhất 8 kí tự, chứa chữ cái, chữ số và kí tự đặt biệt'
+                  : 'Vui lòng nhập mật khẩu'
+              }
+              pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
               id="password"
               type="password"
               minLength="8"

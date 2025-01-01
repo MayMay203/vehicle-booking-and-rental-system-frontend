@@ -4,13 +4,13 @@ import styles from './Search.module.scss'
 import classNames from 'classnames/bind'
 import { getLocations } from '~/apiServices/getLocations'
 import { Select } from 'antd'
-import DatePicker from 'react-datepicker'
 import { config } from '~/config'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSearchTicket } from '~/redux/slices/searchSlice'
 import { getBusinessName } from '~/apiServices/user/getBusPartnerName'
 import { fetchAllBusTrips, fetchBusTicketList } from '~/redux/slices/busPartnerSlice'
+import DatePicker from 'react-datepicker'
 
 const cx = classNames.bind(styles)
 function Search({ noSelectBus, noSelectDate = false, type }) {
@@ -37,53 +37,20 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
     setDepartureDate(searchValues.departureDate)
   }, [searchValues])
 
-  // useEffect(() => {
-  //   async function fetchApi() {
-  //     const provinces = await getLocations(1)
-  //     if (provinces) {
-  //       const cleanedProvinces = provinces
-  //         .map((province) => {
-  //           const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
-  //           return {
-  //             ...province,
-  //             name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
-  //           }
-  //         })
-  //         .sort((a, b) => a.name.localeCompare(b.name))
-  //       setProvincesList(cleanedProvinces)
-  //     }
-  //     const businessNames = await getBusinessName()
-  //     if (businessNames) {
-  //       setBusinessList(businessNames)
-  //     }
-  //   }
-  //   fetchApi()
-  // }, [])
   useEffect(() => {
     async function fetchApi() {
       const provinces = await getLocations(1)
       if (provinces) {
         const cleanedProvinces = provinces
           .map((province) => {
-            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') 
             return {
               ...province,
-              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName,
             }
           })
           .sort((a, b) => a.name.localeCompare(b.name))
         setProvincesList(cleanedProvinces)
-        // const sortedProvinces = provinces
-        //   .map((province) => {
-        //     const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '')
-        //     return {
-        //       ...province,
-        //       name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName,
-        //     }
-        //   })
-        //   .sort((a, b) => a.name.localeCompare(b.name))
-
-        // setProvincesList([{ value: '', label: 'Tất cả' }, ...sortedProvinces])
       }
       const businessNames = await getBusinessName()
       if (businessNames) {
@@ -104,9 +71,6 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
     } else if (type === 'partner') {
       console.log('departureLocation:', departureLocation, '- arrivalLocation:', arrivalLocation)
       dispatch(fetchAllBusTrips({ dep: departureLocation, des: arrivalLocation }))
-      // if (window.location.origin === 'http://localhost:3000' && window.location.pathname === '/') {
-      //   navigate(config.routes.ticket)
-      // }
     } else if (type === 'partner-ticket') {
       console.log('departureLocation:', departureLocation, '- arrivalLocation:', arrivalLocation)
       dispatch(fetchBusTicketList({ dep: departureLocation, des: arrivalLocation }))
@@ -155,19 +119,6 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
           <div className={cx('item')}>
             <p className={cx('title')}>Nơi xuất phát</p>
             <div className={cx('custom-select')}>
-              {/* <Select
-                showSearch
-                defaultValue={departureLocation}
-                style={{
-                  width: '100%',
-                }}
-                optionFilterProp="label"
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                }
-                options={provincesList.map((province) => ({ value: province.name, label: province.name }))}
-                onChange={(value) => setDepartureLocation(value)}
-              /> */}
               <Select
                 showSearch
                 defaultValue={departureLocation}
@@ -179,7 +130,7 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
                   (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                 }
                 options={[
-                  { value: '', label: 'Tất cả' }, // Thêm lựa chọn này vào đầu danh sách
+                  { value: '', label: 'Tất cả' }, 
                   ...provincesList.map((province) => ({ value: province.name, label: province.name })),
                 ]}
                 onChange={(value) => setDepartureLocation(value)}
@@ -191,20 +142,6 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
           <div className={cx('item')}>
             <p className={cx('title')}>Nơi đến</p>
             <div className={cx('custom-select')}>
-              {/* <Select
-                showSearch
-                style={{
-                  width: '100%',
-                  fontSize: '1.6rem',
-                }}
-                defaultValue={arrivalLocation}
-                optionFilterProp="label"
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                }
-                onChange={(value) => setArrivalLocation(value)}
-                options={provincesList.map((province) => ({ value: province.name, label: province.name }))}
-              /> */}
               <Select
                 showSearch
                 style={{
@@ -218,7 +155,7 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
                 }
                 onChange={(value) => setArrivalLocation(value)}
                 options={[
-                  { value: '', label: 'Tất cả' }, // Thêm lựa chọn này vào đầu danh sách
+                  { value: '', label: 'Tất cả' }, 
                   ...provincesList.map((province) => ({ value: province.name, label: province.name })),
                 ]}
               />
@@ -229,12 +166,6 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
           <div className="col col-md-6">
             <div className={cx('item')}>
               <p className={cx('title')}>Ngày đi</p>
-              {/* <input
-                type="date"
-                className="w-100"
-                defaultValue={new Date().toISOString().split('T')[0]}
-                min={new Date().toISOString().split('T')[0]}
-              /> */}
               <div className="custom-picker">
                 <DatePicker
                   selected={departureDate}

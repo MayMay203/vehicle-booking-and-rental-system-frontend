@@ -16,7 +16,6 @@ import { saveEmail } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function RegisterModal() {
-  console.log('re-render register modal')
   const showRegister = useSelector((state) => state.authModal.register)
   const dispatch = useDispatch()
 
@@ -121,11 +120,14 @@ function RegisterModal() {
           ></FormInput>
           <FormInput
             title="Mật khẩu"
-            error={password ? 'Mật khẩu có ít nhất 8 kí tự' : 'Vui lòng nhập mật khẩu'}
+            error={
+              password ? 'Mật khẩu có ít nhất 8 kí tự, chứa chữ cái, chữ số và kí tự đặt biệt' : 'Vui lòng nhập mật khẩu'
+            }
             id="password"
             type="password"
             minLength="8"
             placeholder="Nhập mật khẩu"
+            pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
             value={password}
             onChange={(e) => handleChange(e.target.value, setPassword)}
             required
