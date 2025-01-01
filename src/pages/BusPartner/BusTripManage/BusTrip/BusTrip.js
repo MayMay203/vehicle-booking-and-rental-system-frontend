@@ -109,6 +109,7 @@ import { fetchAllBusTrips } from '~/redux/slices/busPartnerSlice'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
 import { ConfigProvider } from 'antd'
 import viVN from 'antd/locale/vi_VN'
+import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 
 const cx = classNames.bind(styles)
 function BusTrip() {
@@ -177,8 +178,8 @@ function BusTrip() {
       dataIndex: 'delete',
       align: 'center',
       width: 90,
-      render: (record) => (
-        <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
+      render: (text, record) => (
+        <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} onClick={() => handleDeleteBusTrip(record.key)}/>
       ),
     },
   ]
@@ -222,6 +223,20 @@ function BusTrip() {
   const handleEditBus = (id) => {
     setShowModalUpdate(true)
     setSelectedBusTrip(id)
+  }
+  const handleDeleteBusTrip = (id) => {
+    if (dispatch(checkLoginSession())) {
+          dispatch(
+            setConfirmModalVisible({
+              name: generalModalNames.DEL_BUS_TRIP,
+              title: 'Xác nhận xoá chuyến xe',
+              description: 'Bạn có chắc chắn xoá chuyến xe này?',
+              isOpen: true,
+              modalType: 'confirm',
+              id,
+            }),
+          )
+        }
   }
   return (
     <div className={cx('container', 'mb-5 mt-5')}>

@@ -2,7 +2,6 @@ import classNames from 'classnames/bind'
 import styles from './TicketBus.module.scss'
 import { Col, Form, Row } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 const cx = classNames.bind(styles)
 function ViewTicketBus({ data, enableEdit = true }) {
   // const dispatch = useDispatch()
@@ -20,13 +19,13 @@ function ViewTicketBus({ data, enableEdit = true }) {
   //   //chưa reset hết được
   //   setDataBusTicket({ startOperationDay: '', discountPercentage: '', departureTime: '', breakDays: [''] })
   // }
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setDataBusTicket((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
-  }
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target
+  //   setDataBusTicket((prevState) => ({
+  //     ...prevState,
+  //     [name]: value,
+  //   }))
+  // }
   // const handleStartTimeChange = (time) => {
   //   setStartTime(time)
   //   setDataBusTicket((prevState) => ({
@@ -108,10 +107,10 @@ function ViewTicketBus({ data, enableEdit = true }) {
   // }
   return (
     <div className={cx('row', 'wrap-ticket')}>
-      <Col className={cx('id-ticket')} sm={12} lg={1}>
+      <Col className={cx('id-ticket', 'me-5')} sm={1} lg={1}>
         Vé xe
       </Col>
-      <Col sm={12} lg={5} className={cx('p-3')}>
+      <Col sm={6} lg={5} className={cx('p-3')}>
         <Row>
           <Col>
             <Form.Group className={cx('txt', 'mb-3', 'mt-3')} controlId="formAdd.ControlInput5">
@@ -125,6 +124,7 @@ function ViewTicketBus({ data, enableEdit = true }) {
                 aria-label="departureTime"
                 value={dataBusTicket.departureTime}
                 className={cx('txt')}
+                readOnly
               />
               {/* <DatePicker
                 value={startTime}
@@ -151,6 +151,7 @@ function ViewTicketBus({ data, enableEdit = true }) {
                 aria-label="startOperationDay"
                 value={dataBusTicket.startOperationDay}
                 className={cx('txt')}
+                readOnly
               />
               {/* <DatePicker
                 placeholder="Chọn ngày"
@@ -193,26 +194,27 @@ function ViewTicketBus({ data, enableEdit = true }) {
                 name="discountPercentage"
                 aria-label="discountPercentage"
                 className={cx('txt')}
-                onChange={(e) => {
-                  let value = e.target.value
-                  if (value === '' || (value >= 0 && value <= 100)) {
-                    handleInputChange(e)
-                  } else {
-                    toast.error('Vui lòng nhập gí trị từ 0 - 100!', {
-                      autoClose: 2000,
-                      position: 'top-center',
-                    })
-                  }
-                }}
-                max="100"
-                min="0"
+                readOnly
+                // onChange={(e) => {
+                //   let value = e.target.value
+                //   if (value === '' || (value >= 0 && value <= 100)) {
+                //     handleInputChange(e)
+                //   } else {
+                //     toast.error('Vui lòng nhập gí trị từ 0 - 100!', {
+                //       autoClose: 2000,
+                //       position: 'top-center',
+                //     })
+                //   }
+                // }}
+                // max="100"
+                // min="0"
               />
             </Form.Group>
           </Col>
         </Row>
       </Col>
-      <Col lg={1} className={cx('line-vertical')}></Col>
-      <Col sm={12} lg={5} className={cx('wrap-break-days')}>
+      <Col lg={1} className={cx('line-vertical', 'd-sm-none')}></Col>
+      <Col sm={5} lg={5} className={cx('wrap-break-days')}>
         <Row className="align-items-start">
           {/* <div className={cx('line-vertical')}></div> */}
           <div className="d-flex align-items-start">
@@ -231,6 +233,7 @@ function ViewTicketBus({ data, enableEdit = true }) {
                       aria-label="startDay"
                       value={item.startDay}
                       className={cx('txt')}
+                      readOnly
                     />
                   </Form.Group>
                   <Form.Group className={cx('txt', 'd-flex')} controlId={`formAddEnd_${item.id}`}>
@@ -242,6 +245,7 @@ function ViewTicketBus({ data, enableEdit = true }) {
                       aria-label="endDay"
                       value={item.endDay}
                       className={cx('txt')}
+                      readOnly
                     />
                   </Form.Group>
                 </div>

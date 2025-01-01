@@ -1,16 +1,18 @@
 import * as httpRequest from '~/utils/httpRequest'
 import { getAccessToken } from '~/utils/cookieUtils'
-export const detailBusSchedule = async (id, date) => {
+export const updateStatusOrder = async (id, status) => {
   try {
-    const response = await httpRequest.get(
-      `/v1/busTripSchedules/detail?busTripScheduleId=${id}&departureDate=${date}`,
+    const response = await httpRequest.post(
+      `/v1/vehicle-rental-order/update-status-rental-order?rentalOrderId=${id}&status=${status}`,
+      {},
       {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,
         },
       },
     )
-    return response.data
+    console.log('updateStatusOrder--', response)
+    return response
   } catch (error) {
     // console.log(error)
     throw httpRequest.getMessage(error)

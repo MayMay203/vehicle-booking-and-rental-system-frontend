@@ -13,6 +13,7 @@ function FormConfirmRegister({ isRegister, formData, handleFormConfirmChange, ha
      handleFormConfirmChange(formConfirm)
    }, [formConfirm, handleFormConfirmChange])
    const [activeConfirm, setActiveConfirm] = useState(false)
+   const [active, setActive] = useState(true)
    const handleChangeSelect = (e) => {
      const { name, checked } = e.target
      setFormConfirm((prevState) => ({
@@ -20,6 +21,10 @@ function FormConfirmRegister({ isRegister, formData, handleFormConfirmChange, ha
        [name]: checked,
      }))
    }
+    const handleClick = (e) => {
+      setActive(false)
+      handleRegister(e)
+    }
    const handleCancel = (e) => {
      e.preventDefault()
      setFormConfirm({
@@ -83,7 +88,7 @@ function FormConfirmRegister({ isRegister, formData, handleFormConfirmChange, ha
             <Button outline className={cx('btn', 'btn-cancel')} onClick={handleCancel}>
               Hủy
             </Button>
-            <Button primary className={cx('btn', 'btn-save')} disabled={!activeConfirm} onClick={handleRegister}>
+            <Button primary className={cx('btn', 'btn-save')} disabled={!activeConfirm && !active} onClick={handleClick}>
               Xác nhận
             </Button>
           </div>

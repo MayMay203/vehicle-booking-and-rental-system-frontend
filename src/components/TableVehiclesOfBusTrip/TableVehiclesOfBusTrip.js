@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import styles from './TableVehiclesOfBusTrip.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'antd'
 import { useEffect, useState } from 'react'
 import ModalBusInfor from '~/pages/BusPartner/BusManage/ModalBusInfor'
@@ -11,8 +11,11 @@ import { fetchAllBuses } from '~/redux/slices/busPartnerSlice'
 import { detailBusByID } from '~/apiServices/busPartner/detailBusByID'
 import { ConfigProvider } from 'antd'
 import viVN from 'antd/locale/vi_VN'
+import { checkScheduleHasOrder } from '~/apiServices/busPartner/checkScheduleHasOrder'
+import { toast } from 'react-toastify'
+import { generalModalNames, setConfirmModalVisible } from '~/redux/slices/generalModalSlice'
 const cx = classNames.bind(styles)
-function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
+function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable, date, idBusTrip }) {
   const [isHovered, setIsHovered] = useState(null)
   const [modalBusInforShow, setModalBusInforShow] = useState(false)
   const listBuses = useSelector((state) => state.busPartner.busList)
@@ -80,7 +83,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
       sorter: (a, b) => {
         const convertToMinutes = (time) => {
           const [hours, minutes] = time.split(':').map(Number)
-          return hours * 60 + minutes 
+          return hours * 60 + minutes
         }
         return convertToMinutes(a.timeDeparture) - convertToMinutes(b.timeDeparture)
       },
@@ -119,6 +122,14 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
       // sorter: (a, b) => a.age - b.age,
     },
     {
+      title: 'Tổng vé',
+      dataIndex: 'totalSeat',
+      align: 'center',
+      defaultSortOrder: 'descend',
+      width: 110,
+      // sorter: (a, b) => a.age - b.age,
+    },
+    {
       title: 'Còn trống',
       dataIndex: 'available',
       align: 'center',
@@ -138,29 +149,77 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
     //     />
     //   ),
     // },
+
     {
-      title: 'Sửa',
-      dataIndex: 'update',
-      align: 'center',
-      width: 90,
-      render: (text, record) => (
-        <FontAwesomeIcon
-          icon={faEdit}
-          style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
-          onClick={handleUpdateSchedule}
-        />
-      ),
-    },
-    {
-      title: 'Xóa',
+      title: 'Hủy vé',
       dataIndex: 'delete',
       align: 'center',
       width: 90,
-      render: (record) => (
-        <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
-      ),
+      render: (text, record) => {
+        const isDisabled = date <= new Date() // So sánh ngày
+
+        return (
+          <FontAwesomeIcon
+            icon={faTrash}
+            style={{
+              cursor: isDisabled ? 'not-allowed' : 'pointer',
+              color: isDisabled ? '#D5420C80' : '#D5420C',
+              fontSize: '2rem',
+              opacity: isDisabled ? 0.5 : 1,
+            }}
+            onClick={() => !isDisabled && handleCancelScheduleOneDay(record.key)}
+          />
+        )
+      },
     },
   ]
+  // const getInforBusSchedule = async(id) => {
+  //   if(dispatch(checkLoginSession())){
+
+  //   }
+  // }
+  
+  const handleCancelScheduleOneDay = async (id) => {
+    if (dispatch(checkLoginSession())) {
+      try {
+        console.log('id Schedule iss:', id)
+        // const response = await cancelScheduleOneDay(id, dayjs(date, 'DD/MM/YYYY').format('YYYY-MM-DD'))
+        const response = await checkScheduleHasOrder(id)
+        if (response.info.includes('has orders')) {
+          console.log('vô')
+          dispatch(
+            setConfirmModalVisible({
+              name: generalModalNames.DEL_BUS_TRIP_SCHEDULE_ONE_DAY,
+              title: 'Xác nhận xoá vé xe',
+              description:
+                'Bạn có chắc chắn xoá vé xe này? Hiện vé xe đang có đơn đặt, nếu bạn đồng ý xóa chúng tôi sẽ hủy toàn bộ những đơn hàng đó.',
+              isOpen: true,
+              modalType: 'confirm',
+              id,
+              date,
+              idBusTrip,
+            }),
+          )
+        } else if (response.info.includes("hasn't orders")) {
+          dispatch(
+            setConfirmModalVisible({
+              name: generalModalNames.DEL_BUS_TRIP_SCHEDULE_ONE_DAY,
+              title: 'Xác nhận xoá vé xe',
+              description: 'Bạn có chắc chắn xoá vé xe này?',
+              isOpen: true,
+              modalType: 'confirm',
+              id,
+              date,
+              idBusTrip,
+            }),
+          )
+        } else {
+          toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+          console.log('--response:', response)
+        }
+      } catch (error) {}
+    }
+  }
   // const data = [
   //   {
   //     key: '1',
@@ -192,7 +251,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
         getInforBusByID()
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBus.id])
   useEffect(() => {
     const matchedBus = listBuses.find((item) => item.licensePlate === selectedBus.licensePlateNumber)
@@ -212,6 +271,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
       status: item.status,
       timeDeparture: item.departureTime,
       discount: item.discountPercentage,
+      totalSeat: item?.busInfo?.busType?.numberOfSeat,
       available: item.availableSeats,
       rating: item.ratingValue,
     }))
@@ -236,7 +296,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable }) {
           onChange={onChange}
           bordered
           pagination={false}
-          scroll={{ x: 'auto', y: 500 }}
+          scroll={{ x: 'max-content', y: 500 }}
           // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
           rowClassName="table-row-center" // Thêm class để căn giữa dọc
           showSorterTooltip={{
