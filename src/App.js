@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { publicRoutes } from './routes'
 import { DefaultLayout, ProtectedRoute } from './layouts'
 import { ToastContainer } from 'react-toastify'
@@ -25,6 +25,7 @@ import UtilityModal from './Modals/GeneralModal/UtilityModal'
 import FeeServiceModal from './Modals/GeneralModal/FeeServiceModal'
 import Message from './pages/Message'
 import ScrollToTop from './components/ScrollToTop'
+import { config } from './config'
 
 function App() {
   const dispatch = useDispatch()
@@ -54,7 +55,7 @@ function App() {
               ></Route>
             )
           })}
-          {/* <Route path="*" element={<Navigate to={config.routes.error} />} /> */}
+          <Route path="*" element={<Navigate to={config.routes.error} />} />
         </Routes>
         <ToastContainer
           position="top-right"

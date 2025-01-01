@@ -14,7 +14,6 @@ function Notification({ handleClose }) {
   const { currentUser } = useSelector((state) => state.user)
   const { currentRole } = useSelector((state) => state.menu)
   const { notificationList } = useSelector((state) => state.conversation)
-  console.log('notificationList', notificationList)
   const [filterList, setFilterList] = useState([])
   const dispatch = useDispatch()
 
