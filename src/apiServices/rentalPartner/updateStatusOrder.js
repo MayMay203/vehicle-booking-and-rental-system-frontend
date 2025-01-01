@@ -14,7 +14,7 @@ export const updateStatusOrder = async (id, status) => {
     console.log('updateStatusOrder--', response)
     return response
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     throw httpRequest.getMessage(error)
   }
 }

@@ -12,7 +12,7 @@ export const detailBusSchedule = async (id, date) => {
     )
     return response.data
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     throw httpRequest.getMessage(error)
   }
 }
