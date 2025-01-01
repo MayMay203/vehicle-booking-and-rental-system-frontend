@@ -1,3 +1,4 @@
+@use '../../abstracts' as abstracts;
 .wrapper{
     color: var(--dark-red-color);
     font-weight: 400;
@@ -19,6 +20,10 @@
     cursor: pointer;
     border-radius: 4px;
     color: var(--dark-red-color);
+
+    @include abstracts.screen(sm){
+        display: none;
+    }
 
     &:hover{
         background-color: var(--primary-bg);
