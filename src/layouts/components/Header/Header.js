@@ -42,7 +42,7 @@ function Header() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    if (pathname.includes('register-partner')) {
+    if (pathname.includes('register-partner') || pathname.includes('manage-partners')) {
       setIsActive(true)
     } else {
       setIsActive(false)
