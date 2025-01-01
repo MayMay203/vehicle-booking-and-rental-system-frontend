@@ -69,9 +69,9 @@ function FormEmergencyContact({ updateActive, formEmergencyContact, handleSaveFo
           aria-label="phonenumber"
           className={cx('txt', 'mb-0')}
           onInput={(e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '') // Loại bỏ ký tự không phải là số
+            e.target.value = e.target.value.replace(/[^0-9]/g, '') 
             if (e.target.value.length > 10) {
-              e.target.value = e.target.value.slice(0, 10) // Giới hạn số ký tự nhập vào 10 số
+              e.target.value = e.target.value.slice(0, 10)
             }
           }}
           onChange={handleInputChange}

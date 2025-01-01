@@ -43,22 +43,9 @@ function BusTicket() {
     setModalAddTicketShow(true)
   }
   const [modalDetailTicketShow, setModalDetailTicketShow] = useState(false)
-  // const handleDetailTicket = () => {
-  //   setModalDetailTicketShow(true)
-  // }
-  // const [modalUpdateTicketShow, setModalUpdateTicketShow] = useState(false)
-  // const handleUpdateTicket = () => {
-  //   setModalUpdateTicketShow(true)
-  // }
   return (
     <div className={cx('container')}>
       <div className="mb-5"></div>
-      {/* <Search noSelectBus={true} noSelectDate={true} type={'partner'}></Search>
-      <div className="d-flex justify-content-center mt-4 align-items-center">
-        <Button primary onClick={() => handleAddTicket()}>
-          Thêm vé xe
-        </Button>
-      </div> */}
       <Row className="d-flex mb-5">
         <div className="col">
           <Search noSelectBus={true} noSelectDate={true} type={'partner-ticket'}></Search>

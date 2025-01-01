@@ -4,8 +4,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 import styles from './InforRental.module.scss'
 import classNames from 'classnames/bind'
 import Form from 'react-bootstrap/Form'
-// import { useNavigate } from 'react-router-dom'
-// import VoucherSlider from '../Voucher/VoucherSlider'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 import RentalOrder from '~/pages/RentalPage/RentalOrder'
@@ -17,11 +15,6 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllVouchersForUser, fetchAllVouchersInSystem } from '~/redux/slices/voucherSlice'
 const cx = classNames.bind(styles)
 function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime, endDateTime }) {
-  // const listVoucher = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
-  // const [startTime, setStartTime] = useState(new Date())
-  // const [endTime, setEndTime] = useState(new Date())
-  // const [startDate, setStartDate] = useState(new Date())
-  // const [endDate, setEndDate] = useState(new Date())
   const dispatch = useDispatch()
   const { isLogin, currentUser } = useSelector((state) => state.user)
   const [modalOrderShow, setModalOrderShow] = useState(false)
@@ -30,21 +23,7 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
   const { voucherUser } = useSelector((state) => state.voucher)
   const [formData, setFormData] = useState({
     start_rental_time: startDateTime.startDT,
-    // startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
-    // ' ' +
-    // (`0${startDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
-    //   '-' +
-    //   `0${startDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
-    //   '-' +
-    //   startDate.getFullYear()),
     end_rental_time: endDateTime.endDT,
-    // endTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) +
-    // ' ' +
-    // (`0${endDate.getDate()}`.slice(-2) + // Ngày có 2 chữ số
-    //   '-' +
-    //   `0${endDate.getMonth() + 1}`.slice(-2) + // Tháng có 2 chữ số
-    //   '-' +
-    //   endDate.getFullYear()),
     pickup_location: inforVehicleRental?.location,
     total: 0,
     status: 'confirmed',
@@ -63,28 +42,15 @@ function InforRental({ typeService, inforVehicleRental, newPrice, startDateTime,
   })
   console.log('endDatatime ---4---', endDateTime)
   console.log('startDatatime ---- 4----', startDateTime)
-  // useEffect(() => {
-  //   if (startDateTime?.startDT) {
-  //     setStartDate(startDateTime?.startDate)
-  //     setStartTime(startDateTime?.startTime)
-  //     console.log('startDateTime?.startDate ---- 4----', startDateTime?.startDate)
-  //     // setStartTime(startDateTime?.startTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }))
-  //   }
-  //   if (endDateTime?.endDT) {
-  //     setEndDate(endDateTime?.endDate)
-  //     setEndTime(endDateTime?.endTime)
-  //     console.log('endDateTime?.endTime ---- 4----', endDateTime?.endTime)
-  //   }
-  // }, [])
   useEffect(() => {
     const fetchRentalPrice = async () => {
       try {
         const response = await calculateRentalPrice(startDateTime.startDT, endDateTime.endDT, newPrice)
         console.log('setPriceRental', response)
-        setPriceRental(response) // Cập nhật giá trị giá thuê
+        setPriceRental(response) 
         setFormData((prevFormData) => ({
           ...prevFormData,
-          price: response, // Cập nhật formData với giá trị mới
+          price: response, 
         }))
       } catch (error) {
         console.error('Error fetching rental price:', error)

@@ -13,8 +13,6 @@ import { ConfigProvider } from 'antd'
 import viVN from 'antd/locale/vi_VN'
 const cx = classNames.bind(styles)
 function StatisticsTicket() {
-  //   const [isCorrectDateStart, setIsCorrectDateStart] = useState(false)
-  //   const [isCorrectDateEnd, setIsCorrectDateEnd] = useState(false)
   const [routes, setRoutes] = useState([])
   const statisticsByList = [
     { value: 'year', label: 'Theo năm' },
@@ -102,15 +100,7 @@ function StatisticsTicket() {
       )
     }
   }
-  //  const data = [
-  //    {
-  //      key: '1',
-  //      route: 'Hà Nội - Quảng Ngãi',
-  //      soldTicket: '232',
-  //      unsoldTicket: '12',
-  //      cancelTicket: '1',
-  //    },
-  //  ]
+
   useEffect(() => {
     setData(listData.map((item, index) => ( {
        key: index,
@@ -119,30 +109,7 @@ function StatisticsTicket() {
        cancelTicket: item.cancelledTickets,
      })))
   }, [listData])
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target
-  //   if (name === 'dateStart') {
-  //     const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
-  //     if (!regex.test(value)) {
-  //       setIsCorrectDateStart(false)
-  //       return
-  //     }
-  //   }
-  //   if (name === 'dateEnd') {
-  //     const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
-  //     if (!regex.test(value)) {
-  //       setIsCorrectDateEnd(false)
-  //       return
-  //     }
-  //   }
-
-  //   setIsCorrectDateStart(true)
-  //   setIsCorrectDateEnd(true)
-  //   //   setFormData((prevState) => ({
-  //   //     ...prevState,
-  //   //     [name]: value,
-  //   //   }))
-  // }
+ 
   const columns = [
     {
       title: 'STT',
@@ -257,15 +224,7 @@ function StatisticsTicket() {
               <Form.Label className="mb-3">
                 Ngày bắt đầu<span className="text-danger">*</span>
               </Form.Label>
-              {/* <Form.Control
-                type="text"
-                placeholder="dd-mm-yyyy"
-                name="dateStart"
-                aria-label="dateStart"
-                className={cx('txt', 'm-0')}
-                onChange={handleInputChange}
-              />
-              {!isCorrectDateStart && <p className={cx('txt-warn')}>Vui lòng nhập theo dạng: dd-mm-yyyy</p>} */}
+             
               <DatePicker
                 picker="startDate"
                 onChange={handleStartDateChange}
@@ -278,15 +237,7 @@ function StatisticsTicket() {
               <Form.Label className="mb-3">
                 Ngày kết thúc<span className="text-danger">*</span>
               </Form.Label>
-              {/* <Form.Control
-                type="text"
-                placeholder="dd-mm-yyyy"
-                name="dateEnd"
-                aria-label="dateEnd"
-                className={cx('txt', 'm-0')}
-                onChange={handleInputChange}
-              />
-              {!isCorrectDateEnd && <p className={cx('txt-warn')}>Vui lòng nhập theo dạng: dd-mm-yyyy</p>} */}
+          
               <DatePicker
                 picker="endDate"
                 onChange={handleEndDateChange}
@@ -309,12 +260,10 @@ function StatisticsTicket() {
           <Table
             columns={columns}
             dataSource={data}
-            // onChange={onChange}
             bordered
-            // pagination={false}
             scroll={{ x: 'auto', y: 500 }}
             pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-            rowClassName="table-row-center" // Thêm class để căn giữa dọc
+            rowClassName="table-row-center"
             showSorterTooltip={{
               target: 'sorter-icon',
             }}

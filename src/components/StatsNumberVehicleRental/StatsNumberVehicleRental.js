@@ -99,22 +99,6 @@ function StatsNumberVehicleRental() {
     console.log('----loại xe:', uniqueVehicleTypes)
   }, [vehicleList, provinces])
 
-  // const handleStats = () => {
-  //   if (dispatch(checkLoginSession())) {
-  //     dispatch(
-  //       fetchStatsRental({
-  //         location: selectedLocation,
-  //         vehicleType: selectedVehicleType,
-  //         year: selectedYear.format('YYYY'),
-  //         month: selectedMonth.format('MM'),
-  //         startDate: selectedStartDate.format('YYYY-MM-DD'),
-  //         endDate: selectedEndDate.format('YYYY-MM-DD'),
-  //         statsBy: statisticsBy,
-  //       }),
-  //     )
-  //   }
-  // }
-
   const handleStats = async () => {
     if (dispatch(checkLoginSession())) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
@@ -353,12 +337,10 @@ function StatsNumberVehicleRental() {
         <Table
           columns={columns}
           dataSource={data}
-          // onChange={onChange}
           bordered
-          // pagination={false}
           scroll={{ y: 500 }}
           pagination={{ position: ['bottomCenter'], pageSize: 8 }}
-          rowClassName="table-row-center" // Thêm class để căn giữa dọc
+          rowClassName="table-row-center"
           showSorterTooltip={{
             target: 'sorter-icon',
           }}

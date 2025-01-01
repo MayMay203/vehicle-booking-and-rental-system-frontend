@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClockRotateLeft, faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
 
 import { useState, useEffect } from 'react'
-// import Button from '~/components/Button'
-// import AddManyTickets from '~/components/AddManyTickets'
 import TableSchedulesOfBus from '~/components/TableSchedulesOfBus'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
@@ -38,33 +36,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
     typeSeat: '',
     price: '',
   })
-
-  // const [activeUpdate, setActiveUpdate] = useState(false)
-
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target
-  //   if (name === 'departure') {
-  //     const matches = listBusTrips.filter((trip) => trip.departureLocation === value)
-  //     console.log('matches', matches)
-  //     setFilteredDestinations(matches)
-  //   }
-  //   // Khi cả departure và destination đều có giá trị, tìm thời gian hành trình
-  //     if (formData.departure && formData.destination) {
-  //       const matchingTrip = listBusTrips.find(
-  //         (trip) =>
-  //           trip.departureLocation === updatedFormData.departure &&
-  //           trip.arrivalLocation === updatedFormData.destination,
-  //       )
-  //       if (matchingTrip) {
-  //          setFormData((prevState) => ({
-  //     ...prevState,
-  //    extendTime: matchingTrip.journeyDuration,
-  //   }))}
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }))
-  // }
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
       dispatch(fetchAllBusTypes())
@@ -73,14 +44,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
-  // useEffect(() => {
-  //   if (dispatch(checkLoginSession())) {
-  //     dispatch(fetchAllBusTypes())
-  //     dispatch(fetchAllBusesByBusType(formData.nameType))
-  //     dispatch(fetchAllBusTrips())
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
   console.log('listBusTrips---', listBusTrips)
   const fetchInforBusTrip = async (id) => {
     try {
@@ -120,7 +83,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
       setFilteredDestinations(uniqueDestinations)
     }
 
-    // Nếu đủ cả departure và destination, tìm duration
     const updatedFormData = {
       ...formData,
       [name]: value,
@@ -147,34 +109,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
     }))
   }
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target
-  //   setFormData((prevState) => {
-  //     const updatedFormData = {
-  //       ...prevState,
-  //       [name]: value,
-  //     }
-  //     // Khi cả departure và destination đều có giá trị, tìm thời gian hành trình
-  //     if (updatedFormData.departure && updatedFormData.destination) {
-  //       const matchingTrip = listBusTrips.find(
-  //         (trip) =>
-  //           trip.departureLocation === updatedFormData.departure &&
-  //           trip.arrivalLocation === updatedFormData.destination,
-  //       )
-
-  //       // Gán extendTime nếu tìm thấy hành trình phù hợp
-  //       if (matchingTrip) {
-  //         updatedFormData.extendTime = matchingTrip.journeyDuration
-  //       } else {
-  //         updatedFormData.extendTime = '' // Không tìm thấy
-  //       }
-  //     }
-
-  //     return updatedFormData
-  //   })
-  // }
-
-  // console.log('data bên con:', data)
   console.log('formData:', formData)
 
   useEffect(() => {
@@ -222,17 +156,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.nameType])
 
-  // const handleCancel = () => {
-  //   setFormData({
-  //     departure: 'Đà Nẵng',
-  //     typeVehicle: 'Limousine34GiuongNam',
-  //     licensePlateNumber: '30G-49344',
-  //     destination: 'Hà Nội',
-  //     extendTime: '2 tiếng',
-  //     numberSeat: '34',
-  //     typeSeat: 'Giường nằm',
-  //   })
-  // }
   return (
     <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -321,27 +244,7 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
               </Form.Group>
             </Col>
             <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
-              {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput11">
-                <Form.Label className="mb-3">Địa điểm đến</Form.Label>
-                <Form.Select
-                  value={formData.destination}
-                  name="destination"
-                  aria-label="destination"
-                  className={cx('txt', 'selectbox', 'infor-item')}
-                  // readOnly
-                  // disabled
-                  onChange={handleInputChange}
-                >
-                  <option key={-1} value="">
-                    Chọn tỉnh/thành phố
-                  </option>
-                  {filteredDestinations.map((trip, index) => (
-                    <option key={index} value={trip.arrivalLocation}>
-                      {trip.arrivalLocation} - {trip.journeyDuration}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group> */}
+  
               <Form.Group className={cx('txt', 'mb-5')} controlId="destination">
                 <Form.Label className="mb-3">Địa điểm đến</Form.Label>
                 <Form.Select
@@ -354,12 +257,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
                   onChange={handleInputChange}
                   disabled={!filteredDestinations.length}
                 >
-                  {/* <Form.Select
-                  name="destination"
-                  value={formData.destination}
-                  onChange={handleInputChange}
-                  disabled={!filteredDestinations.length} // Disable nếu chưa có danh sách
-                > */}
                   <option value="">Chọn địa điểm đến</option>
                   {filteredDestinations.map((destination, index) => (
                     <option key={index} value={destination}>
@@ -428,7 +325,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
               </Row>
             </Col>
           </Row>
-          {/* <AddManyTickets initialItems={[1]}></AddManyTickets> */}
           <div className="align-items-center row">
             <div className="d-flex align-items-center">
               <p className={cx('mb-2', 'me-3', 'txt')}>
@@ -452,20 +348,6 @@ function ModalManageBusTicket({ enableEdit = true, functionModal, ...props }) {
           <TableSchedulesOfBus idBus={formData?.licensePlateNumber}></TableSchedulesOfBus>
         </div>
       </Modal.Body>
-      {/* <Modal.Footer>
-        <Row className="justify-content-center mt-4">
-          <Col></Col>
-          <Col className="d-flex justify-content-center">
-            <Button outline className="ms-5 me-5" onClick={handleCancel}>
-              Hủy
-            </Button>
-            <Button primary className="ms-5 me-5" disabled={!activeUpdate}>
-              {functionModal === 'add' ? 'Thêm' : 'Cập nhật'}
-            </Button>
-          </Col>
-          <Col></Col>
-        </Row>
-      </Modal.Footer> */}
     </Modal>
   )
 }

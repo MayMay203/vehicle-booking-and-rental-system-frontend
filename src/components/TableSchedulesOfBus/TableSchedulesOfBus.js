@@ -55,17 +55,6 @@ const disabledDate = (current) => {
   return !breakDays.some(({ start, end }) => dayjs(currentDay).isBetween(start, end, 'day', '[]'))
 }
 
-
-
-
-
-
-  // // Xử lý khi click vào "Chi tiết"
-  // const handleDetailClick = (id) => {
-  //   setOpenPicker(true)
-  //   setSelectedSchedule(id)
-  // }
-
   // Xử lý khi chọn ngày
   const handleDateChange = (dates) => {
     setSelectedDays(dates)
@@ -177,13 +166,7 @@ useEffect(() => {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-  // const navigate = useNavigate()
-  // const handleViewBus = (id) => {
-  //   navigate('detail-service-rental', { state: { enableEdit: false, busID: id } })
-  // }
-  // const handleEditBus = (id) => {
-  //   navigate('edit-service-rental', { state: { enableEdit: true, busID: id } })
-  // }
+
   return (
     <>
       <ConfigProvider>

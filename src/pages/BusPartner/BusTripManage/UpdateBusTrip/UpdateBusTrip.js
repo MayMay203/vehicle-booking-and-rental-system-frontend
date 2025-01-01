@@ -122,22 +122,6 @@ function UpdateBusTrip({ idBusTrip, ...props }) {
           initialItems={initialItemDropOffs}
         ></AddManyDropOffLocation>
       </Modal.Body>
-      {/* <Modal.Footer className="d-flex justify-content-center align-items-center">
-        <div className="row w-100">
-          <Col></Col>
-          <div className="col d-flex justify-content-center">
-            <Button outline className={cx('btn')}>
-              Hủy
-            </Button>
-          </div>
-          <div className="col d-flex justify-content-center">
-            <Button primary outline className={cx('btn')}>
-              Cập nhật
-            </Button>
-          </div>
-          <Col></Col>
-        </div>
-      </Modal.Footer> */}
     </Modal>
   )
 }

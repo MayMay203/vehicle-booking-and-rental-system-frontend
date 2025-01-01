@@ -136,10 +136,6 @@ function ModalDetailOrderRental({
           </div>
         </Row>
         <Row>
-          {/* <div className={cx('wrap-infor')}>
-            <span>Thuế VAT:</span>
-            <span className={cx('align-right')}>{inforOrder?.pricingInfo?.priceTotal.toLocaleString('vi-VN')} đ</span>
-          </div> */}
         </Row>
         <Row>
           <div className={cx('wrap-infor')}>
@@ -163,14 +159,6 @@ function ModalDetailOrderRental({
             </span>
           </div>
         </Row>
-        {/* <Row>
-          <div className={cx('wrap-note')}>
-            <span className={cx('note')}>Lưu ý:</span>
-            <span className={cx('note-content')}>
-              Mọi tiền bạn đã thanh toán sẽ được hoàn trả 100% nếu chủ xe hủy đơn và hệ thống sẽ đánh giá xe 1 sao.
-            </span>
-          </div>
-        </Row> */}
       </Modal.Body>
       <Modal.Footer>
         {!isNoti && (

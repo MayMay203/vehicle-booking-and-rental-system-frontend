@@ -15,15 +15,6 @@ import { convertTimeFormat } from '~/utils/convertTimeFormat'
 import InforBusTrip from '../../BusTripManage/DetailBusTrip/InforBusTrip'
 const cx = classNames.bind(styles)
 function ModalUpdateBusTicket({ enableEdit = true, functionModal, ticket, ...props }) {
-  // const [formData, setFormData] = useState({
-  //   departure: 'Đà Nẵng',
-  //   typeVehicle: 'Limousine34GiuongNam',
-  //   licensePlateNumber: '30G-49344',
-  //   destination: 'Hà Nội',
-  //   extendTime: '2 tiếng',
-  //   numberSeat: '34',
-  //   typeSeat: 'Giường nằm',
-  // })
   const [formData, setFormData] = useState({
     idBusTrip: '',
     departure: '',
@@ -39,14 +30,6 @@ function ModalUpdateBusTicket({ enableEdit = true, functionModal, ticket, ...pro
   })
 
   const [activeUpdate, setActiveUpdate] = useState(false)
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }))
-  //   console.log(formData)
-  // }
 
   useEffect(() => {
     // const allFieldsFilled = Object.values(formData).every((value) => value.toString().trim() !== '')
@@ -87,11 +70,7 @@ function ModalUpdateBusTicket({ enableEdit = true, functionModal, ticket, ...pro
       operation: ticket?.operation,
     })
   }
-  // const statuses = [
-  //   { value: 'Đang hoạt động', label: 'Đang hoạt động' },
-  //   { value: 'Tạm dừng hoạt động', label: 'Tạm dừng hoạt động' },
-  //   { value: 'Dừng hoạt động', label: 'Dừng hoạt động' },
-  // ]
+
   const [selectedDate, setSelectedDate] = useState(dayjs())
 
   const handleDateChange = (date) => {
@@ -109,14 +88,6 @@ function ModalUpdateBusTicket({ enableEdit = true, functionModal, ticket, ...pro
       </Modal.Header>
       <Modal.Body>
         <div className={cx('container', 'wrap-container')}>
-          {/* <Col md={3} className={cx('background-red', 'ml-auto')}>
-            <DatePicker
-              onChange={handleDateChange}
-              value={selectedDate} // Hiển thị giá trị được chọn
-              format="DD/MM/YYYY" // Định dạng ngày
-              className={cx('content-calendar')}
-            />
-          </Col> */}
           <Tabs defaultActiveKey="infor" id="fill-tab-bus-ticket" className="mb-3" fill>
             <Tab eventKey="infor" title="Thông tin">
               <Row className={cx('form-infor-bus-trip', 'justify-content-center')}>
@@ -287,16 +258,6 @@ function ModalUpdateBusTicket({ enableEdit = true, functionModal, ticket, ...pro
                 </Col>
               </Row>
               <AddManyTickets initialItems={[1]} data={formData} enableEdit={false}></AddManyTickets>
-              {/* <Accordion>
-                <Accordion.Item eventKey={1}>
-                  <Accordion.Header>
-                    <span className={cx('txt')}>Thông tin chuyến xe</span>
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    <InforBusTrip idBusTrip={formData?.idBusTrip}></InforBusTrip>
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion> */}
             </Tab>
             <Tab eventKey="list-order" title="Danh sách đơn đặt vé">
               <Col md={3} className={cx('background-red', 'ml-auto')}>

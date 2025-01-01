@@ -140,9 +140,6 @@ function BusTypeManage() {
   }, [dispatch])
   useEffect(() => {
     try {
-      // const allBusTypes = await getAllBusTypes()
-      // console.log('allBusTypes:', allBusTypes)
-      // const newData = allBusTypes.result?.map((item) => ({
       const newData = allBusTypes?.map((item) => ({
         key: item.id,
         typeSeat: item.chairType,
@@ -174,9 +171,6 @@ function BusTypeManage() {
     setShowModalUpdate(true)
     setIDSlectedBusType(id)
   }
-  // useEffect(() => {
-  //   handleGetAllBusTypes()
-  // }, [handleGetAllBusTypes, showModalAdd, showModalUpdate])
   return (
     <div className="container mt-4 mb-5">
       <div className={cx('header')}>{/* <p>Danh sách loại xe khách</p> */}</div>
