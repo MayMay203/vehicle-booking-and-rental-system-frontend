@@ -197,7 +197,7 @@ function TableListRentalService({ typeService }) {
         onChange={onChange}
         bordered
         // pagination={false}
-        scroll={{ x: 'auto', y: 500 }}
+        scroll={{ x: 'max-content', y: 500 }}
         pagination={{ position: ['bottomCenter'], pageSize: 6 }}
         rowClassName="table-row-center"
         showSorterTooltip={{

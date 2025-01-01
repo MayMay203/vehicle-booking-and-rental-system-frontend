@@ -11,9 +11,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllOrder } from '~/redux/slices/rentalPartnerSlice'
 import { createCoversation } from '~/apiServices/messageService/createConverstation'
-import { setMessageModalVisible } from '~/redux/slices/generalModalSlice'
+import { generalModalNames, setConfirmModalVisible, setMessageModalVisible } from '~/redux/slices/generalModalSlice'
 import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
+import { faSquare, faSquareCheck } from '@fortawesome/free-regular-svg-icons'
+import { toast } from 'react-toastify'
 const cx = classNames.bind(styles)
 function OrderManage() {
   const columns = [
@@ -21,7 +23,7 @@ function OrderManage() {
       title: 'STT',
       dataIndex: '',
       align: 'center',
-      width: 60,
+      width: 80,
       render: (text, record, index) => index + 1,
     },
     {
@@ -29,7 +31,7 @@ function OrderManage() {
       dataIndex: 'nameRental',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 190,
+      width: 250,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -69,7 +71,7 @@ function OrderManage() {
       dataIndex: 'number',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 100,
+      width: 150,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -77,7 +79,7 @@ function OrderManage() {
       dataIndex: 'charge',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 100,
+      width: 150,
       // sorter: (a, b) => a.age - b.age,
       render: (value) => {
         return value ? `${value.toLocaleString('vi-VN')} đ` : '-'
@@ -96,24 +98,31 @@ function OrderManage() {
         />
       ),
     },
-    // {
-    //   title: 'Đã trả xe',
-    //   dataIndex: 'update',
-    //   align: 'center',
-    //   width: 70,
-    //   render: (text, record) => (
-    //     <FontAwesomeIcon
-    //       icon={faSquare}
-    //       style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
-    //       onClick={() => handleReturned(record.key)}
-    //     />
-    //   ),
-    // },
+    {
+      title: 'Đã trả xe',
+      dataIndex: 'update',
+      align: 'center',
+      width: 90,
+      render: (text, record) =>
+        record.statusOrder === 'returned' ? (
+          <FontAwesomeIcon
+            icon={faSquareCheck}
+            style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
+            onClick={() => handleReturned(record.key, 'not_returned')}
+          />
+        ) : (
+          <FontAwesomeIcon
+            icon={faSquare}
+            style={{ cursor: 'pointer', color: '#FF672F', fontSize: '2rem' }}
+            onClick={() => handleReturned(record.key, 'returned')}
+          />
+        ),
+    },
     {
       title: 'Nhắn tin',
       dataIndex: 'delete',
       align: 'center',
-      width: 70,
+      width: 90,
       // render: (record) => (
       //   <FontAwesomeIcon icon={faMessage} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
       // ),
@@ -148,6 +157,26 @@ function OrderManage() {
     const response = await getVehicleRentalByID(id)
     return response
   }
+  const handleReturned = (id, statusOrder) => {
+    if (dispatch(checkLoginSession())) {
+      try {
+        dispatch(
+          setConfirmModalVisible({
+            name: generalModalNames.UPDATE_STATUS_RENTAL_ORDERS,
+            title: 'Xác nhận',
+            description: statusOrder === 'not_returned' ? 'Khách hàng chưa trả xe?' : 'Khách hàng đã trả xe?',
+            isOpen: true,
+            modalType: 'confirm',
+            id: id,
+            status: statusOrder,
+            // startDate: startDate.toISOString(),
+          }),
+        )
+      } catch (error) {
+        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
+      }
+    }
+  }
   const handleChat = async (id) => {
     if (dispatch(checkLoginSession())) {
       // Create new conversation
@@ -181,7 +210,7 @@ function OrderManage() {
             const rentalInfo = await getInforRentalVehicle(item.rentalInfo.carRentalServiceId)
             setInforRentalVehicle(rentalInfo)
             return {
-              key: index,
+              key: item.orderId,
               typeVehicle: rentalInfo.vehicle_type,
               number: item.rentalInfo.numberOfVehicles,
               charge: item.pricingInfo.priceTotal,
@@ -192,6 +221,7 @@ function OrderManage() {
               accountID: item.customerInfo.accountId,
               transactionCode: item.transactionCode,
               inforRentalVehicle: rentalInfo,
+              statusOrder: item.rentalInfo.statusOrder,
             }
           }),
         )
@@ -220,7 +250,7 @@ function OrderManage() {
         onChange={onChange}
         bordered
         // pagination={false}
-        scroll={{ x: 'auto', y: 500 }}
+        scroll={{ x: 'max-content', y: 500 }}
         pagination={{ position: ['bottomCenter'], pageSize: 10 }}
         rowClassName="table-row-center" // Thêm class để căn giữa dọc
         showSorterTooltip={{

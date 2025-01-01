@@ -23,6 +23,7 @@ export const generalModalNames = {
   DEL_VOUCHER: 'deleteVoucher',
   SUSPENDED_BUS_SCHEDULE: 'suspendedBusSchedule',
   INFOR_RENTAL_ORDER: 'inforRentalOrder',
+  UPDATE_STATUS_RENTAL_ORDERS: 'updateStatusRentalOrder'
 }
 
 const initialState = {

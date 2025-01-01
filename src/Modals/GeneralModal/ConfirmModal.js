@@ -36,6 +36,8 @@ import dayjs from 'dayjs'
 import { suspendBusSchedule } from '~/apiServices/busPartner/suspendBusSchedule'
 import ModalDetailBusTicket from '~/pages/BusPartner/BusTicketManage/ModalDetailBusTicket'
 import { useState } from 'react'
+import { updateStatusOrder } from '~/apiServices/rentalPartner/updateStatusOrder'
+import { fetchAllOrder } from '~/redux/slices/rentalPartnerSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
@@ -186,7 +188,6 @@ function ConfirmModal() {
       const startDate = showConfirmModal.startDate
       try {
         if (dispatch(checkLoginSession())) {
-          
           await suspendBusSchedule(id, status)
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
           // dispatch(
@@ -273,6 +274,22 @@ function ConfirmModal() {
           dispatch(fetchAllVouchers({ page: 1 }))
         } else {
           toast.error('Mã khuyến mãi đã được sử dụng. Không thể xoá!', { autoClose: 1200, position: 'top-center' })
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+        }
+      }
+    } else if (showConfirmModal.name === generalModalNames.UPDATE_STATUS_RENTAL_ORDERS) {
+      if (dispatch(checkLoginSession())) {
+        const id = showConfirmModal.id
+        const status = showConfirmModal.status
+        console.log(status)
+        console.log(id)
+        const response = await updateStatusOrder(id, status)
+        if (response?.statusCode === 200) {
+          toast.success('Cập nhật thành công!', { autoClose: 1000, position: 'top-center' })
+          dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
+          dispatch(fetchAllOrder())
+        } else {
+          toast.error('Cập nhật thất bại. Vui lòng thử lại', { autoClose: 1200, position: 'top-center' })
           dispatch(setConfirmModalVisible({ modalType: 'confirm', isOpen: false }))
         }
       }

@@ -129,8 +129,8 @@ function RegisterPartner() {
 
   const notesPartnerDriver = [
     { id: 1, content: 'Đọc kĩ quy định và chính sách bảo mật', sub_contents: [], icon: 'faCircleCheck'},
-    { id: 2, content: 'Không chia sẽ', sub_contents: [], icon: 'faCircleCheck'},
-    { id: 3, content: 'Nếu không tuân thủ thì sẽ...', sub_contents: [], icon: 'faCircleCheck'},
+    { id: 2, content: 'Không chia sẻ tài khoản cho bên thứ ba.', sub_contents: [], icon: 'faCircleCheck'},
+    { id: 3, content: 'Nếu không tuân thủ thì sẽ bị xử lí theo quy định.', sub_contents: [], icon: 'faCircleCheck'},
   ]
   const notesIsPartnerDriver = [
     {

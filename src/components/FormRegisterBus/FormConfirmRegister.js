@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
 function FormConfirmRegister({ isRegister, formData, handleFormConfirmChange, handleRegister }) {
   const [formConfirm, setFormConfirm] = useState(formData)
+   const [active, setActive] = useState(true)
   useEffect(() => {
     const allSelected = Object.values(formConfirm).every((value) => value === true)
     setActiveConfirm(allSelected)
@@ -19,6 +20,10 @@ function FormConfirmRegister({ isRegister, formData, handleFormConfirmChange, ha
       ...prevState,
       [name]: checked,
     }))
+  }
+   const handleClick = (e) => {
+    setActive(false)
+    handleRegister(e)
   }
   const handleCancel = (e) => {
     e.preventDefault()
@@ -83,7 +88,7 @@ function FormConfirmRegister({ isRegister, formData, handleFormConfirmChange, ha
             <Button outline className={cx('btn', 'btn-cancel')} onClick={handleCancel}>
               Hủy
             </Button>
-            <Button primary className={cx('btn', 'btn-save')} disabled={!activeConfirm} onClick={handleRegister}>
+            <Button primary className={cx('btn', 'btn-save')} disabled={!activeConfirm && !active} onClick={handleClick}>
               Xác nhận
             </Button>
           </div>

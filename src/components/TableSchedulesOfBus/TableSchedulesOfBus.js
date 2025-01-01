@@ -8,9 +8,11 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 import { fetchAllSchedulesByBusID } from '~/redux/slices/busPartnerSlice'
 import { getAllBreakDaysOfBusSchedule } from '~/apiServices/busPartner/getAllBreakDaysOfBusSchedule'
 import dayjs from 'dayjs'
-import dayjsGenerateConfig from 'rc-picker/es/generate/dayjs'
 import { ConfigProvider } from 'antd'
 import { DatePicker } from 'antd'
+import isBetween from 'dayjs/plugin/isBetween'
+
+dayjs.extend(isBetween)
 const { RangePicker } = DatePicker
 const cx = classNames.bind(styles)
 function TableSchedulesOfBus({ handleUpdateSchedule, idBus }) {
@@ -24,52 +26,36 @@ function TableSchedulesOfBus({ handleUpdateSchedule, idBus }) {
   const [selectedDays, setSelectedDays] = useState([]) // Lưu các ngày được chọn
   const [data, setData] = useState([])
 
-  // Gọi API lấy ngày nghỉ khi component load
-  useEffect(() => {
-    const fetchBreakDays = async () => {
-     if(dispatch(checkLoginSession())){
-      if(selectedSchedule){
+ useEffect(() => {
+   const fetchBreakDays = async () => {
+     if (dispatch(checkLoginSession())) {
+       if (selectedSchedule) {
          const response = await getAllBreakDaysOfBusSchedule(selectedSchedule)
          if (response) {
            const mappedDays = response.map((item) => ({
-             start: dayjs(item.startDay, 'DD-MM-YYYY'),
-             end: dayjs(item.endDay, 'DD-MM-YYYY'),
+             start: dayjs(item.startDay, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+             end: dayjs(item.endDay, 'DD-MM-YYYY').format('YYYY-MM-DD'),
            }))
            setBreakDays(mappedDays)
          }
-      }
+       }
      }
-    }
-    fetchBreakDays()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSchedule])
+   }
+   fetchBreakDays()
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [selectedSchedule])
 
-  // // Hàm disable các ngày nghỉ
-  // const disabledDate = (current) => {
-  //   return breakDays.some(({ start, end }) => {
-  //     return current.isBetween(start, end, 'day', '[]')
-  //   })
-  // }
-// const disabledDate = (current) => {
-//   const currentDay = dayjs(current) // Chuyển current sang dayjs
-
-
-//   // Chỉ cho phép chọn nếu ngày nằm trong khoảng nghỉ
-//   const isInBreak = breakDays.some(({ start, end }) => {
-//     return currentDay.isBetween(start, end, 'day', '[]') // Kiểm tra ngày trong khoảng
-//   })
-
-//   return !isInBreak // Chỉ cho phép chọn ngày nghỉ
-// }
-const handleDetailClick = (id) => {
-  setSelectedSchedule(id)
-  setOpenPicker(true)
-}
+ const handleDetailClick = (id) => {
+   setSelectedSchedule(id)
+   setOpenPicker(true)
+ }
 
 const disabledDate = (current) => {
-  const currentDay = dayjs(current)
-  return !breakDays.some(({ start, end }) => currentDay.isBetween(start, end, 'day', '[]'))
+  const currentDay = dayjs(current).format('YYYY-MM-DD')
+  return !breakDays.some(({ start, end }) => dayjs(currentDay).isBetween(start, end, 'day', '[]'))
 }
+
+
 
 
 
@@ -200,7 +186,7 @@ useEffect(() => {
   // }
   return (
     <>
-      <ConfigProvider picker={dayjsGenerateConfig}>
+      <ConfigProvider>
         <Table
           columns={columns}
           dataSource={data}

@@ -31,6 +31,7 @@ function FormRegisterBus() {
     setNow(now + 100 / 3)
   }
   const [isRegister, setIsRegister] = useState(false)
+  
   const handleRegister = async (e) => {
     e.preventDefault()
     if (dispatch(checkLoginSession())) {

@@ -237,7 +237,7 @@ function DetailBusTrip() {
               onChange={onChange}
               bordered
               pagination={false}
-              scroll={{ x: 'auto', y: 500 }}
+              scroll={{ x: 'max-content', y: 500 }}
               // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
               rowClassName="table-row-center" // Thêm class để căn giữa dọc
               showSorterTooltip={{

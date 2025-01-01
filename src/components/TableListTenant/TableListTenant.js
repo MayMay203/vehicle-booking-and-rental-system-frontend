@@ -184,7 +184,7 @@ function TableListTenant({ idRegister }) {
           rowKey={(record) => record.orderId}
           bordered
           pagination={false}
-          scroll={{ x: 'auto', y: 500 }}
+          scroll={{ x: 'max-content', y: 500 }}
           onChange={(pagination, filters, sorter, extra) => console.log('params', pagination, filters, sorter, extra)}
           className={cx('table-container')}
         />
