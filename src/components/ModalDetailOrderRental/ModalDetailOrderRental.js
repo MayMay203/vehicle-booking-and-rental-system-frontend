@@ -51,7 +51,7 @@ function ModalDetailOrderRental({
         <Row>
           <span className={cx('time-payment')}>Thanh toán lúc: {inforOrder?.createAt}</span>
           <span className={cx('time-payment')}>
-            Thuê:{inforRentalVehicle?.vehicle_type + ' '}
+            Thuê: {inforRentalVehicle?.vehicle_type + ' '}
             {inforRentalVehicle?.manufacturer}
             {inforRentalVehicle?.type === 0 ? ' tự lái' : ' có người lái'}
           </span>
@@ -174,9 +174,17 @@ function ModalDetailOrderRental({
       </Modal.Body>
       <Modal.Footer>
         {!isNoti && (
-          <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
-            Xem đánh giá
-          </Button>
+          <>
+            <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
+              {/* Xem đánh giá */}
+            </Button>
+            <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
+              {/* Xem đánh giá */}
+            </Button>
+            <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
+              {/* Xem đánh giá */}
+            </Button>
+          </>
         )}
         {isNoti && (
           <Link
