@@ -11,7 +11,6 @@ import { registerAdAccount } from '~/apiServices/registerAdAccount'
 
 const cx = classNames.bind(styles)
 function RegisterAdminModal() {
-  console.log('re-render register admin modal')
   const showAdRegisterModal = useSelector((state) => state.authModal.registerAdmin)
   const dispatch = useDispatch()
 

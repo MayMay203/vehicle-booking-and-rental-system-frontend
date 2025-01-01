@@ -32,7 +32,6 @@ import { verifyDriverPartner } from '~/apiServices/verifyDriverPartner'
 
 const cx = classNames.bind(styles)
 function DetailDriverPartner() {
-  console.log('re-render detail driver modal')
   const showDetailDriverPartnerModal = useSelector((state) => state.generalModal.DetailDriverPartner)
   const { id, isOpen, status } = showDetailDriverPartnerModal
   const [detailData, setDetailData] = useState({})

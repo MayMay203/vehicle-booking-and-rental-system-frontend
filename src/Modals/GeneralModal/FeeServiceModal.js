@@ -20,7 +20,6 @@ import { updateFeeService } from '~/apiServices/manageFeeService/updateFeeServic
 
 const cx = classNames.bind(styles)
 function FeeServiceModal() {
-  console.log('re-render fee service modal')
   const dispatch = useDispatch()
   const showFeeServiceModal = useSelector((state) => state.generalModal.feeServiceModal)
   const { id, isOpen } = showFeeServiceModal

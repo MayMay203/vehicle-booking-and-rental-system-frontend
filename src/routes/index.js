@@ -112,7 +112,7 @@ const publicRoutes = [
   {
     path: config.routes.resetPassword,
     component: ResetPassword,
-    layout: null,
+    layout: HeaderOnly,
   },
   {
     path: config.routes.authenticate,

@@ -13,7 +13,6 @@ import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 const cx = classNames.bind(styles)
 
 function AuthCodeModal() {
-  console.log('re-render auth code modal')
   const showAuthCodeModal = useSelector((state) => state.authModal.authCode)
   const email  = useSelector((state) => state.user.email)
   const dispatch = useDispatch()

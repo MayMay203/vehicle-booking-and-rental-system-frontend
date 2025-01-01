@@ -32,7 +32,6 @@ import SlideVoucher from '~/components/Voucher/SlideVoucher'
 
 const cx = classNames.bind(styles)
 function TicketModal() {
-  console.log('re-render ticket modal')
   const { currentUser } = useSelector((state) => state.user)
   const showTicketModal = useSelector((state) => state.generalModal.buyTicket)
   const { departureDate, arrivalLocation } = useSelector((state) => state.search.searchTicket)

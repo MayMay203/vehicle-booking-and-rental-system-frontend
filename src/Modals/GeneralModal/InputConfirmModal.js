@@ -23,7 +23,6 @@ import { refuseDriverPartner } from '~/apiServices/refuseDriverPartner'
 
 const cx = classNames.bind(styles)
 function InputConfirmModal() {
-  console.log('re-render input - confirm modal')
   const showInputConfirm = useSelector((state) => state.generalModal.inputConfirm)
   const dispatch = useDispatch()
 

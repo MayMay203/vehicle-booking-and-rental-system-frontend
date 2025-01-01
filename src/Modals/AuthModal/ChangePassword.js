@@ -12,7 +12,6 @@ import { checkLoginSession } from '~/redux/slices/userSlice'
 
 const cx = classNames.bind(styles)
 function ChangePassword() {
-  console.log('re-render change passsword modal')
   const showChangePassModal = useSelector((state) => state.authModal.changePassword)
   console.log(showChangePassModal)
   const dispatch = useDispatch()
@@ -70,7 +69,12 @@ function ChangePassword() {
         <form ref={formRef}>
           <FormInput
             title="Mật khẩu hiện tại"
-            error={currentPassword ? 'Mật khẩu có ít nhất 8 kí tự' : 'Vui lòng nhập mật khẩu'}
+            error={
+              currentPassword
+                ? 'Mật khẩu có ít nhất 8 kí tự, chứa chữ cái, chữ số và kí tự đặt biệt'
+                : 'Vui lòng nhập mật khẩu'
+            }
+            pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
             id="currentPassword"
             type="password"
             minLength="8"
@@ -84,7 +88,12 @@ function ChangePassword() {
           ></FormInput>
           <FormInput
             title="Mật khẩu mới"
-            error={newPassword ? 'Mật khẩu có ít nhất 8 kí tự' : 'Vui lòng nhập mật khẩu'}
+            error={
+              newPassword
+                ? 'Mật khẩu có ít nhất 8 kí tự, chứa chữ cái, chữ số và kí tự đặt biệt'
+                : 'Vui lòng nhập mật khẩu'
+            }
+            pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
             id="newPassword"
             type="password"
             minLength="8"

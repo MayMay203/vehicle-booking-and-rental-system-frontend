@@ -18,7 +18,6 @@ import { getMyAccount } from '~/apiServices/getMyAccount'
 
 const cx = classNames.bind(styles)
 function LoginModal() {
-  console.log('re-render-login modal')
   const showLoginModal = useSelector((state) => state.authModal.login)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -60,8 +59,7 @@ function LoginModal() {
       if (data.accountLogin.roles.includes('ADMIN')) {
         dispatch(setMenu('adminMenu'))
         navigate(config.routes.manageAccounts)
-      }
-      else dispatch(setMenu('userMenu'))
+      } else dispatch(setMenu('userMenu'))
       // add localstorage
       localStorage.setItem('accessToken', data.access_token)
       const currentAccount = await getMyAccount()
@@ -72,9 +70,8 @@ function LoginModal() {
     } catch (message) {
       dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
       if (String(message).includes('Tài khoản')) {
-        toast.error(message, {autoClose: 1300})
-      }
-      else {
+        toast.error(message, { autoClose: 1300 })
+      } else {
         toast.error('Email hoặc mật khẩu sai. Vui lòng thử lại!', { autoClose: 1300 })
       }
     }
@@ -121,7 +118,12 @@ function LoginModal() {
           ></FormInput>
           <FormInput
             title="Mật khẩu"
-            error={password ? 'Mật khẩu có ít nhất 8 kí tự' : 'Vui lòng nhập mật khẩu'}
+            error={
+              password
+                ? 'Mật khẩu có ít nhất 8 kí tự, chứa chữ cái, chữ số và kí tự đặt biệt'
+                : 'Vui lòng nhập mật khẩu'
+            }
+            pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
             id="password"
             type="password"
             minLength="8"
@@ -135,7 +137,7 @@ function LoginModal() {
           <Button className={cx('btn-submit')} onClick={handleLogin} disabled={!isValid} type="submit">
             Đăng nhập
           </Button>
-          <button className={cx('btn-link')} onClick={handleShowForget} type='button'>
+          <button className={cx('btn-link')} onClick={handleShowForget} type="button">
             Quên mật khẩu
           </button>
           <div className={cx('other')}>hoặc</div>
