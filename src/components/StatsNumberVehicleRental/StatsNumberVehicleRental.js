@@ -4,14 +4,15 @@ import { Form, Row } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 import { DatePicker, Table } from 'antd'
 import Button from '../Button'
+import { fetchAllVehicle, fetchAllVehicleTypes, fetchStatsRental } from '~/redux/slices/rentalPartnerSlice'
+import dayjs from 'dayjs'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
-import { fetchAllVehicleTypes, fetchStatsRental } from '~/redux/slices/rentalPartnerSlice'
-import dayjs from 'dayjs'
-import { getLocations } from '~/apiServices/getLocations'
 const cx = classNames.bind(styles)
 function StatsNumberVehicleRental() {
-  const typeVehicles = useSelector((state) => state.rentalPartner.vehicleTypeList)
+  // const typeVehicles = useSelector((state) => state.rentalPartner.vehicleTypeList)
+  const vehicleList = useSelector((state) => state.rentalPartner.vehicleList)
+  const [typeVehicles, setTypeVehicles] = useState([])
   const statisticsByList = [
     { value: 'year', label: 'Theo năm' },
     { value: 'month', label: 'Theo tháng' },
@@ -27,16 +28,6 @@ function StatsNumberVehicleRental() {
   const dispatch = useDispatch()
   // const listData = useSelector((state) => state.busPartner.statsBusTrip)
   const [data, setData] = useState([])
-
-  // const data = [
-  //   {
-  //     key: '1',
-  //     location: 'Hà Nội',
-  //     typeVehicle: 'Xe máy',
-  //     rentaled: '12',
-  //     canceled: '1',
-  //   },
-  // ]
   const [provincesList, setProvincesList] = useState([])
   const handleLocationChange = (event) => {
     setSelectedLocation(event.target.value)
@@ -68,6 +59,19 @@ function StatsNumberVehicleRental() {
       dispatch(fetchAllVehicleTypes())
     }
   }, [dispatch])
+  useEffect(() => {
+    if (dispatch(checkLoginSession())) {
+      dispatch(fetchAllVehicle({ typeService: '2', status: 'available' }))
+    }
+  }, [dispatch])
+  useEffect(() => {
+    const uniqueLocations = [...new Set(vehicleList.map((item) => item.location))]
+    setProvincesList(uniqueLocations)
+    const uniqueVehicleTypes = [...new Set(vehicleList.map((item) => item.vehicle_type))]
+    setTypeVehicles(uniqueVehicleTypes)
+    console.log('----loại xe:', uniqueVehicleTypes)
+  }, [vehicleList])
+
   // const handleStats = () => {
   //   if (dispatch(checkLoginSession())) {
   //     dispatch(
@@ -84,10 +88,10 @@ function StatsNumberVehicleRental() {
   //   }
   // }
   useEffect(() => {
-     handleStats()
-      
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    handleStats()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const handleStats = async () => {
     if (dispatch(checkLoginSession())) {
       const result = await dispatch(
@@ -101,51 +105,23 @@ function StatsNumberVehicleRental() {
           statsBy: statisticsBy,
         }),
       )
+
       if (fetchStatsRental.fulfilled.match(result)) {
-        setData(
-          result.payload.map((item, index) => ({
+        const filteredData = result.payload
+          .filter((item) => provincesList.includes(item.location) && typeVehicles.includes(item.vehicle_type))
+          .map((item, index) => ({
             key: index,
             location: item.location,
             typeVehicle: item.vehicle_type,
             rentaled: item.vehicleRentalAmount,
             canceled: item.canceledVehicleAmount,
-          })),
-        )
-        console.log('----data number rental:', result.payload)
+          }))
+
+        setData(filteredData)
+        console.log('----data number rental (filtered):', filteredData)
       }
     }
   }
-
-  // useEffect(() => {
-  //   setData(
-  //     listData.map((item, index) => ({
-  //       key: index,
-  //       location: item.location,
-  //       typeVehicle: item.vehicle_type,
-  //       rentaled: item.vehicleRentalAmount,
-  //       canceled: item.canceledVehicleAmount,
-  //     })),
-  //   )
-  // }, [listData])
-  console.log("----data number rental:", data)
-  useEffect(() => {
-    async function fetchApi() {
-      const provices = await getLocations(1)
-      if (provices) {
-        const cleanedProvinces = provices
-          .map((province) => {
-            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
-            return {
-              ...province,
-              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
-            }
-          })
-          .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
-        setProvincesList(cleanedProvinces)
-      }
-    }
-    fetchApi()
-  }, [])
   const columns = [
     {
       title: 'STT',
@@ -162,7 +138,7 @@ function StatsNumberVehicleRental() {
       showSorterTooltip: {
         target: 'full-header',
       },
-      sorter: (a, b) => a.name.length - b.name.length,
+      sorter: (a, b) => a.length - b.length,
     },
     {
       title: 'Loại xe',
@@ -206,8 +182,8 @@ function StatsNumberVehicleRental() {
               Tất cả
             </option>
             {provincesList.map((province, index) => (
-              <option key={index} value={province.name}>
-                {province.name}
+              <option key={index} value={province}>
+                {province}
               </option>
             ))}
           </Form.Select>
@@ -226,8 +202,8 @@ function StatsNumberVehicleRental() {
               Tất cả
             </option>
             {typeVehicles.map((type, index) => (
-              <option key={index} value={type.name}>
-                {type.name}
+              <option key={index} value={type}>
+                {type}
               </option>
             ))}
           </Form.Select>
