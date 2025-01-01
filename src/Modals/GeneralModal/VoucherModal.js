@@ -16,7 +16,6 @@ import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 function VoucherModal() {
-  console.log('re-render ticket modal')
   const showAddVoucher = useSelector((state) => state.generalModal.addVoucher)
   const { isOpen, voucherId } = showAddVoucher
   const dispatch = useDispatch()

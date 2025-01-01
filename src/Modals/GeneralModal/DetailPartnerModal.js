@@ -37,7 +37,6 @@ import { getAllBankAccounts } from '~/apiServices/bankAccount/getAllBankAccount'
 
 const cx = classNames.bind(styles)
 function DetailPartner() {
-  console.log('re-render detail business modal')
   const showDetailPartnerModal = useSelector((state) => state.generalModal.detailPartner)
   const { id, type, status, isOpen, isReadonly } = showDetailPartnerModal
   const [detailData, setDetailData] = useState()
@@ -223,12 +222,14 @@ function DetailPartner() {
           </div>
           <div>
             <div className="p-3">
-              <div className="flex flex-column">
-                <LinkItem title="Mô tả" Icon={<DescriptionIcon />} className={cx('custom')} />
-                <span className={cx('d-inline-block', 'px-4', 'line-height-1-4', 'mt-3')}>
-                  {detailData?.busPartnerInfo?.description || detailData?.carRentalPartnerInfo?.description}
-                </span>
-              </div>
+              {detailData?.busPartnerInfo?.description && (
+                <div className="flex flex-column">
+                  <LinkItem title="Mô tả" Icon={<DescriptionIcon />} className={cx('custom')} />
+                  <span className={cx('d-inline-block', 'px-4', 'line-height-1-4', 'mt-3')}>
+                    {detailData?.busPartnerInfo?.description}
+                  </span>
+                </div>  
+              )}
               <div className="flex flex-column row-gap-3 mt-4">
                 <LinkItem title="Chính sách" Icon={<PolicyIcon />} className={cx('custom')} />
                 <ul className={cx('list')}>
@@ -247,10 +248,16 @@ function DetailPartner() {
               </div>
               <div className="flex flex-column row-gap-3">
                 <LinkItem title="Giấy phép kinh doanh" Icon={<LicenceIcon />} className={cx('custom')} />
-                <div className="d-flex justify-content-center column-gap-5" style={{width: '100%'}}>
+                <div className="d-flex justify-content-center column-gap-5" style={{ width: '100%' }}>
                   {(detailData?.busPartnerInfo?.urlLicenses || detailData?.carRentalPartnerInfo?.urlLicenses)?.map(
                     (url, index) => (
-                      <img key={index} src={url} alt={`license-${index}`} className="object-fit-contain" style={{maxWidth: '100%'}}/>
+                      <img
+                        key={index}
+                        src={url}
+                        alt={`license-${index}`}
+                        className="object-fit-contain"
+                        style={{ maxWidth: '100%' }}
+                      />
                     ),
                   )}
                 </div>
@@ -409,10 +416,13 @@ function DetailPartner() {
               </Form.Select>
             </Form.Group>
             <div className="d-flex justify-content-center">
-              <Button outline onClick={(e) => {
-                e.preventDefault()
-                setIsEditBank(false)
-              }}>
+              <Button
+                outline
+                onClick={(e) => {
+                  e.preventDefault()
+                  setIsEditBank(false)
+                }}
+              >
                 Thoát
               </Button>
               <Button

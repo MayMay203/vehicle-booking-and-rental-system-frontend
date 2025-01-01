@@ -16,7 +16,6 @@ import { modalNames, setAuthModalVisible } from '~/redux/slices/authModalSlice'
 const cx = classNames.bind(styles)
 
 function PersonalModal() {
-  console.log('re-render personal modal')
   const showInfoModal = useSelector((state) => state.authModal.info)
   const email = useSelector((state) => state.user.email)
   const dispatch = useDispatch()

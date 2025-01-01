@@ -41,7 +41,6 @@ import { fetchAllOrder } from '~/redux/slices/rentalPartnerSlice'
 
 const cx = classNames.bind(styles)
 function ConfirmModal() {
-  console.log('re-render confirm modal')
   const showConfirmModal = useSelector((state) => state.generalModal.confirm)
   const dispatch = useDispatch()
 
