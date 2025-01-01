@@ -21,7 +21,7 @@ function AddServiceRental({ ...props }) {
   const [formData, setFormData] = useState({
     car_company: '',
     type_vehicle: '',
-    car_year: '',
+    vehicleLife: '',
     quantity: '',
     type_service: '',
     price1: '',
@@ -55,7 +55,7 @@ function AddServiceRental({ ...props }) {
     setFormData({
       car_company: '',
       type_vehicle: '',
-      car_year: '',
+      vehicleLife: '',
       quantity: '',
       type_service: '',
       price1: '',
@@ -91,7 +91,7 @@ function AddServiceRental({ ...props }) {
       try {
         const vehicleRegisterInfo = {
           location: formData.location,
-          vehicle_life: formData.car_year,
+          vehicle_life: formData.vehicleLife,
           manufacturer: formData.car_company,
           description: formData.description,
           quantity: parseInt(formData.quantity, 10), // Ensure integer value

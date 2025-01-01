@@ -13,6 +13,7 @@ export const statsRevenueRental = async (statsBy, year) => {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     })
+    console.log('statsRevenueRental', response.data)
     return response.data
   } catch (error) {
     console.log(error)

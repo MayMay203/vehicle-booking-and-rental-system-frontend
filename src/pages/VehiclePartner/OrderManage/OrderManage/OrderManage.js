@@ -16,6 +16,7 @@ import { getVehicleRentalByID } from '~/apiServices/user/getVehicleRentalByID'
 import { fetchAllConversationsByAcc } from '~/redux/slices/conversationSlice'
 import { faSquare, faSquareCheck } from '@fortawesome/free-regular-svg-icons'
 import { toast } from 'react-toastify'
+import { convertDateTimeFormat } from '~/utils/convertDateTimeFormat'
 const cx = classNames.bind(styles)
 function OrderManage() {
   const columns = [
@@ -23,7 +24,7 @@ function OrderManage() {
       title: 'STT',
       dataIndex: '',
       align: 'center',
-      width: 80,
+      width: 60,
       render: (text, record, index) => index + 1,
     },
     {
@@ -31,7 +32,7 @@ function OrderManage() {
       dataIndex: 'nameRental',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 250,
+      width: 220,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -48,6 +49,7 @@ function OrderManage() {
       align: 'center',
       defaultSortOrder: 'descend',
       width: 150,
+      render: (text) => convertDateTimeFormat(text),
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -55,7 +57,7 @@ function OrderManage() {
       dataIndex: 'typeVehicle',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 130,
+      width: 120,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -71,7 +73,7 @@ function OrderManage() {
       dataIndex: 'number',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 150,
+      width: 100,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -79,7 +81,7 @@ function OrderManage() {
       dataIndex: 'charge',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 150,
+      width: 110,
       // sorter: (a, b) => a.age - b.age,
       render: (value) => {
         return value ? `${value.toLocaleString('vi-VN')} đ` : '-'
@@ -89,7 +91,7 @@ function OrderManage() {
       title: 'Chi tiết',
       dataIndex: 'view',
       align: 'center',
-      width: 70,
+      width: 90,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
@@ -194,6 +196,7 @@ function OrderManage() {
     console.log('transactionCode-trong-cha:', transactionCode, '--inforRentalVehicle:', inforRentalVehicle)
     setModalDetailShow(true)
     setTransactionCode(transactionCode)
+    // setInforRentalVehicle(inforRentalVehicle)
   }
   console.log('transactionCode--cha:', transactionCode)
   useEffect(() => {

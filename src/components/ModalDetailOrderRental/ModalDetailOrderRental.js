@@ -27,6 +27,7 @@ function ModalDetailOrderRental({
     if (dispatch(checkLoginSession())) {
       const getInforOrder = async () => {
         const response = await getDetailTransaction(transactionCode, 'VEHICLE_RENTAL_ORDER')
+
         if (!inforRentalVehicleProp) {
           const rentalInfo = await getVehicleRentalByID(response?.rentalInfo?.carRentalServiceId)
           setInforRentalVehicle(rentalInfo)

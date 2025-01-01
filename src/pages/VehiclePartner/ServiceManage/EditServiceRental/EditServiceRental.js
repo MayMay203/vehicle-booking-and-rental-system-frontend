@@ -247,11 +247,11 @@ function EditServiceRental({ idRegister, ...props }) {
           </Row>
         </div>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className="justify-content-center">
         <Row className="justify-content-center">
           <Col></Col>
           <Col className="d-flex justify-content-center">
-            <Button primary className={cx('btn')}>
+            <Button outline className={cx('btn')}>
               Hủy
             </Button>
             <Button primary className={cx('btn')} disabled={!activeUpdate} onClick={handleUpdate}>

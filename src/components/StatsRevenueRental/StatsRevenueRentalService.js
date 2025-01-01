@@ -17,6 +17,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { convertMoneyIntoDigits } from '~/utils/convertMoneyIntoDigits'
 
 ChartJS.register(LineElement, LinearScale, CategoryScale, PointElement, Title, Tooltip, Legend)
 
@@ -50,7 +51,7 @@ function StatsRevenueRentalService() {
   const handleTypeFilterClick = (btnType) => {
     setActiveTypeFilter(btnType)
   }
-  console.log('setActiveTypeFilter:', activeTypeFilter)
+  console.log('setActiveTypeFilter:', activeTypeFilter, '---data:', data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim())))
   return (
     <div className="mb-3 mt-3 container">
       <div>
@@ -62,14 +63,14 @@ function StatsRevenueRentalService() {
                 className={cx('type-filter', { active: activeTypeFilter === 'ByMonth' })}
                 onClick={() => handleTypeFilterClick('ByMonth')}
               >
-                Doanh thu mỗi tháng
+                Doanh thu các tháng trong năm
               </Button>
               <Button
                 rounded
                 className={cx('type-filter', { active: activeTypeFilter === 'ByYear' })}
                 onClick={() => handleTypeFilterClick('ByYear')}
               >
-                Doanh thu mỗi năm
+                Doanh thu tất cả các năm
               </Button>
             </div>
           </Col>
@@ -112,10 +113,11 @@ function StatsRevenueRentalService() {
               {
                 data: [
                   null,
-                  ...data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim(), 10)),
+                  // ...data.revenueStatistic.map((item) => parseInt(item.revenue.replace('VND', '').trim())),
+                  ...data.revenueStatistic.map((item) => convertMoneyIntoDigits(item.revenue)),
                   null,
                 ], // Safely access data
-                label: 'Doanh thu mỗi tháng',
+                label: activeTypeFilter === 'ByMonth'?'Doanh thu tháng':'Doanh thu năm',
                 borderColor: '#FF7F50',
                 fill: false,
               },
@@ -126,7 +128,7 @@ function StatsRevenueRentalService() {
             plugins: {
               title: {
                 display: true,
-                text: activeTypeFilter === 'ByMonth' ? 'DOANH THU THEO THÁNG' : 'DOANH THU THEO NĂM',
+                text: activeTypeFilter === 'ByMonth' ? 'DOANH THU CÁC THÁNG TRONG NĂM' : 'DOANH THU TẤT CẢ CÁC NĂM',
                 color: '#A33A3A',
                 font: {
                   size: 30,
