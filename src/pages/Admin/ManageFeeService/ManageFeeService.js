@@ -93,7 +93,7 @@ function ManageFeeService() {
                 </td>
                 <td className="align-middle">
                   <div className="p-2 d-flex justify-content-center">
-                    <span className={cx('txt')}>{service.price}</span>
+                    <span className={cx('txt')}>{service.price.toLocaleString()}</span>
                   </div>
                 </td>
                 <td className="align-middle text-center">

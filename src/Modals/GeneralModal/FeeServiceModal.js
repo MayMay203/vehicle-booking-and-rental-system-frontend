@@ -39,6 +39,7 @@ function FeeServiceModal() {
     async function fetchData() {
       if (id) {
         const data = await getFeeService(id)
+        console.log(data)
         setName(data.name)
         setDescription(data.description)
         setPrice(data.price)
@@ -46,6 +47,8 @@ function FeeServiceModal() {
     }
     fetchData()
   }, [id])
+
+  console.log('id', id)
 
   const handleClose = (e) => {
     if (e) {
