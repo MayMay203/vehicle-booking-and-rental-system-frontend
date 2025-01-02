@@ -13,13 +13,11 @@ function CRUDImage({ initialNumberPhoto, imagePerRow, handleSave, obligatory, ur
   console.log('numberPhoto', numberPhoto)
   const fileInputRefs = useRef(Array(numberPhoto).fill(null))
   console.log('urlImages', urlImages)
-  // const [selectedFiles, setSelectedFiles] = useState(Array(numberPhoto).fill(null))
   const [selectedFiles, setSelectedFiles] = useState(urlImages)
   const [hasSaved, setHasSaved] = useState(false)
   const handleImageClick = (index) => {
     fileInputRefs.current[index].click()
   }
-  //   const [isSaved, setIsSaved] = useState(false)
   const [warningMessage, setWarningMessage] = useState('')
   const maxSizeImage = 3 * 1024 * 1024
   const handleFileChange = (index, event) => {
@@ -29,13 +27,13 @@ function CRUDImage({ initialNumberPhoto, imagePerRow, handleSave, obligatory, ur
       reader.readAsDataURL(file)
       reader.onload = (e) => {
         const newFiles = [...selectedFiles]
-        newFiles[index] = e.target.result // Lấy Data URL của ảnh
+        newFiles[index] = e.target.result 
         setSelectedFiles(newFiles)
         setHasSaved(false)
         setWarningMessage('')
 
         if (handleSave) {
-          handleSave(newFiles) // Cập nhật lại urlImages trong component cha
+          handleSave(newFiles) 
         }
       }
     } else if (file && !file.type.startsWith('image/')) {
@@ -70,15 +68,12 @@ function CRUDImage({ initialNumberPhoto, imagePerRow, handleSave, obligatory, ur
 
   useEffect(() => {
     const allImagesSelected = selectedFiles.every((file) => file !== null)
-    // const allImagesSelected = Array.isArray(selectedFiles) && selectedFiles.every((file) => file !== null)
-
-    // Chỉ gọi handleSave khi tất cả ảnh đã chọn và handleSave chưa được gọi
     if (allImagesSelected && !hasSaved) {
       handleSave(selectedFiles)
       console.log('url ảnh:', selectedFiles)
-      setHasSaved(true) // Đánh dấu là đã gọi handleSave
+      setHasSaved(true)
     } else if (!allImagesSelected && hasSaved) {
-      setHasSaved(false) // Đặt lại cờ khi có thay đổi và chưa đủ ảnh được chọn
+      setHasSaved(false) 
     }
   }, [selectedFiles, handleSave, hasSaved])
 

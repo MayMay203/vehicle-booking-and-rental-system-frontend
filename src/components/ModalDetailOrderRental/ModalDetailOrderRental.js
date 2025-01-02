@@ -51,7 +51,7 @@ function ModalDetailOrderRental({
         <Row>
           <span className={cx('time-payment')}>Thanh toán lúc: {inforOrder?.createAt}</span>
           <span className={cx('time-payment')}>
-            Thuê:{inforRentalVehicle?.vehicle_type + ' '}
+            Thuê: {inforRentalVehicle?.vehicle_type + ' '}
             {inforRentalVehicle?.manufacturer}
             {inforRentalVehicle?.type === 0 ? ' tự lái' : ' có người lái'}
           </span>
@@ -136,10 +136,6 @@ function ModalDetailOrderRental({
           </div>
         </Row>
         <Row>
-          {/* <div className={cx('wrap-infor')}>
-            <span>Thuế VAT:</span>
-            <span className={cx('align-right')}>{inforOrder?.pricingInfo?.priceTotal.toLocaleString('vi-VN')} đ</span>
-          </div> */}
         </Row>
         <Row>
           <div className={cx('wrap-infor')}>
@@ -163,20 +159,20 @@ function ModalDetailOrderRental({
             </span>
           </div>
         </Row>
-        {/* <Row>
-          <div className={cx('wrap-note')}>
-            <span className={cx('note')}>Lưu ý:</span>
-            <span className={cx('note-content')}>
-              Mọi tiền bạn đã thanh toán sẽ được hoàn trả 100% nếu chủ xe hủy đơn và hệ thống sẽ đánh giá xe 1 sao.
-            </span>
-          </div>
-        </Row> */}
       </Modal.Body>
       <Modal.Footer>
         {!isNoti && (
-          <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
-            Xem đánh giá
-          </Button>
+          <>
+            <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
+              {/* Xem đánh giá */}
+            </Button>
+            <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
+              {/* Xem đánh giá */}
+            </Button>
+            <Button onClick={props.onHide} className={cx('btn-confirm')} variant="none">
+              {/* Xem đánh giá */}
+            </Button>
+          </>
         )}
         {isNoti && (
           <Link

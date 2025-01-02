@@ -22,10 +22,6 @@ function TicketBusTrip({ handleShowDetail, ticket }) {
         <div className="d-flex flex-wrap align-items-center gap-3">
           <span className={cx('type')}>{ticket.busInfo.busType.name}:</span>
           <span className={cx('type')}>{ticket.busInfo.licensePlate}</span>
-          {/* <div className={cx('rating')}>
-            <StarIcon className={cx('icon')} width="2.6rem" />
-            <span>4.5(5)</span>
-          </div> */}
         </div>
         <div className="d-flex gap-3 align-items-center">
           <img className={cx('location-img')} alt="location" src={images.location} />
@@ -34,12 +30,6 @@ function TicketBusTrip({ handleShowDetail, ticket }) {
               <span>
                 {ticket.departureTime} {ticket.busTripInfo.departureLocation}
               </span>
-              {/* {status && (
-                  <p className={cx('date')}>
-                    <FontAwesomeIcon icon={faCalendar} />
-                    05/10/2024
-                  </p>
-                )} */}
             </div>
 
             <span className={cx('duration')}>{convertTimeFormat(ticket.journeyDuration)}</span>
@@ -59,16 +49,6 @@ function TicketBusTrip({ handleShowDetail, ticket }) {
             <span>{ticket.ratingTotal !== 0 ? ticket.ratingTotal : '_'}/5</span>
           </div>
         </div>
-        {/* {!status && <span className={cx('status', 'w-100')}>Còn 19 chỗ trống</span>}
-          {status && (
-            <button
-              className={cx('d-flex', 'align-items-center', 'gap-2', 'fs-4', 'detail-btn')}
-              onClick={handleShowDetailOrder}
-            >
-              Chi tiết hoá đơn
-              <FontAwesomeIcon icon={faReadme} className={cx('icon')}></FontAwesomeIcon>
-            </button>
-          )} */}
         <div className="d-flex w-100 align-items-center justify-content-between justify-content-md-end justify-content-lg-none mt-4 mt-lg-0 gap-sm-2 gap-md-5 gap-lg-5">
           <button className={cx('actions', 'd-flex', 'gap-2', 'align-items-center')}>
             <span onClick={handleShowDetail}>Thông tin chi tiết</span>

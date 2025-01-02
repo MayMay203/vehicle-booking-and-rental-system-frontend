@@ -22,9 +22,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
 
   console.log('-----formData-------', formData)
   const typeVehicles = useSelector((state) => state.rentalPartner.vehicleTypeList)
-  // const [listPolicies, setListPolicies] = useState(formData?.policy)
   console.log('formData.policy----', formData.policy)
-  // console.log('listPolicies----', listPolicies)
   const [policies, setPolicies] = useState(
     formData?.policy
       .split('@#$%&')
@@ -39,11 +37,6 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
     { value: '1', label: 'Thuê xe có người lái' },
     { value: '2', label: 'Cả 2 dịch vụ' },
   ]
-  // const statuses = [
-  //   { value: 'available', label: 'Đang hoạt động' },
-  //   { value: 'Tạm dừng hoạt động', label: 'Tạm dừng hoạt động' },
-  //   { value: 'Dừng hoạt động', label: 'Dừng hoạt động' },
-  // ]
   useEffect(() => {
     if (dispatch(checkLoginSession())) {
       dispatch(fetchAllVehicleTypes())
@@ -58,7 +51,7 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
   const handleAddPolicy = () => {
     setPolicies((prevState) => {
       const updatedPolicies = [...prevState, { value: '', id: policyCounter + 1 }]
-      setPolicyCounter((prev) => prev + 1) // Tăng counter
+      setPolicyCounter((prev) => prev + 1) 
       return updatedPolicies
     })
   }
@@ -68,11 +61,10 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
       setPolicies(
         formData?.policy
           .split('@#$%&')
-          // .filter(Boolean)
           .map((value, index) => ({ value: value.trim(), id: index })) || '',
       )
     }
-  }, [formData.policy]) // Chạy khi formData.policy thay đổi
+  }, [formData.policy])
 
   const handleRemovePolicy = (id) => {
     setPolicies((prevState) => {
@@ -175,20 +167,6 @@ function FormInforServiceRental({ mode, formData, handleInputChange }) {
           <Form.Label className="mb-3">
             Địa chỉ<span className="text-danger">*</span>
           </Form.Label>
-          {/* <Form.Select
-            value={formData.location}
-            name="location"
-            aria-label="location"
-            className={cx('txt', 'selectbox', 'infor-item')}
-            readOnly={view}
-            // disabled={view}
-          >
-            {provinces.map((province, index) => (
-              <option key={index} value={province.value}>
-                {province.label}
-              </option>
-            ))}
-          </Form.Select> */}
           <Form.Control
             type="text"
             value={formData.location}

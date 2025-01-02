@@ -59,9 +59,6 @@ function TakePhotoRegister({ id, initialNumberPhoto, name_photos, handleSave, ob
 
   useEffect(() => {
     const allImagesSelected = selectedFiles.every((file) => file !== null)
-    // const allImagesSelected = Array.isArray(selectedFiles) && selectedFiles.every((file) => file !== null)
-
-    // Chỉ gọi handleSave khi tất cả ảnh đã chọn và handleSave chưa được gọi
     if (allImagesSelected && !hasSaved) {
       handleSave(id, selectedFiles)
       console.log('url ảnh:', selectedFiles)
@@ -112,25 +109,6 @@ function TakePhotoRegister({ id, initialNumberPhoto, name_photos, handleSave, ob
               </div>
             )}
       </div>
-      {/* {!noButton && (
-        <div className="d-flex justify-content-center">
-          <Button outline className={cx('btn', 'btn-cancel')}>
-            Hủy
-          </Button>
-          <Button
-            primary
-            className={cx('btn', 'btn-save')}
-            disabled={!allImagesSelected || isSaved}
-            onClick={(event) => {
-              event.preventDefault()
-              setIsSaved(true)
-              handleSave()
-            }}
-          >
-            {!isSaved ? 'Lưu' : 'Đã lưu'}
-          </Button>
-        </div>
-      )} */}
     </div>
   )
 }

@@ -28,27 +28,9 @@ function UpdateTicketBus({ startDate, priceTicket, idTicket, data, enableEdit = 
       [name]: value,
     }))
   }
-  //   const handleStartTimeChange = (time) => {
-  //     setStartTime(time)
-  //     setDataBusTicket((prevState) => ({
-  //       ...prevState,
-  //       departureTime: time.format('HH:mm'),
-  //     }))
-  //   }
-  //   const handleStartDateChange = (date) => {
-  //     setStartDate(date)
-  //     setDataBusTicket((prevState) => ({
-  //       ...prevState,
-  //       startOperationDay: date?.format('DD-MM-YYYY'),
-  //     }))
-  //   }
   const [newBreakDays, setNewBreakDays] = useState([])
 
   const setBreakDays = (days) => {
-    // setDataBusTicket((prevState) => ({
-    //   ...prevState,
-    //   breakDays: days,
-    // }))
     setNewBreakDays(days)
     console.log()
   }
@@ -90,19 +72,12 @@ function UpdateTicketBus({ startDate, priceTicket, idTicket, data, enableEdit = 
         if (response) {
           toast.success('Cập nhật vé xe thành công!', { autoClose: 2000 })
           console.log('Cập nhật vé xe thành công!', response)
-          // dispatch(fetchOrderListBusTrip({ id: idTicket, date: dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD') }))
-          // const formattedDate = dayjs.isDayjs(startDate)
-          //   ? startDate.format('YYYY-MM-DD')
-          //   : dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
           setSaved(true)
           dispatch(fetchTicketInfor({ id: idTicket, date: dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD') }))
         }
       } catch (error) {
         console.log('Cập nhật thất bại:')
         console.log(error)
-        // if (error === 'Bus sche is available') {
-        //   toast.error('Biển số xe đã tồn tại!', { autoClose: 2000, position: 'top-center' })
-        // } else {
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 2000, position: 'top-center' })
       }
     }
@@ -138,16 +113,6 @@ function UpdateTicketBus({ startDate, priceTicket, idTicket, data, enableEdit = 
                 className={cx('txt')}
                 disabled
               />
-              {/* <DatePicker
-                value={startTime}
-                placeholder="Chọn giờ"
-                onChange={handleStartTimeChange}
-                picker="time" // Enables time selection
-                format="HH:mm" // Time format
-                minuteStep={15} // 15-minute intervals
-                showNow={false} // Hide "Now" button if not needed
-                className="w-100"
-              /> */}
             </Form.Group>
           </Col>
           <Col>
@@ -164,34 +129,10 @@ function UpdateTicketBus({ startDate, priceTicket, idTicket, data, enableEdit = 
                 className={cx('txt')}
                 disabled
               />
-              {/* <DatePicker
-                placeholder="Chọn ngày"
-                onChange={handleStartDateChange}
-                // selected={startDate}
-                value={startDate}
-                format="DD-MM-YYYY"
-                className="content-calendar w-100"
-              /> */}
             </Form.Group>
           </Col>
         </Row>
         <Row>
-          {/* <Col>
-            <Form.Group className={cx('txt', 'mb-3', 'mt-3')} controlId="formAdd.ControlInput5">
-              <Form.Label className="mb-2">
-                Giá vé <span className="text-danger">*</span>
-              </Form.Label>
-              <Form.Control
-                type="text"
-                // placeholder="450000"
-                name="priceTicket"
-                aria-label="priceTicket"
-                value={priceTicket ? `${priceTicket.toLocaleString('vi-VN')} đ` : ''}
-                className={cx('txt')}
-                disabled
-              />
-            </Form.Group>
-          </Col> */}
           <Col>
             <Form.Group className={cx('txt', 'mb-3', 'mt-3')} controlId="formAdd.ControlInput5">
               <Form.Label className="mb-2">
@@ -224,43 +165,7 @@ function UpdateTicketBus({ startDate, priceTicket, idTicket, data, enableEdit = 
       </Col>
       <Col sm={12} lg={6} className={cx('wrap-break-days')}>
         <Row className="align-items-start">
-          {/* <div className="d-flex align-items-start">
-            <p className={cx('me-3', 'txt', 'p-2')}>Ngày nghỉ</p>
-          </div> */}
-          {/* <div>
-            {dataBusTicket?.breakDays?.length > 0 ? (
-              dataBusTicket.breakDays.map((item) => (
-                <div className={cx('d-flex', 'align-items-start', 'mt-2', 'mb-2')} key={item.id}>
-                  <Form.Group className={cx('txt', 'd-flex')} controlId={`formAddStart_${item.id}`}>
-                    <Form.Label className="mb-2 d-flex mt-3 me-2">Từ</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="45"
-                      name="startDay"
-                      aria-label="startDay"
-                      value={item.startDay}
-                      className={cx('txt')}
-                    />
-                  </Form.Group>
-                  <Form.Group className={cx('txt', 'd-flex')} controlId={`formAddEnd_${item.id}`}>
-                    <Form.Label className="mb-2 d-flex mt-3 ms-5 me-2">Đến</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="45"
-                      name="endDay"
-                      aria-label="endDay"
-                      value={item.endDay}
-                      className={cx('txt')}
-                    />
-                  </Form.Group>
-                </div>
-              ))
-            ) : (
-              <div className="text-muted">Không có dữ liệu nghỉ.</div>
-            )}
-          </div> */}
           <Row className="align-items-start">
-            {/* <div className={cx('line-vertical')}></div> */}
             <div className="d-flex align-items-start">
               <p className={cx('me-3', 'txt', 'p-2', 'background')}>Ngày nghỉ</p>
             </div>
@@ -306,13 +211,9 @@ function UpdateTicketBus({ startDate, priceTicket, idTicket, data, enableEdit = 
           ></AddManyBreakDay>
         </Row>
       </Col>
-      {/* <Col sm={12} lg={6} className={cx('wrap-break-days')}>
-        
-      </Col> */}
       <div className={cx('save-button', { disabled: !activeAdd || saved})} onClick={activeAdd ? handleSave : undefined}>
         {saved ? 'Đã lưu' : ' Lưu vé xe'}
       </div>
-      {/* Thêm phần tử này để hiển thị chữ "Lưu..." */}
     </div>
   )
 }

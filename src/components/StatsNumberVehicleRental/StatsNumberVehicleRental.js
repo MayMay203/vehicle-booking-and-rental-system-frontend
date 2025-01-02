@@ -8,6 +8,8 @@ import { fetchAllVehicle, fetchAllVehicleTypes, fetchStatsRental } from '~/redux
 import dayjs from 'dayjs'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
+import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
+import { getLocations } from '~/apiServices/getLocations'
 const cx = classNames.bind(styles)
 function StatsNumberVehicleRental() {
   // const typeVehicles = useSelector((state) => state.rentalPartner.vehicleTypeList)
@@ -29,6 +31,7 @@ function StatsNumberVehicleRental() {
   // const listData = useSelector((state) => state.busPartner.statsBusTrip)
   const [data, setData] = useState([])
   const [provincesList, setProvincesList] = useState([])
+  const [provinces, setProvinces] = useState([])
   const handleLocationChange = (event) => {
     setSelectedLocation(event.target.value)
   }
@@ -55,6 +58,24 @@ function StatsNumberVehicleRental() {
     setStatisticsBy(event.target.value)
   }
   useEffect(() => {
+    async function fetchApi() {
+      const provices = await getLocations(1)
+      if (provices) {
+        const cleanedProvinces = provices
+          .map((province) => {
+            const cleanedName = province.name.replace(/^(Thành phố|Tỉnh)\s+/i, '') // Loại bỏ tiền tố "Thành phố" hoặc "Tỉnh"
+            return {
+              ...province,
+              name: cleanedName === 'Hồ Chí Minh' ? `TP ${cleanedName}` : cleanedName, // Thêm "TP" nếu là Hồ Chí Minh
+            }
+          })
+          .sort((a, b) => a.name.localeCompare(b.name)) // Sắp xếp theo bảng chữ cái
+        setProvinces(cleanedProvinces.map((item) => item.name))
+      }
+    }
+    fetchApi()
+  }, [])
+  useEffect(() => {
     if (dispatch(checkLoginSession())) {
       dispatch(fetchAllVehicleTypes())
     }
@@ -65,35 +86,22 @@ function StatsNumberVehicleRental() {
     }
   }, [dispatch])
   useEffect(() => {
+    console.log('provinces', provinces)
     const uniqueLocations = [...new Set(vehicleList.map((item) => item.location))]
-    setProvincesList(uniqueLocations)
+    if (provinces) {
+      const filteredProvinces = provinces.filter((province) =>
+        uniqueLocations.some((location) => location.toLowerCase().includes(province.toLowerCase())),
+      )
+      setProvincesList(filteredProvinces)
+    }
     const uniqueVehicleTypes = [...new Set(vehicleList.map((item) => item.vehicle_type))]
     setTypeVehicles(uniqueVehicleTypes)
     console.log('----loại xe:', uniqueVehicleTypes)
-  }, [vehicleList])
+  }, [vehicleList, provinces])
 
-  // const handleStats = () => {
-  //   if (dispatch(checkLoginSession())) {
-  //     dispatch(
-  //       fetchStatsRental({
-  //         location: selectedLocation,
-  //         vehicleType: selectedVehicleType,
-  //         year: selectedYear.format('YYYY'),
-  //         month: selectedMonth.format('MM'),
-  //         startDate: selectedStartDate.format('YYYY-MM-DD'),
-  //         endDate: selectedEndDate.format('YYYY-MM-DD'),
-  //         statsBy: statisticsBy,
-  //       }),
-  //     )
-  //   }
-  // }
-  useEffect(() => {
-    handleStats()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
   const handleStats = async () => {
     if (dispatch(checkLoginSession())) {
+      dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
       const result = await dispatch(
         fetchStatsRental({
           location: selectedLocation,
@@ -105,23 +113,39 @@ function StatsNumberVehicleRental() {
           statsBy: statisticsBy,
         }),
       )
-
+      console.log('----data number rental (result):', result)
       if (fetchStatsRental.fulfilled.match(result)) {
-        const filteredData = result.payload
-          .filter((item) => provincesList.includes(item.location) && typeVehicles.includes(item.vehicle_type))
-          .map((item, index) => ({
-            key: index,
-            location: item.location,
-            typeVehicle: item.vehicle_type,
-            rentaled: item.vehicleRentalAmount,
-            canceled: item.canceledVehicleAmount,
-          }))
-
-        setData(filteredData)
-        console.log('----data number rental (filtered):', filteredData)
+        console.log(
+          '----data number rental (filter):',
+          result.payload.filter(
+            (item) => provincesList.includes(item.location) && typeVehicles.includes(item.vehicle_type),
+          ),
+          '====',
+          provincesList,
+        )
+        if (provincesList.length > 0 && typeVehicles.length > 0) {
+          const filteredData = result.payload
+            .filter((item) => provincesList.includes(item.location) && typeVehicles.includes(item.vehicle_type))
+            .map((item, index) => ({
+              key: index,
+              location: item.location,
+              typeVehicle: item.vehicle_type,
+              rentaled: item.vehicleRentalAmount,
+              canceled: item.canceledVehicleAmount,
+              date: item.date,
+            }))
+          dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
+          setData(filteredData)
+          console.log('----data number rental (filtered):', filteredData)
+        }
       }
     }
   }
+  useEffect(() => {
+    handleStats()
+    console.log('vooooooooooo')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typeVehicles, provincesList])
   const columns = [
     {
       title: 'STT',
@@ -130,11 +154,24 @@ function StatsNumberVehicleRental() {
       width: 70,
       render: (text, record, index) => index + 1,
     },
+    ...(statisticsBy === 'date'
+      ? [
+          {
+            title: 'Ngày',
+            dataIndex: 'date',
+            align: 'center',
+            width: 150,
+            showSorterTooltip: {
+              target: 'full-header',
+            },
+          },
+        ]
+      : []),
     {
       title: 'Khu vực',
       dataIndex: 'location',
       align: 'center',
-      width: 400,
+      width: 300,
       showSorterTooltip: {
         target: 'full-header',
       },
@@ -144,7 +181,7 @@ function StatsNumberVehicleRental() {
       title: 'Loại xe',
       dataIndex: 'typeVehicle',
       align: 'center',
-      width: 400,
+      width: 300,
       showSorterTooltip: {
         target: 'full-header',
       },
@@ -154,14 +191,14 @@ function StatsNumberVehicleRental() {
       dataIndex: 'rentaled',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 200,
+      width: 180,
       // sorter: (a, b) => a.age - b.age,
     },
     {
       title: 'Số xe bị hủy',
       dataIndex: 'canceled',
       align: 'center',
-      width: 200,
+      width: 180,
     },
   ]
 
@@ -300,12 +337,10 @@ function StatsNumberVehicleRental() {
         <Table
           columns={columns}
           dataSource={data}
-          // onChange={onChange}
           bordered
-          pagination={false}
           scroll={{ y: 500 }}
-          // pagination={{ position: ['bottomCenter'], pageSize: 10 }}
-          rowClassName="table-row-center" // Thêm class để căn giữa dọc
+          pagination={{ position: ['bottomCenter'], pageSize: 8 }}
+          rowClassName="table-row-center"
           showSorterTooltip={{
             target: 'sorter-icon',
           }}

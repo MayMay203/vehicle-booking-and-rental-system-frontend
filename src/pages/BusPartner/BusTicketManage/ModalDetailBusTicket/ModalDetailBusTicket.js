@@ -54,8 +54,6 @@ function ModalDetailBusTicket({ enableEdit = true, statusTicket='', loadAgain = 
   useEffect(() => {
     if(dispatch(checkLoginSession())){
       dispatch(fetchTicketInfor({ id: idTicket, date: dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD') }))
-      // setTicket(ticketInfor)
-      // setActiveSchedule(!ticket.suspended)
       setActiveSchedule(statusTicket)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,11 +95,6 @@ function ModalDetailBusTicket({ enableEdit = true, statusTicket='', loadAgain = 
 
   const handleStartDateChange = (date) => {
     setStartDate(date)
-    // setStartDateTime((prev) => ({
-    //   ...prev,
-    //   startDate: date?.format('DD-MM-YYYY'),
-    //   startDT: startTime?.format('HH:mm') + ' ' + date?.format('DD-MM-YYYY'),
-    // }))
   }
   useEffect(() => {
     if (ticket.busTripScheduleId) {
@@ -164,14 +157,6 @@ function ModalDetailBusTicket({ enableEdit = true, statusTicket='', loadAgain = 
       </Modal.Header>
       <Modal.Body>
         <div className={cx('container', 'wrap-container')}>
-          {/* <Col md={3} className={cx('background-red', 'ml-auto')}>
-            <DatePicker
-              onChange={handleDateChange}
-              value={selectedDate} // Hiển thị giá trị được chọn
-              format="DD/MM/YYYY" // Định dạng ngày
-              className={cx('content-calendar')}
-            />
-          </Col> */}
           <Tabs defaultActiveKey="infor" id="fill-tab-bus-ticket" className="mb-3" fill>
             <Tab eventKey="infor" title="Thông tin">
               <Row className={cx('form-infor-bus-trip', 'justify-content-center')}>
@@ -260,23 +245,6 @@ function ModalDetailBusTicket({ enableEdit = true, statusTicket='', loadAgain = 
                     </Col>
                   </Row>
 
-                  {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput13">
-                    <Form.Label className="mb-3">Thời gian hành trình</Form.Label>
-                    <InputGroup className={cx('txt', 'infor-item')}>
-                      <Form.Control
-                        type="text"
-                        value={formData.extendTime ? convertTimeFormat(formData.extendTime) : ''}
-                        name="extendTime"
-                        aria-label="extend-time"
-                        className={cx('txt')}
-                        readOnly
-                        // disabled
-                      />
-                      <InputGroup.Text className={cx('txt')}>
-                        <FontAwesomeIcon icon={faClockRotateLeft} />
-                      </InputGroup.Text>
-                    </InputGroup>
-                  </Form.Group> */}
                   <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput4">
                     <Form.Label className="mb-3">Loại phương tiện</Form.Label>
                     <Form.Control
@@ -290,38 +258,10 @@ function ModalDetailBusTicket({ enableEdit = true, statusTicket='', loadAgain = 
                       {/* <option value={formData.typeVehicle}>{formData.typeVehicle}</option> */}
                     </Form.Control>
                   </Form.Group>
-
-                  {/* <Form.Group className={cx('txt', 'mb-5')} controlId="formInfor.ControlInput3">
-                    <Form.Label className="mb-3">
-                      Giá vé<span className="text-danger">*</span>
-                    </Form.Label>
-                    <InputGroup className={cx('txt', 'infor-item')}>
-                      <Form.Control
-                        type="text"
-                        value={formData.price}
-                        name="price"
-                        aria-label="price"
-                        className={cx('txt')}
-                        // onChange={handleInputChange}
-                      />
-                      <InputGroup.Text className={cx('txt')}>
-                        <FontAwesomeIcon icon={faDongSign} />
-                      </InputGroup.Text>
-                    </InputGroup>
-                  </Form.Group> */}
                 </Col>
                 <Col className={cx('col-sm-12 col-xs-12 col-md-6', 'col-form')}>
                   <Row className="d-flex align-items-center justify-content-center">
-                    {/* <div className="d-flex align-items-center justify-content-end">
-                        <span className={cx('text')}>Ngày:</span>
-                        <DatePicker
-                          onChange={handleStartDateChange}
-                          // selected={startDate}
-                          value={startDate}
-                          format="DD-MM-YYYY"
-                          className="content-calendar ms-3"
-                        />
-                      </div> */}
+  
                     {activeSchedule && (
                       <>
                         <Col>
@@ -438,23 +378,6 @@ function ModalDetailBusTicket({ enableEdit = true, statusTicket='', loadAgain = 
                 </div>
               </div>
 
-              {/* <AddManyTickets
-                haveTitle={false}
-                // date={startDate}
-                initialItems={[1]}
-                idBusSchedule={formData?.idBusSchedule}
-                enableEdit={false}
-              ></AddManyTickets> */}
-              {/* <Accordion>
-                <Accordion.Item eventKey={1}>
-                  <Accordion.Header>
-                    <span className={cx('txt')}>Thông tin chuyến xe</span>
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    <InforBusTrip idBusTrip={formData?.idBusTrip}></InforBusTrip>
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion> */}
             </Tab>
             <Tab eventKey="list-order" title="Danh sách đơn đặt vé">
               <div className="d-flex align-items-center justify-content-end mb-4">
@@ -489,20 +412,6 @@ function ModalDetailBusTicket({ enableEdit = true, statusTicket='', loadAgain = 
         </div>
       </Modal.Body>
       <Modal.Footer>
-        {/* {enableEdit && (
-          <Row className="justify-content-center mt-4">
-            <Col></Col>
-            <Col className="d-flex justify-content-center">
-              <Button outline className="ms-5 me-5" onClick={handleCancel}>
-                Hủy
-              </Button>
-              <Button primary className="ms-5 me-5" disabled={!activeUpdate}>
-                {functionModal === 'add' ? 'Thêm' : 'Cập nhật'}
-              </Button>
-            </Col>
-            <Col></Col>
-          </Row>
-        )} */}
         <Button onClick={handleModeUpdate} className={cx('btn-update')} variant="none">
           {isUpdate ? 'Chế độ xem?' : 'Chế độ chỉnh sửa?'}
         </Button>

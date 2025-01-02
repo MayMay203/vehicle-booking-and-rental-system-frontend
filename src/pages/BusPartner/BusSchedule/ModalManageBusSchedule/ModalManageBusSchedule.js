@@ -319,20 +319,6 @@ function ModalManageBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
           <TableSchedulesOfBus idBus={formData?.licensePlateNumber}></TableSchedulesOfBus>
         </div>
       </Modal.Body>
-      {/* <Modal.Footer>
-        <Row className="justify-content-center mt-4">
-          <Col></Col>
-          <Col className="d-flex justify-content-center">
-            <Button outline className="ms-5 me-5" onClick={handleCancel}>
-              Hủy
-            </Button>
-            <Button primary className="ms-5 me-5" disabled={!activeUpdate}>
-              {functionModal === 'add' ? 'Thêm' : 'Cập nhật'}
-            </Button>
-          </Col>
-          <Col></Col>
-        </Row>
-      </Modal.Footer> */}
 
     </Modal>
   )

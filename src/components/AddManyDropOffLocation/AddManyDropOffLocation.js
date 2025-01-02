@@ -117,14 +117,7 @@ function AddManyDropOffLocation({
       setIsSaved(false)
     }
   }
-  // const handleInputChange = (e) => {
-  //   // const {name, value} = e.target
-  //   // setFormData((prevState) => ({
-  //   //   ...prevState,
-  //   //   [name]: value,
-  //   // }))
-  //   // console.log(formData)
-  // }
+
   const getDurationOfTwoProvinces = async (departure, destination) => {
     try {
       const dep = await getLongitudeLatitude(departure)

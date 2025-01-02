@@ -8,7 +8,7 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import PaginationDots from '~/components/PaginationDots'
 
 const cx = classNames.bind(styles)
-function SlideVoucherOrder({ listVoucher, handleApplyVoucher }) {
+function SlideVoucherOrder({ typeVoucher = '', listVoucher, handleApplyVoucher }) {
   const [currentIndex, setCurrentIndex] = useState(0)
 const voucherPerPage = 1
   const [currentPage, setCurrentPage] = useState(0)
@@ -50,6 +50,7 @@ const voucherPerPage = 1
               className={cx('voucher-long', 'ms-4 me-4')}
               key={index}
               data={voucher}
+              typeVoucher={typeVoucher}
               type="order"
               handleApplyVoucher={handleApplyVoucher}
             ></Voucher>
@@ -77,7 +78,7 @@ const voucherPerPage = 1
         onPageChange={handlePageChange}
         className={cx('pagination-dots')}
       ></PaginationDots>
-    {/* // </div> */}
+      {/* // </div> */}
     </>
   )
 }

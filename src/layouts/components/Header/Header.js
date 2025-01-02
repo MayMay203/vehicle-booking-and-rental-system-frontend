@@ -109,6 +109,9 @@ function Header() {
       } else if (response.info === 'Not registered yet') {
         statusValue = 'Not_registered_yet'
         setStatus(statusValue)
+      } else if (response.info === 'CANCEL') {
+        statusValue = 'CANCEL'
+        setStatus(statusValue)
       }
 
       const partnerTypeMap = {

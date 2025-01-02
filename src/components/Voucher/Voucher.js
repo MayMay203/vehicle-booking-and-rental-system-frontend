@@ -19,7 +19,7 @@ import { generalModalNames, setAddVoucherVisible, setConfirmModalVisible } from 
 const cx = classNames.bind(styles)
 const now = 60
 
-function Voucher({ className, data, type = '', handleApplyVoucher=()=>{}}) {
+function Voucher({ className, data, typeVoucher = '', type = '', handleApplyVoucher = () => {} }) {
   const { currentUser, isLogin } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const [visibleMenu, setVisibleMenu] = useState(false)
@@ -68,7 +68,12 @@ function Voucher({ className, data, type = '', handleApplyVoucher=()=>{}}) {
 
   console.log(data.id)
   return (
-    <div className={cx('wrapper', 'voucher', [className])} style={{ backgroundImage: `url(${images.voucher})` }}>
+    <div
+      className={cx('wrapper', { 'voucher-rental': typeVoucher === 'rental', voucher: typeVoucher !== 'rental' }, [
+        className,
+      ])}
+      style={{ backgroundImage: `url(${images.voucher})` }}
+    >
       <Col xs="3" className={cx('d-flex justify-content-center align-items-center', 'border-right')}>
         <p className={cx('voucher-value')}>{`-${Math.round(data.voucherPercentage)}%`}</p>
       </Col>

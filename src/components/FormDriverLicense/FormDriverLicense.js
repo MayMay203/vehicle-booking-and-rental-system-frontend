@@ -11,22 +11,13 @@ function FormDriverLicense({ updateActive, formDriverLicense, handleSaveFormDriv
   const [isSaved, setIsSaved] = useState(updateActive)
   const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/
   const [isCorrectDate, setIsCorrectDate] = useState(dateRegex.test(formData.issueDateLicense))
-  // const [allImagesSelected, setAllImagesSelected] = useState(false)
+
   const licenseClasses = [
     { value: '', label: 'Chọn hạng bằng lái' },
     { value: 'A1', label: 'A1' },
     { value: 'A2', label: 'A2' },
-    // { value: 'A3', label: 'A3' },
-    // { value: 'A4', label: 'A4' },
-    // { value: 'B1', label: 'B1' },
     { value: 'B2', label: 'B2' },
-    // { value: 'C', label: 'C' },
     { value: 'D', label: 'D' },
-    // { value: 'E', label: 'E' },
-    // { value: 'FB2', label: 'FB2' },
-    // { value: 'FC', label: 'FC' },
-    // { value: 'FD', label: 'FD' },
-    // { value: 'FE', label: 'FE' },
   ]
   useEffect(() => {
     const { driverLicenseImages, ...restOfFormData } = formData
@@ -52,7 +43,6 @@ function FormDriverLicense({ updateActive, formDriverLicense, handleSaveFormDriv
     setIsSaved(false)
   }
   const handleSave = (id, images) => {
-    // setAllImagesSelected(true)
     setFormData((prevState) => ({
       ...prevState,
       driverLicenseImages: images,
