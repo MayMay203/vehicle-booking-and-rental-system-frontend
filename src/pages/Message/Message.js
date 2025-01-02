@@ -234,7 +234,6 @@ function Message() {
   const handleUpdateMessage = async (id, content) => {
     // Cập nhật message trong danh sách
     const msg = await getMessageById(id)
-    console.log(msg)
     setMessages((prev) => prev.map((message) => (message.id === id ? { ...msg, content } : message)))
 
     const updatedMessage = { ...msg, content }

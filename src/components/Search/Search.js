@@ -65,14 +65,12 @@ function Search({ noSelectBus, noSelectDate = false, type }) {
       const date = new Date(departureDate)
       const formattedDate = date.toISOString().split('T')[0]
       dispatch(setSearchTicket({ busName, departureDate: formattedDate, departureLocation, arrivalLocation }))
-      if (window.location.origin === 'http://localhost:3000' && window.location.pathname === '/') {
+      if (window.location.origin === 'http://150.95.110.230:3000' && window.location.pathname === '/') {
         navigate(config.routes.ticket)
       }
     } else if (type === 'partner') {
-      console.log('departureLocation:', departureLocation, '- arrivalLocation:', arrivalLocation)
       dispatch(fetchAllBusTrips({ dep: departureLocation, des: arrivalLocation }))
     } else if (type === 'partner-ticket') {
-      console.log('departureLocation:', departureLocation, '- arrivalLocation:', arrivalLocation)
       dispatch(fetchBusTicketList({ dep: departureLocation, des: arrivalLocation }))
     }
   }

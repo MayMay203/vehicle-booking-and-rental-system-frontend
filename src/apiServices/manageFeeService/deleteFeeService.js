@@ -3,7 +3,7 @@ import * as httpRequest from '~/utils/httpRequest'
 
 export const deleteFeeService = async (idVehicleType) => {
   try {
-    const response = await httpRequest.DELETE(`/v1/vehicle-types?idVehicleType=${idVehicleType}`, {
+    const response = await httpRequest.DELETE(`/v1/vehicle-types/${idVehicleType}`, {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },

@@ -10,7 +10,7 @@ const cx = classNames.bind(styles)
 function DetailMessage({ data, image, handleUpdateMessage }) {
   const { currentUser } = useSelector((state) => state.user)
   const [isShowDate, setIsShowDate] = useState(false)
-  const [contentUpdate, setContentUpdate] = useState('')
+  const [contentUpdate, setContentUpdate] = useState(data.content)
   const [isEditing, setIsEditing] = useState(false)
   const isSender = data.senderId === currentUser.id
   const textAreaRef = useRef(null)
@@ -63,7 +63,7 @@ function DetailMessage({ data, image, handleUpdateMessage }) {
               autoFocus
             />
             <div className="mt-1 d-flex justify-content-end">
-              <button onClick={handleSaveEdit} className={cx('button-complete')}>
+              <button disabled={contentUpdate === ''} onClick={handleSaveEdit} className={cx('button-complete')}>
                 <FontAwesomeIcon icon={faCheckCircle} />
               </button>
               <button onClick={() => setIsEditing(false)} className={cx('button-close')}>

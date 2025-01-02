@@ -3,7 +3,7 @@ import * as httpRequest from '~/utils/httpRequest'
 
 export const getFeeService = async(idVehicleType) => {
   try {
-    const response =await httpRequest.get(`/v1/vehicle-types?idVehicleType=${idVehicleType}`, {
+    const response = await httpRequest.get(`/v1/vehicle-types/${idVehicleType}`, {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
