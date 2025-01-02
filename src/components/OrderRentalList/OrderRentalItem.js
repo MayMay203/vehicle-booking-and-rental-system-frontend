@@ -549,13 +549,6 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
           )}
           {/* {type === 'utility' && detailInfor['utility'] && <UtilitiesList dataList={detailInfor['utility']} />} */}
           {type === 'image' && (
-            // <div className="mt-5">
-            //   <span
-            //     className="d-block text-center fst-italic"
-            //     style={{ fontWeight: 500 }}
-            //   >{`Biển kiểm số: ${data.busInfo.licensePlate}`}</span>
-            //   <ImageList dataList={detailInfor['image']} />
-            // </div>
             <Row className="justify-content-center align-items-center pt-3 pb-3">
               <Col xs="1" className="d-flex justify-content-start">
                 <Button
@@ -569,9 +562,7 @@ function OrderRentalItem({ status, data = {}, isDetailOrder = false }) {
               </Col>
               <Col xs="10">
                 <div className="d-flex justify-content-center">
-                  {/* {(displayedImageVehicle?.[0] || []).map((item, index) => (
-                    <Image key={index} src={item.imgLink} rounded className={cx('image-vehicle')} />
-                  ))} */}
+               
                   <div className="d-flex justify-content-center">
                     {displayedImageVehicle ? (
                       displayedImageVehicle.map((item, index) => (

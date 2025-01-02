@@ -65,13 +65,13 @@ function FormRegisterBus() {
         }
         formDocs.businessImages.forEach((imageBase64, index) => {
           if(imageBase64 !== null){
-            const base64DataBusiness = imageBase64.split(',')[1] // Lấy phần base64 từ chuỗi (loại bỏ phần data:image/png;base64,...)
-            const byteCharactersBusiness = atob(base64DataBusiness) // Giải mã base64 thành chuỗi ký tự
+            const base64DataBusiness = imageBase64.split(',')[1] 
+            const byteCharactersBusiness = atob(base64DataBusiness)
             const byteNumbersBusiness = new Array(byteCharactersBusiness.length)
               .fill(0)
-              .map((_, i) => byteCharactersBusiness.charCodeAt(i)) // Chuyển mỗi ký tự thành mã số byte
-            const byteArrayBusiness = new Uint8Array(byteNumbersBusiness) // Tạo mảng Uint8Array từ mã byte
-            const imageBlobBusiness = new Blob([byteArrayBusiness], { type: 'image/png' }) // Tạo Blob từ mảng byte
+              .map((_, i) => byteCharactersBusiness.charCodeAt(i)) 
+            const byteArrayBusiness = new Uint8Array(byteNumbersBusiness) 
+            const imageBlobBusiness = new Blob([byteArrayBusiness], { type: 'image/png' }) 
 
             formDataRegisterBus.append('businessImages', imageBlobBusiness, `businessImages${index + 1}.png`)
           }
@@ -110,7 +110,7 @@ function FormRegisterBus() {
         toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!', { autoClose: 1000, position: 'top-center' })
         // }
       } finally {
-        setLoading(false) // Ẩn Spinner sau khi xử lý xong
+        setLoading(false)
       }
     }
   }

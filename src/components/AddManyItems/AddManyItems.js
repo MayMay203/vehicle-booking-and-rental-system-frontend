@@ -26,9 +26,6 @@ function AddManyItems({
   const [activeSave, setActiveSave] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
   const dispatch = useDispatch()
-  // console.log('ban đầu:', itemCounter)
-  //   const hasEmptyItem = items.some((item) => item.value.trim() === '')
-  // console.log('--nhan: initialItems:', initialItems)
   const handleAddItem = () => {
     setItems((prevState) => [...prevState, { value: '', id: itemCounter + 2 }])
     setItemCounter(itemCounter + 1)

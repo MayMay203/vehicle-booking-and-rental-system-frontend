@@ -88,7 +88,7 @@ function FormConfirmRegister({ isRegister, formData, handleFormConfirmChange, ha
             <Button outline className={cx('btn', 'btn-cancel')} onClick={handleCancel}>
               Hủy
             </Button>
-            <Button primary className={cx('btn', 'btn-save')} disabled={!activeConfirm && !active} onClick={handleClick}>
+            <Button primary className={cx('btn', 'btn-save')} disabled={!activeConfirm || !active} onClick={handleClick}>
               Xác nhận
             </Button>
           </div>
@@ -99,7 +99,6 @@ function FormConfirmRegister({ isRegister, formData, handleFormConfirmChange, ha
           type={'success'}
           subtitle={'Đăng ký thành công!'}
           content={
-            // 'Chúc mừng bạn đã trở thành đối tác cho thuê xe!\nCảm ơn vì đã tin tưởng và đồng hành cùng chúng tôi. Safety Travel chúc bạn sẽ có nhiều đơn đặt thuê xe nhé!'
             'Chúc mừng bạn đã đăng ký trở thành đối tác cho thuê xe của Safety Travel!\nCảm ơn vì đã tin tưởng đồng hành cùng chúng tôi.\nQuá trình xét duyệt sẽ mất một ít thời gian, nếu gặp vấn đề hay thắc mắc gì xin hãy liên hệ với chúng tôi qua số điện thoại: 0842059000.\n Safety Travel mong đợi hợp tác cùng bạn.'
           }
         ></Notice>

@@ -27,12 +27,6 @@ function OrderRental({ typeService, formData, setFormData }) {
   const [warningMessageName, setWarningMessageName] = useState(
     formData.customerPhoneNumber ? '' : 'Vui lòng nhập tên người thuê xe!',
   )
-  // const total =
-  //   Math.floor(formData.price) * formData.amount +
-  //   formData.reservation_fee +
-  //   formData.car_deposit -
-  //   formData.voucher_percentage * Math.floor(formData.price) * formData.amount -
-  //   formData.voucher_value
   const total =
     Math.floor(formData.price) * formData.amount + formData.reservation_fee + formData.car_deposit - voucherDiscount
   const handleInputChange = (e) => {
@@ -61,9 +55,7 @@ function OrderRental({ typeService, formData, setFormData }) {
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voucherDiscount])
-  //  const handleOrder = (type) => {
-  //   navigate('/rent-vehicle/rental-service/rental-service-detail/rental-order', { state: { typeService: type } })
-  // }
+
   const handleOrder = async () => {
     try {
       if (dispatch(checkLoginSession())) {
@@ -103,10 +95,7 @@ function OrderRental({ typeService, formData, setFormData }) {
     }
     if (isLogin) fetchAllSuitableVoucher()
   }, [formData, isLogin, dispatch])
-  // useEffect(() => { setFormData((prevState) => ({
-  //   ...prevState,
-  //   [name]: value,
-  // }))}, [voucherDiscount])
+
   const handleApplyVoucher = (id, percent, maxValue) => {
     console.log(id)
     setFormData((prevState) => ({
@@ -122,7 +111,6 @@ function OrderRental({ typeService, formData, setFormData }) {
   }
   return (
     <Row className={cx('order', 'm-0')}>
-      {/* <Row className={cx('txt')}>THÔNG TIN ĐƠN HÀNG</Row> */}
       <Row>
         <Row className={cx('txt-title')}>Người đặt</Row>
         <Row className={cx('xs-col-2', 'wrap-renter')}>
@@ -131,7 +119,6 @@ function OrderRental({ typeService, formData, setFormData }) {
               <FontAwesomeIcon icon={faUserLarge} className={cx('icon')}></FontAwesomeIcon>
               <div className={cx('wrap-name')}>
                 <p className={cx('name')}>Họ và tên</p>
-                {/* <p className={cx('input-name')}>Ngô Thị Lan Hương</p> */}
                 <Form.Control
                   type="text"
                   name="customerName"
@@ -224,12 +211,7 @@ function OrderRental({ typeService, formData, setFormData }) {
           </span>
         </div>
       </Row>
-      {/* <Row>
-        <div className={cx('wrap-infor')}>
-          <span>Giảm giá</span>
-          <span className={cx('align-right', 'txt-red')}>-đ</span>
-        </div>
-      </Row> */}
+
       <Row>
         <div className={cx('wrap-infor')}>
           <span>Giảm giá voucher</span>
@@ -243,24 +225,18 @@ function OrderRental({ typeService, formData, setFormData }) {
           </button>
         </div>
       </Row>
-      {/* {isVoucher &&
-        suitableVoucher.map((voucher) => (
-          <div className="col mt-0" key={voucher.id}>
-            <Voucher className="m-auto" data={voucher} type="order" handleApplyVoucher={handleApplyVoucher} />
-          </div>
-        ))} */}
+
       <Row className="justify-content-center">
         {isVoucher && suitableVoucher.length > 0 && (
-          <SlideVoucherOrder listVoucher={suitableVoucher} handleApplyVoucher={handleApplyVoucher}></SlideVoucherOrder>
+          <SlideVoucherOrder
+            typeVoucher="rental"
+            listVoucher={suitableVoucher}
+            handleApplyVoucher={handleApplyVoucher}
+          ></SlideVoucherOrder>
         )}
         {isVoucher && suitableVoucher.length === 0 && <Empty description="Không có voucher nào hợp lệ để sử dùng" />}
       </Row>
-      {/* <Row>
-        <div className={cx('wrap-infor')}>
-          <span>Thuế VAT:</span>
-          <span className={cx('align-right')}></span>
-        </div>
-      </Row> */}
+
       <Row>
         <div className={cx('wrap-infor')}>
           <span>Tiền cọc xe:</span>

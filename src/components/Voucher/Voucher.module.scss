@@ -4,8 +4,20 @@
     margin: 0;
 }
 .voucher {
-    // width: 37rem;
-    width: 40rem;
+    width: 37rem;
+    // width: 40rem;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+
+    @include abstracts.screen(sm){
+        width: 34.5rem;
+    }
+}
+.voucher-rental{
+    width: 42rem;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;

@@ -72,19 +72,6 @@ function TableListTenant({ idRegister }) {
       width: 150,
       render: (rentalInfo) => rentalInfo?.cancelAt || '--',
     },
-    // {
-    //   title: 'Nhắn tin',
-    //   dataIndex: 'orderId',
-    //   align: 'center',
-    //   width: 100,
-    //   render: (orderId) => (
-    //     <FontAwesomeIcon
-    //       icon={faMessage}
-    //       style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-    //       onClick={() => handleChat(orderId)}
-    //     />
-    //   ),
-    // },
     {
       title: 'Nhắn tin',
       dataIndex: 'chat',
@@ -115,9 +102,6 @@ function TableListTenant({ idRegister }) {
       dispatch(setMessageModalVisible({ isOpen: true, conversationId: idConversation }))
     }
   }
-  // const handleChat = (orderId) => {
-  //   console.log('Nhắn tin với order ID:', orderId)
-  // }
 
   useEffect(() => {
     const fetchOrders = async () => {

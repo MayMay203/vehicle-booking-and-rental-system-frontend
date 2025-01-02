@@ -20,8 +20,6 @@ function FormInforID({ updateActive, formInforID, handleSaveFormInforID }) {
     { value: 'Bộ công an', label: 'Bộ công an' },
   ]
   useEffect(() => {
-    // const allFieldsFilled = Object.values(formData).every((value) => value.trim() !== '')
-    // Tạo một bản sao của formData nhưng loại bỏ trường citizenImages
     const { citizenImages, ...restOfFormData } = formData
     const allFieldsFilled =
       Object.values(restOfFormData).every((value) => value && value.trim() !== '') &&
@@ -54,16 +52,11 @@ function FormInforID({ updateActive, formInforID, handleSaveFormInforID }) {
     setIsSaved(false)
   }
   const handleSave = (id, images) => {
-    // setAllImagesSelected(true)
     setFormData((formDataPrev) => ({
       ...formDataPrev,
       citizenImages: images,
     }))
     console.log("ảnh ID:", formData)
-    // handleSaveFormInforID((formDataPrev) => ({
-    //   ...formDataPrev,
-    //   citizenImages: images,
-    // }))
   }
   const handleCancel = (e) => {}
   return (

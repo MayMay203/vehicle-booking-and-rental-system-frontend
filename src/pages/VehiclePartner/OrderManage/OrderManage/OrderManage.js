@@ -32,7 +32,7 @@ function OrderManage() {
       dataIndex: 'nameRental',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 220,
+      width: 170,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -65,7 +65,7 @@ function OrderManage() {
       dataIndex: 'location',
       align: 'center',
       defaultSortOrder: 'descend',
-      width: 130,
+      width: 200,
       // sorter: (a, b) => a.age - b.age,
     },
     {
@@ -91,7 +91,7 @@ function OrderManage() {
       title: 'Chi tiết',
       dataIndex: 'view',
       align: 'center',
-      width: 90,
+      width: 85,
       render: (text, record) => (
         <FontAwesomeIcon
           icon={faArrowUpRightFromSquare}
@@ -104,7 +104,7 @@ function OrderManage() {
       title: 'Đã trả xe',
       dataIndex: 'update',
       align: 'center',
-      width: 90,
+      width: 80,
       render: (text, record) =>
         record.statusOrder === 'returned' ? (
           <FontAwesomeIcon
@@ -124,7 +124,7 @@ function OrderManage() {
       title: 'Nhắn tin',
       dataIndex: 'delete',
       align: 'center',
-      width: 90,
+      width: 85,
       // render: (record) => (
       //   <FontAwesomeIcon icon={faMessage} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
       // ),

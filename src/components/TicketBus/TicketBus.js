@@ -138,14 +138,6 @@ function TicketBus({ data, enableEdit = true }) {
               <Form.Label className="mb-2">
                 Giờ khởi hành <span className="text-danger">*</span>
               </Form.Label>
-              {/* <Form.Control
-                type="text"
-                placeholder="45"
-                name="departureTime"
-                aria-label="departureTime"
-                value={dataBusTicket.departureTime}
-                className={cx('txt')}
-              /> */}
               <DatePicker
                 value={startTime}
                 placeholder="Chọn giờ"
@@ -163,14 +155,6 @@ function TicketBus({ data, enableEdit = true }) {
               <Form.Label className="mb-2">
                 Ngày bắt đầu <span className="text-danger">*</span>
               </Form.Label>
-              {/* <Form.Control
-                type="text"
-                placeholder="45"
-                name="startOperationDay"
-                aria-label="startOperationDay"
-                value={dataBusTicket.startOperationDay}
-                className={cx('txt')}
-              /> */}
               <DatePicker
                 placeholder="Chọn ngày"
                 onChange={handleStartDateChange}

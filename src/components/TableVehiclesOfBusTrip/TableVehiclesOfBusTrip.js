@@ -137,18 +137,6 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable, date, idBusTr
       width: 110,
       // sorter: (a, b) => a.age - b.age,
     },
-    // {
-    //   title: 'Xem',
-    //   dataIndex: 'view',
-    //   align: 'center',
-    //   render: (text, record) => (
-    //     <FontAwesomeIcon
-    //       icon={faArrowUpRightFromSquare}
-    //       style={{ cursor: 'pointer', color: '#A33A3A', fontSize: '2rem' }}
-    //       onClick={() => handleViewBus(record.key)}
-    //     />
-    //   ),
-    // },
 
     {
       title: 'Hủy vé',
@@ -173,11 +161,6 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable, date, idBusTr
       },
     },
   ]
-  // const getInforBusSchedule = async(id) => {
-  //   if(dispatch(checkLoginSession())){
-
-  //   }
-  // }
   
   const handleCancelScheduleOneDay = async (id) => {
     if (dispatch(checkLoginSession())) {
@@ -220,21 +203,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable, date, idBusTr
       } catch (error) {}
     }
   }
-  // const data = [
-  //   {
-  //     key: '1',
-  //     licensePlateNumber: '92H-12356',
-  //     nameCompany: 'Honda',
-  //     busType: 'Xe máy',
-  //     status: 'Đang hoạt động',
-  //     timeDeparture: '5:00; 10:00; 15:00',
-  //     price: '100.000đ',
-  //     discount: '10%',
-  //     available: '12/37',
-  //     rating: '3/5',
-  //     location: 'Quảng Nam',
-  //   },
-  // ]
+
   const getInforBusByID = async () => {
     const response = await detailBusByID(selectedBus.id)
     setDataInforBus(response)
@@ -280,13 +249,7 @@ function TableVehiclesOfBusTrip({ handleUpdateSchedule, dataTable, date, idBusTr
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
   }
-  // const navigate = useNavigate()
-  // const handleViewBus = (id) => {
-  //   navigate('detail-service-rental', { state: { enableEdit: false, busID: id } })
-  // }
-  // const handleEditBus = (id) => {
-  //   navigate('edit-service-rental', { state: { enableEdit: true, busID: id } })
-  // }
+
   return (
     <>
       <ConfigProvider locale={viVN}>

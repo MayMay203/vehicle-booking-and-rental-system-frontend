@@ -92,8 +92,8 @@ function StatsRevenueRental() {
                     text: dataset.label,
                     fillStyle: dataset.backgroundColor || dataset.borderColor, // Background matches dataset color
                     strokeStyle: dataset.borderColor, // Border matches dataset color
-                    lineWidth: 3, // Width of the border line
-                    hidden: !chart.isDatasetVisible(index), // Show/hide based on dataset visibility
+                    lineWidth: 3, 
+                    hidden: !chart.isDatasetVisible(index), 
                     datasetIndex: index,
                   }))
                 },
@@ -107,29 +107,21 @@ function StatsRevenueRental() {
               title: {
                 display: true,
                 text: 'Tháng',
-                color: '#A33A3A', // x-axis label color
+                color: '#A33A3A', 
                 font: {
-                  size: 16, // x-axis label font size
+                  size: 16, 
                 },
               },
               ticks: {
                 color: '#A33A3A',
               },
               grid: {
-                // display: false, // Remove grid lines
-                // color: '#A33A3A', // Màu lưới trục x
-                // borderColor: '#FF5733', // Màu đường viền trục x
-                // borderWidth: 2, // Độ dày đường viền trục x
               },
             },
             y: {
               id: 'y',
               type: 'linear',
               grid: {
-                // display: false, // Remove grid lines
-                // color: '#A33A3A', // Màu lưới trục x
-                // borderColor: '#FF5733', // Màu đường viền trục x
-                // borderWidth: 2, // Độ dày đường viền trục x
               },
               title: {
                 display: true,

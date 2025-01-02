@@ -115,11 +115,7 @@ function InforBusTrip({ idBusTrip }) {
                         readOnly
                         className={cx('txt', 'selectbox', 'add-item')}
                       >
-                        {/* {provinces.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
-                  </option>
-                ))} */}
+           
                       </Form.Control>
                     </Form.Group>
                   </Col>
@@ -133,11 +129,7 @@ function InforBusTrip({ idBusTrip }) {
                         readOnly
                         className={cx('txt', 'selectbox', 'add-item')}
                       >
-                        {/* {provinces.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
-                  </option>
-                ))} */}
+           
                       </Form.Control>
                     </Form.Group>
                   </Col>
@@ -152,11 +144,7 @@ function InforBusTrip({ idBusTrip }) {
                         readOnly
                         className={cx('txt', 'selectbox', 'add-item')}
                       >
-                        {/* {provinces.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
-                  </option>
-                ))} */}
+                    
                       </Form.Control>
                     </Form.Group>
                   </Col>

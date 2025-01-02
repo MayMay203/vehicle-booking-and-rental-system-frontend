@@ -12,6 +12,7 @@ import FormRegisterCarRental from '~/components/FormRegisterCarRental'
 import { createSearchParams, useLocation } from 'react-router-dom'
 import FormApprovedRegister from '~/components/FormApprovedRegister'
 import FormPendingApproveRegister from '~/components/FormPendingApproveRegister'
+import FormCancelRegister from '~/components/FormCancelRegister'
 const cx = classNames.bind(styles)
 function RegisterPartner() {
   const location = useLocation()
@@ -213,7 +214,9 @@ function RegisterPartner() {
                 <FormApprovedRegister />
               ) : status === 'pending_approval' ? (
                 <FormPendingApproveRegister />
-              ) : (
+              ) : status === 'CANCEL' ? (
+                <FormCancelRegister />
+              ):(
                 <></>
               )}
             </div>

@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClockRotateLeft, faCouch, faTicket } from '@fortawesome/free-solid-svg-icons'
 
 import { useState, useEffect } from 'react'
-// import Button from '~/components/Button'
-// import AddManyTickets from '~/components/AddManyTickets'
 import TableSchedulesOfBus from '~/components/TableSchedulesOfBus'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLoginSession } from '~/redux/slices/userSlice'
@@ -15,11 +13,7 @@ import { fetchAllBusesByBusType, fetchAllBusTypes } from '~/redux/slices/busPart
 import { fetchBusTypeByID } from '~/apiServices/busPartner/fetchBusTypeByID'
 import { getLocations } from '~/apiServices/getLocations'
 import { convertTimeFormat } from '~/utils/convertTimeFormat'
-// import TicketBus from '~/components/TicketBus'
 import UpdateTicketBus from '~/components/TicketBus/UpdateTicket'
-// import { generalModalNames, setLoadingModalVisible } from '~/redux/slices/generalModalSlice'
-// import { updateBusSchedule } from '~/apiServices/busPartner/updateBusSchedule'
-// import { detailBusSchedule } from '~/apiServices/busPartner/detailBusSchedule'
 const cx = classNames.bind(styles)
 function ModalUpdateBusSchedule({ enableEdit = true, idBusTrip, data, functionModal, ...props }) {
   const dispatch = useDispatch()
@@ -117,42 +111,6 @@ function ModalUpdateBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.nameType])
 
-  // const handleCancel = () => {
-  //   setFormData({
-  //     departure: 'Đà Nẵng',
-  //     typeVehicle: 'Limousine34GiuongNam',
-  //     licensePlateNumber: '30G-49344',
-  //     destination: 'Hà Nội',
-  //     extendTime: '2 tiếng',
-  //     numberSeat: '34',
-  //     typeSeat: 'Giường nằm',
-  //   })
-  // }
-
-
-  //  const handleUpdate = async (id) => {
-  //     if (dispatch(checkLoginSession())) {
-  //       try {
-  //         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: true }))
-  //         const inforBusSchedule = await detailBusSchedule(id, new Date())
-  //         const dataUpdate = {
-  //           busTripScheduleId: id,
-  //           discountPercentage: 10,
-  //           breakDays: [
-  //             {
-  //               startDay: '23-01-2024',
-  //               endDay: '23-01-2024',
-  //             },
-  //           ],
-  //         }
-  //         const response = await updateBusSchedule()
-  //       } catch (error) {
-  //         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-  //       } finally {
-  //         dispatch(setLoadingModalVisible({ name: generalModalNames.LOADING, isOpen: false }))
-  //       }
-  //     }
-  //   }
   return (
     <Modal {...props} size="xl" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -331,9 +289,6 @@ function ModalUpdateBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
               <UpdateTicketBus initialItems={[]} content={''} data={formData}></UpdateTicketBus>
             </div>
           </div>
-          {/* <p className={cx('txt', 'mb-2', 'mt-4')}>
-            Lịch khởi hành của xe: <span className={cx('txt-plate-number')}>{formData.licensePlateNumber}</span>
-          </p> */}
           <p className={cx('txt', 'mb-2', 'mt-4')}>
             Lịch khởi hành của xe:{' '}
             <span className={cx('txt-plate-number')}>
@@ -346,20 +301,6 @@ function ModalUpdateBusSchedule({ enableEdit = true, idBusTrip, data, functionMo
           <TableSchedulesOfBus idBus={formData?.licensePlateNumber}></TableSchedulesOfBus>
         </div>
       </Modal.Body>
-      {/* <Modal.Footer>
-        <Row className="justify-content-center mt-4">
-          <Col></Col>
-          <Col className="d-flex justify-content-center">
-            <Button outline className="ms-5 me-5" onClick={handleCancel}>
-              Hủy
-            </Button>
-            <Button primary className="ms-5 me-5" disabled={!activeUpdate}>
-              {functionModal === 'add' ? 'Thêm' : 'Cập nhật'}
-            </Button>
-          </Col>
-          <Col></Col>
-        </Row>
-      </Modal.Footer> */}
     </Modal>
   )
 }

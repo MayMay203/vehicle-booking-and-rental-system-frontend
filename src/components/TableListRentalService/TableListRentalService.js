@@ -115,28 +115,8 @@ function TableListRentalService({ typeService }) {
         />
       ),
     },
-    // {
-    //   title: 'Xóa',
-    //   width: 90,
-    //   dataIndex: 'delete',
-    //   align: 'center',
-    //   render: (record) => (
-    //     <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer', color: '#D5420C', fontSize: '2rem' }} />
-    //   ),
-    // },
   ]
-  // const data = [
-  //   {
-  //     key: '1',
-  //     nameCompany: 'Honda',
-  //     typeVehicle: 'Xe máy',
-  //     number: '10',
-  //     charge: '100.000đ',
-  //     location: 'Quảng Nam',
-  //     status: 'Hoạt động',
-  //   },
 
-  // ]
   const dispatch = useDispatch()
   const vehicleList = useSelector((state) => state.rentalPartner.vehicleList)
   const [data, setData] = useState([])
@@ -144,22 +124,15 @@ function TableListRentalService({ typeService }) {
     console.log('params', pagination, filters, sorter, extra)
   }
   const navigate = useNavigate()
-  // const handleViewVehicle = (inforVehicle) => {
-  //   console.log('inforVehicle cha---', inforVehicle)
-  //   navigate('detail-service-rental', { state: { enableEdit: false, inforVehicle: inforVehicle } })
-  // }
-  // const [inforVehicle, setInforVehicle] = useState({})
   const handleViewVehicle = (record) => {
     const selectedVehicle = vehicleList.find((item) => item.vehicle_register_id === record.key)
     if (selectedVehicle) {
-      // setInforVehicle(selectedVehicle)
       console.log('selectedVehicle cha---', selectedVehicle)
       navigate('detail-service-rental', { state: { enableEdit: false, inforVehicle: selectedVehicle } })
     }
   }
 
   const handleEditVehicle = (id) => {
-    // navigate('edit-service-rental', { state: { enableEdit: true, vehicleID: id } })
     setModalEditService(true)
     setSelectedVehicle(id)
   }
@@ -206,8 +179,6 @@ function TableListRentalService({ typeService }) {
         className={cx('')}
       />
       <EditServiceRental
-        // enableEdit={true}
-        // functionModal={'EditServiceRental'}
         idRegister={selectedVehicle}
         show={modalEditService}
         onHide={() => setModalEditService(false)}
