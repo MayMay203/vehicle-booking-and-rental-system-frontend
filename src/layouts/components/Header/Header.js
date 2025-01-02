@@ -299,7 +299,7 @@ function Header() {
                           Đối tác cho thuê xe
                         </NavLink>
                       </div>
-                      <div className={cx('wrap-link')}>
+                      {/* <div className={cx('wrap-link')}>
                         <NavLink
                           style={{ paddingLeft: '34px' }}
                           className={cx('link')}
@@ -311,7 +311,7 @@ function Header() {
                         >
                           Đối tác tài xế
                         </NavLink>
-                      </div>
+                      </div> */}
                     </div>
                   )}
                 </div>
@@ -493,7 +493,7 @@ function Header() {
                             Đối tác cho thuê xe
                           </NavLink>
                         </div>
-                        <div className={cx('wrap-link')}>
+                        {/* <div className={cx('wrap-link')}>
                           <NavLink
                             className={cx('link')}
                             onClick={() => {
@@ -503,7 +503,7 @@ function Header() {
                           >
                             Đối tác tài xế
                           </NavLink>
-                        </div>
+                        </div> */}
                       </div>
                     </PopperWrapper>
                   </div>
