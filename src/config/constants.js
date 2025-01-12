@@ -12,8 +12,8 @@ export const constants = {
   cancelled: 'CANCEL',
   pagesize: 5,
   busName: 'all',
-  departureLocation: 'Thừa Thiên Huế',
-  arrivalLocation: 'Đà Nẵng',
+  departureLocation: 'Đà Nẵng',
+  arrivalLocation: 'Nghệ An',
   departureDate: new Date().toISOString().split('T')[0],
   // notification type
   NEW_BOOKING: 'NEW_BOOKING',
