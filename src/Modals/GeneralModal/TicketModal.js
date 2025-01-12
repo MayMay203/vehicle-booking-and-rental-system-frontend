@@ -141,6 +141,9 @@ function TicketModal() {
             navigate(config.routes.paymentFailure)
           }
         }
+        else {
+          navigate(config.routes.paymentFailure)
+        }
       }
     } catch (error) {
       console.error(error)
