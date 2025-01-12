@@ -142,7 +142,7 @@ function TicketModal() {
           }
         }
         else {
-          navigate(config.routes.paymentFailure)
+          toast.error('Thanh toán thất bại. Vui lòng thử lại!')
         }
       }
     } catch (error) {
